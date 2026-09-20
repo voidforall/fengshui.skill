@@ -2,13 +2,15 @@
 
 > 「峦头为体，理气为用；峦头差，理气无用。」
 
-**一个 Claude Code Skill，将传统堪舆学蒸馏为可对话的风水顾问。** 以江南三元世家传人的视角，运用玄空飞星、八宅明镜、择日学等传统方法，帮助你分析居住环境、选择吉日、化解煞气。
+**一个遵循 [Agent Skills 开放标准](https://agentskills.io) 的 Skill，将传统堪舆学蒸馏为可对话的风水顾问。** 以江南三元世家传人的视角，运用玄空飞星、八宅明镜、择日学等传统方法，帮助你分析居住环境、选择吉日、化解煞气。
+
+本 Skill 只是一份符合标准的 `SKILL.md` + 参考资料，不绑定任何特定工具——可在 Claude Code、Codex CLI 等 30+ 支持 [Agent Skills](https://github.com/agentskills/agentskills) 标准的智能体中直接使用。
 
 ---
 
 ## 这是什么
 
-传统风水（堪舆学）是一套研究居住环境与人居关系的学问，包含形势（地理格局）与理气（方位气场）两大体系。本 Skill 将其核心方法论编码为 Claude 可执行的知识框架，使其能够：
+传统风水（堪舆学）是一套研究居住环境与人居关系的学问，包含形势（地理格局）与理气（方位气场）两大体系。本 Skill 将其核心方法论编码为 AI 智能体可执行的知识框架，使其能够：
 
 - 根据房屋朝向、入住时间，**排布玄空飞星盘**，判断旺位凶位
 - 依据居住者命卦，**配合八宅游年**，给出四吉四凶方布局建议
@@ -22,23 +24,43 @@
 
 ## 安装
 
-### 方式一：Claude Code CLI（推荐）
+本项目遵循 [Agent Skills 开放标准](https://agentskills.io)（`SKILL.md` + YAML frontmatter），可用官方跨工具安装器 [`npx skills`](https://github.com/vercel-labs/skills) 一键装进 Claude Code、Codex CLI 及其他兼容工具，也可手动 clone。
+
+### 方式一：npx skills（推荐，Claude Code / Codex CLI 通用）
 
 ```bash
-claude install-skill https://github.com/voidforall/fengshui.skill
+# 自动检测项目内已使用的智能体（Claude Code / Codex 等）并安装
+npx skills add voidforall/fengshui.skill
+
+# 指定安装到 Codex CLI（写入 .agents/skills/ 或 ~/.codex/skills/）
+npx skills add voidforall/fengshui.skill --agent codex
+
+# 指定安装到 Claude Code（写入 .claude/skills/ 或 ~/.claude/skills/）
+npx skills add voidforall/fengshui.skill --agent claude-code
+
+# 安装到用户全局目录而非当前项目
+npx skills add voidforall/fengshui.skill -g
 ```
+
+`npx skills` 由 [vercel-labs/skills](https://github.com/vercel-labs/skills) 维护，支持 70+ 智能体，`--agent` 也可写 `cursor`、`opencode`、`windsurf` 等其他兼容工具名。
 
 ### 方式二：手动安装
 
+按你使用的工具，clone 到对应的 skills 目录即可（目录名不强制，仅需包含 `SKILL.md`）：
+
 ```bash
+# Claude Code
 git clone https://github.com/voidforall/fengshui.skill ~/.claude/skills/fengshui-master
+
+# Codex CLI
+git clone https://github.com/voidforall/fengshui.skill ~/.codex/skills/fengshui-master
 ```
 
 ---
 
 ## 使用方法
 
-安装后，在 Claude Code 中用自然语言描述需求即可触发。**无需特定指令**，以下场景均能自动识别：
+安装后，在支持该 Skill 的智能体（Claude Code、Codex CLI 等）中用自然语言描述需求即可触发。**无需特定指令**，以下场景均能自动识别：
 
 ### 阳宅分析
 
@@ -134,8 +156,10 @@ fengshui.skill/
 
 ## 相关项目
 
-本项目属于 Claude Code **Persona Distill Skill** 生态的一部分——将特定领域的知识体系与专家视角蒸馏为可复用的 Skill。
+本项目遵循 **Agent Skills 开放标准**，也属于 **Persona Distill Skill** 生态的一部分——将特定领域的知识体系与专家视角蒸馏为跨工具可复用的 Skill。
 
+- [agentskills/agentskills](https://github.com/agentskills/agentskills) — Agent Skills 开放标准规范
+- [vercel-labs/skills](https://github.com/vercel-labs/skills) — `npx skills` 跨工具安装器
 - [anthropics/skills](https://github.com/anthropics/skills) — 官方 Skill 仓库
 - [nuwa-skill](https://github.com/alchaincyf/nuwa-skill) — 从公众人物蒸馏思维框架
 - [awesome-persona-distill-skills](https://github.com/xixu-me/awesome-persona-distill-skills) — Persona Skill 合集
