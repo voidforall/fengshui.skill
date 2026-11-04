@@ -141,6 +141,8 @@ python3 scripts/fengshui.py zeri --event 入宅 --start 2026-05-10 --end 2026-05
 python3 scripts/fengshui.py bazi --birth "1990-06-01 08:30" --gender f --longitude 116.4
 ```
 
+每个命令都可以加 `--json` 输出结构化数据，便于程序处理。
+
 | 计算 | 实现 |
 |------|------|
 | 飞星排盘 | 二十四山玄空阴阳 + 同元龙定顺逆，支持替卦、兼向/空亡提示、格局判定（旺山旺向、上山下水、双星、伏反吟、合十、三般卦） |
@@ -152,6 +154,15 @@ python3 scripts/fengshui.py bazi --birth "1990-06-01 08:30" --gender f --longitu
 
 ```bash
 python3 -m unittest discover -s tests
+```
+
+未安装 `lunar_python` 时，历法相关用例会自动跳过。CI 在 Python 3.9 / 3.13、装与不装 lunar_python 四种组合下运行。
+
+命令行输出有快照测试（`tests/golden/`）。有意修改输出格式后，重新生成快照并检查 diff：
+
+```bash
+UPDATE_GOLDEN=1 python3 -m unittest tests/test_cli.py
+git diff tests/golden/
 ```
 
 测试用例取自可公开核对的结论（游年歌诀、七/八/九运旺山旺向与上山下水表、紫白年星与 lunar-python 交叉验证等）。派别有分歧的地方不进测试，而是在输出中提示。
@@ -168,9 +179,21 @@ python3 -m unittest discover -s tests
 fengshui.skill/
 ├── SKILL.md                    # 主 Skill（人物设定 + 知识框架 + 执行流程，计算一律调用脚本）
 ├── scripts/
-│   └── fengshui.py             # 确定性计算：飞星、八宅、命卦、流年、历法、择日、八字
+│   ├── fengshui.py             # 命令行入口（SKILL 调用这里）
+│   └── kanyu/                  # 确定性计算包
+│       ├── core.py             #   二十四山、九宫、洛书飞泊、元运（纯标准库）
+│       ├── bazhai.py           #   八宅：命卦、游年
+│       ├── feixing.py          #   玄空飞星：排盘、格局、替卦、兼向
+│       ├── zibai.py            #   流年流月紫白、年家煞方
+│       ├── almanac.py          #   历法：立春分年、节气月、单日信息、真太阳时
+│       ├── zeri.py             #   择日：硬排除规则 + 打分
+│       ├── bazi.py             #   八字排盘
+│       ├── render.py           #   文字输出（计算模块不做格式化）
+│       └── cli.py              #   参数解析、--json
 ├── tests/
-│   └── test_fengshui.py        # 回归测试
+│   ├── test_<模块>.py          # 每个模块一份单元测试
+│   ├── test_cli.py             # 命令行快照、JSON、出错路径
+│   └── golden/                 # 命令行输出快照
 ├── requirements.txt            # lunar_python（历法）
 ├── references/
 │   ├── feixing.md              # 玄空飞星速查（九宫飞布规则、各运旺衰、流年星表）
