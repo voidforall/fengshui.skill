@@ -2,9 +2,9 @@
 
 > 「峦头为体，理气为用；峦头差，理气无用。」
 
-**一个遵循 [Agent Skills 开放标准](https://agentskills.io) 的 Skill，将传统堪舆学蒸馏为可对话的风水顾问。** 以江南三元世家传人的视角，运用玄空飞星、八宅明镜、择日学等传统方法，帮助你分析居住环境、选择吉日、化解煞气。
+**一个遵循 [Agent Skills 开放标准](https://agentskills.io) 的 Skill，将传统堪舆学蒸馏为可对话的风水顾问。** 运用玄空飞星、八宅明镜、择日学等传统方法，帮助你分析居住环境、选择吉日、化解煞气。
 
-本 Skill 只是一份符合标准的 `SKILL.md` + 参考资料，不绑定任何特定工具——可在 Claude Code、Codex CLI 等 30+ 支持 [Agent Skills](https://github.com/agentskills/agentskills) 标准的智能体中直接使用。
+本 Skill 由一份符合标准的 `SKILL.md`、参考资料和一个确定性计算脚本组成，不绑定任何特定工具——可在 Claude Code、Codex CLI 等 30+ 支持 [Agent Skills](https://github.com/agentskills/agentskills) 标准的智能体中直接使用。
 
 ---
 
@@ -17,6 +17,8 @@
 - 结合年月神煞，**筛选入宅/开业/动土吉日**，给出可操作时间窗口
 - 识别路冲、天斩、壁刀等**常见外煞**，提供化解方案
 - **解读风水术语**与经典原文，回答堪舆学理论问题
+
+**计算交给代码，解读交给模型。** 大模型擅长问询与解释，但并不擅长排盘、推算干支节气——这些地方「看起来对」的错误最难被发现。因此本 Skill 内置 `scripts/fengshui.py`，所有排盘、查表、历法计算由脚本确定性完成，并有回归测试覆盖；模型只负责收集信息、调用脚本、解读结果。
 
 不是玄学算命，不卖风水摆件，不恐吓煞气。基于《沈氏玄空学》《地理五诀》《协纪辨方书》等传统典籍的系统性方法。
 
@@ -54,6 +56,15 @@ git clone https://github.com/voidforall/fengshui.skill ~/.claude/skills/fengshui
 
 # Codex CLI
 git clone https://github.com/voidforall/fengshui.skill ~/.codex/skills/fengshui-master
+```
+
+### 依赖
+
+- Python 3.9+（飞星、八宅、命卦、流年只用标准库）
+- 择日、单日黄历、八字需要历法库 [lunar-python](https://github.com/6tail/lunar-python)：
+
+```bash
+pip install -r requirements.txt   # 即 pip install lunar_python
 ```
 
 ---
@@ -116,11 +127,51 @@ git clone https://github.com/voidforall/fengshui.skill ~/.codex/skills/fengshui-
 
 ---
 
+## 计算脚本
+
+Skill 运行时会自动调用，也可以直接在命令行使用：
+
+```bash
+python3 scripts/fengshui.py feixing --facing 180 --year 2018-09 --annual 2026   # 玄空飞星排盘
+python3 scripts/fengshui.py bazhai --facing 90 --birth 1988-05-01 --gender m    # 八宅游年 + 命卦
+python3 scripts/fengshui.py mingua --birth 1990-01-20 --gender f                # 命卦（自动按立春分年）
+python3 scripts/fengshui.py liunian --year 2026 --span 5                        # 流年紫白、太岁、三煞
+python3 scripts/fengshui.py day --date 2026-05-20                               # 单日四柱、建除、神煞、宜忌
+python3 scripts/fengshui.py zeri --event 入宅 --start 2026-05-10 --end 2026-05-31 --birth-year 1988
+python3 scripts/fengshui.py bazi --birth "1990-06-01 08:30" --gender f --longitude 116.4
+```
+
+| 计算 | 实现 |
+|------|------|
+| 飞星排盘 | 二十四山玄空阴阳 + 同元龙定顺逆，支持替卦、兼向/空亡提示、格局判定（旺山旺向、上山下水、双星、伏反吟、合十、三般卦） |
+| 八宅 | 依《八宅明镜》游年歌诀生成，命卦自动按立春分年、男五寄坤女五寄艮 |
+| 流年流月 | 紫白飞星、太岁、岁破、三煞、五黄二黑方 |
+| 历法择日 | 干支、节气、建除、黄黑道、神煞、宜忌取自 lunar-python；月破、岁破、受死、正四废、冲当事人做硬排除 |
+
+### 测试
+
+```bash
+python3 -m unittest discover -s tests
+```
+
+测试用例取自可公开核对的结论（游年歌诀、七/八/九运旺山旺向与上山下水表、紫白年星与 lunar-python 交叉验证等）。派别有分歧的地方不进测试，而是在输出中提示。
+
+### 勘误
+
+发现错误？欢迎提 issue，请注明**出处**（典籍卷次或可核对的资料）。确认后会补充对应的测试用例。
+
+---
+
 ## 文件结构
 
 ```
 fengshui.skill/
-├── SKILL.md                    # 主 Skill（堪舆子人物设定 + 完整知识框架 + 执行流程）
+├── SKILL.md                    # 主 Skill（人物设定 + 知识框架 + 执行流程，计算一律调用脚本）
+├── scripts/
+│   └── fengshui.py             # 确定性计算：飞星、八宅、命卦、流年、历法、择日、八字
+├── tests/
+│   └── test_fengshui.py        # 回归测试
+├── requirements.txt            # lunar_python（历法）
 ├── references/
 │   ├── feixing.md              # 玄空飞星速查（九宫飞布规则、各运旺衰、流年星表）
 │   ├── wuxing-ganzhi.md        # 五行干支速查（天干地支、生克、命卦算法）
@@ -134,7 +185,7 @@ fengshui.skill/
 
 ## 人物设定
 
-**堪舆子**，江南三元派世家第七代传人。主修玄空飞星（沈竹礽一脉），兼通八宅明镜与三合形势，择日依《协纪辨方书》。
+**堪舆子**：研习传统堪舆的顾问。主修玄空飞星，兼通八宅明镜与形势峦头，择日参《协纪辨方书》体系。不虚构师承身份。
 
 风格：引经据典但解释清晰，先问情况再下结论，不夸大风水作用，对伪术直接指出。
 
