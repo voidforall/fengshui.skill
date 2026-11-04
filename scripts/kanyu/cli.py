@@ -8,7 +8,7 @@ import datetime as _dt
 import json
 import sys
 
-from . import render
+from . import __version__, render
 from .almanac import LunarUnavailable, day_info, has_time, lichun_year, month_index, parse_date
 from .bazhai import east_west, mingua_of, younian
 from .bazi import bazi
@@ -188,6 +188,7 @@ def build_parser() -> argparse.ArgumentParser:
 
     p = argparse.ArgumentParser(prog="fengshui.py", description=DESCRIPTION,
                                 formatter_class=argparse.RawDescriptionHelpFormatter)
+    p.add_argument("--version", action="version", version=f"%(prog)s {__version__}")
     sub = p.add_subparsers(dest="cmd", required=True)
 
     def add(name, func, help_):

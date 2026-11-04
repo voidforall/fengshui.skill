@@ -167,6 +167,10 @@ git diff tests/golden/
 
 测试用例取自可公开核对的结论（游年歌诀、七/八/九运旺山旺向与上山下水表、紫白年星与 lunar-python 交叉验证等）。派别有分歧的地方不进测试，而是在输出中提示。
 
+### 版本
+
+变更记录见 [CHANGELOG.md](CHANGELOG.md)。v1.0.0 的八宅、命卦、飞星规则存在大量错误，已在 v2.0.0 修正，请使用 v2 及以上版本。
+
 ### 勘误
 
 发现错误？欢迎提 issue，请注明**出处**（典籍卷次或可核对的资料）。确认后会补充对应的测试用例。
@@ -194,6 +198,7 @@ fengshui.skill/
 │   ├── test_<模块>.py          # 每个模块一份单元测试
 │   ├── test_cli.py             # 命令行快照、JSON、出错路径
 │   └── golden/                 # 命令行输出快照
+├── CHANGELOG.md                # 变更记录
 ├── requirements.txt            # lunar_python（历法）
 ├── references/
 │   ├── feixing.md              # 玄空飞星速查（九宫飞布规则、各运旺衰、流年星表）
