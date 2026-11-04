@@ -1,0 +1,19 @@
+feixing_8_zi	feixing --facing 180 --year 2018-09-01 --annual 2026
+feixing_9_jian	feixing --facing 187 --year 2025-03-01
+feixing_tigua	feixing --facing 午 --yun 9 --tigua
+feixing_month	feixing --facing 186 --year 2025 --month 2026-11-04
+feixing_sit	feixing --sit 丑 --yun 8
+feixing_genkun	feixing --sit 艮 --yun 8
+mingua_f	mingua --birth 1990-06-01 --gender f
+mingua_jan	mingua --birth 1990-01-20 --gender f
+mingua_year	mingua --birth 1986 --gender m
+bazhai	bazhai --facing 卯 --birth 1988-05-01 --gender m
+bazhai_house	bazhai --sit 乾
+liunian	liunian --year 2026
+liunian_span	liunian --year 2022 --span 9
+day	day --date 2026-05-16
+day_time	day --date "2026-05-20 09:00"
+zeri	zeri --event 入宅 --start 2026-05-10 --end 2026-05-31 --birth-year 1988
+zeri_kaiye	zeri --event 开业 --start 2026-09-01 --end 2026-09-30 --birth-year 1985 --birth-year 1990 --top 5
+bazi	bazi --birth "1990-06-01 08:30" --gender f --longitude 116.4
+bazi_m	bazi --birth "1985-12-20 23:30" --gender m
