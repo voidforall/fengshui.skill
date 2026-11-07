@@ -33,7 +33,7 @@ ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
 CASES = os.path.join(ROOT, "evals", "cases.json")
 SKILL_FILES = ["SKILL.md", "scripts", "references", "examples", "requirements.txt"]
 VERDICTS = ("一致", "部分一致", "不一致")
-ANSWER_TOOLS = ["Skill", "Read", "Glob", "Grep", "Bash(python3:*)", "Bash(python:*)", "Bash(pip install:*)"]
+ANSWER_TOOLS = ["Skill", "Read", "Write", "Glob", "Grep", "Bash(python3:*)", "Bash(python:*)", "Bash(pip install:*)"]
 
 JUDGE_PROMPT = """你是严格的评审。下面是一道命理 / 风水题、古籍中的原文结论，以及被评测助手的回答。
 请只判断「回答的核心结论是否与古籍一致」，不评判文笔，也不评判命理风水本身是否灵验。

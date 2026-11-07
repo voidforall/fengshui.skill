@@ -8,7 +8,7 @@ import datetime as _dt
 import json
 import sys
 
-from . import __version__, render
+from . import __version__, pages, render
 from .almanac import LunarUnavailable, day_info, has_time, lichun_year, month_index, parse_date
 from .bazhai import east_west, mingua_of, younian
 from .bazi import bazi
@@ -142,10 +142,23 @@ def cmd_feixing(a) -> Output:
         y, mi = month_index(parse_date(a.month))
         month = monthly_center(y, mi)
         annual = annual or annual_center(y)
+    cur = yun_of_year(today().year)
     text = render.feixing(ch, annual=annual, month=month, facing_deg=facing_deg, yun_note=note,
-                          current_yun=yun_of_year(today().year))
-    return Output(text, {"chart": _jsonable(ch), "facing_deg": facing_deg,
-                         "annual_center": annual, "month_center": month})
+                          current_yun=cur)
+    data = {"chart": _jsonable(ch), "facing_deg": facing_deg, "annual_center": annual, "month_center": month}
+    if a.html is not None:
+        notes = pages.load_notes(a.notes)
+        annual_label = f"{a.annual}年" if a.annual else (f"{lichun_year(parse_date(a.month))[0]}年" if a.month else None)
+        page = pages.render("feixing.html", f"飞星盘 {ch.sit}山{ch.facing}向",
+                            pages.feixing_data(ch, annual=annual, annual_label=annual_label, month=month,
+                                               facing_deg=facing_deg, yun_note=note, current_yun=cur,
+                                               notes=notes))
+        path = pages.write_page(a.html or pages.default_name(ch), page)
+        text += f"\n\n交互盘面已生成：{path}"
+        data["html"] = path
+    elif a.notes:
+        raise UsageError("--notes 需与 --html 一起使用")
+    return Output(text, data)
 
 
 def cmd_liunian(a) -> Output:
@@ -214,6 +227,9 @@ def build_parser() -> argparse.ArgumentParser:
     s.add_argument("--tigua", action="store_true", help="用替卦（兼向时）")
     s.add_argument("--annual", help="叠加流年（年份）")
     s.add_argument("--month", help="叠加流月（日期，按节气月）")
+    s.add_argument("--html", nargs="?", const="", metavar="PATH",
+                   help="同时生成可交互的 HTML 盘面（不给路径则写到当前目录）")
+    s.add_argument("--notes", metavar="JSON", help="写入盘面的批注：{summary, palaces:{宫名:文字}, advice:[...]}")
 
     s = add("liunian", cmd_liunian, "流年紫白与年家煞方")
     s.add_argument("--year", type=int, required=True)
