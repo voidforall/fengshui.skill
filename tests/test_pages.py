@@ -85,7 +85,7 @@ class TestCli(unittest.TestCase):
         root = support.ROOT
         with open(os.path.join(root, "docs", "examples", "feixing-demo.html"), encoding="utf-8") as f:
             demo = f.read()
-        with open(os.path.join(root, "scripts", "kanyu", "templates", "feixing.html"), encoding="utf-8") as f:
+        with open(os.path.join(root, "assets", "templates", "feixing.html"), encoding="utf-8") as f:
             tpl = f.read()
         head = tpl.split("__DATA__")[0].replace("__TITLE__", "飞星盘 子山午向")
         self.assertTrue(demo.startswith(head), "示例页面已过期：重新运行 docs/examples/README 中的命令")

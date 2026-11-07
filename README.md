@@ -174,7 +174,7 @@ SKILL 要求模型按状态说话，不把通行做法说成经典原文。
 
 ```
 fengshui.skill/
-├── SKILL.md                    # 主 Skill（人物设定 + 知识框架 + 执行流程，计算一律调用脚本）
+├── SKILL.md                    # 主 Skill：铁律、人设、问题分流（按用例路由到 references/playbook-*.md）
 ├── scripts/
 │   ├── fengshui.py             # 命令行入口（SKILL 调用这里）
 │   └── kanyu/                  # 确定性计算包
@@ -186,7 +186,7 @@ fengshui.skill/
 │       ├── zeri.py             #   择日：硬排除规则 + 打分
 │       ├── bazi.py             #   八字排盘
 │       ├── render.py           #   文字输出（计算模块不做格式化）
-│       ├── pages.py            #   交互 HTML 盘面（模板在 templates/）
+│       ├── pages.py            #   交互 HTML 盘面（模板在 assets/templates/）
 │       └── cli.py              #   参数解析、--json
 ├── tests/
 │   ├── test_<模块>.py          # 每个模块一份单元测试
@@ -195,10 +195,15 @@ fengshui.skill/
 ├── CHANGELOG.md                # 变更记录
 ├── requirements.txt            # lunar_python（历法）
 ├── references/
+│   ├── playbook-yangzhai.md    # 看宅流程（含交互盘面）
+│   ├── playbook-zeri.md        # 择日流程
+│   ├── playbook-bazi.md        # 八字流程
 │   ├── feixing.md              # 玄空飞星速查（九宫飞布规则、各运旺衰、流年星表）
 │   ├── wuxing-ganzhi.md        # 五行干支速查（天干地支、生克、命卦算法）
 │   ├── zeri.md                 # 择日规则（节气月、大忌、通书俗忌、年神方位）
 │   └── sources.md              # 每条规则 / 引文的出处与核对状态
+├── assets/
+│   └── templates/              # 交互盘面模板
 ├── docs/
 │   ├── images/                 # README 用图
 │   └── examples/               # 交互盘面示例

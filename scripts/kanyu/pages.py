@@ -1,7 +1,7 @@
 """可交互 HTML 页面：把排盘结果填进模板，生成单个离线可用的 HTML 文件。
 
 图形与数据全部来自计算模块；模型的解读通过 notes（JSON）传入，只作为文字嵌入页面。
-模板见 kanyu/templates/。
+模板见 skill 根目录 assets/templates/。
 """
 
 from __future__ import annotations
@@ -16,7 +16,9 @@ from .core import (GRID, LUOSHU_PATH, MOUNTAINS, PALACE_DIR, PALACES, STAR_NAMES
                    deg_to_mountain, fly, mountain_center_deg, mountain_yinyang)
 from .feixing import Chart, jian_warnings, main_pattern, palace_flags, star_status
 
-TEMPLATES = os.path.join(os.path.dirname(os.path.abspath(__file__)), "templates")
+# 模板放在 skill 根目录的 assets/templates/（Agent Skills 规范：模板等静态资源放 assets/）
+SKILL_ROOT = os.path.abspath(os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", ".."))
+TEMPLATES = os.path.join(SKILL_ROOT, "assets", "templates")
 
 # 《周易·说卦传》第十、十一章取象（原文已核对，见 references/sources.md）
 GUA_XIANG = {
