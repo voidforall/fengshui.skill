@@ -6,6 +6,21 @@
 
 本 Skill 由一份符合标准的 `SKILL.md`、参考资料和一个确定性计算脚本组成，不绑定任何特定工具——可在 Claude Code、Codex CLI 等 30+ 支持 [Agent Skills](https://github.com/agentskills/agentskills) 标准的智能体中直接使用。
 
+<p align="center">
+  <img src="docs/images/feixing-cast.gif" alt="交互飞星盘：点「起盘」，九星按洛书轨迹逐宫飞布，右侧批注随宫位更新" width="720">
+</p>
+
+**每次排盘，都会给你一张可以「起盘」的交互盘面。** 九星按洛书轨迹逐宫飞布，点任意一宫，看《说卦》取象、各星旺衰与这一宫的批注。
+单个 HTML 文件，离线可开，手机与深色模式都能看。
+
+<p align="center">
+  <img src="docs/images/feixing-dark.webp" alt="深色模式：黑漆描金" width="520">
+  <img src="docs/images/feixing-phone.webp" alt="手机版" width="190">
+</p>
+
+示例：[docs/examples/feixing-demo.html](docs/examples/feixing-demo.html)（下载后用浏览器打开；
+或经第三方 [htmlpreview 在线预览](https://htmlpreview.github.io/?https://github.com/voidforall/fengshui.skill/blob/main/docs/examples/feixing-demo.html)）
+
 ---
 
 ## 这是什么
@@ -115,6 +130,22 @@ pip install -r requirements.txt   # 即 pip install lunar_python
 
 ---
 
+## 可视化路线图
+
+不同的问题用不同的盘面。数据一律由脚本计算，模型只往页面里填解读文字。
+
+| 用例 | 交互 | 状态 |
+|------|------|------|
+| **飞星揭盘** | 二十四山罗盘 + 九宫；「起盘」按洛书逐宫飞布；分层看运盘、山星、向星、流年；点宫看批注 | ✅ 已上线 |
+| **罗盘定向** | 拖动罗盘，或在手机上用陀螺仪对准大门，实时显示坐向、兼向度数、是否空亡 | 计划中 |
+| **户型对位** | 把「大门、主卧、厨房」卡片拖到九宫方位，逐个房间显示飞星与八宅吉凶 | 计划中 |
+| **八宅方位** | 八个扇区按吉凶着色，叠加家人命卦外环，宅命配不配一眼可见 | 计划中 |
+| **择日月历** | 黄历式月历：吉日亮、凶日暗，悬停看建除、神煞与排除原因 | 计划中 |
+| **八字命盘** | 四柱如四张牌依次翻开，五行力量、大运时间轴可滑动 | 计划中 |
+| **起卦** | 摇三枚铜钱六次成卦，揭示本卦、变卦与《周易》卦辞（原文出处见 `references/sources.md`） | 计划中 |
+
+---
+
 ## 知识体系
 
 | 流派 | 核心方法 | 用途 |
@@ -133,6 +164,8 @@ Skill 运行时会自动调用，也可以直接在命令行使用：
 
 ```bash
 python3 scripts/fengshui.py feixing --facing 180 --year 2018-09 --annual 2026   # 玄空飞星排盘
+python3 scripts/fengshui.py feixing --facing 180 --year 2018-09 --annual 2026 \
+        --html 飞星盘.html --notes 批注.json                                         # 同时生成交互盘面
 python3 scripts/fengshui.py bazhai --facing 90 --birth 1988-05-01 --gender m    # 八宅游年 + 命卦
 python3 scripts/fengshui.py mingua --birth 1990-01-20 --gender f                # 命卦（自动按立春分年）
 python3 scripts/fengshui.py liunian --year 2026 --span 5                        # 流年紫白、太岁、三煞
@@ -198,6 +231,7 @@ fengshui.skill/
 │       ├── zeri.py             #   择日：硬排除规则 + 打分
 │       ├── bazi.py             #   八字排盘
 │       ├── render.py           #   文字输出（计算模块不做格式化）
+│       ├── pages.py            #   交互 HTML 盘面（模板在 templates/）
 │       └── cli.py              #   参数解析、--json
 ├── tests/
 │   ├── test_<模块>.py          # 每个模块一份单元测试
@@ -210,6 +244,9 @@ fengshui.skill/
 │   ├── wuxing-ganzhi.md        # 五行干支速查（天干地支、生克、命卦算法）
 │   ├── zeri.md                 # 择日规则（节气月、大忌、通书俗忌、年神方位）
 │   └── sources.md              # 每条规则 / 引文的出处与核对状态
+├── docs/
+│   ├── images/                 # README 用图
+│   └── examples/               # 交互盘面示例
 └── examples/
     ├── yangzhai.md             # 完整阳宅分析对话示例（含飞星盘排布过程）
     └── zeri-example.md         # 完整择日对话示例（含命卦配合）
