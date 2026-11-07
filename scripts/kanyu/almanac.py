@@ -114,26 +114,31 @@ class DayInfo:
     ji: list[str] = field(default_factory=list)
     chong: str = ""            # 冲煞描述
     chong_zhi: str = ""        # 本日所冲地支
-    flags: list[str] = field(default_factory=list)  # 大忌：月破 / 岁破 / 受死 / 正四废
+    flags: list[str] = field(default_factory=list)   # 大忌（《协纪辨方书》体系）：月破、正四废
+    suji: list[str] = field(default_factory=list)    # 通书俗忌（无《协纪》出处）：岁破日、受死
 
     @property
     def lunar_md(self) -> str:
         return self.lunar.split("年", 1)[1]
 
 
-def day_flags(year_zhi: str, month_zhi: str, day_gz: str, jianchu: str) -> list[str]:
-    """大忌判定（纯规则，便于单独测试）。"""
+def day_flags(year_zhi: str, month_zhi: str, day_gz: str, jianchu: str) -> tuple[list[str], list[str]]:
+    """返回 (大忌, 通书俗忌)。纯规则，便于单独测试；出处见 references/sources.md。
+
+    大忌：月破、正四废 ——《协纪辨方书》所载，且与 lunar-python 逐日一致。
+    俗忌：岁破日（日支冲太岁）、受死 —— 通书用法，《协纪》体系日神中未列，只作提示。
+    """
     day_zhi = day_gz[1]
-    flags = []
+    flags, suji = [], []
     if jianchu == "破":
         flags.append("月破")
-    if day_zhi == chong(year_zhi):
-        flags.append("岁破")
-    if SHOUSI[month_zhi] == day_zhi:
-        flags.append("受死")
     if day_gz in SIFEI[month_zhi]:
         flags.append("正四废")
-    return flags
+    if day_zhi == chong(year_zhi):
+        suji.append("岁破日")
+    if SHOUSI[month_zhi] == day_zhi:
+        suji.append("受死")
+    return flags, suji
 
 
 def day_info(d: _dt.datetime) -> DayInfo:
@@ -143,7 +148,7 @@ def day_info(d: _dt.datetime) -> DayInfo:
     day_gz = lu.getDayInGanZhi()
     jianchu = lu.getZhiXing()
     prev_jq = lu.getPrevJieQi(True)
-    return DayInfo(
+    info = DayInfo(
         date=d,
         lunar=f"{lu.getYearInChinese()}年{lu.getMonthInChinese()}月{lu.getDayInChinese()}",
         year_gz=lu.getYearInGanZhiByLiChun(),
@@ -161,8 +166,9 @@ def day_info(d: _dt.datetime) -> DayInfo:
         ji=list(lu.getDayJi()),
         chong=f"冲{lu.getDayChongDesc()}，煞{lu.getDaySha()}",
         chong_zhi=chong(lu.getDayZhi()),
-        flags=day_flags(lu.getYearZhiByLiChun(), month_zhi, day_gz, jianchu),
     )
+    info.flags, info.suji = day_flags(lu.getYearZhiByLiChun(), month_zhi, day_gz, jianchu)
+    return info
 
 
 # --- 真太阳时 -------------------------------------------------------------------

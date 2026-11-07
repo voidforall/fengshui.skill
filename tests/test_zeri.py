@@ -50,7 +50,8 @@ class TestSelect(unittest.TestCase):
         self.assertEqual(scores, sorted(scores, reverse=True))
         bad = {d.info.date.date(): d.excluded for d in r.bad}
         self.assertIn("月破", bad[dt.date(2026, 5, 13)])
-        self.assertIn("岁破", bad[dt.date(2026, 5, 14)])
+        notes = {d.info.date.date(): d.notes for d in r.good + r.bad}
+        self.assertIn("通书俗忌：岁破日", notes[dt.date(2026, 5, 14)])   # 俗忌只标注，不排除
         self.assertTrue(any("冲1988" in x for x in bad[dt.date(2026, 5, 12)]))
         self.assertEqual(len(r.good) + len(r.bad) <= 22, True)
         for d in r.good:

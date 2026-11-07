@@ -1,6 +1,6 @@
 # 堪舆子 · 传统风水顾问
 
-> 「峦头为体，理气为用；峦头差，理气无用。」
+> 「峦头为体，理气为用。」（堪舆家常言）
 
 **一个遵循 [Agent Skills 开放标准](https://agentskills.io) 的 Skill，将传统堪舆学蒸馏为可对话的风水顾问。** 运用玄空飞星、八宅明镜、择日学等传统方法，帮助你分析居住环境、选择吉日、化解煞气。
 
@@ -60,7 +60,7 @@ git clone https://github.com/voidforall/fengshui.skill ~/.codex/skills/fengshui-
 
 ### 依赖
 
-- Python 3.9+（飞星、八宅、命卦、流年只用标准库）
+- Python 3.10+（飞星、八宅、命卦、流年只用标准库）
 - 择日、单日黄历、八字需要历法库 [lunar-python](https://github.com/6tail/lunar-python)：
 
 ```bash
@@ -110,7 +110,7 @@ pip install -r requirements.txt   # 即 pip install lunar_python
 ```
 
 ```
-《玄空秘旨》里「山上龙神不下水」是什么意思？
+《青囊序》里「山上龙神不下水」是什么意思？
 ```
 
 ---
@@ -148,7 +148,7 @@ python3 scripts/fengshui.py bazi --birth "1990-06-01 08:30" --gender f --longitu
 | 飞星排盘 | 二十四山玄空阴阳 + 同元龙定顺逆，支持替卦、兼向/空亡提示、格局判定（旺山旺向、上山下水、双星、伏反吟、合十、三般卦） |
 | 八宅 | 依《八宅明镜》游年歌诀生成，命卦自动按立春分年、男五寄坤女五寄艮 |
 | 流年流月 | 紫白飞星、太岁、岁破、三煞、五黄二黑方 |
-| 历法择日 | 干支、节气、建除、黄黑道、神煞、宜忌取自 lunar-python；月破、岁破、受死、正四废、冲当事人做硬排除 |
+| 历法择日 | 干支、节气、建除、黄黑道、神煞、宜忌取自 lunar-python；月破、正四废、冲当事人做硬排除；岁破日、受死为通书俗忌，只标注 |
 
 ### 测试
 
@@ -156,7 +156,7 @@ python3 scripts/fengshui.py bazi --birth "1990-06-01 08:30" --gender f --longitu
 python3 -m unittest discover -s tests
 ```
 
-未安装 `lunar_python` 时，历法相关用例会自动跳过。CI 在 Python 3.9 / 3.13、装与不装 lunar_python 四种组合下运行。
+未安装 `lunar_python` 时，历法相关用例会自动跳过。CI 在 Python 3.10 / 3.13、装与不装 lunar_python 四种组合下运行。
 
 命令行输出有快照测试（`tests/golden/`）。有意修改输出格式后，重新生成快照并检查 diff：
 
@@ -170,6 +170,11 @@ git diff tests/golden/
 ### 版本
 
 变更记录见 [CHANGELOG.md](CHANGELOG.md)。v1.0.0 的八宅、命卦、飞星规则存在大量错误，已在 v2.0.0 修正，请使用 v2 及以上版本。
+
+### 出处
+
+每条规则、引文的出处与核对状态都列在 [references/sources.md](references/sources.md)，分为：原文已核对、已计算验证、公认出处（原文未核对）、流派口径、已删除。
+SKILL 要求模型按状态说话，不把通行做法说成经典原文。
 
 ### 勘误
 
@@ -203,7 +208,8 @@ fengshui.skill/
 ├── references/
 │   ├── feixing.md              # 玄空飞星速查（九宫飞布规则、各运旺衰、流年星表）
 │   ├── wuxing-ganzhi.md        # 五行干支速查（天干地支、生克、命卦算法）
-│   └── zeri.md                 # 择日神煞速查（建除十二神、月破、三煞、受死日）
+│   ├── zeri.md                 # 择日规则（节气月、大忌、通书俗忌、年神方位）
+│   └── sources.md              # 每条规则 / 引文的出处与核对状态
 └── examples/
     ├── yangzhai.md             # 完整阳宅分析对话示例（含飞星盘排布过程）
     └── zeri-example.md         # 完整择日对话示例（含命卦配合）
@@ -217,7 +223,7 @@ fengshui.skill/
 
 风格：引经据典但解释清晰，先问情况再下结论，不夸大风水作用，对伪术直接指出。
 
-> 「《宅经》云：地善则苗茂，宅吉则人荣。风水能提供有利条件，左右吉凶概率，非决定命运之术。」
+> 「《宅经》引《三元经》云：地善即苗茂，宅吉即人荣。风水能提供有利条件，左右吉凶概率，非决定命运之术。」
 
 ---
 

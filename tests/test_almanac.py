@@ -24,11 +24,11 @@ class TestRules(unittest.TestCase):
     """不依赖历法库的纯规则。"""
 
     def test_day_flags(self):
-        self.assertEqual(al.day_flags("午", "巳", "丁亥", "破"), ["月破"])
-        self.assertEqual(al.day_flags("午", "巳", "戊子", "危"), ["岁破"])
-        self.assertEqual(al.day_flags("午", "巳", "癸巳", "建"), ["受死"])
-        self.assertEqual(al.day_flags("午", "寅", "庚申", "破"), ["月破", "正四废"])
-        self.assertEqual(al.day_flags("午", "巳", "甲午", "成"), [])
+        self.assertEqual(al.day_flags("午", "巳", "丁亥", "破"), (["月破"], []))
+        self.assertEqual(al.day_flags("午", "巳", "戊子", "危"), ([], ["岁破日"]))
+        self.assertEqual(al.day_flags("午", "巳", "癸巳", "建"), ([], ["受死"]))
+        self.assertEqual(al.day_flags("午", "寅", "庚申", "破"), (["月破", "正四废"], []))
+        self.assertEqual(al.day_flags("午", "巳", "甲午", "成"), ([], []))
 
     def test_shousi_table(self):
         self.assertEqual(al.SHOUSI["寅"], "戌")
@@ -62,8 +62,8 @@ class TestLunar(unittest.TestCase):
         i = al.day_info(dt.datetime(2026, 11, 4, 12))
         self.assertEqual((i.day_gz, i.jianchu, i.month_zhi), ("壬午", "成", "戌"))
         self.assertIn("月破", al.day_info(dt.datetime(2026, 5, 13, 12)).flags)
-        self.assertIn("岁破", al.day_info(dt.datetime(2026, 5, 14, 12)).flags)
-        self.assertIn("受死", al.day_info(dt.datetime(2026, 5, 19, 12)).flags)
+        self.assertIn("岁破日", al.day_info(dt.datetime(2026, 5, 14, 12)).suji)
+        self.assertIn("受死", al.day_info(dt.datetime(2026, 5, 19, 12)).suji)
 
     def test_jianchu_po_is_chong_month(self):
         # 破日即日支冲月建
