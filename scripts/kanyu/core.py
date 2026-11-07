@@ -140,6 +140,14 @@ def palace_of_star(chart: dict[str, int], n: int) -> str:
 
 # --- 年份 / 元运 --------------------------------------------------------------
 
+JIAZI = [GAN[i % 10] + ZHI[i % 12] for i in range(60)]   # 六十甲子
+
+
+def jiazi_step(gz: str, k: int) -> str:
+    """六十甲子中 gz 之后第 k 个（k 可为负）。"""
+    return JIAZI[(JIAZI.index(gz) + k) % 60]
+
+
 def ganzhi_of_year(year: int) -> str:
     return GAN[(year - 4) % 10] + ZHI[(year - 4) % 12]
 
