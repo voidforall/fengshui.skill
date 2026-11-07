@@ -13,14 +13,6 @@
 **每次排盘，都会给你一张可以「起盘」的交互盘面。** 九星按洛书轨迹逐宫飞布，点任意一宫，看《说卦》取象、各星旺衰与这一宫的批注。
 单个 HTML 文件，离线可开，手机与深色模式都能看。
 
-<p align="center">
-  <img src="docs/images/feixing-dark.webp" alt="深色模式：黑漆描金" width="520">
-  <img src="docs/images/feixing-phone.webp" alt="手机版" width="190">
-</p>
-
-示例：[docs/examples/feixing-demo.html](docs/examples/feixing-demo.html)（下载后用浏览器打开；
-或经第三方 [htmlpreview 在线预览](https://htmlpreview.github.io/?https://github.com/voidforall/fengshui.skill/blob/main/docs/examples/feixing-demo.html)）
-
 ---
 
 ## 这是什么
