@@ -1,2 +1,6 @@
 __pycache__/
 *.pyc
+
+# eval 运行结果（体积大、含模型输出），只提交基线摘要
+evals/results/*
+!evals/results/baseline.md

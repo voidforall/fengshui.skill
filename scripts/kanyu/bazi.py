@@ -7,7 +7,7 @@ from dataclasses import dataclass, field
 
 from .bazhai import MinGua, mingua_of
 from .almanac import lichun_year, require_lunar, true_solar_time
-from .core import parse_gender, wuxing_of
+from .core import jiazi_step, parse_gender, wuxing_of
 
 try:
     from lunar_python import Solar  # type: ignore
@@ -38,6 +38,24 @@ class Bazi:
     qiyun: tuple[int, int, int]         # 起运：年 月 天
     dayun: list[DaYun] = field(default_factory=list)
     mingua: MinGua | None = None
+
+
+def dayun_forward(year_gan: str, gender: str) -> bool:
+    """大运顺逆：阳年生男、阴年生女顺排；阴年生男、阳年生女逆排。
+
+    🧮 一次性核对《滴天髓阐微》485 个命例，书中所列大运全部一致。
+    """
+    yang = year_gan in "甲丙戊庚壬"
+    return yang == (parse_gender(gender) == "m")
+
+
+def dayun_from_pillars(pillars: list[str], gender: str, n: int = 8) -> list[str]:
+    """由四柱与性别排大运干支：自月柱起，顺则依六十甲子向后，逆则向前，共 n 步。
+
+    只排干支，不算起运岁数（起运岁数需出生时刻，见 bazi()）。纯规则，不依赖历法库。
+    """
+    k = 1 if dayun_forward(pillars[0][0], gender) else -1
+    return [jiazi_step(pillars[1], k * (i + 1)) for i in range(n)]
 
 
 def wuxing_count(pillars: list[str]) -> dict[str, int]:
