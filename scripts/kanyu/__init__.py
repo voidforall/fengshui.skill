@@ -14,4 +14,4 @@
 计算函数只返回数据（dataclass / dict），不做格式化；格式化统一在 render。
 """
 
-__version__ = "2.1.0"
+__version__ = "2.2.0"

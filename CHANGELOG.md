@@ -2,8 +2,9 @@
 
 版本号遵循 [语义化版本](https://semver.org/lang/zh-CN/)。`SKILL.md` 的 `metadata.version`、
 `scripts/kanyu/__init__.py` 的 `__version__` 与本文件最新条目保持一致（有测试校验）。
+新改动先记在 `## [Unreleased]` 下；发版时改为 `## [版本号] - 日期`，合并到 main 后自动发布 Release。
 
-## [Unreleased]
+## [2.2.0] - 2026-11-07
 
 ### 结构
 - 按 Agent Skills 规范做内部拆分：SKILL.md 精简为铁律、人设与问题分流（341 → 约 130 行），
@@ -79,6 +80,7 @@ v1 的核心规则存在大量错误，本版本修正并改为「计算交给�
 - 初版：`SKILL.md` 人设与知识框架、参考资料、示例对话。
   **注意：此版本的八宅游年表、命卦、飞星规则、流年表存在错误，请勿使用。**
 
+[2.2.0]: https://github.com/voidforall/fengshui.skill/compare/v2.1.0...v2.2.0
 [2.1.0]: https://github.com/voidforall/fengshui.skill/compare/v2.0.0...v2.1.0
 [2.0.0]: https://github.com/voidforall/fengshui.skill/compare/v1.0.0...v2.0.0
 [1.0.0]: https://github.com/voidforall/fengshui.skill/releases/tag/v1.0.0
