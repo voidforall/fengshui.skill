@@ -60,7 +60,7 @@ git clone https://github.com/voidforall/fengshui.skill ~/.codex/skills/fengshui-
 
 ### 依赖
 
-- Python 3.9+（飞星、八宅、命卦、流年只用标准库）
+- Python 3.10+（飞星、八宅、命卦、流年只用标准库）
 - 择日、单日黄历、八字需要历法库 [lunar-python](https://github.com/6tail/lunar-python)：
 
 ```bash
@@ -156,7 +156,7 @@ python3 scripts/fengshui.py bazi --birth "1990-06-01 08:30" --gender f --longitu
 python3 -m unittest discover -s tests
 ```
 
-未安装 `lunar_python` 时，历法相关用例会自动跳过。CI 在 Python 3.9 / 3.13、装与不装 lunar_python 四种组合下运行。
+未安装 `lunar_python` 时，历法相关用例会自动跳过。CI 在 Python 3.10 / 3.13、装与不装 lunar_python 四种组合下运行。
 
 命令行输出有快照测试（`tests/golden/`）。有意修改输出格式后，重新生成快照并检查 diff：
 
