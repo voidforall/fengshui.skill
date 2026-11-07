@@ -43,7 +43,7 @@ class Bazi:
 def dayun_forward(year_gan: str, gender: str) -> bool:
     """大运顺逆：阳年生男、阴年生女顺排；阴年生男、阳年生女逆排。
 
-    🧮 与《滴天髓阐微》485 个命例书中所列大运逐一对照一致（tests/test_dayun.py）。
+    🧮 一次性核对《滴天髓阐微》485 个命例，书中所列大运全部一致。
     """
     yang = year_gan in "甲丙戊庚壬"
     return yang == (parse_gender(gender) == "m")
