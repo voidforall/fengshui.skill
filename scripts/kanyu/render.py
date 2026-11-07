@@ -159,6 +159,8 @@ def day(info: DayInfo, ys: YearSha) -> str:
            f"忌：{_join(info.ji)}"]
     if info.flags:
         out.append(f"⚠ 大忌：{'、'.join(info.flags)}")
+    if info.suji:
+        out.append(f"△ 通书俗忌：{'、'.join(info.suji)}（无《协纪辨方书》出处，仅供参考）")
     out.append(f"年家：太岁{ys.taisui}，岁破{ys.suipo}，三煞{ys.sansha}，流年五黄{ys.wuhuang}")
     return "\n".join(out)
 
@@ -176,6 +178,8 @@ def zeri(r: ZeriResult, top: int = 8) -> str:
         out.append(f"  {d0} 周{WEEKDAYS[d0.weekday()]} {i.day_gz}日 "
                    f"农历{i.lunar_md}  分{ds.score}：{'，'.join(ds.reasons)}")
         out.append(f"      {i.chong}；凶煞：{_join(i.xiongsha[:6])}")
+        if ds.notes:
+            out.append(f"      △ {'、'.join(ds.notes)}")
     if not r.good:
         out.append("  （范围内无合格日，建议放宽日期范围）")
     out += ["", f"已排除 {len(r.bad)} 天，例如："]
@@ -183,7 +187,8 @@ def zeri(r: ZeriResult, top: int = 8) -> str:
         i = ds.info
         out.append(f"  {i.date.date()} {i.day_gz}日 {i.jianchu}日：{'、'.join(ds.excluded)}")
     out += ["", "说明：评分为筛选辅助（宜忌出自通书体系的黄历数据 + 建除 + 黄道 + 德神），"
-                "月破/岁破/受死/正四废/冲当事人/黄历明忌为硬性排除。时辰与方位需另行配合。"]
+                "月破/正四废/冲当事人/黄历明忌为硬性排除；岁破日、受死为通书俗忌，仅标注（△）不排除。"
+                "出处见 references/sources.md。时辰与方位需另行配合。"]
     return "\n".join(out)
 
 

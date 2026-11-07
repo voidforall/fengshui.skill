@@ -58,6 +58,7 @@ class DayScore:
     score: int = 0
     reasons: list[str] = field(default_factory=list)    # 加分理由
     excluded: list[str] = field(default_factory=list)   # 排除原因（非空即排除）
+    notes: list[str] = field(default_factory=list)      # 不排除、但须向用户说明的通书俗忌
 
 
 @dataclass
@@ -80,6 +81,7 @@ def get_event(name: str) -> Event:
 def score_day(info: DayInfo, ev: Event, persons: list[Person]) -> DayScore:
     ds = DayScore(info)
     ds.excluded = list(info.flags)
+    ds.notes = [f"通书俗忌：{x}" for x in info.suji]
     for p in persons:
         if info.chong_zhi == p.zhi:
             ds.excluded.append(f"冲{p.year}年生人（{p.zhi}{shengxiao(p.zhi)}）")
