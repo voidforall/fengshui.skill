@@ -7,7 +7,7 @@ description: |
          「朝向」「摆放」「布局」「命卦」「流年」「山水」「龙穴砂水」等。
   适用：阳宅分析、家居办公布局、择日择时、八字配合风水、风水理论问答。
 metadata:
-  version: "2.1.0"
+  version: "2.2.0"
   author: voidforall
 ---
 

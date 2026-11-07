@@ -1,0 +1,56 @@
+name: release
+
+# main 上版本号变化时自动发版：打 tag v<版本号>，以 CHANGELOG 对应条目为正文创建 GitHub Release。
+# 该 tag 已存在则跳过。发版步骤：在 PR 中同步提升 scripts/kanyu/__init__.py、SKILL.md 的版本号，
+# 并把 CHANGELOG 的「Unreleased」改为 [版本号] - 日期；合并后由本工作流完成其余步骤。
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - scripts/kanyu/__init__.py
+      - SKILL.md
+      - CHANGELOG.md
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.13"
+      - name: Read version
+        id: v
+        run: |
+          V=$(python -c "import sys; sys.path.insert(0, 'scripts'); import kanyu; print(kanyu.__version__)")
+          echo "version=$V" >> "$GITHUB_OUTPUT"
+          if git rev-parse -q --verify "refs/tags/v$V" >/dev/null; then
+            echo "exists=true" >> "$GITHUB_OUTPUT"
+            echo "v$V 已存在，跳过发版"
+          else
+            echo "exists=false" >> "$GITHUB_OUTPUT"
+          fi
+      - name: Test (含版本号一致性检查)
+        if: steps.v.outputs.exists == 'false'
+        run: |
+          pip install -r requirements.txt
+          python -m unittest discover -s tests
+      - name: Release notes
+        if: steps.v.outputs.exists == 'false'
+        run: python .github/scripts/release_notes.py "${{ steps.v.outputs.version }}" > "$RUNNER_TEMP/notes.md"
+      - name: Create release
+        if: steps.v.outputs.exists == 'false'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release create "v${{ steps.v.outputs.version }}" \
+            --target "$GITHUB_SHA" \
+            --title "v${{ steps.v.outputs.version }}" \
+            --notes-file "$RUNNER_TEMP/notes.md"

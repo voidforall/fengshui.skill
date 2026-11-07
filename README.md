@@ -159,6 +159,9 @@ git diff tests/golden/
 
 变更记录见 [CHANGELOG.md](CHANGELOG.md)。v1.0.0 的八宅、命卦、飞星规则存在大量错误，已在 v2.0.0 修正，请使用 v2 及以上版本。
 
+**发版**：在一个 PR 里同步提升 `scripts/kanyu/__init__.py` 与 `SKILL.md` 的版本号，并把 CHANGELOG 的 `## [Unreleased]` 改为 `## [版本号] - 日期`。
+合并到 main 后，`.github/workflows/release.yml` 自动打 tag、以 CHANGELOG 对应条目为正文发布 GitHub Release（tag 已存在则跳过）。
+
 ### 出处
 
 每条规则、引文的出处与核对状态都列在 [references/sources.md](references/sources.md)，分为：原文已核对、已计算验证、公认出处（原文未核对）、流派口径、已删除。
