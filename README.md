@@ -33,45 +33,8 @@
 
 ## 安装
 
-本项目遵循 [Agent Skills 开放标准](https://agentskills.io)（`SKILL.md` + YAML frontmatter），可用官方跨工具安装器 [`npx skills`](https://github.com/vercel-labs/skills) 一键装进 Claude Code、Codex CLI 及其他兼容工具，也可手动 clone。
-
-### 方式一：npx skills（推荐，Claude Code / Codex CLI 通用）
-
 ```bash
-# 自动检测项目内已使用的智能体（Claude Code / Codex 等）并安装
 npx skills add voidforall/fengshui.skill
-
-# 指定安装到 Codex CLI（写入 .agents/skills/ 或 ~/.codex/skills/）
-npx skills add voidforall/fengshui.skill --agent codex
-
-# 指定安装到 Claude Code（写入 .claude/skills/ 或 ~/.claude/skills/）
-npx skills add voidforall/fengshui.skill --agent claude-code
-
-# 安装到用户全局目录而非当前项目
-npx skills add voidforall/fengshui.skill -g
-```
-
-`npx skills` 由 [vercel-labs/skills](https://github.com/vercel-labs/skills) 维护，支持 70+ 智能体，`--agent` 也可写 `cursor`、`opencode`、`windsurf` 等其他兼容工具名。
-
-### 方式二：手动安装
-
-按你使用的工具，clone 到对应的 skills 目录即可（目录名不强制，仅需包含 `SKILL.md`）：
-
-```bash
-# Claude Code
-git clone https://github.com/voidforall/fengshui.skill ~/.claude/skills/fengshui-master
-
-# Codex CLI
-git clone https://github.com/voidforall/fengshui.skill ~/.codex/skills/fengshui-master
-```
-
-### 依赖
-
-- Python 3.10+（飞星、八宅、命卦、流年只用标准库）
-- 择日、单日黄历、八字需要历法库 [lunar-python](https://github.com/6tail/lunar-python)：
-
-```bash
-pip install -r requirements.txt   # 即 pip install lunar_python
 ```
 
 ---
