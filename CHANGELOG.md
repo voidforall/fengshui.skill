@@ -5,6 +5,14 @@
 
 ## [Unreleased]
 
+### 结构
+- 按 Agent Skills 规范做内部拆分：SKILL.md 精简为铁律、人设与问题分流（341 → 约 130 行），
+  各用例流程移入 `references/playbook-yangzhai.md`、`playbook-zeri.md`、`playbook-bazi.md`，按需读取。
+- 交互盘面模板移至 `assets/templates/`。
+- 规则资料之间不再互相链接（规范：引用只有一层）；`tests/test_structure.py` 检查。
+- CI 新增 Agent Skills 规范校验（`agentskills validate`）。
+- 修正八字流程中残留的「材质建议」（已于出处核对时删除）。
+
 ### 交互盘面
 - `feixing --html [路径] --notes 批注.json`：生成可交互的飞星盘（单个 HTML，离线可开，适配手机与深色模式）。
   二十四山罗盘、坐向线、九宫分层（运盘 / 山星 / 向星 / 流年 / 流月）、「起盘」按洛书逐宫飞布、点宫看《说卦》取象与批注。

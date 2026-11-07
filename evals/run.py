@@ -31,7 +31,7 @@ import tempfile
 
 ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
 CASES = os.path.join(ROOT, "evals", "cases.json")
-SKILL_FILES = ["SKILL.md", "scripts", "references", "examples", "requirements.txt"]
+SKILL_FILES = ["SKILL.md", "scripts", "references", "assets", "examples", "requirements.txt"]
 VERDICTS = ("一致", "部分一致", "不一致")
 ANSWER_TOOLS = ["Skill", "Read", "Write", "Glob", "Grep", "Bash(python3:*)", "Bash(python:*)", "Bash(pip install:*)"]
 
