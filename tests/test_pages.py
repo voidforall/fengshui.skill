@@ -28,7 +28,7 @@ class TestFeixingPage(unittest.TestCase):
         self.assertEqual(d["layers"]["yun"], ch.yunpan)
         self.assertEqual(d["layers"]["annual"]["中"], 1)
         self.assertEqual(d["main_pattern"], "双星到向")
-        self.assertEqual(d["title"], "八运 · 子山午向")
+        self.assertEqual((d["title"], d["subtitle"]), ("子山午向", "八运宅"))
         self.assertEqual(d["chart_status"]["8"], "当令旺星")    # 八运盘，当前九运：两种旺衰都给出
         self.assertEqual(d["status"]["9"], "当令旺星")
 
