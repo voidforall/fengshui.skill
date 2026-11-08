@@ -14,7 +14,9 @@ import re
 from . import __version__
 from .core import (GRID, LUOSHU_PATH, MOUNTAINS, PALACE_DIR, PALACES, STAR_NAMES,
                    deg_to_mountain, fly, mountain_center_deg, mountain_yinyang)
+from .bazhai import YOUNIAN_JI, YOUNIAN_NOTE
 from .feixing import Chart, jian_warnings, main_pattern, palace_flags, star_status
+from .layout import Member, house_gua, palace_younian
 
 # 模板放在 skill 根目录的 assets/templates/（Agent Skills 规范：模板等静态资源放 assets/）
 SKILL_ROOT = os.path.abspath(os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", ".."))
@@ -33,7 +35,7 @@ GUA_XIANG = {
 }
 GUA_DEG = {"坎": 0, "艮": 45, "震": 90, "巽": 135, "离": 180, "坤": 225, "兑": 270, "乾": 315}
 
-NOTES_KEYS = {"summary", "palaces", "advice"}
+NOTES_KEYS = {"summary", "palaces", "rooms", "advice"}
 
 
 def load_notes(path: str | None) -> dict:
@@ -46,11 +48,14 @@ def load_notes(path: str | None) -> dict:
         raise ValueError("notes 应为 JSON 对象")
     unknown = set(notes) - NOTES_KEYS
     if unknown:
-        raise ValueError(f"notes 含未知字段：{'、'.join(sorted(unknown))}（可用：summary、palaces、advice）")
+        raise ValueError(f"notes 含未知字段：{'、'.join(sorted(unknown))}（可用：summary、palaces、rooms、advice）")
     pals = notes.get("palaces", {})
     bad = set(pals) - set(PALACE_DIR)
     if bad:
         raise ValueError(f"notes.palaces 的键应为宫名（坎坤震巽中乾兑艮离），收到：{'、'.join(sorted(bad))}")
+    rooms = notes.get("rooms", {})
+    if not isinstance(rooms, dict) or not all(isinstance(v, str) for v in rooms.values()):
+        raise ValueError("notes.rooms 应为 {房间名: 文字}")
     if not all(isinstance(v, str) for v in pals.values()) or not isinstance(notes.get("summary", ""), str) \
             or not all(isinstance(a, str) for a in notes.get("advice", [])):
         raise ValueError("notes 中的批注应为文字")
@@ -66,8 +71,13 @@ def _escape_html(s: str) -> str:
     return s.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;")
 
 
+# 签筒里备用的常见房间（未在 --rooms 中给出的，作为空签供用户自己摆放）
+SPARE_ROOMS = ["大门", "客厅", "主卧", "次卧", "书房", "厨房", "卫生间", "儿童房", "老人房"]
+
+
 def feixing_data(ch: Chart, *, annual: int | None, annual_label: str | None, month: int | None,
-                 facing_deg: float | None, yun_note: str, current_yun: int, notes: dict) -> dict:
+                 facing_deg: float | None, yun_note: str, current_yun: int, notes: dict,
+                 rooms: list[tuple[str, str]] | None = None, members: list[Member] | None = None) -> dict:
     ann = fly(annual) if annual else None
     mon = fly(month) if month else None
     palaces = {}
@@ -77,7 +87,7 @@ def feixing_data(ch: Chart, *, annual: int | None, annual_label: str | None, mon
             "xiang": GUA_XIANG.get(p, ""),
             "flags": palace_flags(ch.shan[p], ch.xiang[p], ann[p] if ann else None),
         }
-    facts = [("元运", f"{NUM_CN[ch.yun]}运"), ("坐向", f"坐{ch.sit}向{ch.facing}"),
+    facts = [("坐向", f"坐{ch.sit}向{ch.facing}"),
              ("排法", "替卦" if ch.tigua else "下卦")]
     warnings = []
     axis = facing_deg if facing_deg is not None else mountain_center_deg(ch.facing)
@@ -98,8 +108,15 @@ def feixing_data(ch: Chart, *, annual: int | None, annual_label: str | None, mon
         entries.append(line)
     mountains = [{"name": m, "deg": mountain_center_deg(m), "boundary": i % 3 == 0}
                  for i, m in enumerate(MOUNTAINS)]
+    rooms = rooms or []
+    members = members or []
+    hg, hgroup = house_gua(ch)
+    given = {name for name, _ in rooms}
+    room_cards = [{"name": n, "palace": p} for n, p in rooms] + \
+                 [{"name": n, "palace": None} for n in SPARE_ROOMS if n not in given]
     return {
-        "title": f"{NUM_CN[ch.yun]}运 · {ch.sit}山{ch.facing}向",
+        "title": f"{ch.sit}山{ch.facing}向",
+        "subtitle": f"{NUM_CN[ch.yun]}运宅",
         "facts": facts, "warnings": warnings, "yun_note": yun_note,
         "sit": ch.sit, "facing": ch.facing, "sit_palace": ch.sit_palace, "face_palace": ch.face_palace,
         "axis_deg": axis,
@@ -114,9 +131,14 @@ def feixing_data(ch: Chart, *, annual: int | None, annual_label: str | None, mon
         "mountains": mountains,
         "gua_ring": [{"name": g, "deg": GUA_DEG[g]} for g in PALACES],
         "notes": notes,
+        "rooms": room_cards,
+        "house": {"label": "宅", "gua": hg, "group": hgroup, "younian": palace_younian(hg)},
+        "members": [{"label": m.label, "gua": m.mingua.gua, "number": m.mingua.number,
+                     "group": m.mingua.group, "younian": m.younian} for m in members],
+        "younian_ji": sorted(YOUNIAN_JI), "younian_note": YOUNIAN_NOTE,
         "autoplay": True,
-        "source": f"堪舆子 fengshui-master v{__version__} · 生成于 {_dt.date.today():%Y-%m-%d} · "
-                  f"盘面由 scripts/fengshui.py 计算，旺衰按当前{NUM_CN[current_yun]}运论",
+        "source": f"由堪舆子 fengshui-master v{__version__} 于 {_dt.date.today():%Y-%m-%d} 生成。"
+                  f"盘面由 scripts/fengshui.py 计算，旺衰按当前{NUM_CN[current_yun]}运论。",
     }
 
 

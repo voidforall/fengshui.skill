@@ -10,6 +10,7 @@ from .core import (GRID, LUOSHU_PATH, NUM_PALACE, PALACE_DIR, STAR_NAMES, WEEKDA
 from .feixing import Chart, jian_warnings, palace_flags, star_status
 from .zeri import ZeriResult
 from .zibai import YearSha, monthly_center
+from .layout import Member, RoomReading
 
 
 def display_width(s: str) -> int:
@@ -98,6 +99,26 @@ def feixing(ch: Chart, *, annual: int | None = None, month: int | None = None,
     if annual:
         out.append(f"\n流年中宫 {annual}（{STAR_NAMES[annual]}）"
                    + (f"，流月中宫 {month}" if month else ""))
+    return "\n".join(out)
+
+
+# --- 户型对位 ----------------------------------------------------------------------
+
+def rooms(readings: list[RoomReading], house: tuple[str, str], members: list[Member]) -> str:
+    out = ["", f"房间对位（宅卦：{house[0]}宅，{house[1]}宅；以宅中心立极）："]
+    for m in members:
+        out.append(f"  家人 {m.label}：{m.mingua.number} {m.mingua.gua}卦，{m.mingua.group}命")
+    for r in readings:
+        line = (f"  {r.name}：{r.direction}（{r.palace}宫）山{r.shan} 向{r.xiang} 运{r.yun}"
+                + (f" 年{r.annual}" if r.annual else ""))
+        if r.house_younian:
+            line += f"；宅·{r.house_younian}{'（吉）' if r.house_ji else '（凶）'}"
+        for label, y in r.members.items():
+            if y:
+                line += f"；{label}·{y}"
+        if r.flags:
+            line += "  ⚠ " + "、".join(r.flags)
+        out.append(line)
     return "\n".join(out)
 
 

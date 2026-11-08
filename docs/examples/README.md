@@ -4,6 +4,8 @@
 
 ```bash
 python3 scripts/fengshui.py feixing --facing 180 --year 2018-09-01 --annual 2026 \
+        --rooms "大门=南,主卧=西北,厨房=东,卫生间=东北,客厅=中,书房=西" \
+        --member "我:1985-03-01:m" --member "太太:1990-06-01:f" \
         --html docs/examples/feixing-demo.html --notes docs/examples/feixing-notes.json
 ```
 

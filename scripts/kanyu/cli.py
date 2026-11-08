@@ -14,6 +14,7 @@ from .bazhai import east_west, mingua_of, younian
 from .bazi import bazi
 from .core import mountain_palace, opposite, parse_direction, yun_of_year, yun_range
 from .feixing import feixing_chart
+from .layout import house_gua, make_member, parse_rooms, read_rooms
 from .zeri import EVENTS, select
 from .zibai import annual_center, monthly_center, year_sha
 
@@ -146,19 +147,36 @@ def cmd_feixing(a) -> Output:
     text = render.feixing(ch, annual=annual, month=month, facing_deg=facing_deg, yun_note=note,
                           current_yun=cur)
     data = {"chart": _jsonable(ch), "facing_deg": facing_deg, "annual_center": annual, "month_center": month}
+    members = [_member(m) for m in (a.member or [])]
+    rooms = parse_rooms(a.rooms) if a.rooms else []
+    readings = read_rooms(ch, rooms, members, annual) if (rooms or members) else []
+    if rooms or members:
+        text += "\n" + render.rooms(readings, house_gua(ch), members)
+        data["rooms"] = _jsonable(readings)
+        data["members"] = _jsonable(members)
     if a.html is not None:
         notes = pages.load_notes(a.notes)
         annual_label = f"{a.annual}年" if a.annual else (f"{lichun_year(parse_date(a.month))[0]}年" if a.month else None)
         page = pages.render("feixing.html", f"飞星盘 {ch.sit}山{ch.facing}向",
                             pages.feixing_data(ch, annual=annual, annual_label=annual_label, month=month,
                                                facing_deg=facing_deg, yun_note=note, current_yun=cur,
-                                               notes=notes))
+                                               notes=notes, rooms=rooms, members=members))
         path = pages.write_page(a.html or pages.default_name(ch), page)
         text += f"\n\n交互盘面已生成：{path}"
         data["html"] = path
     elif a.notes:
         raise UsageError("--notes 需与 --html 一起使用")
     return Output(text, data)
+
+
+def _member(spec: str):
+    """'我:1985-03-01:m' → Member（年份按立春分年）。"""
+    parts = [p.strip() for p in spec.replace("：", ":").split(":")]
+    if len(parts) != 3 or not all(parts):
+        raise ValueError(f"家人格式应为 称呼:出生日期:m/f，如 我:1985-03-01:m，收到 {spec!r}")
+    label, birth, gender = parts
+    y, _ = lichun_year(parse_date(birth))
+    return make_member(label, y, gender)
 
 
 def cmd_liunian(a) -> Output:
@@ -229,7 +247,12 @@ def build_parser() -> argparse.ArgumentParser:
     s.add_argument("--month", help="叠加流月（日期，按节气月）")
     s.add_argument("--html", nargs="?", const="", metavar="PATH",
                    help="同时生成可交互的 HTML 盘面（不给路径则写到当前目录）")
-    s.add_argument("--notes", metavar="JSON", help="写入盘面的批注：{summary, palaces:{宫名:文字}, advice:[...]}")
+    s.add_argument("--notes", metavar="JSON",
+                   help="写入盘面的批注：{summary, palaces:{宫名:文字}, rooms:{房间:文字}, advice:[...]}")
+    s.add_argument("--rooms", metavar="名称=方位,...",
+                   help="户型对位，如 大门=南,主卧=西北,厨房=东（方位以宅中心论，可用八方名或宫名）")
+    s.add_argument("--member", action="append", metavar="称呼:出生日期:m/f",
+                   help="家人命卦（可多次），如 我:1985-03-01:m；用于八宅吉凶")
 
     s = add("liunian", cmd_liunian, "流年紫白与年家煞方")
     s.add_argument("--year", type=int, required=True)

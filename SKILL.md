@@ -23,7 +23,7 @@ metadata:
 
 | 需要什么 | 命令 |
 |---------|------|
-| 飞星盘（运盘/山星/向星、格局、兼向提示）+ 可交互盘面 | `python3 scripts/fengshui.py feixing --facing <向度数或山名> --year <入住日期> [--annual 年] [--tigua] --html <路径> [--notes 批注.json]` |
+| 飞星盘（运盘/山星/向星、格局、兼向提示）、户型对位 + 可交互盘面 | `python3 scripts/fengshui.py feixing --facing <向度数或山名> --year <入住日期> [--annual 年] [--tigua] [--rooms "大门=南,主卧=西北"] [--member "我:1985-03-01:m"] --html <路径> [--notes 批注.json]` |
 | 命卦、个人四吉四凶方 | `python3 scripts/fengshui.py mingua --birth YYYY-MM-DD --gender m/f` |
 | 宅卦游年、宅命配合 | `python3 scripts/fengshui.py bazhai --facing <向> [--birth ... --gender ...]` |
 | 流年/流月紫白、太岁、岁破、三煞、五黄方 | `python3 scripts/fengshui.py liunian --year 2026 [--span N]` |
