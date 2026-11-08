@@ -7,10 +7,10 @@
 本 Skill 由一份符合标准的 `SKILL.md`、参考资料和一个确定性计算脚本组成，不绑定任何特定工具——可在 Claude Code、Codex CLI 等 30+ 支持 [Agent Skills](https://github.com/agentskills/agentskills) 标准的智能体中直接使用。
 
 <p align="center">
-  <img src="docs/images/feixing-cast.gif" alt="交互飞星盘：点「起盘」，九星按洛书轨迹逐宫飞布，右侧批注随宫位更新" width="720">
+  <img src="docs/images/feixing-cast.gif" alt="交互飞星盘：起盘时九星按洛书轨迹逐宫飞布；把房间竹签拖进宫位，右侧显示这个房间的星曜与八宅吉凶" width="600">
 </p>
 
-**每次排盘，都会给你一张可以「起盘」的交互盘面。** 九星按洛书轨迹逐宫飞布，点任意一宫，看《说卦》取象、各星旺衰与这一宫的批注。
+**每次排盘，都会给你一张可以「起盘」的交互盘面。** 九星按洛书轨迹逐宫飞布；房间做成竹签插在九宫里，拖到哪一宫，就看这个房间在那里的星曜、八宅吉凶与批注。
 单个 HTML 文件，离线可开，手机与深色模式都能看。
 
 ---
