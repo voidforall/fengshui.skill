@@ -43,5 +43,10 @@
       "title": "Times Square Alliance · 已研究的演艺街区范围（人工概化）",
       "url": "https://www.timessquarenyc.org/times-square-alliance/about-the-alliance"
     }
-  ]
+  ],
+  "search": {
+    "country_code": "us",
+    "placeholder": "10013 / Brooklyn / 350 5th Ave",
+    "hint": "美国ZIP Code、街道地址或街区名；也可输入行政区名、纬度,经度。"
+  }
 }

@@ -27,18 +27,26 @@ button { cursor:pointer; min-block-size:44px; }
 .swatch { display:inline-block; inline-size:.65rem; block-size:.65rem; border-radius:50%; background:var(--element); margin-inline-end:.4rem; }
 .reset { margin-inline-start:auto; }
 .workspace { display:grid; grid-template-columns:minmax(0, 19rem) minmax(0, 1fr); border:1px solid var(--rule); background:var(--card); }
-.sidebar { min-inline-size:0; border-inline-end:1px solid var(--rule); }
-.search { padding:1rem; border-block-end:1px solid var(--rule); }
+.sidebar { min-inline-size:0; border-inline-end:1px solid var(--rule); display:flex; flex-direction:column; max-block-size:47rem; }
+.search { flex:none; padding:1rem; border-block-end:1px solid var(--rule); }
 label { display:block; font-size:.8rem; color:var(--soft); }
 input[type="search"] { inline-size:100%; margin-block-start:.4rem; padding:.5rem .6rem; color:var(--ink); border:1px solid var(--rule); background:var(--card); border-radius:0; min-inline-size:0; }
 #count { margin:.6rem 0 0; font-size:.8rem; color:var(--soft); }
-#regions { max-block-size:34rem; overflow:auto; overscroll-behavior:contain; scrollbar-gutter:stable; list-style:none; padding:0; margin:0; }
+#regions { min-block-size:0; flex:1; max-block-size:34rem; overflow:auto; overscroll-behavior:contain; scrollbar-gutter:stable; list-style:none; padding:0; margin:0; }
 .place { display:flex; gap:.7rem; align-items:start; inline-size:100%; padding:.9rem 1rem; border:0; border-block-end:1px solid #b9a98570; background:transparent; color:var(--ink); text-align:start; }
 .place:hover, .place[aria-pressed="true"] { background:#ded1b4; }
 .place strong { font-size:.93rem; font-weight:600; }
 .place small { display:block; color:var(--soft); font-size:.75rem; }
 .number { flex:none; color:var(--element); font-family:system-ui,sans-serif; font-size:.75rem; padding-block-start:.2rem; }
 .empty { padding:1rem; }
+.search { display:block; }
+#search-submit { font:inherit; min-block-size:48px; padding:.4rem 1rem; margin-block-start:.5rem; background:var(--ink); color:var(--paper); border:1px solid var(--rule); cursor:pointer; }
+#search-submit:disabled { opacity:.6; cursor:wait; }
+#search-help, #search-status, .search-provider { font-size:.75rem; overflow-wrap:anywhere; margin-block:.5rem; }
+#search-results { list-style:none; margin:0; padding:0; max-block-size:15rem; overflow:auto; }
+#search-results button { min-block-size:48px; text-align:start; overflow-wrap:anywhere; }
+#search { font-size:1rem; min-block-size:48px; }
+
 .map-wrap { min-inline-size:0; position:relative; }
 #map { block-size:41rem; background:#ddd8ca; font-family:system-ui,sans-serif; }
 .map-head { display:flex; justify-content:space-between; padding:.55rem .9rem; font-size:.75rem; border-block-end:1px solid var(--rule); color:var(--soft); }
@@ -79,7 +87,7 @@ footer { color:var(--soft); font-size:.75rem; padding-block:1rem; border-block-s
   .workspace { grid-template-columns:minmax(0,1fr); }
   .map-wrap { grid-row:1; }
   #map { block-size:58dvh; min-block-size:20rem; }
-  .sidebar { border-inline-end:0; border-block-start:1px solid var(--rule); }
+  .sidebar { max-block-size:none; border-inline-end:0; border-block-start:1px solid var(--rule); }
   #regions { max-block-size:16rem; }
   .detail { grid-template-columns:minmax(0,1fr); gap:.5rem; }
   .reset { margin-inline-start:0; }
@@ -129,7 +137,11 @@ footer { color:var(--soft); font-size:.75rem; padding-block:1rem; border-block-s
   <div class="filters" role="group" aria-label="按片区主象筛选" id="filters"></div>
   <div class="workspace">
     <aside class="sidebar" aria-label="片区索引">
-      <div class="search"><label for="search">搜索行政区、单元或坐标</label><input id="search" type="search" placeholder="行政区名或 纬度,经度（回车定位）" autocomplete="off"><p id="count" role="status"></p></div>
+      <search class="search"><form id="search-form" action="#map" method="get" aria-label="当地地址定位">
+        <label for="search">邮编、地址或地区</label><input id="search" name="q" type="search" placeholder="当地邮编、地址或地区名" maxlength="200" enterkeyhint="search" autocomplete="off" autocorrect="off" autocapitalize="none" spellcheck="false" aria-describedby="search-help search-status">
+        <button id="search-submit" type="submit">定位 ↗</button><p id="search-help"></p><p id="search-status" role="status"></p><ul id="search-results" aria-label="候选地点"></ul>
+        <p class="search-provider">联网定位：<a href="https://postcodes.io/" target="_blank" rel="noopener noreferrer">Postcodes.io</a> / <a href="https://github.com/komoot/photon" target="_blank" rel="noopener noreferrer">Photon · © OSM</a>。仅提交时发送查询词。</p>
+      </form><p id="count" role="status"></p></search>
       <ol id="regions"></ol>
     </aside>
     <section class="map-wrap" aria-label="真实地图与五行分析区块">
@@ -161,6 +173,7 @@ footer { color:var(--soft); font-size:.75rem; padding-block:1rem; border-block-s
 </main>
 <!-- __LICENSE__ -->
 <script>__LEAFLET_JS__</script>
+<script>__SEARCH_JS__</script>
 <script id="city-data" type="application/json">__DATA__</script>
 <script>
 'use strict';
@@ -193,7 +206,7 @@ function ringContains(ring,lon,lat){let inside=false;for(let i=0,j=ring.length-1
 function contains(geometry,lon,lat){const polys=geometry.type==='Polygon'?[geometry.coordinates]:geometry.coordinates;return polys.some(poly=>ringContains(poly[0],lon,lat)&&!poly.slice(1).some(hole=>ringContains(hole,lon,lat)));}
 function coordinateQuery(){const match=$('search').value.trim().match(/^(-?\d+(?:\.\d+)?)\s*[,，]\s*(-?\d+(?:\.\d+)?)$/);return match?[Number(match[2]),Number(match[1])]:null;}
 function regionAt(lon,lat){return data.regions.find(r=>shapes.get(r.id).getBounds().contains([lat,lon])&&contains(r.geometry,lon,lat));}
-function visible(){const q=$('search').value.trim().toLocaleLowerCase(),coord=coordinateQuery();if(coord){const r=regionAt(...coord);return r?[r]:[];}return data.regions.filter(r=>(active==='全部'||analysis(r).primary===active)&&searchIndex.get(r.id).includes(q));}
+function visible(){if(located)return data.regions.filter(r=>r.id===located&&(active==='全部'||analysis(r).primary===active));const q=$('search').value.trim().toLocaleLowerCase(),coord=coordinateQuery();if(coord){const r=regionAt(...coord);return r?[r]:[];}const matches=data.regions.filter(r=>(active==='全部'||analysis(r).primary===active)&&searchIndex.get(r.id).includes(q));return matches.length||!q?matches:data.regions.filter(r=>active==='全部'||analysis(r).primary===active);}
 function fit(regions){if(regions.length)map.fitBounds(L.featureGroup(regions.map(r=>shapes.get(r.id))).getBounds(),{padding:[20,20],maxZoom:15,animate:false});}
 function style(r){const a=analysis(r);return {color:r.id===selected?'#26211b':colors[a.primary],fillColor:colors[a.primary],fillOpacity:r.id===selected ? .72 : .52,weight:r.id===selected?2.5:($('show-grid').checked ? .45 : 0),dashArray:null};}
 function refreshEvidence(){evidenceLayer.clearLayers();const r=regionIndex.get(selected);if(!$('show-evidence').checked||!r)return;for(const p of r.evidence||[]){const box=node('div');box.append(node('h3',p.name),node('p',p.note));const list=node('ul');sourceList(list,p.sources);box.append(list);L.circleMarker([p.position[1],p.position[0]],{className:'evidence-marker',radius:5,color:'#26211b',fillColor:'#fff8ed',fillOpacity:1,weight:2}).bindPopup(box).addTo(evidenceLayer);}}
@@ -221,9 +234,48 @@ function update(){
  put('view-note',($('method').value==='combined'?'全城综合取象':'全城土地覆盖底层')+'：每个单元均已归类；筛选只改变显示。土地覆盖为2021年，功能资料的现状完整性有限。');
 }
 for(const e of ['全部','金','木','水','火','土']){const b=node('button',undefined,'filter');b.dataset.element=e;if(colors[e]){const dot=node('span',undefined,'swatch');dot.style.setProperty('--element',colors[e]);b.append(dot);}b.append(node('span',e,'filter-text'));b.addEventListener('click',()=>{active=e;update();fit(visible());});$('filters').append(b);}
-$('search').addEventListener('input',()=>{if(coordinateQuery())active='全部';update();});$('search').addEventListener('keydown',event=>{if(event.key==='Enter'){update();fit(visible());}});
+const searchConfig=data.search||{};
+$('search').placeholder=searchConfig.placeholder||'当地邮编、地址、地区名或坐标';
+put('search-help',(searchConfig.hint||'按当地习惯输入邮编、地址或地区名；坐标格式为纬度,经度。')+' 名称可本地筛选；点击定位或回车联网查询。');
+const lookup=CitySearch.createLookup();
+let searchController=null,searchVersion=0,located=null,locationMarker=null;
+function clearLocation(){located=null;if(locationMarker){map.removeLayer(locationMarker);locationMarker=null;}}
+function cancelSearch(){searchVersion++;searchController?.abort();searchController=null;$('search-form').removeAttribute('aria-busy');$('search-submit').disabled=false;}
+function showLocation(result){
+ const r=regionAt(...result.position);if(!r){put('search-status','此地点在本图城市范围外，无法提供五行分析。');return;}
+ clearLocation();located=r.id;active='全部';update();select(r,false);
+ const content=node('div');content.append(node('strong',result.label),node('p',result.source+(result.approximate?' · 地区/邮区参考中心点':' · 地址/邮编参考点')));
+ locationMarker=L.circleMarker([result.position[1],result.position[0]],{radius:7,color:'#26211b',fillColor:'#fff8ed',fillOpacity:1,weight:2}).addTo(map).bindPopup(content).openPopup();
+ map.setView([result.position[1],result.position[0]],14,{animate:false});
+ put('search-status','已定位：'+result.label+'。'+(result.approximate?'以地区/邮区参考中心点定位，并非整个邮区边界或全区统一结论。':'显示参考点所在单元的分析，邮编范围可能跨越多个单元。')+' 来源：'+result.source+'。');
+}
+async function submitSearch(){
+ const query=$('search').value.trim();cancelSearch();clearLocation();$('search-results').replaceChildren();
+ if(!query){update();fit(data.regions);put('search-status','请输入邮编、地址、地区名或坐标。');return;}
+ const coordinate=coordinateQuery();if(coordinate){active='全部';update();fit(visible());put('search-status',regionAt(...coordinate)?'已定位坐标所在单元。':'该坐标不在本图城市范围内。');return;}
+ // Exact local region names are available offline; short names may also be
+ // resolved online to a more precise neighbourhood or address on submission.
+ if(data.regions.some(r=>r.name.toLocaleLowerCase()===query.toLocaleLowerCase())){update();fit(visible());put('search-status','已定位本地单元。');return;}
+ const version=searchVersion,controller=new AbortController();searchController=controller;
+ $('search-form').setAttribute('aria-busy','true');$('search-submit').disabled=true;put('search-status','正在查询当地邮编或地址…');
+ const timeout=setTimeout(()=>controller.abort(),15000);
+ try{
+  const b=outline.getBounds();
+  const results=await lookup(query,{...searchConfig,bbox:[b.getWest(),b.getSouth(),b.getEast(),b.getNorth()]},controller.signal);
+  if(version!==searchVersion)return;
+  const inside=results.filter(result=>regionAt(...result.position));
+  if(!inside.length){put('search-status',results.length?'查询地点在本图城市范围外。':'未找到范围内的地点；请补充完整邮编、门牌或当地地区名，也可使用坐标。');return;}
+  if(inside.length===1){showLocation(inside[0]);return;}
+  put('search-status','找到 '+inside.length+' 个候选地点，请选择；以下地点均在本图范围内。');
+  for(const result of inside){const li=node('li'),button=node('button',result.label,'evidence-link');button.type='button';button.addEventListener('click',()=>{showLocation(result);});li.append(button);$('search-results').append(li);}
+ }catch(error){if(version===searchVersion)put('search-status',error.name==='AbortError'?'查询超时，请重试；本地单元筛选与坐标查询仍可用。':(error instanceof TypeError?'无法连接定位服务；请检查网络、重试或输入坐标。':error.message||'查询失败，请重试或输入坐标。'));}
+ finally{clearTimeout(timeout);if(version===searchVersion){searchController=null;$('search-form').removeAttribute('aria-busy');$('search-submit').disabled=false;}}
+}
+$('search').addEventListener('input',()=>{cancelSearch();clearLocation();$('search-results').replaceChildren();put('search-status','');if(coordinateQuery())active='全部';update();});
+$('search-form').addEventListener('submit',event=>{event.preventDefault();submitSearch();});
+$('search').addEventListener('keydown',event=>{if(event.key==='Enter'&&(event.isComposing||event.keyCode===229))event.preventDefault();});
 $('method').addEventListener('change',()=>{active='全部';update();fit(visible());});$('show-evidence').addEventListener('change',refreshEvidence);$('show-grid').addEventListener('change',()=>{for(const r of data.regions)shapes.get(r.id).setStyle(style(r));});
-$('reset').addEventListener('click',()=>{active='全部';$('search').value='';update();fit(data.regions);});
+$('reset').addEventListener('click',()=>{cancelSearch();clearLocation();$('search-results').replaceChildren();put('search-status','');active='全部';$('search').value='';update();fit(data.regions);});
 map.on('click',event=>{const r=regionAt(event.latlng.lng,event.latlng.lat);if(r)select(r,false);});
 update();fit(data.regions);
 const status=(message,error=false)=>{put('map-status',message);$('map-status').dataset.error=String(error);};

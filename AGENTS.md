@@ -22,7 +22,7 @@
 
 - 常规测试：`python3 -m unittest discover -s tests`。CI 矩阵与 skill 校验命令以 `.github/workflows/tests.yml` 为准；缺少 `lunar_python` 时历法测试会跳过，涉及历法改动时须安装依赖并确认相关测试实际运行。
 - 有意调整 CLI 输出后，按 `README.md` 的快照更新命令重新生成 `tests/golden/`，逐项检查 diff，不能用更新快照掩盖计算错误。
-- 城市地图拓扑校验依赖 `skills/city-wuxing-map/requirements.txt`；源数据重建另需该目录的 `requirements-build.txt`。模板或输入变更后按 `docs/examples/README.md` 重新生成示例，保留第三方数据和底图署名。
+- 城市地图拓扑校验依赖 `skills/city-wuxing-map/requirements.txt`；源数据重建另需该目录的 `requirements-build.txt`。地址搜索另运行 `node --test tests/city_search.test.cjs`（Node 22）。模板或输入变更后按 `docs/examples/README.md` 重新生成示例，保留第三方数据和底图署名。
 - 修改飞星 HTML 模板后，按 `docs/examples/README.md` 重新生成示例，并在浏览器检查起盘、点宫批注、移动端与深色模式。
 - 修改 eval 案例后运行 `python3 evals/run.py --dry-run`；模型评测流程及结果提交边界见 `evals/README.md`。
 - 仅文档改动检查内容准确性、引用路径及 `git diff --check`，不必为文案新增测试。

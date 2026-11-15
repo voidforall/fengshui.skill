@@ -135,6 +135,16 @@ def validate(data):
                 text(point.get(key), label + ".evidence." + key)
             position(point.get("position"), label + ".evidence.position")
             sources(point.get("sources"), label + ".evidence.sources")
+    search = data.get("search", {})
+    if not isinstance(search, dict):
+        raise ValueError("search 应为对象")
+    if "country_code" in search and not re.fullmatch(r"[a-z]{2}", str(search["country_code"])):
+        raise ValueError("search.country_code 应为小写两位国家代码")
+    for key in ("placeholder", "hint"):
+        if key in search:
+            text(search[key], "search." + key)
+    if "photon_url" in search:
+        https(search["photon_url"], "search.photon_url")
     validate_coverage(data)
     basemap = data.get("basemap", DEFAULT_BASEMAP)
     if not isinstance(basemap, dict):
@@ -196,11 +206,12 @@ def render(data):
         "__TITLE__": html.escape(data["city"] + " · 城市五行风水地图"),
         "__DATA__": embedded,
         "__LEAFLET_CSS__": (ROOT / "assets/vendor/leaflet.css").read_text(encoding="utf-8"),
+        "__SEARCH_JS__": (ROOT / "assets/search.js").read_text(encoding="utf-8"),
         "__LEAFLET_JS__": (ROOT / "assets/vendor/leaflet.js").read_text(encoding="utf-8"),
         "__LICENSE__": (ROOT / "assets/vendor/LEAFLET-LICENSE").read_text(encoding="utf-8"),
     }
     template = (ROOT / "assets/map.html").read_text(encoding="utf-8")
-    return re.sub(r"__(?:TITLE|DATA|LEAFLET_CSS|LEAFLET_JS|LICENSE)__",
+    return re.sub(r"__(?:TITLE|DATA|LEAFLET_CSS|LEAFLET_JS|SEARCH_JS|LICENSE)__",
                   lambda match: replacements[match.group()], template)
 
 

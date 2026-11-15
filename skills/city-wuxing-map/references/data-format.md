@@ -20,3 +20,17 @@
 ```
 
 XYZ地址需含三个占位符，max_zoom为1–22整数；底图配置不转换区域坐标。
+
+## 当地地址搜索
+
+可选顶层 `search` 对象，国家代码使用小写ISO两位代码；不设置则保留多语言地址/邮编查询，并按完整城市范围筛选结果：
+
+```json
+{"search":{"country_code":"gb","placeholder":"SW1A 1AA / SW1 / Camden","hint":"支持英国完整邮编、邮区和地址。","photon_url":"https://photon.komoot.io/api/"}}
+```
+
+`placeholder` 与 `hint` 必须按本地常用格式编写，不能照搬伦敦。纽约示例使用us和ZIP Code；法国可用fr和75001，日本可用jp和当地地址/邮编。邮编作为文字保留前导零；不要求所有国家都具有邮编。英国专用查询支持完整邮编、outcode和细分邮区候选；其他文字走Photon搜索，城市边界内的候选才可选。邮区/地区中心点仅定位该点所在单元，不代表整个邮区属性或精确邮区边界。
+
+仅点击定位或回车发起联网请求，输入时只做本地筛选。取消过时请求、15秒超时、页面内缓存；服务失败时保留本地搜索和坐标定位。请求词发送到Postcodes.io（英国邮编）或配置的Photon实例（其他查询）；页面明确显示服务来源。
+
+默认Photon公共实例仅供适量交互使用，无可用性保证，生产流量应配置自托管/获授权实例，并确保CORS；[使用说明](https://github.com/komoot/photon#demo-server)。[英国查询文档](https://postcodes.io/docs/overview/)。不使用公共Nominatim作通用地址服务。

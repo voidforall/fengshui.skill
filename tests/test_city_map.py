@@ -97,6 +97,17 @@ class TestCityMap(unittest.TestCase):
         generator.validate(self.data)
         self.assertAlmostEqual(100,generator.validate_coverage(self.data)['coverage_percent'])
 
+    def test_search_configuration_and_standalone_script(self):
+        self.data['search']={'country_code':'fr','placeholder':'75001 / Paris','hint':'Adresse locale'}
+        output=generator.render(self.data)
+        self.assertIn('createLookup',output)
+        self.assertNotIn('__SEARCH_JS__',output)
+        self.assertIn('id="search-form"',output)
+        self.data['search']['photon_url']='javascript:alert(1)'
+        with self.assertRaises(ValueError): generator.validate(self.data)
+        self.data['search']={'country_code':'United Kingdom'}
+        with self.assertRaises(ValueError): generator.validate(self.data)
+
     def test_data_cannot_escape_json_script_or_title(self):
         payload='</script><script>alert("injected")</script>'
         self.data['city']=payload;self.data['regions'][0]['analyses']['function']['reason']=payload

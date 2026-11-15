@@ -46,5 +46,10 @@
     }
   },
   "prepared_at": "2026-11-15",
-  "scope_name": "大伦敦完整范围"
+  "scope_name": "大伦敦完整范围",
+  "search": {
+    "country_code": "gb",
+    "placeholder": "SW1A 1AA / SW1 / Camden",
+    "hint": "英国完整邮编、邮区或地址；也可输入行政区名、纬度,经度。"
+  }
 }

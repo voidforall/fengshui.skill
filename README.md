@@ -97,7 +97,7 @@ npx skills add voidforall/fengshui.skill --full-depth --skill city-wuxing-map
 能切换土地覆盖底层与综合分析，说明资料年代和置信等级。
 ```
 
-独立skill [city-wuxing-map](skills/city-wuxing-map/SKILL.md) 在真实底图上连续着色，点击任意单元查看覆盖统计、功能证据、主象、兼象、置信等级和来源。支持坐标定位、行政区搜索、五行筛选及可选证据点和格网线。
+独立skill [city-wuxing-map](skills/city-wuxing-map/SKILL.md) 在真实底图上连续着色，点击任意单元查看覆盖统计、功能证据、主象、兼象、置信等级和来源。支持当地邮编/地址定位（伦敦完整邮编及邮区、纽约ZIP Code）、候选地点选择、坐标定位、行政区搜索、五行筛选及可选证据点和格网线。
 
 ![伦敦全城五行地图](docs/images/london-wuxing.png)
 
