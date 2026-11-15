@@ -37,11 +37,16 @@ jobs:
           else
             echo "exists=false" >> "$GITHUB_OUTPUT"
           fi
+      - uses: actions/setup-node@v4
+        if: steps.v.outputs.exists == 'false'
+        with:
+          node-version: "22"
       - name: Test (含版本号一致性检查)
         if: steps.v.outputs.exists == 'false'
         run: |
-          pip install -r requirements.txt
+          pip install -r requirements.txt -r skills/city-wuxing-map/requirements.txt
           python -m unittest discover -s tests
+          node --test tests/city_search.test.cjs
       - name: Release notes
         if: steps.v.outputs.exists == 'false'
         run: python .github/scripts/release_notes.py "${{ steps.v.outputs.version }}" > "$RUNNER_TEMP/notes.md"
