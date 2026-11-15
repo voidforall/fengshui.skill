@@ -43,3 +43,4 @@ jobs:
           git archive HEAD | tar -x -C "$RUNNER_TEMP/skill"
           mv "$RUNNER_TEMP/skill" "$RUNNER_TEMP/fengshui-master"
           agentskills validate "$RUNNER_TEMP/fengshui-master"
+          agentskills validate "$RUNNER_TEMP/fengshui-master/skills/city-wuxing-map"

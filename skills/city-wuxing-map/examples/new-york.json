@@ -1,0 +1,89 @@
+{
+  "city": "纽约",
+  "subtitle": "New York · 曼哈顿的水岸、林地与文化节点",
+  "summary": "从下城港湾到中央公园，选取五处真实地点，展示纽约的金木水火土。标注描述具体地点，不给整座城区贴单一吉凶标签。",
+  "reviewed_at": "2026-11-15",
+  "coordinate_note": "坐标使用 WGS84，经公开地图手工选取代表位置，非测绘或导航精度。河流、公园与城区标注不表示边界；五行是本图的文化解读，事实来源只支持地理或功能描述。",
+  "places": [
+    {
+      "id": "nyse",
+      "name": "纽约证券交易所 · Wall Street",
+      "lat": 40.7069,
+      "lon": -74.0113,
+      "element": "金",
+      "basis": "城市功能类比",
+      "fact": "纽约证券交易所是证券交易机构，位于曼哈顿下城的金融街区。",
+      "reading": "以证券交易与金融制度取金象，这是现代城市功能类比；不意味着到此投资就会获利。",
+      "sources": [
+        {
+          "title": "NYSE · History of NYSE",
+          "url": "https://www.nyse.com/history-of-nyse"
+        }
+      ]
+    },
+    {
+      "id": "ramble",
+      "name": "中央公园 · The Ramble",
+      "lat": 40.7771,
+      "lon": -73.9692,
+      "element": "木",
+      "basis": "地貌取象",
+      "fact": "The Ramble 是中央公园内的林地景观，有弯曲的小径、树木与观鸟空间。",
+      "reading": "以成片树木与林地取木象。公园的环境价值应结合实际绿量、可达性等考察，木象不能代替环境质量检测。",
+      "sources": [
+        {
+          "title": "Central Park Conservancy · The Ramble",
+          "url": "https://www.centralparknyc.org/locations/the-ramble"
+        }
+      ]
+    },
+    {
+      "id": "battery",
+      "name": "炮台公园 · 临港岸线",
+      "lat": 40.7033,
+      "lon": -74.0182,
+      "element": "水",
+      "basis": "地貌取象",
+      "fact": "The Battery 位于曼哈顿南端，临近纽约港，并连接前往自由女神像等地的渡船活动。点位选在临港岸线附近。",
+      "reading": "以港湾水面取水象，园内绿化兼木。临水同时需要关注真实的风、潮汐与防洪条件；这些条件不由五行标签代替。",
+      "sources": [
+        {
+          "title": "The Battery Conservancy · Visit",
+          "url": "https://www.thebattery.org/"
+        }
+      ]
+    },
+    {
+      "id": "lincoln-center",
+      "name": "林肯中心 · Lincoln Center",
+      "lat": 40.7725,
+      "lon": -73.9835,
+      "element": "火",
+      "basis": "城市功能类比",
+      "fact": "林肯中心汇集音乐、歌剧、舞蹈与戏剧等表演艺术机构及场馆。",
+      "reading": "以表演、艺术传播与公共文化活动取火象，是现代功能类比，不代表此地气温、火灾风险或某种可测能量。",
+      "sources": [
+        {
+          "title": "Lincoln Center · Visit",
+          "url": "https://lincolncenter.org/series/visit"
+        }
+      ]
+    },
+    {
+      "id": "belvedere",
+      "name": "眺望台城堡 · Vista Rock",
+      "lat": 40.7794,
+      "lon": -73.9691,
+      "element": "土",
+      "basis": "地貌取象",
+      "fact": "Belvedere Castle 建在中央公园的 Vista Rock 上，是园内的岩地高点与观景节点。",
+      "reading": "以裸露岩地和抬升地势取土象，周边树木兼木；不因为建筑叫城堡就推断存在特定风水格局。",
+      "sources": [
+        {
+          "title": "Central Park Conservancy · Belvedere Castle",
+          "url": "https://www.centralparknyc.org/locations/belvedere-castle"
+        }
+      ]
+    }
+  ]
+}

@@ -24,6 +24,7 @@
 - 结合年月神煞，**筛选入宅/开业/动土吉日**，给出可操作时间窗口
 - 识别路冲、天斩、壁刀等**常见外煞**，提供化解方案
 - **解读风水术语**与经典原文，回答堪舆学理论问题
+- 使用独立的 **city-wuxing-map** skill，生成城市的**金木水火土真实地图**，点击地点查阅地理事实、五行解读与来源
 
 **计算交给代码，解读交给模型。** 大模型擅长问询与解释，但并不擅长排盘、推算干支节气——这些地方「看起来对」的错误最难被发现。因此本 Skill 内置 `scripts/fengshui.py`，所有排盘、查表、历法计算由脚本确定性完成，并有回归测试覆盖；模型只负责收集信息、调用脚本、解读结果。
 
@@ -35,6 +36,12 @@
 
 ```bash
 npx skills add voidforall/fengshui.skill
+```
+
+仓库另含城市地图 skill，可单独安装（主顾问可用 `--skill fengshui-master` 指定）：
+
+```bash
+npx skills add voidforall/fengshui.skill --full-depth --skill city-wuxing-map
 ```
 
 ---
@@ -83,6 +90,38 @@ npx skills add voidforall/fengshui.skill
 《青囊序》里「山上龙神不下水」是什么意思？
 ```
 
+### 城市五行风水地图
+
+```
+给伦敦做一张金木水火土风水地图，要真实地图，标出不同地方的取象和依据。
+```
+
+```
+用同样的方法做纽约的五行地图，把河流、园林、金融和文化地标标出来，附来源。
+```
+
+新 skill [city-wuxing-map](skills/city-wuxing-map/SKILL.md) 使用 **OpenStreetMap 真实地理底图**，可拖动、缩放、按五行筛选和搜索地点；地图标记与地点索引联动，点击可查看地理事实、五行文化解读与资料来源。也支持为其他城市核对资料后，通过 JSON 生成地图，不限于内置城市。
+
+![伦敦城市五行风水地图](docs/images/london-wuxing.png)
+
+| 示例 | 代表地点 | 文件 |
+|------|----------|------|
+| 伦敦 · 10 处 | 金：英格兰银行、Canary Wharf；木：海德公园、邱园；水：泰晤士河、小威尼斯；火：环球剧场、皇家歌剧院；土：Primrose Hill、格林尼治山丘 | [交互地图](docs/examples/london-wuxing.html) · [地点与来源 JSON](skills/city-wuxing-map/examples/london.json) |
+| 纽约 · 5 处 | NYSE、中央公园林地、炮台公园水岸、林肯中心、Vista Rock | [交互地图](docs/examples/new-york-wuxing.html) · [地点与来源 JSON](skills/city-wuxing-map/examples/new-york.json) |
+
+从仓库根目录生成并预览，无需 API key 或第三方 Python 包：
+
+```bash
+python3 skills/city-wuxing-map/scripts/generate.py --example london --output docs/examples/london-wuxing.html
+python3 skills/city-wuxing-map/scripts/generate.py --example new-york --output docs/examples/new-york-wuxing.html
+python3 -m http.server 8000 --bind 127.0.0.1
+# 打开 http://127.0.0.1:8000/docs/examples/london-wuxing.html
+```
+
+任意城市：按 [数据格式](skills/city-wuxing-map/references/data-format.md) 核对地点与来源后，运行 `python3 skills/city-wuxing-map/scripts/generate.py --input 城市地点.json --output 城市五行地图.html`。
+
+**底图需要联网并通过 HTTP 打开**，HTML 已内嵌 Leaflet；直接双击文件时页面会提示启动本地服务。GitHub 文件预览不运行交互地图，请下载或本地启动上述服务。五行分类是明确标识的地貌取象或现代城市功能类比，来源支持地理事实；不代表实测能量、区域吉凶或住宅财运，点位也不表示五行影响范围。详见 [取象口径](skills/city-wuxing-map/references/method.md)。
+
 ---
 
 ## 可视化路线图
@@ -92,6 +131,7 @@ npx skills add voidforall/fengshui.skill
 | 用例 | 交互 | 状态 |
 |------|------|------|
 | **飞星揭盘** | 二十四山罗盘 + 九宫；「起盘」按洛书逐宫飞布；分层看运盘、山星、向星、流年；点宫看批注 | ✅ 已上线 |
+| **城市五行地图** | 真实地图 + 金木水火土地点标记；五行筛选、搜索、事实 / 解读 / 来源分层；伦敦与纽约示例 | ✅ 独立 skill 已上线 |
 | **罗盘定向** | 拖动罗盘，或在手机上用陀螺仪对准大门，实时显示坐向、兼向度数、是否空亡 | 计划中 |
 | **户型对位** | 把「大门、主卧、厨房」卡片拖到九宫方位，逐个房间显示飞星与八宅吉凶 | 计划中 |
 | **八宅方位** | 八个扇区按吉凶着色，叠加家人命卦外环，宅命配不配一眼可见 | 计划中 |
@@ -207,6 +247,8 @@ fengshui.skill/
 │   └── sources.md              # 每条规则 / 引文的出处与核对状态
 ├── assets/
 │   └── templates/              # 交互盘面模板
+├── skills/
+│   └── city-wuxing-map/        # 独立城市五行地图 skill：生成器、模板、示例与取象口径
 ├── docs/
 │   ├── images/                 # README 用图
 │   └── examples/               # 交互盘面示例

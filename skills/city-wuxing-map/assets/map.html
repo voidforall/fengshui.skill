@@ -1,0 +1,249 @@
+<!doctype html>
+<html lang="zh-Hans">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="referrer" content="strict-origin-when-cross-origin">
+<title>__TITLE__</title>
+<style>__LEAFLET_CSS__</style>
+<style>
+:root { color-scheme: light; --paper:#ece2cb; --card:#f6f0e3; --ink:#26211b; --soft:#655a49; --rule:#b9a985; --red:#b03a2e; --gold:#9a7431; }
+* { box-sizing:border-box; }
+body { margin:0; background:var(--paper); color:var(--ink); font-family:"Songti SC","Noto Serif CJK SC",serif; line-height:1.65; }
+main { max-inline-size:1600px; margin:auto; padding:clamp(1rem, 3vw, 2.5rem); }
+header { display:flex; flex-wrap:wrap; align-items:center; gap:1.4rem; padding-block-end:1.4rem; border-block-end:1px solid var(--rule); }
+.seal { background:var(--red); color:#fff8ed; font-family:"Kaiti SC",KaiTi,serif; font-size:1.4rem; line-height:1.3; padding:.5rem .65rem; border:3px double var(--paper); }
+.heading { flex:1 1 20rem; min-inline-size:0; }
+.eyebrow { font-family:system-ui,sans-serif; font-size:.72rem; letter-spacing:.2em; color:var(--soft); margin:0 0 .35rem; }
+h1 { font-size:clamp(1.8rem, 1.2rem + 2vw, 3rem); font-weight:500; line-height:1.25; margin:0; text-wrap:balance; }
+.subtitle { margin:.4rem 0 0; color:var(--soft); }
+.edition { font-size:.8rem; color:var(--soft); }
+.intro { max-inline-size:65rem; margin-block:1.1rem; }
+.filters { display:flex; flex-wrap:wrap; align-items:center; gap:.55rem; margin-block:1rem; }
+button, input { font:inherit; }
+button { cursor:pointer; min-block-size:44px; }
+.filter, .reset { border:1px solid var(--rule); color:var(--ink); background:transparent; padding:.4rem 1rem; border-radius:3px; }
+.filter[aria-pressed="true"] { background:var(--ink); color:var(--card); border-color:var(--ink); }
+.swatch { display:inline-block; inline-size:.65rem; block-size:.65rem; border-radius:50%; background:var(--element); margin-inline-end:.4rem; }
+.reset { margin-inline-start:auto; }
+.workspace { display:grid; grid-template-columns:minmax(0, 19rem) minmax(0, 1fr); border:1px solid var(--rule); background:var(--card); }
+.sidebar { min-inline-size:0; border-inline-end:1px solid var(--rule); }
+.search { padding:1rem; border-block-end:1px solid var(--rule); }
+label { display:block; font-size:.8rem; color:var(--soft); }
+input { inline-size:100%; margin-block-start:.4rem; padding:.5rem .6rem; color:var(--ink); border:1px solid var(--rule); background:var(--card); border-radius:0; min-inline-size:0; }
+#count { margin:.6rem 0 0; font-size:.8rem; color:var(--soft); }
+#places { max-block-size:34rem; overflow:auto; overscroll-behavior:contain; scrollbar-gutter:stable; list-style:none; padding:0; margin:0; }
+.place { display:flex; gap:.7rem; align-items:start; inline-size:100%; padding:.9rem 1rem; border:0; border-block-end:1px solid #b9a98570; background:transparent; color:var(--ink); text-align:start; }
+.place:hover, .place[aria-pressed="true"] { background:#ded1b4; }
+.place strong { font-size:.93rem; font-weight:600; }
+.place small { display:block; color:var(--soft); font-size:.75rem; }
+.number { flex:none; color:var(--element); font-family:system-ui,sans-serif; font-size:.75rem; padding-block-start:.2rem; }
+.empty { padding:1rem; }
+.map-wrap { min-inline-size:0; position:relative; }
+#map { block-size:41rem; background:#ddd8ca; font-family:system-ui,sans-serif; }
+.map-head { display:flex; justify-content:space-between; padding:.55rem .9rem; font-size:.75rem; border-block-end:1px solid var(--rule); color:var(--soft); }
+.map-head b { color:var(--ink); font-weight:500; }
+.map-status { margin:0; padding:.6rem 1rem; font-size:.78rem; background:var(--card); border-block-start:1px solid var(--rule); }
+.map-status[data-error="true"] { color:var(--red); }
+.marker { border:0; background:none; }
+.marker span { display:grid; place-items:center; inline-size:36px; block-size:36px; border:2px solid #fff8ed; background:var(--element); color:white; border-radius:50% 50% 50% 5px; transform:rotate(-45deg); box-shadow:0 1px 4px #26211b55; }
+.marker em { font:600 14px system-ui,sans-serif; font-style:normal; transform:rotate(45deg); }
+.marker.selected span { outline:3px solid var(--ink); outline-offset:2px; }
+.leaflet-tooltip { font-family:inherit; }
+.leaflet-popup-content { color:#26211b; font:14px/1.65 "Songti SC",serif; }
+.leaflet-popup-content h3 { font-size:1rem; margin:0 0 .5rem; }
+.leaflet-popup-content p { margin:.5rem 0; }
+.leaflet-popup-content .popup-basis { color:#655a49; font-size:.75rem; }
+.leaflet-popup-content ul { padding-inline-start:1rem; }
+.leaflet-control-attribution { max-inline-size:100%; overflow-wrap:anywhere; }
+.detail { display:grid; grid-template-columns:minmax(0, 1fr) minmax(0, 1.6fr); gap:2rem; padding:1.5rem 0; border-block-end:1px solid var(--rule); scroll-margin-block-start:1rem; }
+.detail > div { min-inline-size:0; }
+.detail h2 { font-weight:500; margin:.3rem 0; font-size:1.6rem; }
+.detail h3 { font-size:.8rem; color:var(--soft); font-weight:500; margin:0; }
+.detail p { margin:.4rem 0 1rem; }
+.tag { color:var(--element); font-size:.85rem; }
+#coordinate, #sources { font-size:.8rem; }
+#sources { padding-inline-start:1.2rem; }
+a { color:inherit; text-underline-offset:.2em; overflow-wrap:anywhere; }
+a:hover { color:var(--red); }
+details { padding-block:1rem; color:var(--soft); font-size:.85rem; }
+summary { cursor:pointer; color:var(--ink); }
+.method { display:grid; grid-template-columns:repeat(auto-fit,minmax(min(100%,12rem),1fr)); gap:1rem; margin-block:1rem; }
+.method p { border-inline-start:2px solid var(--rule); padding-inline-start:.8rem; margin:0; }
+footer { color:var(--soft); font-size:.75rem; padding-block:1rem; border-block-start:1px solid var(--rule); }
+:focus-visible { outline:3px solid var(--gold); outline-offset:3px; }
+@media (max-width:760px) {
+  header { display:grid; grid-template-columns:auto minmax(0,1fr); gap:.4rem 1rem; }
+  .seal { grid-row:1 / 3; }
+  .edition { grid-column:2; }
+  .workspace { grid-template-columns:minmax(0,1fr); }
+  .map-wrap { grid-row:1; }
+  #map { block-size:58dvh; min-block-size:20rem; }
+  .sidebar { border-inline-end:0; border-block-start:1px solid var(--rule); }
+  #places { max-block-size:16rem; }
+  .detail { grid-template-columns:minmax(0,1fr); gap:.5rem; }
+  .reset { margin-inline-start:0; }
+}
+@media (prefers-color-scheme:dark) {
+  :root { color-scheme:dark; --paper:#16120e; --card:#211a14; --ink:#eadcbf; --soft:#c0b296; --rule:#756247; --red:#e28c7f; --gold:#d2a856; }
+  .place:hover, .place[aria-pressed="true"] { background:#3b3022; }
+  .number, .tag { color:color-mix(in srgb,var(--element) 50%,var(--ink)); }
+  .seal { background:#b03a2e; color:#fff8ed; }
+  .leaflet-container { color:#26211b; color-scheme:light; }
+  .leaflet-container a { color:#194f62; }
+}
+</style>
+</head>
+<body>
+<main>
+  <header>
+    <div class="seal" aria-hidden="true">城<br>市</div>
+    <div class="heading"><p class="eyebrow">KANYU · CITY ATLAS</p><h1 id="title"></h1><p class="subtitle" id="subtitle"></p></div>
+    <div class="edition">五行取象 · 城市风水地图<br><span id="reviewed"></span></div>
+  </header>
+  <p class="intro" id="summary"></p>
+  <div class="filters" role="group" aria-label="筛选五行图层" id="filters"><button class="reset" id="reset">查看全部地点 ↗</button></div>
+  <div class="workspace">
+    <aside class="sidebar" aria-label="地图地点索引">
+      <div class="search"><label for="search">搜索地点或特征</label><input id="search" type="search" placeholder="例如：河流、公园、金融" autocomplete="off"><p id="count" role="status"></p></div>
+      <ol id="places"></ol>
+    </aside>
+    <section class="map-wrap" aria-label="真实地理地图">
+      <div class="map-head"><b>实景地理底图 · 地点取象</b><span>↑ 北 · 可拖动 / 缩放</span></div>
+      <div id="map" aria-label="可缩放地图；也可使用地点索引查阅全部标注"></div>
+      <p class="map-status" id="map-status" role="status">正在加载真实地图…</p>
+    </section>
+  </div>
+  <section class="detail" id="detail" aria-labelledby="place-title" tabindex="-1">
+    <div><span class="tag" id="tag"></span><h2 id="place-title">选择一个地点</h2><p id="coordinate"></p><a id="osm" target="_blank" rel="noopener noreferrer">在 OpenStreetMap 核对位置 ↗</a></div>
+    <div><h3>地理事实</h3><p id="fact"></p><h3>五行风水解读 · 本图取象</h3><p id="reading"></p><h3>事实来源</h3><ul id="sources"></ul></div>
+  </section>
+  <details><summary>这张地图如何读？五行依据与使用边界</summary>
+    <div class="method">
+      <p><b>金</b> · 金融、交易等现代城市功能类比，不等同于财运判断。</p>
+      <p><b>木</b> · 树木、林地、植物园的地貌取象。</p>
+      <p><b>水</b> · 河流、运河、港湾等真实水体的地貌取象。</p>
+      <p><b>火</b> · 舞台、表演、文化传播等现代城市功能类比，不代表火灾风险。</p>
+      <p><b>土</b> · 山丘、岩地等地貌取象，不因位于市中心就自动属土。</p>
+    </div>
+    <p>这是以真实地理为基础的五行文化解读，不是实测能量或区域吉凶评级。一个地点可以兼具多种特征，本图选择一个有依据的主取象；点位仅代表观察位置，不是五行影响边界，也不覆盖城市每一寸土地。不根据缺失信息推断宅运、命卦配合或住房投资价值。</p>
+    <p id="coordinate-note"></p><p>底图需要联网。Leaflet 1.9.4 已内嵌，使用 BSD-2-Clause 许可。地图仅请求当前视野瓦片，不批量下载；公开高流量部署请配置合适的瓦片服务。</p>
+  </details>
+  <footer>堪舆子 · 计算有据，解读有界。底图地理数据 © OpenStreetMap contributors（默认底图）；五行标注为本项目文化取象。<a href="https://www.openstreetmap.org/fixthemap" target="_blank" rel="noopener noreferrer">报告底图问题 ↗</a></footer>
+  <noscript>请启用 JavaScript 查看交互地图。原始地点、依据与来源保存在对应城市 JSON 文件中。</noscript>
+</main>
+<!-- __LICENSE__ -->
+<script>__LEAFLET_JS__</script>
+<script id="city-data" type="application/json">__DATA__</script>
+<script>
+'use strict';
+const data = JSON.parse(document.getElementById('city-data').textContent);
+const colors = {'金':'#8a631d','木':'#376b49','水':'#2f627d','火':'#af4032','土':'#7b5840'};
+const $ = id => document.getElementById(id);
+const put = (id, value) => { $(id).textContent = value; };
+put('title', data.city + ' · 五行地图'); put('subtitle', data.subtitle);
+put('summary', data.summary); put('reviewed', '资料核对：' + data.reviewed_at);
+put('coordinate-note', data.coordinate_note);
+const map = L.map('map', {scrollWheelZoom:false});
+L.control.scale({imperial:false, position:'bottomleft'}).addTo(map);
+const markers = new Map();
+let selected = null, active = '全部';
+const visible = () => data.places.filter(p => (active === '全部' || p.element === active) &&
+  [p.name, p.fact, p.reading, p.element].join(' ').toLocaleLowerCase().includes($('search').value.trim().toLocaleLowerCase()));
+const bounds = places => L.latLngBounds(places.map(p => [p.lat, p.lon]));
+function fit(places) { if (places.length) map.fitBounds(bounds(places), {padding:[45,45], maxZoom:13, animate:false}); }
+function select(place, pan = true) {
+  selected = place.id;
+  put('place-title', place.name); put('tag', place.element + ' · ' + place.basis);
+  $('tag').style.setProperty('--element', colors[place.element]);
+  put('fact', place.fact); put('reading', place.reading);
+  put('coordinate', 'WGS84 · ' + place.lat.toFixed(5) + ', ' + place.lon.toFixed(5) + ' · 代表点位');
+  $('osm').href = 'https://www.openstreetmap.org/?mlat=' + place.lat + '&mlon=' + place.lon + '#map=16/' + place.lat + '/' + place.lon;
+  $('sources').replaceChildren(...place.sources.map(source => {
+    const li = document.createElement('li'), a = document.createElement('a');
+    a.textContent = source.title + ' ↗'; a.href = source.url; a.target = '_blank'; a.rel = 'noopener noreferrer'; li.append(a); return li;
+  }));
+  document.querySelectorAll('.place').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.id === selected)));
+  markers.forEach((marker, id) => {
+    const node = marker.getElement(); if (node) node.classList.toggle('selected', id === selected);
+    if (id === selected && !marker.isPopupOpen()) marker.openTooltip(); else marker.closeTooltip();
+    if (id !== selected) marker.closePopup();
+  });
+  if (pan) map.setView([place.lat, place.lon], Math.max(map.getZoom(), 13), {animate:false});
+}
+data.places.forEach((place, i) => {
+  const badge = document.createElement('span'), glyph = document.createElement('em');
+  badge.style.setProperty('--element', colors[place.element]); glyph.textContent = place.element; badge.append(glyph);
+  const tooltip = document.createElement('span'); tooltip.textContent = (i + 1) + ' · ' + place.name;
+  const popup = document.createElement('div');
+  const heading=document.createElement('h3'), basis=document.createElement('p'), fact=document.createElement('p'), reading=document.createElement('p'), sources=document.createElement('ul');
+  heading.textContent=place.name; basis.className='popup-basis'; basis.textContent=place.element + ' · ' + place.basis;
+  fact.textContent='地理事实：' + place.fact; reading.textContent='五行解读：' + place.reading;
+  place.sources.forEach(source => {
+    const li=document.createElement('li'), a=document.createElement('a');
+    a.textContent=source.title + ' ↗'; a.href=source.url; a.target='_blank'; a.rel='noopener noreferrer'; li.append(a); sources.append(li);
+  });
+  popup.append(heading,basis,fact,reading,sources);
+  const marker = L.marker([place.lat, place.lon], {
+    icon:L.divIcon({className:'marker', html:badge, iconSize:[36,36], iconAnchor:[18,36]}),
+    title:place.name + ' · ' + place.element, alt:place.name + ' · ' + place.element,
+    keyboard:true, riseOnHover:true
+  }).bindTooltip(tooltip, {direction:'top', offset:[0,-38]})
+    .bindPopup(popup, {maxWidth:320, maxHeight:280, autoPanPadding:[20,20]})
+    .on('click', () => select(place, false));
+  marker.on('add', () => marker.getElement().setAttribute('aria-label', place.name + ' · ' + place.element));
+  markers.set(place.id, marker);
+});
+function update() {
+  const places = visible();
+  $('places').replaceChildren();
+  data.places.forEach((place, i) => {
+    const marker = markers.get(place.id);
+    if (!places.includes(place)) { if (map.hasLayer(marker)) map.removeLayer(marker); return; }
+    if (!map.hasLayer(marker)) marker.addTo(map);
+    const li = document.createElement('li'), button = document.createElement('button');
+    button.className = 'place'; button.dataset.id = place.id;
+    button.setAttribute('aria-pressed', String(place.id === selected));
+    const number = document.createElement('span'), body = document.createElement('span'), title = document.createElement('strong'), note = document.createElement('small');
+    number.className = 'number'; number.style.setProperty('--element', colors[place.element]);
+    number.textContent = String(i + 1).padStart(2,'0') + ' ' + place.element;
+    title.textContent = place.name; note.textContent = place.basis; body.append(title,note); button.append(number,body);
+    button.addEventListener('click', () => { select(place); $('detail').focus({preventScroll:true}); $('detail').scrollIntoView({block:'nearest', behavior:'instant'}); });
+    li.append(button); $('places').append(li);
+  });
+  put('count', '显示 ' + places.length + ' / ' + data.places.length + ' 个地点 · ' + active);
+  if (!places.length) { const li=document.createElement('li'); li.className='empty'; li.textContent='没有匹配地点，请切换五行或清空搜索。'; $('places').append(li); }
+  if (places.length && !places.some(p => p.id === selected)) select(places[0], false);
+  if (!places.length) {
+    selected=null; put('place-title','没有匹配地点'); put('tag',''); put('fact','请调整筛选条件。'); put('reading',''); put('coordinate',''); $('osm').removeAttribute('href'); $('sources').replaceChildren();
+  }
+}
+['全部', ...Object.keys(colors)].forEach(element => {
+  const button=document.createElement('button'); button.className='filter'; button.dataset.element=element;
+  button.setAttribute('aria-pressed', String(element === active));
+  if (colors[element]) { const dot=document.createElement('span'); dot.className='swatch'; dot.style.setProperty('--element',colors[element]); button.append(dot); }
+  button.append(document.createTextNode(element + ' · ' + data.places.filter(p => element === '全部' || p.element === element).length));
+  button.addEventListener('click', () => { active=element; document.querySelectorAll('.filter').forEach(b => b.setAttribute('aria-pressed',String(b.dataset.element === active))); update(); fit(visible()); });
+  $('filters').insertBefore(button,$('reset'));
+});
+$('search').addEventListener('input',update);
+$('reset').addEventListener('click', () => { active='全部'; $('search').value=''; document.querySelectorAll('.filter').forEach(b => b.setAttribute('aria-pressed',String(b.dataset.element === active))); update(); fit(data.places); });
+fit(data.places); update();
+const status = (message, error=false) => { put('map-status',message); $('map-status').dataset.error=String(error); };
+if (location.protocol === 'file:') {
+  status('请通过本地 HTTP 打开以加载真实底图：在本文件目录运行 python3 -m http.server 8000 --bind 127.0.0.1，再访问 http://127.0.0.1:8000/ 。目前仅显示标注，未加载底图。', true);
+} else {
+  const base=data.basemap;
+  const link=document.createElement('a'); link.href=base.attribution_url; link.textContent=base.attribution; link.target='_blank'; link.rel='noopener noreferrer';
+  let loaded=0, errors=0;
+  L.tileLayer(base.url,{maxZoom:base.max_zoom,attribution:link.outerHTML})
+    .on('loading', () => { loaded=0; errors=0; status('正在加载真实地图…'); })
+    .on('tileload', () => { loaded++; })
+    .on('tileerror', () => { errors++; status('部分底图加载失败，请检查网络或更换瓦片服务。地点与资料仍可查阅。',true); })
+    .on('load', () => { if (!errors && loaded) status('真实底图已加载 · 点击五行标记或左侧地点，查看取象与来源'); })
+    .addTo(map);
+  window.addEventListener('offline', () => status('网络已断开：底图可能不完整，地点与来源文字仍可查阅。',true));
+}
+</script>
+</body>
+</html>

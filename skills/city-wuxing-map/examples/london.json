@@ -1,0 +1,169 @@
+{
+  "city": "伦敦",
+  "subtitle": "London · 从泰晤士河到城市山丘",
+  "summary": "沿着河流、园林、金融与舞台，读伦敦的五行取象。十处真实地点，五种观察视角；点击标记查看事实、解读与来源。",
+  "reviewed_at": "2026-11-15",
+  "coordinate_note": "坐标使用 WGS84，经公开地图手工选取代表位置，非测绘或导航精度。河流、公园与城区标注不表示边界；五行是本图的文化解读，事实来源只支持地理或功能描述。",
+  "places": [
+    {
+      "id": "bank",
+      "name": "英格兰银行 · City",
+      "lat": 51.5142,
+      "lon": -0.0885,
+      "element": "金",
+      "basis": "城市功能类比",
+      "fact": "英格兰银行是英国中央银行，负责货币与金融稳定等事务。",
+      "reading": "以货币、制度与交易功能取金象；这是现代城市功能类比，不表示这一带必然旺财，也不代表整座 City 只有金。",
+      "sources": [
+        {
+          "title": "Bank of England · About",
+          "url": "https://www.bankofengland.co.uk/about"
+        }
+      ]
+    },
+    {
+      "id": "canary-wharf",
+      "name": "金丝雀码头 · Canary Wharf",
+      "lat": 51.5054,
+      "lon": -0.0235,
+      "element": "金",
+      "basis": "城市功能类比",
+      "fact": "Canary Wharf 是伦敦商务与金融活动集中的城区，同时也有住宅、商店和公共空间。点位选在 One Canada Square 附近。",
+      "reading": "以金融办公的集中性取金象；周边船坞又兼水象，应把金水并见理解为城市景观组合，不推断财运吉凶。",
+      "sources": [
+        {
+          "title": "London Convention Bureau · Canary Wharf",
+          "url": "https://www.conventionbureau.london/neighbourhoods-of-london/canary-wharf"
+        }
+      ]
+    },
+    {
+      "id": "hyde-park",
+      "name": "海德公园 · Hyde Park",
+      "lat": 51.5073,
+      "lon": -0.1657,
+      "element": "木",
+      "basis": "地貌取象",
+      "fact": "海德公园是伦敦皇家公园之一，拥有草地、树木和 Serpentine 湖等景观。",
+      "reading": "以树木与绿地的生长取木象，湖面兼水。适合观察城市绿地与密集街区的过渡；不能由公园存在推出周边住宅一律为吉。",
+      "sources": [
+        {
+          "title": "The Royal Parks · Hyde Park",
+          "url": "https://www.royalparks.org.uk/visit/parks/hyde-park"
+        }
+      ]
+    },
+    {
+      "id": "kew",
+      "name": "邱园 · Kew Gardens",
+      "lat": 51.4787,
+      "lon": -0.2956,
+      "element": "木",
+      "basis": "地貌取象",
+      "fact": "邱园保存丰富的活体植物收藏，兼具植物园与科研功能。点位选在 Palm House 附近。",
+      "reading": "以植物收藏与持续生长取木象；这里只标代表点位，不把整个伦敦西部划为木区，也不替代具体住宅环境勘察。",
+      "sources": [
+        {
+          "title": "Royal Botanic Gardens, Kew · Kew Gardens",
+          "url": "https://www.kew.org/kew-gardens"
+        }
+      ]
+    },
+    {
+      "id": "thames",
+      "name": "泰晤士河 · 塔桥河段",
+      "lat": 51.5052,
+      "lon": -0.073,
+      "element": "水",
+      "basis": "地貌取象",
+      "fact": "塔桥横跨泰晤士河，沿河可连接 Thames Path。标注选在塔桥东侧的河面代表位置。",
+      "reading": "以真实河流的流动取水象。桥梁、河岸建筑与潮汐共同构成形势，是否适合某宅仍需具体坐向、距离及现场信息；不能见水就断旺财。",
+      "sources": [
+        {
+          "title": "Tower Bridge · Plan your visit / Getting here",
+          "url": "https://www.towerbridge.org.uk/plan-your-visit"
+        }
+      ]
+    },
+    {
+      "id": "little-venice",
+      "name": "小威尼斯 · Little Venice",
+      "lat": 51.5205,
+      "lon": -0.1835,
+      "element": "水",
+      "basis": "地貌取象",
+      "fact": "小威尼斯位于 Grand Union Canal 与 Regent’s Canal 相接处，水池和停泊船只形成鲜明的运河景观。",
+      "reading": "以运河汇合与水面取水象；这是可观察的水体取象，不把汇水自动解释成聚财，也不将地图点位当作水势影响范围。",
+      "sources": [
+        {
+          "title": "Canal & River Trust · Little Venice",
+          "url": "https://canalrivertrust.org.uk/canals-and-rivers/places-to-visit/little-venice"
+        }
+      ]
+    },
+    {
+      "id": "globe",
+      "name": "莎士比亚环球剧场 · Globe",
+      "lat": 51.5081,
+      "lon": -0.0972,
+      "element": "火",
+      "basis": "城市功能类比",
+      "fact": "莎士比亚环球剧场是伦敦的戏剧演出与参观场所，位于泰晤士河南岸。",
+      "reading": "以舞台表达、文化传播取火象，属于本图采用的现代功能类比。邻水又兼水象；火不是火灾风险，也不说明居住者性格。",
+      "sources": [
+        {
+          "title": "Shakespeare’s Globe · Visit",
+          "url": "https://www.shakespearesglobe.com/visit/"
+        }
+      ]
+    },
+    {
+      "id": "opera",
+      "name": "皇家歌剧院 · Covent Garden",
+      "lat": 51.5129,
+      "lon": -0.1223,
+      "element": "火",
+      "basis": "城市功能类比",
+      "fact": "皇家歌剧院位于 Covent Garden 的 Bow Street，是歌剧与芭蕾等演出的场所。",
+      "reading": "以表演和文化可见度取火象；此取象用于认识城市文化节点，不把演出热闹程度换算成能量分数或夜间噪声实测值。",
+      "sources": [
+        {
+          "title": "Royal Ballet and Opera · Visitor Information",
+          "url": "https://www.rbo.org.uk/visit/visitor-information"
+        }
+      ]
+    },
+    {
+      "id": "primrose-hill",
+      "name": "樱草山 · Primrose Hill",
+      "lat": 51.5393,
+      "lon": -0.1605,
+      "element": "土",
+      "basis": "地貌取象",
+      "fact": "樱草山的山顶接近海拔 63 米，是伦敦的受保护观景点之一。",
+      "reading": "以抬升的地形与山体取土象，草木兼木。观景开阔不等于某宅已有靠山；住宅与山体的位置关系需要另行实地判断。",
+      "sources": [
+        {
+          "title": "The Royal Parks · Primrose Hill",
+          "url": "https://www.royalparks.org.uk/visit/parks/regents-park-primrose-hill/primrose-hill"
+        }
+      ]
+    },
+    {
+      "id": "greenwich",
+      "name": "格林尼治公园 · 天文台山丘",
+      "lat": 51.4779,
+      "lon": -0.0015,
+      "element": "土",
+      "basis": "地貌取象",
+      "fact": "格林尼治公园内的皇家天文台位于山丘上，附近观景点可俯瞰伦敦。",
+      "reading": "以山丘与地势承托取土象，园林兼木。地图展示高地这一地貌特征，不据此推断全区居民运势，也不把本初子午线当作风水分界。",
+      "sources": [
+        {
+          "title": "The Royal Parks · Greenwich Park",
+          "url": "https://www.royalparks.org.uk/visit/parks/greenwich-park"
+        }
+      ]
+    }
+  ]
+}
