@@ -1,0 +1,47 @@
+{
+  "city": "纽约",
+  "slug": "new-york",
+  "epsg": 32618,
+  "prepared_at": "2026-11-15",
+  "scope_name": "纽约五区完整范围（含行政水域）",
+  "boundary_source": "https://data.cityofnewyork.us/resource/wh2p-dxnf.geojson?$limit=10",
+  "boundary_note": "NYC DCP official borough boundaries with water areas, snapshot 2026-11-15",
+  "landcover_year": 2021,
+  "landcover_source": "https://esa-worldcover.org/en/data-access",
+  "landcover_tiles": [
+    "https://esa-worldcover.s3.eu-central-1.amazonaws.com/v200/2021/map/ESA_WorldCover_10m_2021_v200_N39W075_Map.tif"
+  ],
+  "landcover_processing": "10m 2021 v200 classes majority aggregated to 50m local UTM raster",
+  "function_source_title": "NYC DCP规划分区＋已核对演艺区研究",
+  "function_basis": "规划许可用途（非现状）＋演艺区资料",
+  "function_source_url": "https://services5.arcgis.com/GfwWNkhOj9bNBqoJ/ArcGIS/rest/services/nyzd/FeatureServer/0",
+  "function_snapshot": "2026-11-15",
+  "zoning_count": 1435,
+  "zoning_data_last_edit_ms": 1792767575166,
+  "function_mapping": "C1–C4 as retail/service signal; C5–C6 as commercial; M as industrial. These are permitted uses, not observed businesses. Broadway study extent adds a documented cultural signal.",
+  "attribution": [
+    "© ESA WorldCover project 2021 / Contains modified Copernicus Sentinel data (2021) processed by ESA WorldCover consortium",
+    "NYC Department of City Planning · NYC Open Data",
+    "Times Square Alliance · district description; interpreted cultural study extent"
+  ],
+  "files": {
+    "new-york-boundary.geojson.gz": {
+      "sha256": "a5a238bd26b36ac24649bab9beafe301358ed63febfc2fc9d4fe133118c849db",
+      "bytes": 75367
+    },
+    "new-york-cover-2021.tif": {
+      "sha256": "13a3bb74f42e4ff03810f33b75d60afc3d02db3fb785639fe43a200fb126560e",
+      "bytes": 114833
+    },
+    "new-york-functions.geojson.gz": {
+      "sha256": "03ab354acb1848b0b8703eb76becfd9b3e089f0dac0e097a07dd84803c9cce5d",
+      "bytes": 310817
+    }
+  },
+  "extra_sources": [
+    {
+      "title": "Times Square Alliance · 已研究的演艺街区范围（人工概化）",
+      "url": "https://www.timessquarenyc.org/times-square-alliance/about-the-alliance"
+    }
+  ]
+}

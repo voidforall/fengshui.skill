@@ -1,0 +1,50 @@
+{
+  "city": "伦敦",
+  "slug": "london",
+  "epsg": 32630,
+  "boundary_source": "https://data.london.gov.uk/download/20od9/114d1137-e339-4b50-b409-124c17f4b59a/gla.zip",
+  "boundary_note": "GLA published Greater London boundary; borough context uses 2015 statistical land outlines.",
+  "landcover_year": 2021,
+  "landcover_source": "https://esa-worldcover.org/en/data-access",
+  "landcover_tiles": [
+    "https://esa-worldcover.s3.eu-central-1.amazonaws.com/v200/2021/map/ESA_WorldCover_10m_2021_v200_N51W003_Map.tif",
+    "https://esa-worldcover.s3.eu-central-1.amazonaws.com/v200/2021/map/ESA_WorldCover_10m_2021_v200_N51E000_Map.tif"
+  ],
+  "landcover_processing": "10 m WorldCover 2021 v200 classes aggregated by majority to 50 m in local UTM; no class interpolation.",
+  "osm_source": "https://www.openstreetmap.org/copyright",
+  "osm_endpoint": "https://overpass-api.de/api/interpreter",
+  "osm_timestamp": "2026-11-15T12:52:13Z",
+  "osm_query_bbox": [
+    -0.5103750690072161,
+    51.28676015652843,
+    0.33401556420727196,
+    51.691874110318494
+  ],
+  "osm_normalization": {
+    "retained_features": 9759,
+    "repaired_landuse_features": 0,
+    "skipped_unusable_features": 5,
+    "simplification_m": 2
+  },
+  "attribution": [
+    "© ESA WorldCover project 2021 / Contains modified Copernicus Sentinel data (2021) processed by ESA WorldCover consortium",
+    "© OpenStreetMap contributors · ODbL 1.0",
+    "Contains National Statistics data © Crown copyright and database right 2015; Contains Ordnance Survey data © Crown copyright and database right 2015"
+  ],
+  "files": {
+    "london-boundary.geojson.gz": {
+      "sha256": "41b0561ac0ce6d51ef679ed972407eec8b87fed39e8af479f3da099a7e07e34a",
+      "bytes": 956560
+    },
+    "london-cover-2021.tif": {
+      "sha256": "f67cd1980008869292e4228d8dbe6227e4e0656817d2aee293f4e6f8ed68ca57",
+      "bytes": 206955
+    },
+    "london-functions.geojson.gz": {
+      "sha256": "cb27eb08b7c2b3473d1b1909c0d14015f04a1cf909d001e2b64b415477cb47a6",
+      "bytes": 1020010
+    }
+  },
+  "prepared_at": "2026-11-15",
+  "scope_name": "大伦敦完整范围"
+}

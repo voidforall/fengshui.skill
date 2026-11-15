@@ -1,58 +1,22 @@
-# 区域数据格式（schema_version: 2）
+# 全城数据格式（schema_version: 3）
 
-任意城市均可输入。先研究区域整体特征、取得或概化多边形，再运行 `--input`。不要把旧版 `places` 点位自动加半径转成面；v1 输入会收到补齐区域数据的错误提示。
+权威完整实例为 `examples/london.json` 和 `examples/new-york.json`；字段校验见 `scripts/generate.py`。不再接受旧版点位或零散片区输入。
 
-```json
-{
-  "schema_version": 2,
-  "city": "示例城市",
-  "subtitle": "中心城区 · 区域分析",
-  "summary": "一组有依据的区域主象和兼象。",
-  "reviewed_at": "2026-11-15",
-  "coordinate_note": "WGS84；区界为公开地图参照下的解释性概化范围。",
-  "regions": [{
-    "id": "river-core",
-    "name": "河谷核心观察片",
-    "geometry": {"type": "Polygon", "coordinates": [[[0,51],[0.01,51],[0.01,51.01],[0,51.01],[0,51]]]},
-    "label_position": [0.005,51.005],
-    "boundary": {
-      "kind": "解释性概化",
-      "description": "说明观察范围及为什么以这些河岸或道路划界；此处坐标仅示范格式，并非真实研究结论。",
-      "sources": [{"title":"公开地图参照", "url":"https://www.openstreetmap.org/#map=14/51.005/0.005"}]
-    },
-    "preferred_method": "landscape",
-    "analyses": {
-      "landscape": {
-        "primary": "水",
-        "secondary": ["木"],
-        "facts": ["填写已核对的区域整体事实。"],
-        "reason": "解释为什么水系构成片区骨架，以及植被为何构成兼象。",
-        "limitations": "说明混合、过渡、资料日期与解释范围。",
-        "sources": [{"title":"事实来源标题", "url":"https://www.openstreetmap.org/"}]
-      }
-    },
-    "evidence": [{
-      "name": "观察点",
-      "position": [0.005,51.005],
-      "note": "说明它支持哪条区域观察，不靠一个点决定整区。",
-      "sources": [{"title":"观察点来源", "url":"https://www.openstreetmap.org/"}]
-    }]
-  }]
-}
-```
+- 顶层必填：`schema_version: 3`、非空 `city/subtitle/summary/coordinate_note`、实际核对日期 `reviewed_at`（YYYY-MM-DD）、`regions`。
+- `coverage` 必填：`kind: "full-city"`、`name`、完整城市 `geometry` 和 `sources`；可选 `focus: [经度,纬度]` 为初始选中位置。
+- `regions` 为1–5000个不重叠且覆盖完整范围的单元。每项含唯一小写字母/数字/连字符 `id`、`name`、`geometry`、在本区内部的 `label_position`。
+- 几何为WGS84 GeoJSON Polygon（可有洞）或MultiPolygon。每环4–20000点、首尾闭合、有限坐标，纬度限±85.05112878、经度±180。GEOS检查有效拓扑、并集漏区/越界与面积重叠；不接受伪造的覆盖报告。
+- `boundary` 含 `kind`（统计分区/官方边界/解释性概化）、`description` 与 `sources`。统计格网必须明确尺度，不能标成官方风水区。
+- 每个单元 `analyses` 必须同时有 `landscape` 和 `function`。`preferred_method` 指向其中之一；全城综合视图使用该字段，内置示例均为function。
+- 每份分析必填：`primary`（金木水火土之一）、`secondary`（不重复且不同于主象，可空）、`facts`（非空文字数组）、`reason`、`limitations`、`confidence`（低/中/高）、`confidence_reason`、`sources`。不能用空分析把单元漏掉；资料不足必须在理由、低置信等级中说明，无法建立有依据的分类则补数据再生成。
+- 可选 `evidence` 为证据点数组，每项含 `name/position/note/sources`；证据支持整体解释，不用固定半径外推。
+- 来源都是 `{ "title": "来源标题", "url": "https://…" }`，至少一条。事实来源不自动证明五行解释；所有文字按纯文字安全嵌入。
+- 可选 `metrics`、`model` 保留测量输入、规则版本、来源日期和署名，离线构建器生成这些字段。`coverage_report` 由生成器实际计算，输入同名字段不会被信任。
 
-- 顶层文字均必填，日期为资料实际核对日。`regions` 含1–200区；`id` 为唯一的小写字母/数字/连字符标识。
-- `geometry` 支持 GeoJSON `Polygon`（含内环）和 `MultiPolygon`。每环4–1000点，首尾相同，至少三个不同顶点且不退化。经度范围±180、纬度±85.05112878；两个数都必须有限。生成器不检验所有复杂拓扑，数据作者须核对自交、洞、重叠及范围。`label_position` 应选在片区内部。
-- `boundary.kind` 为 `官方边界` 或 `解释性概化`。描述中写范围、年份/精度、划界依据；至少一条来源。只有实际取得官方几何时才用“官方边界”。
-- `analyses` 可包含 `landscape` / `function`；`preferred_method` 必须指向已存在的分析。整区待分析时用空对象 `{}` 并令 `preferred_method` 为 `null`，综合视图也会显示灰色。缺失的方法保持待分析，不填猜测结论。
-- 分析包含 `primary`（金木水火土之一）、`secondary`（不重复且不同于主象的五行数组，可空）、非空 `facts` 数组、`reason`、`limitations` 和至少一条 `sources`。事实来源不自动证明解释。
-- `evidence` 可省略或为空；每点填写 `name`、`position`、`note`、`sources`。点应属于对应区域或在说明中明确其外部观察关系。
-- 全部来源需 `title` 与 HTTPS `url`。文字不支持 HTML，安全嵌入后通过 DOM textContent 显示。
-
-可选 `basemap` 替换 XYZ 服务；下列子字段均必填，署名必须符合服务许可：
+可选底图对象 `basemap` 全部字段必填，保留服务要求的署名，不公开私密key：
 
 ```json
 {"basemap":{"url":"https://tile.openstreetmap.org/{z}/{x}/{y}.png","attribution":"© OpenStreetMap contributors","attribution_url":"https://www.openstreetmap.org/copyright","max_zoom":19}}
 ```
 
-URL 包含 `{z}`、`{x}`、`{y}`；`max_zoom` 为1–22整数。不要公开私密 API key。底图配置不会转换原始区域坐标。
+XYZ地址需含三个占位符，max_zoom为1–22整数；底图配置不转换区域坐标。

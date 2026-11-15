@@ -107,7 +107,9 @@ footer { color:var(--soft); font-size:.75rem; padding-block:1rem; border-block-s
 #boundary, #limitations { font-size:.88rem; }
 .evidence-link { background:transparent; border:1px solid var(--rule); color:var(--ink); padding:.4rem .65rem; margin:.2rem; text-align:start; }
 .leaflet-interactive:focus-visible { outline:3px solid var(--red); }
-@media (max-width:760px) { .controls { gap:.5rem; } .filters { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:.4rem; } .filter { padding:.3rem; font-size:.85rem; } .filter:last-child { grid-column:span 2; } .region-label { padding:2px 5px; } .region-label b,.region-label .secondary-caption { display:none; } .region-label .primary-symbol { font-size:14px; font-weight:bold; } }
+@media (max-width:760px) { .controls { gap:.5rem; } .filters { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:.4rem; } .filter { padding:.3rem; font-size:.85rem; }  .region-label { padding:2px 5px; } .region-label b,.region-label .secondary-caption { display:none; } .region-label .primary-symbol { font-size:14px; font-weight:bold; } }
+.coverage { border-inline-start:3px solid var(--red); padding:.4rem .8rem; background:var(--card); font-size:.85rem; }
+#confidence { font-size:.85rem; color:var(--soft); }
 </style>
 </head>
 <body>
@@ -117,47 +119,44 @@ footer { color:var(--soft); font-size:.75rem; padding-block:1rem; border-block-s
     <div class="heading"><p class="eyebrow">KANYU · REGIONAL ATLAS</p><h1 id="title"></h1><p class="subtitle" id="subtitle"></p></div>
     <div class="edition">片区主象 · 兼象 · 分析依据<br><span id="reviewed"></span></div>
   </header>
-  <p class="intro" id="summary"></p>
+  <p class="intro" id="summary"></p><p class="coverage" id="coverage-status" role="status"></p>
   <div class="controls">
-    <label for="method">分析口径 <select id="method"><option value="combined">综合展示 · 每区标明口径</option><option value="landscape">仅山水形态取象</option><option value="function">仅城市功能类比</option></select></label>
-    <label><input type="checkbox" id="show-evidence">显示证据地点</label>
+    <label for="method">分析口径 <select id="method"><option value="combined">全城综合取象</option><option value="landscape">全城土地覆盖底层</option></select></label>
+    <label><input type="checkbox" id="show-evidence">显示本单元证据点</label><label><input type="checkbox" id="show-grid">显示统计单元线</label>
     <button class="reset" id="reset">查看全部片区 ↗</button>
   </div>
   <p id="view-note"></p>
   <div class="filters" role="group" aria-label="按片区主象筛选" id="filters"></div>
   <div class="workspace">
     <aside class="sidebar" aria-label="片区索引">
-      <div class="search"><label for="search">搜索片区或分析依据</label><input id="search" type="search" placeholder="例如：河谷、林地、金融" autocomplete="off"><p id="count" role="status"></p></div>
+      <div class="search"><label for="search">搜索行政区、单元或坐标</label><input id="search" type="search" placeholder="如 Camden，或 51.51,-0.13（回车定位）" autocomplete="off"><p id="count" role="status"></p></div>
       <ol id="regions"></ol>
     </aside>
     <section class="map-wrap" aria-label="真实地图与五行分析区块">
-      <div class="map-head"><b>半透明色块 = 片区主象 · 虚线 = 概化分析范围</b><span>↑ 北</span></div>
+      <div class="map-head"><b>全城连续覆盖 · 颜色为模型主象，格网不是风水硬边界</b><span>↑ 北</span></div>
       <div id="map" aria-label="可缩放片区地图；也可通过片区索引查看分析"></div>
       <p class="map-status" id="map-status" role="status">正在加载真实地图…</p>
     </section>
   </div>
   <section class="detail" id="detail" aria-labelledby="region-title" tabindex="-1">
-    <div><span class="tag" id="tag"></span><h2 id="region-title"></h2><p id="basis"></p>
+    <div><span class="tag" id="tag"></span><h2 id="region-title"></h2><p id="basis"></p><p id="confidence"></p>
       <h3>为什么这样划区</h3><p id="boundary"></p><ul id="boundary-sources"></ul>
       <h3>证据地点 · 辅助观察</h3><div id="evidence"></div>
     </div>
     <div><h3>为什么这一带偏这个象</h3><p id="reason"></p><h3>区域整体特征</h3><ul id="facts"></ul>
       <h3>兼象与局限</h3><p id="limitations"></p><h3>事实来源</h3><ul id="sources"></ul></div>
   </section>
-  <details><summary>分析方法、边界与未分析区域</summary>
+  <details><summary>全城覆盖、取象规则与数据时效</summary>
     <div class="method">
-      <p><b>金</b> · 金融交易集群等城市功能类比；传统圆形金体不能由一座银行替代判断。</p>
-      <p><b>木</b> · 连续林地等现代山水取象；不等同于传统直形木体。</p>
-      <p><b>水</b> · 河谷、水岸及曲折结构，按实际空间组织分析。</p>
-      <p><b>火</b> · 演艺传播集群等现代功能类比；不表示火灾风险。</p>
-      <p><b>土</b> · 方整平展格局的现代形态延伸；山丘不自动属土。</p>
+      <p><b>水</b> · 真实水面覆盖信号。</p><p><b>木</b> · 树木、灌丛、草地等植被信号。</p><p><b>土</b> · 耕地、裸地及建成承载空间的底层归类。</p><p><b>金</b> · 商业、工业用地或相应许可分区信号。</p><p><b>火</b> · 零售服务及演艺、传播功能信号。</p>
     </div>
-    <p>主色表示本图的区域解释，兼象用标签表达，不是实测能量或吉凶评级。综合展示允许不同口径并列，单一口径下没有分析的片区显示灰色。未覆盖的底图区域尚未收录；两者都不表示“没有五行”。</p>
-    <p>山水形态取象与城市功能类比均明确标识为本项目现代解释。传统五星形法重视锐、波、直、圆、方，不能仅凭树多、山高、机构名称判定古法星体。本图不冒充完整传统排盘。</p>
-    <p>区界是有来源的观察或统计范围，不是风水影响的硬边界。解释性概化用虚线；官方边界用实线。区域可能混合、过渡或重叠，点击索引可查看被覆盖的区域。点位仅作证据，不能代替区域判断。</p>
-    <p id="coordinate-note"></p><p>Leaflet 1.9.4 已内嵌（BSD-2-Clause）；真实底图需联网及 HTTP，仅请求当前视野瓦片。</p>
+    <p>边界内所有单元都有主象，允许兼象和低置信度，不再只选几处地标。连续统计格网裁切至真实城市边界；细分单位是观察尺度，不代表五行在格线上突变。边界外不在本图范围内；筛选五行会临时隐藏其他颜色，可点“查看全部片区”恢复。</p>
+    <p>土地覆盖底层取自2021年ESA WorldCover，原始10米分类汇总至50米后按单元统计；并非2026年逐块实地调查。伦敦功能资料来自OSM快照，可能遗漏；纽约功能资料使用官方规划分区，表示许可用途，不等于目前营业实况，相关判断降低置信度。</p>
+    <p>综合模型的决策信号为：水×1.2、植被×1.1、承载空间×0.65、商业工业比例×2、零售服务比例×2.4，加演艺区覆盖×0.9及演艺对象信号。比较信号选主象，保留有一定支撑的兼象。它们是本项目公开的现代解释规则，未声称由古籍直接推导，更不是实测气场、吉凶或投资评分。详情中的百分比是地理覆盖统计，不是五行能量百分比。</p>
+    <p id="coordinate-note"></p><p>置信等级表示资料和规则区分度，不是风水效应成立的概率；混合单元、样本少、资料历史性或规划代替现状都会限制判断。</p>
+    <p>Leaflet 1.9.4 已内嵌（BSD-2-Clause）；真实底图需联网及HTTP，仅请求当前视野瓦片。</p>
   </details>
-  <footer>堪舆子 · 先看一片地的格局，再说明取象。底图 © OpenStreetMap contributors（默认底图）。<a href="https://www.openstreetmap.org/fixthemap" target="_blank" rel="noopener noreferrer">报告底图问题 ↗</a></footer>
+  <footer>堪舆子 · 城市边界内逐单元分析，保留主象、兼象与不确定性。底图 © OpenStreetMap contributors。<p id="data-attribution"></p><a href="https://www.openstreetmap.org/fixthemap" target="_blank" rel="noopener noreferrer">报告底图问题 ↗</a></footer>
   <noscript>请启用 JavaScript 查看片区地图；原始分析与来源保存在城市 JSON 文件中。</noscript>
 </main>
 <!-- __LICENSE__ -->
@@ -166,68 +165,74 @@ footer { color:var(--soft); font-size:.75rem; padding-block:1rem; border-block-s
 <script>
 'use strict';
 const data=JSON.parse(document.getElementById('city-data').textContent);
-const colors={'金':'#9b701e','木':'#37754c','水':'#28678b','火':'#b74434','土':'#84603b','待分析':'#747474'};
-const methods={landscape:'山水形态取象 · 现代解释',function:'城市功能类比 · 现代解释'};
+const colors={'金':'#9b701e','木':'#37754c','水':'#28678b','火':'#b74434','土':'#84603b'};
+const methods={landscape:'土地覆盖底层 · 2021年分类',function:'综合取象 · 覆盖与功能证据'};
 const $=id=>document.getElementById(id);
 const put=(id,value)=>{$(id).textContent=value;};
 const node=(tag,value,cls)=>{const n=document.createElement(tag);if(value!==undefined)n.textContent=value;if(cls)n.className=cls;return n;};
 function sourceList(target,sources){target.replaceChildren(...sources.map(s=>{const li=node('li'),a=node('a',s.title+' ↗');a.href=s.url;a.target='_blank';a.rel='noopener noreferrer';li.append(a);return li;}));}
-put('title',data.city+' · 区域五行地图');put('subtitle',data.subtitle);put('summary',data.summary);put('reviewed','资料核对：'+data.reviewed_at);put('coordinate-note',data.coordinate_note);
+put('title',data.city+' · 全城五行地图');put('subtitle',data.subtitle);put('summary',data.summary);put('reviewed','资料整理：'+data.reviewed_at);put('coordinate-note',data.coordinate_note);
+put('coverage-status',data.coverage.name+' · GIS覆盖 '+data.coverage_report.coverage_percent.toFixed(2)+'% · '+data.regions.length+' 个连续单元 · 每单元都有主象及置信说明');
+put('data-attribution',(data.model?.attribution||[]).join('；'));
 const map=L.map('map',{scrollWheelZoom:false});L.control.scale({imperial:false,position:'bottomleft'}).addTo(map);
 map.createPane('regionLabels');map.getPane('regionLabels').style.zIndex=450;map.getPane('regionLabels').style.pointerEvents='none';
-const shapes=new Map(),labels=new Map(),evidenceLayer=L.layerGroup().addTo(map);
+const regionIndex=new Map(data.regions.map(r=>[r.id,r]));
+const searchIndex=new Map(data.regions.map(r=>[r.id,JSON.stringify([r.name,r.analyses]).toLocaleLowerCase()]));
+const shapes=new Map(),evidenceLayer=L.layerGroup().addTo(map);
+const selectedLabel=L.tooltip({permanent:true,direction:'center',className:'region-label',pane:'regionLabels'});
 let active='全部',selected=null;
-function methodFor(r){return $('method').value==='combined'?r.preferred_method:$('method').value;}
-function analysis(r){return r.analyses[methodFor(r)]||null;}
-function caption(a){return a?a.primary+'为主'+(a.secondary.length?' · 兼'+a.secondary.join('、'):''):'本口径待分析';}
-function visible(){const q=$('search').value.trim().toLocaleLowerCase();return data.regions.filter(r=>{const a=analysis(r);return (active==='全部'||(a?a.primary:'待分析')===active)&&JSON.stringify([r.name,r.boundary.description,a]).toLocaleLowerCase().includes(q);});}
-function fit(regions){if(regions.length)map.fitBounds(L.featureGroup(regions.map(r=>shapes.get(r.id))).getBounds(),{padding:[28,28],maxZoom:14,animate:false});}
-function style(r){const a=analysis(r);return {color:colors[a?a.primary:'待分析'],fillColor:colors[a?a.primary:'待分析'],fillOpacity:!a ? .16 : (r.id===selected ? .75 : .6),weight:r.id===selected?3:2,dashArray:r.boundary.kind==='解释性概化'?'6 4':null};}
-function popup(r){const a=analysis(r),box=node('div');box.append(node('h3',r.name),node('p',caption(a)),node('p',a?a.reason:'本口径尚未分析，不自动沿用另一种方法的结论。'));const button=node('button','查看完整分析与划界依据','evidence-link');button.addEventListener('click',()=>{select(r,false);$('detail').focus({preventScroll:true});$('detail').scrollIntoView({block:'start',behavior:'instant'});});box.append(button);return box;}
+const methodFor=r=>$('method').value==='combined'?r.preferred_method:$('method').value;
+const analysis=r=>r.analyses[methodFor(r)];
+const caption=a=>a.primary+'为主'+(a.secondary.length?' · 兼'+a.secondary.join('、'):'');
+function ringContains(ring,lon,lat){let inside=false;for(let i=0,j=ring.length-1;i<ring.length;j=i++){
+ const [xi,yi]=ring[i],[xj,yj]=ring[j];
+ const cross=(lon-xi)*(yj-yi)-(lat-yi)*(xj-xi);
+ if(Math.abs(cross)<1e-12&&lon>=Math.min(xi,xj)-1e-12&&lon<=Math.max(xi,xj)+1e-12&&lat>=Math.min(yi,yj)-1e-12&&lat<=Math.max(yi,yj)+1e-12)return true;
+ if((yi>lat)!==(yj>lat)&&lon<(xj-xi)*(lat-yi)/(yj-yi)+xi)inside=!inside;
+ }return inside;}
+function contains(geometry,lon,lat){const polys=geometry.type==='Polygon'?[geometry.coordinates]:geometry.coordinates;return polys.some(poly=>ringContains(poly[0],lon,lat)&&!poly.slice(1).some(hole=>ringContains(hole,lon,lat)));}
+function coordinateQuery(){const match=$('search').value.trim().match(/^(-?\d+(?:\.\d+)?)\s*[,，]\s*(-?\d+(?:\.\d+)?)$/);return match?[Number(match[2]),Number(match[1])]:null;}
+function regionAt(lon,lat){return data.regions.find(r=>shapes.get(r.id).getBounds().contains([lat,lon])&&contains(r.geometry,lon,lat));}
+function visible(){const q=$('search').value.trim().toLocaleLowerCase(),coord=coordinateQuery();if(coord){const r=regionAt(...coord);return r?[r]:[];}return data.regions.filter(r=>(active==='全部'||analysis(r).primary===active)&&searchIndex.get(r.id).includes(q));}
+function fit(regions){if(regions.length)map.fitBounds(L.featureGroup(regions.map(r=>shapes.get(r.id))).getBounds(),{padding:[20,20],maxZoom:15,animate:false});}
+function style(r){const a=analysis(r);return {color:r.id===selected?'#26211b':colors[a.primary],fillColor:colors[a.primary],fillOpacity:r.id===selected ? .72 : .52,weight:r.id===selected?2.5:($('show-grid').checked ? .45 : 0),dashArray:null};}
+function refreshEvidence(){evidenceLayer.clearLayers();const r=regionIndex.get(selected);if(!$('show-evidence').checked||!r)return;for(const p of r.evidence||[]){const box=node('div');box.append(node('h3',p.name),node('p',p.note));const list=node('ul');sourceList(list,p.sources);box.append(list);L.circleMarker([p.position[1],p.position[0]],{className:'evidence-marker',radius:5,color:'#26211b',fillColor:'#fff8ed',fillOpacity:1,weight:2}).bindPopup(box).addTo(evidenceLayer);}}
+function popup(r){const a=analysis(r),box=node('div');box.append(node('h3',r.name),node('p',caption(a)+' · 置信'+a.confidence),node('p',a.reason));const button=node('button','查看覆盖统计、依据与局限','evidence-link');button.addEventListener('click',()=>{select(r,false);$('detail').focus({preventScroll:true});$('detail').scrollIntoView({block:'start',behavior:'instant'});});box.append(button);return box;}
 function select(r,pan=true){
- selected=r.id;const a=analysis(r);put('region-title',r.name);put('tag',caption(a));$('tag').style.setProperty('--element',colors[a?a.primary:'待分析']);put('basis',(methods[methodFor(r)]||'尚未形成分析结论')+' · '+r.boundary.kind);
- put('boundary',r.boundary.description);sourceList($('boundary-sources'),r.boundary.sources);
- put('reason',a?a.reason:(Object.keys(r.analyses).length?'这一片区在当前口径下尚未完成分析。可切换口径查看已有结论，不自动沿用其他方法。':'本区尚未形成任何口径的结论，保留区界和证据供后续分析。'));
- $('facts').replaceChildren(...(a?a.facts:['尚未收录可支持本口径结论的区域整体事实。']).map(f=>node('li',f)));put('limitations',a?a.limitations:'灰色表示本口径证据不足，并非这一带没有五行特征。');sourceList($('sources'),a?a.sources:[]);if(!a)$('sources').append(node('li','当前口径暂无分析来源；划界资料见区界说明。'));
+ const previous=selected;selected=r.id;const a=analysis(r);
+ put('region-title',r.name);put('tag',caption(a));$('tag').style.setProperty('--element',colors[a.primary]);put('basis',methods[methodFor(r)]+' · 连续统计单元');put('confidence','置信说明：'+a.confidence+' · '+a.confidence_reason);
+ put('boundary',r.boundary.description);sourceList($('boundary-sources'),r.boundary.sources);put('reason',a.reason);$('facts').replaceChildren(...a.facts.map(f=>node('li',f)));put('limitations',a.limitations);sourceList($('sources'),a.sources);
  $('evidence').replaceChildren(...(r.evidence||[]).map(p=>{const b=node('button',p.name+' ↗','evidence-link');b.addEventListener('click',()=>{map.setView([p.position[1],p.position[0]],15,{animate:false});const box=node('div');box.append(node('h3',p.name),node('p',p.note));const list=node('ul');sourceList(list,p.sources);box.append(list);L.popup().setLatLng([p.position[1],p.position[0]]).setContent(box).openOn(map);});return b;}));
- if(!(r.evidence||[]).length)$('evidence').append(node('p','本区依据见区域整体特征与来源。'));
- document.querySelectorAll('.region-item').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.id===selected)));
- shapes.forEach((layer,id)=>layer.setStyle(style(data.regions.find(x=>x.id===id))));
- if(pan)fit([r]);
+ if(!(r.evidence||[]).length)$('evidence').append(node('p','本单元没有附点位；土地覆盖及功能分区资料仍参与完整分析。'));
+ document.querySelectorAll('.region-item[aria-pressed="true"]').forEach(b=>b.setAttribute('aria-pressed','false'));const button=document.querySelector('.region-item[data-id="'+r.id+'"]');if(button)button.setAttribute('aria-pressed','true');
+ if(previous&&shapes.has(previous))shapes.get(previous).setStyle(style(regionIndex.get(previous)));shapes.get(r.id).setStyle(style(r));
+ selectedLabel.setLatLng([r.label_position[1],r.label_position[0]]).setContent(node('span',caption(a)));if(!map.hasLayer(selectedLabel))selectedLabel.addTo(map);refreshEvidence();if(pan)fit([r]);
 }
-for(const r of data.regions){
- const layer=L.geoJSON(r.geometry,{style:()=>style(r),onEachFeature:(_,path)=>{
-   path.on('click',()=>select(r,false));
-   path.on('add',()=>{const el=path.getElement();el.setAttribute('tabindex','0');el.setAttribute('role','button');el.setAttribute('aria-label',r.name+'，查看区域分析');el.onkeydown=event=>{if(event.key==='Enter'||event.key===' '){event.preventDefault();select(r,false);path.openPopup();}};});
-   path.bindPopup(()=>popup(r),{maxWidth:320,maxHeight:260});
- }});shapes.set(r.id,layer);
- const label=L.tooltip({permanent:true,direction:'center',className:'region-label',pane:'regionLabels'}).setLatLng([r.label_position[1],r.label_position[0]]);labels.set(r.id,label);
-}
+for(const r of data.regions){const layer=L.geoJSON(r.geometry,{bubblingMouseEvents:false,style:()=>style(r),onEachFeature:(_,path)=>{
+ path.on('click',()=>select(r,false));path.on('add',()=>{const el=path.getElement();el.setAttribute('tabindex','0');el.setAttribute('role','button');el.setAttribute('aria-label',r.name+'，查看单元分析');el.onkeydown=event=>{if(event.key==='Enter'||event.key===' '){event.preventDefault();select(r,false);path.openPopup();}};});path.bindPopup(()=>popup(r),{maxWidth:320,maxHeight:260});}});shapes.set(r.id,layer);}
+const outline=L.geoJSON(data.coverage.geometry,{interactive:false,style:{color:'#b03a2e',weight:1.5,fill:false}}).addTo(map);
 function update(){
- const shown=visible();map.closePopup();evidenceLayer.clearLayers();$('regions').replaceChildren();
- for(const r of data.regions){const layer=shapes.get(r.id),label=labels.get(r.id),a=analysis(r);
-   if(!shown.includes(r)){if(map.hasLayer(layer))map.removeLayer(layer);if(map.hasLayer(label))map.removeLayer(label);continue;}
-   if(!map.hasLayer(layer))layer.addTo(map);layer.setStyle(style(r));
-   const labelText=node('div'),symbol=node('small');symbol.append(node('span',a?a.primary:'—','primary-symbol'),node('span',a?('为主'+(a.secondary.length?' · 兼'+a.secondary.join('、'):'')):'待分析','secondary-caption'));labelText.append(node('b',r.name.split(' · ')[0]),symbol);label.setContent(labelText);if(!map.hasLayer(label))label.addTo(map);
-   const li=node('li'),button=node('button',undefined,'place region-item');button.dataset.id=r.id;button.setAttribute('aria-pressed',String(r.id===selected));
-   const number=node('span',a?a.primary:'—','number');number.style.setProperty('--element',colors[a?a.primary:'待分析']);const body=node('span');body.append(node('strong',r.name),node('small',caption(a)),node('small',(methods[methodFor(r)]||'尚未形成分析结论')));button.append(number,body);button.addEventListener('click',()=>{select(r);$('detail').focus({preventScroll:true});$('detail').scrollIntoView({block:'nearest',behavior:'instant'});});li.append(button);$('regions').append(li);
-   if($('show-evidence').checked)for(const p of r.evidence||[]){const box=node('div');box.append(node('h3',p.name),node('p',p.note));const list=node('ul');sourceList(list,p.sources);box.append(list);L.circleMarker([p.position[1],p.position[0]],{className:'evidence-marker',radius:5,color:'#26211b',fillColor:'#fff8ed',fillOpacity:1,weight:2}).bindPopup(box).addTo(evidenceLayer);}
- }
- const pending=shown.filter(r=>!analysis(r)).length;put('count','显示 '+shown.length+' / '+data.regions.length+' 个片区'+(pending?' · '+pending+' 区待分析':''));
- if(shown.length){select(shown.find(r=>r.id===selected)||shown[0],false);}else{selected=null;$('regions').append(node('li','没有匹配片区，请调整口径、五行或搜索。','empty'));for(const id of ['tag','basis','boundary','reason','limitations'])put(id,'');put('region-title','没有匹配片区');for(const id of ['facts','sources','boundary-sources','evidence'])$(id).replaceChildren();}
- document.querySelectorAll('.filter').forEach(b=>{const e=b.dataset.element;b.setAttribute('aria-pressed',String(e===active));const count=data.regions.filter(r=>e==='全部'||(analysis(r)?.primary||'待分析')===e).length;b.querySelector('.filter-text').textContent=e+' · '+count;});
- put('view-note',$('method').value==='combined'?'每区标明取象口径；虚线为概化分析范围，空白处尚未收录。':'当前口径：'+methods[$('method').value]+'。灰色区块为本口径待分析，切换方法可能改变结论。');
+ const shown=visible(),shownIds=new Set(shown.map(r=>r.id));map.closePopup();$('regions').replaceChildren();
+ for(const r of data.regions){const layer=shapes.get(r.id);if(!shownIds.has(r.id)){if(map.hasLayer(layer))map.removeLayer(layer);continue;}if(!map.hasLayer(layer))layer.addTo(map);layer.setStyle(style(r));
+ const li=node('li'),button=node('button',undefined,'place region-item');button.dataset.id=r.id;button.setAttribute('aria-pressed',String(r.id===selected));const a=analysis(r),symbol=node('span',a.primary,'number'),body=node('span');symbol.style.setProperty('--element',colors[a.primary]);body.append(node('strong',r.name),node('small',caption(a)+' · 置信'+a.confidence));button.append(symbol,body);button.addEventListener('click',()=>{select(r);$('detail').focus({preventScroll:true});$('detail').scrollIntoView({block:'nearest',behavior:'instant'});});li.append(button);$('regions').append(li);}
+ put('count','显示 '+shown.length+' / '+data.regions.length+' 个分析单元');
+ if(shown.length){const focus=data.coverage.focus,initial=focus?regionAt(focus[0],focus[1]):null;select(shown.find(r=>r.id===selected)||(initial&&shown.includes(initial)?initial:shown[0]),false);}else{selected=null;if(map.hasLayer(selectedLabel))map.removeLayer(selectedLabel);refreshEvidence();$('regions').append(node('li',coordinateQuery()?'该坐标不在本图城市范围内。':'没有匹配单元，请调整筛选或搜索。','empty'));for(const id of ['tag','basis','confidence','boundary','reason','limitations'])put(id,'');put('region-title','没有匹配单元');for(const id of ['facts','sources','boundary-sources','evidence'])$(id).replaceChildren();}
+ document.querySelectorAll('.filter').forEach(b=>{const e=b.dataset.element;b.setAttribute('aria-pressed',String(e===active));const count=data.regions.filter(r=>e==='全部'||analysis(r).primary===e).length;b.querySelector('.filter-text').textContent=e+' · '+count;});
+ put('view-note',($('method').value==='combined'?'全城综合取象':'全城土地覆盖底层')+'：每个单元均已归类；筛选只改变显示。土地覆盖为2021年，功能资料的现状完整性有限。');
 }
-for(const e of ['全部','金','木','水','火','土','待分析']){const b=node('button',undefined,'filter');b.dataset.element=e;if(colors[e]){const dot=node('span',undefined,'swatch');dot.style.setProperty('--element',colors[e]);b.append(dot);}b.append(node('span',e,'filter-text'));b.addEventListener('click',()=>{active=e;update();fit(visible());});$('filters').append(b);}
-$('search').addEventListener('input',update);$('method').addEventListener('change',()=>{active='全部';update();fit(visible());});$('show-evidence').addEventListener('change',update);
+for(const e of ['全部','金','木','水','火','土']){const b=node('button',undefined,'filter');b.dataset.element=e;if(colors[e]){const dot=node('span',undefined,'swatch');dot.style.setProperty('--element',colors[e]);b.append(dot);}b.append(node('span',e,'filter-text'));b.addEventListener('click',()=>{active=e;update();fit(visible());});$('filters').append(b);}
+$('search').addEventListener('input',()=>{if(coordinateQuery())active='全部';update();});$('search').addEventListener('keydown',event=>{if(event.key==='Enter'){update();fit(visible());}});
+$('method').addEventListener('change',()=>{active='全部';update();fit(visible());});$('show-evidence').addEventListener('change',refreshEvidence);$('show-grid').addEventListener('change',()=>{for(const r of data.regions)shapes.get(r.id).setStyle(style(r));});
 $('reset').addEventListener('click',()=>{active='全部';$('search').value='';update();fit(data.regions);});
+map.on('click',event=>{const r=regionAt(event.latlng.lng,event.latlng.lat);if(r)select(r,false);});
 update();fit(data.regions);
 const status=(message,error=false)=>{put('map-status',message);$('map-status').dataset.error=String(error);};
-if(location.protocol==='file:'){status('请通过 HTTP 加载真实底图：在本文件目录运行 python3 -m http.server 8000 --bind 127.0.0.1 。目前仅显示区域与分析。',true);}else{
+if(location.protocol==='file:'){status('请通过HTTP加载真实底图：在本文件目录运行 python3 -m http.server 8000 --bind 127.0.0.1 。完整分类资料仍可查阅。',true);}else{
  const base=data.basemap,link=node('a',base.attribution);link.href=base.attribution_url;link.target='_blank';link.rel='noopener noreferrer';let loaded=0,errors=0;
- L.tileLayer(base.url,{maxZoom:base.max_zoom,attribution:link.outerHTML}).on('loading',()=>{loaded=0;errors=0;status('正在加载真实地图…');}).on('tileload',()=>loaded++).on('tileerror',()=>{errors++;status('部分底图加载失败，请检查网络或更换瓦片服务。区域与分析仍可查阅。',true);}).on('load',()=>{if(!errors&&loaded)status('真实底图已加载 · 点击色块查看区域分析，证据地点可按需显示');}).addTo(map);
- window.addEventListener('offline',()=>status('网络已断开，底图可能不完整；区域分析仍可查阅。',true));
+ L.tileLayer(base.url,{maxZoom:base.max_zoom,attribution:link.outerHTML}).on('loading',()=>{loaded=0;errors=0;status('正在加载真实地图…');}).on('tileload',()=>loaded++).on('tileerror',()=>{errors++;status('部分底图加载失败，完整城市分类与来源仍可查阅。',true);}).on('load',()=>{if(!errors&&loaded)status('真实底图已加载 · 城市边界内全部分类，可点击任意单元或输入坐标查询');}).addTo(map);
+ window.addEventListener('offline',()=>status('网络已断开，底图可能不完整；全城分类资料仍可查阅。',true));
 }
+
 </script>
 </body>
 </html>

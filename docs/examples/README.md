@@ -15,6 +15,7 @@ README 中的动图与截图用 Playwright 录制（见 PR 说明），不参与
 从仓库根目录重新生成两座城市的交互示例：
 
 ```bash
+python3 -m pip install -r skills/city-wuxing-map/requirements.txt
 python3 skills/city-wuxing-map/scripts/generate.py --example london --output docs/examples/london-wuxing.html
 python3 skills/city-wuxing-map/scripts/generate.py --example new-york --output docs/examples/new-york-wuxing.html
 python3 -m http.server 8000 --bind 127.0.0.1
@@ -24,4 +25,4 @@ python3 -m http.server 8000 --bind 127.0.0.1
 
 原始区域资料在 `skills/city-wuxing-map/examples/`，修改模板、生成器、库文件或资料后都要重新生成两个 HTML。`tests/test_city_map.py` 检查示例是否过期。README 截图来自实际浏览器加载后的伦敦地图，保留底图署名。
 
-区域版默认显示半透明多边形与主象/兼象，点位为可开关证据层。检查口径切换（如 Canary Wharf 的金/水主象变化）、灰色待分析、区域点击与边界来源；不能只确认若干点位能显示。
+全城版默认连续着色：伦敦1,735单元、纽约五区1,323单元。检查城市边缘、岛屿与水域，所有单元在两种口径下都有分类。检查坐标搜索、五行筛选、选中单元详情与置信等级、证据和格网线开关。源数据与离线重建方式见skill说明和examples/sources/README.md。

@@ -90,43 +90,37 @@ npx skills add voidforall/fengshui.skill --full-depth --skill city-wuxing-map
 《青囊序》里「山上龙神不下水」是什么意思？
 ```
 
-### 城市区域五行风水地图
+### 城市全域五行地图
 
 ```
-给伦敦做一张区域五行风水地图，用区块颜色说明一整片地方偏金木水火土的什么相，
-点击片区能看到分析原因、兼象和划界依据，不要只标几个地标。
+给伦敦做完整城市范围的五行着色地图，每个地方都有主象、兼象和原因，
+能切换土地覆盖底层与综合分析，说明资料年代和置信等级。
 ```
 
-```
-用同样的方法做纽约，区分山水形态取象与城市功能类比；地标仅作证据，
-资料不足的区域保留待分析。
-```
+独立skill [city-wuxing-map](skills/city-wuxing-map/SKILL.md) 在真实底图上连续着色，点击任意单元查看覆盖统计、功能证据、主象、兼象、置信等级和来源。支持坐标定位、行政区搜索、五行筛选及可选证据点和格网线。
 
-独立 skill [city-wuxing-map](skills/city-wuxing-map/SKILL.md) 在 **OpenStreetMap 真实底图上用半透明片区着色**。点击整片区域或区域索引，查看主象、兼象、整体特征、为什么这样划区、分析原因和来源。证据地点默认隐藏，可单独打开。
+![伦敦全城五行地图](docs/images/london-wuxing.png)
 
-支持综合展示、仅山水形态取象、仅城市功能类比三种视图；同一区域在不同口径下可以有不同主象，缺失的分析显示灰色。例如 Canary Wharf 在金融功能口径下以金为主，在港池水岸形态口径下以水为主。颜色不代表实测能量或统一的古法定性。
+| 示例 | 完整范围与分区 | 文件 |
+|---|---|---|
+| 伦敦 | 大伦敦完整范围，1,735个单元 | [交互地图](docs/examples/london-wuxing.html) · [JSON](skills/city-wuxing-map/examples/london.json) |
+| 纽约 | 五区完整范围（含行政水域），1,323个单元 | [交互地图](docs/examples/new-york-wuxing.html) · [JSON](skills/city-wuxing-map/examples/new-york.json) |
 
-![伦敦区域五行风水地图](docs/images/london-wuxing.png)
+采用1km统计格网裁切真实城市边界，两城均经拓扑校验达到完整覆盖，无面积空洞和重叠（浮点容差内）。每个单元在两种口径下都有分类；统计格网不代表天然风水边界。土地覆盖来自2021年WorldCover，在50m汇总栅格上统计；伦敦功能来自2026-11-15 OSM快照，纽约采用当日取得的DCP许可规划分区与演艺区研究，规划不等于现状。
 
-| 示例 | 片区与分析 | 文件 |
-|------|------------|------|
-| 伦敦 · 6区 | 泰晤士河中心河谷、Hampstead 林地山脊、Bloomsbury 方整街坊、West End 演艺区、City 金融核心、Canary Wharf 港池商务片 | [交互地图](docs/examples/london-wuxing.html) · [区域几何、分析与来源 JSON](skills/city-wuxing-map/examples/london.json) |
-| 纽约 · 5区 | Central Park 连续绿地、Hudson 西岸走廊、Lower Manhattan 金融商务片、Broadway 剧院街区、Bryant–Midtown 规则街坊 | [交互地图](docs/examples/new-york-wuxing.html) · [区域几何、分析与来源 JSON](skills/city-wuxing-map/examples/new-york.json) |
+颜色是公开的现代解释模型，并非客观测量的固有五行。证据较弱的地方仍给出模型分类，同时显示低置信等级及局限；不虚构五行能量百分比。规则见[分析方法](skills/city-wuxing-map/references/method.md)，冻结数据、许可和哈希见[数据源](skills/city-wuxing-map/examples/sources/README.md)。
 
-两套示例都是依据公开地图、景观或城市资料手工概化的**解释性分析范围**，以虚线表示，并非官方风水区或精确法定界线。保留混合特征与过渡，不按行政区或地标等半径圆强行分色。未覆盖的底图区域表示尚未收录。
-
-从仓库根目录生成并预览，无需 API key 或第三方 Python 包：
+从仓库根目录运行：
 
 ```bash
+python3 -m pip install -r skills/city-wuxing-map/requirements.txt
 python3 skills/city-wuxing-map/scripts/generate.py --example london --output docs/examples/london-wuxing.html
 python3 skills/city-wuxing-map/scripts/generate.py --example new-york --output docs/examples/new-york-wuxing.html
 python3 -m http.server 8000 --bind 127.0.0.1
 # 打开 http://127.0.0.1:8000/docs/examples/london-wuxing.html
 ```
 
-其他城市：按 [区域数据格式](skills/city-wuxing-map/references/data-format.md) 核对片区、GeoJSON 多边形与来源，再运行 `python3 skills/city-wuxing-map/scripts/generate.py --input 城市区域.json --output 城市区域五行地图.html`。旧点位数据须补充真实或有依据的分析区界，不能自动扩大成色块。
-
-**真实底图需要联网并通过 HTTP 打开**，Leaflet 已内嵌。直接双击文件时会提示启动本地服务；GitHub 文件预览不运行交互地图。分析采用公开说明的现代山水形态取象或城市功能类比，不把山丘自动判为土，不从单座银行外推整个片区。详见 [分析方法](skills/city-wuxing-map/references/method.md) 与 [调研依据](docs/research/city-wuxing-regional-model.md)。
+真实瓦片需要联网和HTTP，Leaflet已内嵌；GitHub文件预览不运行交互地图。其他城市按[全城数据格式](skills/city-wuxing-map/references/data-format.md)提供完整边界和连续分区；旧版点位和局部片区输入会被拒绝。离线源数据重建命令见skill说明。
 
 ---
 

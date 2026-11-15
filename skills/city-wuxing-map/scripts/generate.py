@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Render researched city annotations over a real map; Python standard library only."""
+"""Validate full-city topology with Shapely and render a standalone interactive map."""
 
 from __future__ import annotations
 
@@ -47,7 +47,7 @@ def sources(value, label):
 
 
 def position(value, label):
-    if not isinstance(value, list) or len(value) != 2:
+    if not isinstance(value, (list, tuple)) or len(value) != 2:
         raise ValueError(f"{label} 应为 [经度, 纬度]")
     for number, limit in zip(value, (180, 85.05112878)):
         if type(number) not in (int, float) or not math.isfinite(number) or abs(number) > limit:
@@ -60,33 +60,30 @@ def geometry(value, label):
     polygons = value.get("coordinates")
     if value["type"] == "Polygon":
         polygons = [polygons]
-    if not isinstance(polygons, list) or not polygons:
+    if not isinstance(polygons, (list, tuple)) or not polygons:
         raise ValueError(f"{label} 缺少面坐标")
     for polygon in polygons:
-        if not isinstance(polygon, list) or not polygon:
+        if not isinstance(polygon, (list, tuple)) or not polygon:
             raise ValueError(f"{label} 缺少环")
         for ring in polygon:
-            if not isinstance(ring, list) or not 4 <= len(ring) <= 1000:
-                raise ValueError(f"{label} 环须有 4–1000 个闭合点")
+            if not isinstance(ring, (list, tuple)) or not 4 <= len(ring) <= 20000:
+                raise ValueError(f"{label} 环须有 4–20000 个闭合点")
             for point in ring:
                 position(point, label)
             if ring[0] != ring[-1] or len(set(map(tuple, ring))) < 3:
                 raise ValueError(f"{label} 环须闭合且至少三个不同顶点")
-            area = sum(a[0]*b[1]-b[0]*a[1] for a,b in zip(ring, ring[1:]))
-            if abs(area) < 1e-12:
-                raise ValueError(f"{label} 环面积为零或退化")
 
 
 def validate(data):
     """Validate regional inputs before writing output; never infer boundaries from points."""
-    if not isinstance(data, dict) or type(data.get("schema_version")) is not int or data.get("schema_version") != 2:
-        raise ValueError("需要 schema_version: 2 区域数据；旧 places 点位须补充区域边界和分析，不能自动扩大成区块")
+    if not isinstance(data, dict) or type(data.get("schema_version")) is not int or data.get("schema_version") != 3:
+        raise ValueError("需要 schema_version: 3 全城数据；旧 places 或局部片区须补充完整城市范围和连续分区")
     for key in ("city", "subtitle", "summary", "coordinate_note", "reviewed_at"):
         text(data.get(key), key)
     datetime.date.fromisoformat(data["reviewed_at"])
     regions = data.get("regions")
-    if not isinstance(regions, list) or not 1 <= len(regions) <= 200:
-        raise ValueError("regions 应包含 1–200 个片区")
+    if not isinstance(regions, list) or not 1 <= len(regions) <= 5000:
+        raise ValueError("regions 应包含 1–5000 个片区")
     seen = set()
     for i, region in enumerate(regions):
         label = f"regions[{i}]"
@@ -100,13 +97,13 @@ def validate(data):
         geometry(region.get("geometry"), label + ".geometry")
         position(region.get("label_position"), label + ".label_position")
         boundary = region.get("boundary")
-        if not isinstance(boundary, dict) or boundary.get("kind") not in ("官方边界", "解释性概化"):
-            raise ValueError(f"{label}.boundary.kind 应为官方边界或解释性概化")
+        if not isinstance(boundary, dict) or boundary.get("kind") not in ("官方边界", "解释性概化", "统计分区"):
+            raise ValueError(f"{label}.boundary.kind 应为官方边界、解释性概化或统计分区")
         text(boundary.get("description"), label + ".boundary.description")
         sources(boundary.get("sources"), label + ".boundary.sources")
         analyses = region.get("analyses")
-        if not isinstance(analyses, dict) or set(analyses) - {"landscape", "function"}:
-            raise ValueError(f"{label}.analyses 只接受 landscape / function（空对象表示待分析）")
+        if not isinstance(analyses, dict) or set(analyses) != {"landscape", "function"}:
+            raise ValueError(f"{label}.analyses 全城数据的每个单元必须同时提供 landscape 和 function 分析")
         if (analyses and region.get("preferred_method") not in analyses) or (not analyses and region.get("preferred_method") is not None):
             raise ValueError(f"{label}.preferred_method 必须有对应分析")
         for method, analysis in analyses.items():
@@ -118,7 +115,9 @@ def validate(data):
                 raise ValueError(f"{label}.{method}.primary 应为金木水火土之一")
             if not isinstance(secondary, list) or any(e not in list(ELEMENTS) or e == primary for e in secondary) or len(set(secondary)) != len(secondary):
                 raise ValueError(f"{label}.{method}.secondary 应为不重复且不同于主象的五行列表")
-            for key in ("reason", "limitations"):
+            if analysis.get("confidence") not in ("低", "中", "高"):
+                raise ValueError(f"{label}.{method}.confidence 须为低、中或高")
+            for key in ("reason", "limitations", "confidence_reason"):
                 text(analysis.get(key), label + "." + method + "." + key)
             facts = analysis.get("facts")
             if not isinstance(facts, list) or not facts:
@@ -136,6 +135,7 @@ def validate(data):
                 text(point.get(key), label + ".evidence." + key)
             position(point.get("position"), label + ".evidence.position")
             sources(point.get("sources"), label + ".evidence.sources")
+    validate_coverage(data)
     basemap = data.get("basemap", DEFAULT_BASEMAP)
     if not isinstance(basemap, dict):
         raise ValueError("basemap 应为对象")
@@ -149,9 +149,44 @@ def validate(data):
     return data
 
 
+def validate_coverage(data):
+    """Prove complete coverage and non-overlap with GEOS, not a reported percentage."""
+    try:
+        from shapely.geometry import shape
+        from shapely.ops import unary_union
+    except ImportError as exc:
+        raise ValueError("全城覆盖校验需要 Shapely：pip install -r skills/city-wuxing-map/requirements.txt") from exc
+    coverage = data.get("coverage")
+    if not isinstance(coverage, dict) or coverage.get("kind") != "full-city":
+        raise ValueError("必须声明真实城市 coverage 范围，不接受零散片区充当全城地图")
+    text(coverage.get("name"), "coverage.name")
+    sources(coverage.get("sources"), "coverage.sources")
+    geometry(coverage.get("geometry"), "coverage.geometry")
+    scope = shape(coverage["geometry"])
+    if scope.is_empty or not scope.is_valid or scope.area <= 0:
+        raise ValueError("城市范围几何无效")
+    polygons=[]
+    for region in data["regions"]:
+        polygon=shape(region["geometry"])
+        if not polygon.is_valid or polygon.is_empty:
+            raise ValueError(f"片区几何无效：{region['id']}")
+        if not polygon.covers(shape({"type":"Point","coordinates":region["label_position"]})):
+            raise ValueError(f"片区标签不在本区内：{region['id']}")
+        polygons.append(polygon)
+    union=unary_union(polygons)
+    tolerance=max(scope.area*1e-9, 1e-12)
+    missing=scope.difference(union).area
+    outside=union.difference(scope).area
+    overlap=max(0,sum(p.area for p in polygons)-union.area)
+    if missing>tolerance or outside>tolerance or overlap>tolerance:
+        raise ValueError(f"全城分区不完整：漏区比例 {missing/scope.area:.8%}，越界比例 {outside/scope.area:.8%}，重叠比例 {overlap/scope.area:.8%}")
+    return {"coverage_percent":100*(1-missing/scope.area),"overlap_percent":100*overlap/scope.area,
+            "outside_percent":100*outside/scope.area,"region_count":len(polygons)}
+
+
 def render(data):
     validate(data)
-    payload = dict(data, basemap=data.get("basemap", DEFAULT_BASEMAP))
+    payload = dict(data, basemap=data.get("basemap", DEFAULT_BASEMAP), coverage_report=validate_coverage(data))
     # Escaping '<' also prevents an annotation from closing the JSON script tag.
     embedded = json.dumps(payload, ensure_ascii=False, allow_nan=False).replace("<", "\\u003c")
     replacements = {
