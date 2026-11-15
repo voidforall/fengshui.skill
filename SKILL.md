@@ -71,6 +71,8 @@ metadata:
 
 ## 二、问题分流：先读对应的流程文档
 
+**城市五行地图**（如「给伦敦做金木水火土地图」）使用仓库独立 skill [city-wuxing-map](skills/city-wuxing-map/SKILL.md)，不以单宅飞星盘代替真实地理地图。若只安装了本主顾问 skill、该路径不存在，提示安装 `npx skills add voidforall/fengshui.skill --full-depth --skill city-wuxing-map`。
+
 判断用户问的是哪一类，**先读表中列出的文件，再作答**。流程文档写明了问询顺序、调用哪些命令、输出格式；规则资料是查对用的速查表。
 
 | 用户问的 | 先读流程 | 配合规则资料 |
