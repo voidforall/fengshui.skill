@@ -36,42 +36,106 @@ def https(value, label):
     return value
 
 
+def sources(value, label):
+    if not isinstance(value, list) or not value:
+        raise ValueError(f"{label} 至少需要一条来源")
+    for source in value:
+        if not isinstance(source, dict):
+            raise ValueError(f"{label} 中每条来源应为对象")
+        text(source.get("title"), label + ".title")
+        https(source.get("url"), label + ".url")
+
+
+def position(value, label):
+    if not isinstance(value, list) or len(value) != 2:
+        raise ValueError(f"{label} 应为 [经度, 纬度]")
+    for number, limit in zip(value, (180, 85.05112878)):
+        if type(number) not in (int, float) or not math.isfinite(number) or abs(number) > limit:
+            raise ValueError(f"{label} 超出 WGS84/Web Mercator 范围")
+
+
+def geometry(value, label):
+    if not isinstance(value, dict) or value.get("type") not in ("Polygon", "MultiPolygon"):
+        raise ValueError(f"{label} 应为 GeoJSON Polygon 或 MultiPolygon")
+    polygons = value.get("coordinates")
+    if value["type"] == "Polygon":
+        polygons = [polygons]
+    if not isinstance(polygons, list) or not polygons:
+        raise ValueError(f"{label} 缺少面坐标")
+    for polygon in polygons:
+        if not isinstance(polygon, list) or not polygon:
+            raise ValueError(f"{label} 缺少环")
+        for ring in polygon:
+            if not isinstance(ring, list) or not 4 <= len(ring) <= 1000:
+                raise ValueError(f"{label} 环须有 4–1000 个闭合点")
+            for point in ring:
+                position(point, label)
+            if ring[0] != ring[-1] or len(set(map(tuple, ring))) < 3:
+                raise ValueError(f"{label} 环须闭合且至少三个不同顶点")
+            area = sum(a[0]*b[1]-b[0]*a[1] for a,b in zip(ring, ring[1:]))
+            if abs(area) < 1e-12:
+                raise ValueError(f"{label} 环面积为零或退化")
+
+
 def validate(data):
-    """Reject unusable geographic inputs before writing any output."""
-    if not isinstance(data, dict):
-        raise ValueError("数据应为 JSON 对象")
+    """Validate regional inputs before writing output; never infer boundaries from points."""
+    if not isinstance(data, dict) or type(data.get("schema_version")) is not int or data.get("schema_version") != 2:
+        raise ValueError("需要 schema_version: 2 区域数据；旧 places 点位须补充区域边界和分析，不能自动扩大成区块")
     for key in ("city", "subtitle", "summary", "coordinate_note", "reviewed_at"):
         text(data.get(key), key)
     datetime.date.fromisoformat(data["reviewed_at"])
-    places = data.get("places")
-    if not isinstance(places, list) or not 1 <= len(places) <= 200:
-        raise ValueError("places 应包含 1–200 个地点")
+    regions = data.get("regions")
+    if not isinstance(regions, list) or not 1 <= len(regions) <= 200:
+        raise ValueError("regions 应包含 1–200 个片区")
     seen = set()
-    for i, place in enumerate(places):
-        label = f"places[{i}]"
-        if not isinstance(place, dict):
+    for i, region in enumerate(regions):
+        label = f"regions[{i}]"
+        if not isinstance(region, dict):
             raise ValueError(f"{label} 应为对象")
-        for key in ("id", "name", "fact", "reading"):
-            text(place.get(key), f"{label}.{key}")
-        if not re.fullmatch(r"[a-z0-9-]+", place["id"]) or place["id"] in seen:
+        for key in ("id", "name"):
+            text(region.get(key), label + "." + key)
+        if not re.fullmatch(r"[a-z0-9-]+", region["id"]) or region["id"] in seen:
             raise ValueError(f"{label}.id 应为唯一的小写英文/数字/连字符标识")
-        seen.add(place["id"])
-        if place.get("element") not in list(ELEMENTS):
-            raise ValueError(f"{label}.element 应为金、木、水、火、土之一")
-        if place.get("basis") not in ("地貌取象", "城市功能类比"):
-            raise ValueError(f"{label}.basis 应为地貌取象或城市功能类比")
-        for key, limit in (("lat", 85.05112878), ("lon", 180)):
-            value = place.get(key)
-            if type(value) not in (int, float) or not math.isfinite(value) or abs(value) > limit:
-                raise ValueError(f"{label}.{key} 超出 Web Mercator 有效范围")
-        sources = place.get("sources")
-        if not isinstance(sources, list) or not sources:
-            raise ValueError(f"{label}.sources 至少需要一条事实来源")
-        for source in sources:
-            if not isinstance(source, dict):
-                raise ValueError(f"{label}.sources 中每条来源应为对象")
-            text(source.get("title"), f"{label}.sources.title")
-            https(source.get("url"), f"{label}.sources.url")
+        seen.add(region["id"])
+        geometry(region.get("geometry"), label + ".geometry")
+        position(region.get("label_position"), label + ".label_position")
+        boundary = region.get("boundary")
+        if not isinstance(boundary, dict) or boundary.get("kind") not in ("官方边界", "解释性概化"):
+            raise ValueError(f"{label}.boundary.kind 应为官方边界或解释性概化")
+        text(boundary.get("description"), label + ".boundary.description")
+        sources(boundary.get("sources"), label + ".boundary.sources")
+        analyses = region.get("analyses")
+        if not isinstance(analyses, dict) or set(analyses) - {"landscape", "function"}:
+            raise ValueError(f"{label}.analyses 只接受 landscape / function（空对象表示待分析）")
+        if (analyses and region.get("preferred_method") not in analyses) or (not analyses and region.get("preferred_method") is not None):
+            raise ValueError(f"{label}.preferred_method 必须有对应分析")
+        for method, analysis in analyses.items():
+            if not isinstance(analysis, dict):
+                raise ValueError(f"{label}.{method} 应为对象")
+            primary = analysis.get("primary")
+            secondary = analysis.get("secondary")
+            if primary not in list(ELEMENTS):
+                raise ValueError(f"{label}.{method}.primary 应为金木水火土之一")
+            if not isinstance(secondary, list) or any(e not in list(ELEMENTS) or e == primary for e in secondary) or len(set(secondary)) != len(secondary):
+                raise ValueError(f"{label}.{method}.secondary 应为不重复且不同于主象的五行列表")
+            for key in ("reason", "limitations"):
+                text(analysis.get(key), label + "." + method + "." + key)
+            facts = analysis.get("facts")
+            if not isinstance(facts, list) or not facts:
+                raise ValueError(f"{label}.{method}.facts 至少需要一条区域事实")
+            for fact in facts:
+                text(fact, label + ".facts")
+            sources(analysis.get("sources"), label + "." + method + ".sources")
+        evidence = region.get("evidence", [])
+        if not isinstance(evidence, list):
+            raise ValueError(f"{label}.evidence 应为列表")
+        for point in evidence:
+            if not isinstance(point, dict):
+                raise ValueError(f"{label}.evidence 应包含对象")
+            for key in ("name", "note"):
+                text(point.get(key), label + ".evidence." + key)
+            position(point.get("position"), label + ".evidence.position")
+            sources(point.get("sources"), label + ".evidence.sources")
     basemap = data.get("basemap", DEFAULT_BASEMAP)
     if not isinstance(basemap, dict):
         raise ValueError("basemap 应为对象")
@@ -106,7 +170,7 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     group = parser.add_mutually_exclusive_group(required=True)
     group.add_argument("--example", choices=("london", "new-york"))
-    group.add_argument("--input", type=Path, help="任意城市的已核对地点 JSON")
+    group.add_argument("--input", type=Path, help="任意城市的区域 GeoJSON 几何与分析 JSON")
     parser.add_argument("--output", type=Path, required=True, help="输出单个 HTML 文件")
     args = parser.parse_args()
     source = ROOT / "examples" / (args.example + ".json") if args.example else args.input

@@ -20,7 +20,7 @@ h1 { font-size:clamp(1.8rem, 1.2rem + 2vw, 3rem); font-weight:500; line-height:1
 .edition { font-size:.8rem; color:var(--soft); }
 .intro { max-inline-size:65rem; margin-block:1.1rem; }
 .filters { display:flex; flex-wrap:wrap; align-items:center; gap:.55rem; margin-block:1rem; }
-button, input { font:inherit; }
+button, input, select { font:inherit; }
 button { cursor:pointer; min-block-size:44px; }
 .filter, .reset { border:1px solid var(--rule); color:var(--ink); background:transparent; padding:.4rem 1rem; border-radius:3px; }
 .filter[aria-pressed="true"] { background:var(--ink); color:var(--card); border-color:var(--ink); }
@@ -30,9 +30,9 @@ button { cursor:pointer; min-block-size:44px; }
 .sidebar { min-inline-size:0; border-inline-end:1px solid var(--rule); }
 .search { padding:1rem; border-block-end:1px solid var(--rule); }
 label { display:block; font-size:.8rem; color:var(--soft); }
-input { inline-size:100%; margin-block-start:.4rem; padding:.5rem .6rem; color:var(--ink); border:1px solid var(--rule); background:var(--card); border-radius:0; min-inline-size:0; }
+input[type="search"] { inline-size:100%; margin-block-start:.4rem; padding:.5rem .6rem; color:var(--ink); border:1px solid var(--rule); background:var(--card); border-radius:0; min-inline-size:0; }
 #count { margin:.6rem 0 0; font-size:.8rem; color:var(--soft); }
-#places { max-block-size:34rem; overflow:auto; overscroll-behavior:contain; scrollbar-gutter:stable; list-style:none; padding:0; margin:0; }
+#regions { max-block-size:34rem; overflow:auto; overscroll-behavior:contain; scrollbar-gutter:stable; list-style:none; padding:0; margin:0; }
 .place { display:flex; gap:.7rem; align-items:start; inline-size:100%; padding:.9rem 1rem; border:0; border-block-end:1px solid #b9a98570; background:transparent; color:var(--ink); text-align:start; }
 .place:hover, .place[aria-pressed="true"] { background:#ded1b4; }
 .place strong { font-size:.93rem; font-weight:600; }
@@ -80,7 +80,7 @@ footer { color:var(--soft); font-size:.75rem; padding-block:1rem; border-block-s
   .map-wrap { grid-row:1; }
   #map { block-size:58dvh; min-block-size:20rem; }
   .sidebar { border-inline-end:0; border-block-start:1px solid var(--rule); }
-  #places { max-block-size:16rem; }
+  #regions { max-block-size:16rem; }
   .detail { grid-template-columns:minmax(0,1fr); gap:.5rem; }
   .reset { margin-inline-start:0; }
 }
@@ -92,157 +92,141 @@ footer { color:var(--soft); font-size:.75rem; padding-block:1rem; border-block-s
   .leaflet-container { color:#26211b; color-scheme:light; }
   .leaflet-container a { color:#194f62; }
 }
+.controls { display:flex; flex-wrap:wrap; gap:1rem; align-items:center; margin-block:1rem; }
+.controls label { display:flex; gap:.5rem; align-items:center; color:var(--ink); }
+.controls select { min-block-size:44px; max-inline-size:100%; background:var(--card); color:var(--ink); border:1px solid var(--rule); padding:.4rem; }
+.controls input { accent-color:var(--red); inline-size:1.15rem; block-size:1.15rem; margin:0; }
+#view-note { font-size:.8rem; color:var(--soft); margin:0 0 1rem; }
+.leaflet-tile-pane { filter:grayscale(.85); }
+.region-label { inline-size:max-content; background:transparent; color:#26211b; border:0; text-shadow:-1px -1px 2px #fff8ed,1px 1px 2px #fff8ed,0 0 3px #fff8ed; box-shadow:none; padding:2px 5px; font:12px/1.4 "Songti SC",serif; white-space:normal; text-align:center; max-inline-size:11rem; }
+.region-label::before { display:none; }
+.region-label b { display:block; font-weight:600; }
+.region-label small { color:#655a49; }
+.detail ul { margin-block:.4rem 1rem; padding-inline-start:1.2rem; }
+.detail li { margin-block:.3rem; }
+#boundary, #limitations { font-size:.88rem; }
+.evidence-link { background:transparent; border:1px solid var(--rule); color:var(--ink); padding:.4rem .65rem; margin:.2rem; text-align:start; }
+.leaflet-interactive:focus-visible { outline:3px solid var(--red); }
+@media (max-width:760px) { .controls { gap:.5rem; } .filters { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:.4rem; } .filter { padding:.3rem; font-size:.85rem; } .filter:last-child { grid-column:span 2; } .region-label { padding:2px 5px; } .region-label b,.region-label .secondary-caption { display:none; } .region-label .primary-symbol { font-size:14px; font-weight:bold; } }
 </style>
 </head>
 <body>
 <main>
   <header>
-    <div class="seal" aria-hidden="true">城<br>市</div>
-    <div class="heading"><p class="eyebrow">KANYU · CITY ATLAS</p><h1 id="title"></h1><p class="subtitle" id="subtitle"></p></div>
-    <div class="edition">五行取象 · 城市风水地图<br><span id="reviewed"></span></div>
+    <div class="seal" aria-hidden="true">城<br>域</div>
+    <div class="heading"><p class="eyebrow">KANYU · REGIONAL ATLAS</p><h1 id="title"></h1><p class="subtitle" id="subtitle"></p></div>
+    <div class="edition">片区主象 · 兼象 · 分析依据<br><span id="reviewed"></span></div>
   </header>
   <p class="intro" id="summary"></p>
-  <div class="filters" role="group" aria-label="筛选五行图层" id="filters"><button class="reset" id="reset">查看全部地点 ↗</button></div>
+  <div class="controls">
+    <label for="method">分析口径 <select id="method"><option value="combined">综合展示 · 每区标明口径</option><option value="landscape">仅山水形态取象</option><option value="function">仅城市功能类比</option></select></label>
+    <label><input type="checkbox" id="show-evidence">显示证据地点</label>
+    <button class="reset" id="reset">查看全部片区 ↗</button>
+  </div>
+  <p id="view-note"></p>
+  <div class="filters" role="group" aria-label="按片区主象筛选" id="filters"></div>
   <div class="workspace">
-    <aside class="sidebar" aria-label="地图地点索引">
-      <div class="search"><label for="search">搜索地点或特征</label><input id="search" type="search" placeholder="例如：河流、公园、金融" autocomplete="off"><p id="count" role="status"></p></div>
-      <ol id="places"></ol>
+    <aside class="sidebar" aria-label="片区索引">
+      <div class="search"><label for="search">搜索片区或分析依据</label><input id="search" type="search" placeholder="例如：河谷、林地、金融" autocomplete="off"><p id="count" role="status"></p></div>
+      <ol id="regions"></ol>
     </aside>
-    <section class="map-wrap" aria-label="真实地理地图">
-      <div class="map-head"><b>实景地理底图 · 地点取象</b><span>↑ 北 · 可拖动 / 缩放</span></div>
-      <div id="map" aria-label="可缩放地图；也可使用地点索引查阅全部标注"></div>
+    <section class="map-wrap" aria-label="真实地图与五行分析区块">
+      <div class="map-head"><b>半透明色块 = 片区主象 · 虚线 = 概化分析范围</b><span>↑ 北</span></div>
+      <div id="map" aria-label="可缩放片区地图；也可通过片区索引查看分析"></div>
       <p class="map-status" id="map-status" role="status">正在加载真实地图…</p>
     </section>
   </div>
-  <section class="detail" id="detail" aria-labelledby="place-title" tabindex="-1">
-    <div><span class="tag" id="tag"></span><h2 id="place-title">选择一个地点</h2><p id="coordinate"></p><a id="osm" target="_blank" rel="noopener noreferrer">在 OpenStreetMap 核对位置 ↗</a></div>
-    <div><h3>地理事实</h3><p id="fact"></p><h3>五行风水解读 · 本图取象</h3><p id="reading"></p><h3>事实来源</h3><ul id="sources"></ul></div>
-  </section>
-  <details><summary>这张地图如何读？五行依据与使用边界</summary>
-    <div class="method">
-      <p><b>金</b> · 金融、交易等现代城市功能类比，不等同于财运判断。</p>
-      <p><b>木</b> · 树木、林地、植物园的地貌取象。</p>
-      <p><b>水</b> · 河流、运河、港湾等真实水体的地貌取象。</p>
-      <p><b>火</b> · 舞台、表演、文化传播等现代城市功能类比，不代表火灾风险。</p>
-      <p><b>土</b> · 山丘、岩地等地貌取象，不因位于市中心就自动属土。</p>
+  <section class="detail" id="detail" aria-labelledby="region-title" tabindex="-1">
+    <div><span class="tag" id="tag"></span><h2 id="region-title"></h2><p id="basis"></p>
+      <h3>为什么这样划区</h3><p id="boundary"></p><ul id="boundary-sources"></ul>
+      <h3>证据地点 · 辅助观察</h3><div id="evidence"></div>
     </div>
-    <p>这是以真实地理为基础的五行文化解读，不是实测能量或区域吉凶评级。一个地点可以兼具多种特征，本图选择一个有依据的主取象；点位仅代表观察位置，不是五行影响边界，也不覆盖城市每一寸土地。不根据缺失信息推断宅运、命卦配合或住房投资价值。</p>
-    <p id="coordinate-note"></p><p>底图需要联网。Leaflet 1.9.4 已内嵌，使用 BSD-2-Clause 许可。地图仅请求当前视野瓦片，不批量下载；公开高流量部署请配置合适的瓦片服务。</p>
+    <div><h3>为什么这一带偏这个象</h3><p id="reason"></p><h3>区域整体特征</h3><ul id="facts"></ul>
+      <h3>兼象与局限</h3><p id="limitations"></p><h3>事实来源</h3><ul id="sources"></ul></div>
+  </section>
+  <details><summary>分析方法、边界与未分析区域</summary>
+    <div class="method">
+      <p><b>金</b> · 金融交易集群等城市功能类比；传统圆形金体不能由一座银行替代判断。</p>
+      <p><b>木</b> · 连续林地等现代山水取象；不等同于传统直形木体。</p>
+      <p><b>水</b> · 河谷、水岸及曲折结构，按实际空间组织分析。</p>
+      <p><b>火</b> · 演艺传播集群等现代功能类比；不表示火灾风险。</p>
+      <p><b>土</b> · 方整平展格局的现代形态延伸；山丘不自动属土。</p>
+    </div>
+    <p>主色表示本图的区域解释，兼象用标签表达，不是实测能量或吉凶评级。综合展示允许不同口径并列，单一口径下没有分析的片区显示灰色。未覆盖的底图区域尚未收录；两者都不表示“没有五行”。</p>
+    <p>山水形态取象与城市功能类比均明确标识为本项目现代解释。传统五星形法重视锐、波、直、圆、方，不能仅凭树多、山高、机构名称判定古法星体。本图不冒充完整传统排盘。</p>
+    <p>区界是有来源的观察或统计范围，不是风水影响的硬边界。解释性概化用虚线；官方边界用实线。区域可能混合、过渡或重叠，点击索引可查看被覆盖的区域。点位仅作证据，不能代替区域判断。</p>
+    <p id="coordinate-note"></p><p>Leaflet 1.9.4 已内嵌（BSD-2-Clause）；真实底图需联网及 HTTP，仅请求当前视野瓦片。</p>
   </details>
-  <footer>堪舆子 · 计算有据，解读有界。底图地理数据 © OpenStreetMap contributors（默认底图）；五行标注为本项目文化取象。<a href="https://www.openstreetmap.org/fixthemap" target="_blank" rel="noopener noreferrer">报告底图问题 ↗</a></footer>
-  <noscript>请启用 JavaScript 查看交互地图。原始地点、依据与来源保存在对应城市 JSON 文件中。</noscript>
+  <footer>堪舆子 · 先看一片地的格局，再说明取象。底图 © OpenStreetMap contributors（默认底图）。<a href="https://www.openstreetmap.org/fixthemap" target="_blank" rel="noopener noreferrer">报告底图问题 ↗</a></footer>
+  <noscript>请启用 JavaScript 查看片区地图；原始分析与来源保存在城市 JSON 文件中。</noscript>
 </main>
 <!-- __LICENSE__ -->
 <script>__LEAFLET_JS__</script>
 <script id="city-data" type="application/json">__DATA__</script>
 <script>
 'use strict';
-const data = JSON.parse(document.getElementById('city-data').textContent);
-const colors = {'金':'#8a631d','木':'#376b49','水':'#2f627d','火':'#af4032','土':'#7b5840'};
-const $ = id => document.getElementById(id);
-const put = (id, value) => { $(id).textContent = value; };
-put('title', data.city + ' · 五行地图'); put('subtitle', data.subtitle);
-put('summary', data.summary); put('reviewed', '资料核对：' + data.reviewed_at);
-put('coordinate-note', data.coordinate_note);
-const map = L.map('map', {scrollWheelZoom:false});
-L.control.scale({imperial:false, position:'bottomleft'}).addTo(map);
-const markers = new Map();
-let selected = null, active = '全部';
-const visible = () => data.places.filter(p => (active === '全部' || p.element === active) &&
-  [p.name, p.fact, p.reading, p.element].join(' ').toLocaleLowerCase().includes($('search').value.trim().toLocaleLowerCase()));
-const bounds = places => L.latLngBounds(places.map(p => [p.lat, p.lon]));
-function fit(places) { if (places.length) map.fitBounds(bounds(places), {padding:[45,45], maxZoom:13, animate:false}); }
-function select(place, pan = true) {
-  selected = place.id;
-  put('place-title', place.name); put('tag', place.element + ' · ' + place.basis);
-  $('tag').style.setProperty('--element', colors[place.element]);
-  put('fact', place.fact); put('reading', place.reading);
-  put('coordinate', 'WGS84 · ' + place.lat.toFixed(5) + ', ' + place.lon.toFixed(5) + ' · 代表点位');
-  $('osm').href = 'https://www.openstreetmap.org/?mlat=' + place.lat + '&mlon=' + place.lon + '#map=16/' + place.lat + '/' + place.lon;
-  $('sources').replaceChildren(...place.sources.map(source => {
-    const li = document.createElement('li'), a = document.createElement('a');
-    a.textContent = source.title + ' ↗'; a.href = source.url; a.target = '_blank'; a.rel = 'noopener noreferrer'; li.append(a); return li;
-  }));
-  document.querySelectorAll('.place').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.id === selected)));
-  markers.forEach((marker, id) => {
-    const node = marker.getElement(); if (node) node.classList.toggle('selected', id === selected);
-    if (id === selected && !marker.isPopupOpen()) marker.openTooltip(); else marker.closeTooltip();
-    if (id !== selected) marker.closePopup();
-  });
-  if (pan) map.setView([place.lat, place.lon], Math.max(map.getZoom(), 13), {animate:false});
+const data=JSON.parse(document.getElementById('city-data').textContent);
+const colors={'金':'#9b701e','木':'#37754c','水':'#28678b','火':'#b74434','土':'#84603b','待分析':'#747474'};
+const methods={landscape:'山水形态取象 · 现代解释',function:'城市功能类比 · 现代解释'};
+const $=id=>document.getElementById(id);
+const put=(id,value)=>{$(id).textContent=value;};
+const node=(tag,value,cls)=>{const n=document.createElement(tag);if(value!==undefined)n.textContent=value;if(cls)n.className=cls;return n;};
+function sourceList(target,sources){target.replaceChildren(...sources.map(s=>{const li=node('li'),a=node('a',s.title+' ↗');a.href=s.url;a.target='_blank';a.rel='noopener noreferrer';li.append(a);return li;}));}
+put('title',data.city+' · 区域五行地图');put('subtitle',data.subtitle);put('summary',data.summary);put('reviewed','资料核对：'+data.reviewed_at);put('coordinate-note',data.coordinate_note);
+const map=L.map('map',{scrollWheelZoom:false});L.control.scale({imperial:false,position:'bottomleft'}).addTo(map);
+map.createPane('regionLabels');map.getPane('regionLabels').style.zIndex=450;map.getPane('regionLabels').style.pointerEvents='none';
+const shapes=new Map(),labels=new Map(),evidenceLayer=L.layerGroup().addTo(map);
+let active='全部',selected=null;
+function methodFor(r){return $('method').value==='combined'?r.preferred_method:$('method').value;}
+function analysis(r){return r.analyses[methodFor(r)]||null;}
+function caption(a){return a?a.primary+'为主'+(a.secondary.length?' · 兼'+a.secondary.join('、'):''):'本口径待分析';}
+function visible(){const q=$('search').value.trim().toLocaleLowerCase();return data.regions.filter(r=>{const a=analysis(r);return (active==='全部'||(a?a.primary:'待分析')===active)&&JSON.stringify([r.name,r.boundary.description,a]).toLocaleLowerCase().includes(q);});}
+function fit(regions){if(regions.length)map.fitBounds(L.featureGroup(regions.map(r=>shapes.get(r.id))).getBounds(),{padding:[28,28],maxZoom:14,animate:false});}
+function style(r){const a=analysis(r);return {color:colors[a?a.primary:'待分析'],fillColor:colors[a?a.primary:'待分析'],fillOpacity:!a ? .16 : (r.id===selected ? .75 : .6),weight:r.id===selected?3:2,dashArray:r.boundary.kind==='解释性概化'?'6 4':null};}
+function popup(r){const a=analysis(r),box=node('div');box.append(node('h3',r.name),node('p',caption(a)),node('p',a?a.reason:'本口径尚未分析，不自动沿用另一种方法的结论。'));const button=node('button','查看完整分析与划界依据','evidence-link');button.addEventListener('click',()=>{select(r,false);$('detail').focus({preventScroll:true});$('detail').scrollIntoView({block:'start',behavior:'instant'});});box.append(button);return box;}
+function select(r,pan=true){
+ selected=r.id;const a=analysis(r);put('region-title',r.name);put('tag',caption(a));$('tag').style.setProperty('--element',colors[a?a.primary:'待分析']);put('basis',(methods[methodFor(r)]||'尚未形成分析结论')+' · '+r.boundary.kind);
+ put('boundary',r.boundary.description);sourceList($('boundary-sources'),r.boundary.sources);
+ put('reason',a?a.reason:(Object.keys(r.analyses).length?'这一片区在当前口径下尚未完成分析。可切换口径查看已有结论，不自动沿用其他方法。':'本区尚未形成任何口径的结论，保留区界和证据供后续分析。'));
+ $('facts').replaceChildren(...(a?a.facts:['尚未收录可支持本口径结论的区域整体事实。']).map(f=>node('li',f)));put('limitations',a?a.limitations:'灰色表示本口径证据不足，并非这一带没有五行特征。');sourceList($('sources'),a?a.sources:[]);if(!a)$('sources').append(node('li','当前口径暂无分析来源；划界资料见区界说明。'));
+ $('evidence').replaceChildren(...(r.evidence||[]).map(p=>{const b=node('button',p.name+' ↗','evidence-link');b.addEventListener('click',()=>{map.setView([p.position[1],p.position[0]],15,{animate:false});const box=node('div');box.append(node('h3',p.name),node('p',p.note));const list=node('ul');sourceList(list,p.sources);box.append(list);L.popup().setLatLng([p.position[1],p.position[0]]).setContent(box).openOn(map);});return b;}));
+ if(!(r.evidence||[]).length)$('evidence').append(node('p','本区依据见区域整体特征与来源。'));
+ document.querySelectorAll('.region-item').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.id===selected)));
+ shapes.forEach((layer,id)=>layer.setStyle(style(data.regions.find(x=>x.id===id))));
+ if(pan)fit([r]);
 }
-data.places.forEach((place, i) => {
-  const badge = document.createElement('span'), glyph = document.createElement('em');
-  badge.style.setProperty('--element', colors[place.element]); glyph.textContent = place.element; badge.append(glyph);
-  const tooltip = document.createElement('span'); tooltip.textContent = (i + 1) + ' · ' + place.name;
-  const popup = document.createElement('div');
-  const heading=document.createElement('h3'), basis=document.createElement('p'), fact=document.createElement('p'), reading=document.createElement('p'), sources=document.createElement('ul');
-  heading.textContent=place.name; basis.className='popup-basis'; basis.textContent=place.element + ' · ' + place.basis;
-  fact.textContent='地理事实：' + place.fact; reading.textContent='五行解读：' + place.reading;
-  place.sources.forEach(source => {
-    const li=document.createElement('li'), a=document.createElement('a');
-    a.textContent=source.title + ' ↗'; a.href=source.url; a.target='_blank'; a.rel='noopener noreferrer'; li.append(a); sources.append(li);
-  });
-  popup.append(heading,basis,fact,reading,sources);
-  const marker = L.marker([place.lat, place.lon], {
-    icon:L.divIcon({className:'marker', html:badge, iconSize:[36,36], iconAnchor:[18,36]}),
-    title:place.name + ' · ' + place.element, alt:place.name + ' · ' + place.element,
-    keyboard:true, riseOnHover:true
-  }).bindTooltip(tooltip, {direction:'top', offset:[0,-38]})
-    .bindPopup(popup, {maxWidth:320, maxHeight:280, autoPanPadding:[20,20]})
-    .on('click', () => select(place, false));
-  marker.on('add', () => marker.getElement().setAttribute('aria-label', place.name + ' · ' + place.element));
-  markers.set(place.id, marker);
-});
-function update() {
-  const places = visible();
-  $('places').replaceChildren();
-  data.places.forEach((place, i) => {
-    const marker = markers.get(place.id);
-    if (!places.includes(place)) { if (map.hasLayer(marker)) map.removeLayer(marker); return; }
-    if (!map.hasLayer(marker)) marker.addTo(map);
-    const li = document.createElement('li'), button = document.createElement('button');
-    button.className = 'place'; button.dataset.id = place.id;
-    button.setAttribute('aria-pressed', String(place.id === selected));
-    const number = document.createElement('span'), body = document.createElement('span'), title = document.createElement('strong'), note = document.createElement('small');
-    number.className = 'number'; number.style.setProperty('--element', colors[place.element]);
-    number.textContent = String(i + 1).padStart(2,'0') + ' ' + place.element;
-    title.textContent = place.name; note.textContent = place.basis; body.append(title,note); button.append(number,body);
-    button.addEventListener('click', () => { select(place); $('detail').focus({preventScroll:true}); $('detail').scrollIntoView({block:'nearest', behavior:'instant'}); });
-    li.append(button); $('places').append(li);
-  });
-  put('count', '显示 ' + places.length + ' / ' + data.places.length + ' 个地点 · ' + active);
-  if (!places.length) { const li=document.createElement('li'); li.className='empty'; li.textContent='没有匹配地点，请切换五行或清空搜索。'; $('places').append(li); }
-  if (places.length && !places.some(p => p.id === selected)) select(places[0], false);
-  if (!places.length) {
-    selected=null; put('place-title','没有匹配地点'); put('tag',''); put('fact','请调整筛选条件。'); put('reading',''); put('coordinate',''); $('osm').removeAttribute('href'); $('sources').replaceChildren();
-  }
+for(const r of data.regions){
+ const layer=L.geoJSON(r.geometry,{style:()=>style(r),onEachFeature:(_,path)=>{
+   path.on('click',()=>select(r,false));
+   path.on('add',()=>{const el=path.getElement();el.setAttribute('tabindex','0');el.setAttribute('role','button');el.setAttribute('aria-label',r.name+'，查看区域分析');el.onkeydown=event=>{if(event.key==='Enter'||event.key===' '){event.preventDefault();select(r,false);path.openPopup();}};});
+   path.bindPopup(()=>popup(r),{maxWidth:320,maxHeight:260});
+ }});shapes.set(r.id,layer);
+ const label=L.tooltip({permanent:true,direction:'center',className:'region-label',pane:'regionLabels'}).setLatLng([r.label_position[1],r.label_position[0]]);labels.set(r.id,label);
 }
-['全部', ...Object.keys(colors)].forEach(element => {
-  const button=document.createElement('button'); button.className='filter'; button.dataset.element=element;
-  button.setAttribute('aria-pressed', String(element === active));
-  if (colors[element]) { const dot=document.createElement('span'); dot.className='swatch'; dot.style.setProperty('--element',colors[element]); button.append(dot); }
-  button.append(document.createTextNode(element + ' · ' + data.places.filter(p => element === '全部' || p.element === element).length));
-  button.addEventListener('click', () => { active=element; document.querySelectorAll('.filter').forEach(b => b.setAttribute('aria-pressed',String(b.dataset.element === active))); update(); fit(visible()); });
-  $('filters').insertBefore(button,$('reset'));
-});
-$('search').addEventListener('input',update);
-$('reset').addEventListener('click', () => { active='全部'; $('search').value=''; document.querySelectorAll('.filter').forEach(b => b.setAttribute('aria-pressed',String(b.dataset.element === active))); update(); fit(data.places); });
-fit(data.places); update();
-const status = (message, error=false) => { put('map-status',message); $('map-status').dataset.error=String(error); };
-if (location.protocol === 'file:') {
-  status('请通过本地 HTTP 打开以加载真实底图：在本文件目录运行 python3 -m http.server 8000 --bind 127.0.0.1，再访问 http://127.0.0.1:8000/ 。目前仅显示标注，未加载底图。', true);
-} else {
-  const base=data.basemap;
-  const link=document.createElement('a'); link.href=base.attribution_url; link.textContent=base.attribution; link.target='_blank'; link.rel='noopener noreferrer';
-  let loaded=0, errors=0;
-  L.tileLayer(base.url,{maxZoom:base.max_zoom,attribution:link.outerHTML})
-    .on('loading', () => { loaded=0; errors=0; status('正在加载真实地图…'); })
-    .on('tileload', () => { loaded++; })
-    .on('tileerror', () => { errors++; status('部分底图加载失败，请检查网络或更换瓦片服务。地点与资料仍可查阅。',true); })
-    .on('load', () => { if (!errors && loaded) status('真实底图已加载 · 点击五行标记或左侧地点，查看取象与来源'); })
-    .addTo(map);
-  window.addEventListener('offline', () => status('网络已断开：底图可能不完整，地点与来源文字仍可查阅。',true));
+function update(){
+ const shown=visible();map.closePopup();evidenceLayer.clearLayers();$('regions').replaceChildren();
+ for(const r of data.regions){const layer=shapes.get(r.id),label=labels.get(r.id),a=analysis(r);
+   if(!shown.includes(r)){if(map.hasLayer(layer))map.removeLayer(layer);if(map.hasLayer(label))map.removeLayer(label);continue;}
+   if(!map.hasLayer(layer))layer.addTo(map);layer.setStyle(style(r));
+   const labelText=node('div'),symbol=node('small');symbol.append(node('span',a?a.primary:'—','primary-symbol'),node('span',a?('为主'+(a.secondary.length?' · 兼'+a.secondary.join('、'):'')):'待分析','secondary-caption'));labelText.append(node('b',r.name.split(' · ')[0]),symbol);label.setContent(labelText);if(!map.hasLayer(label))label.addTo(map);
+   const li=node('li'),button=node('button',undefined,'place region-item');button.dataset.id=r.id;button.setAttribute('aria-pressed',String(r.id===selected));
+   const number=node('span',a?a.primary:'—','number');number.style.setProperty('--element',colors[a?a.primary:'待分析']);const body=node('span');body.append(node('strong',r.name),node('small',caption(a)),node('small',(methods[methodFor(r)]||'尚未形成分析结论')));button.append(number,body);button.addEventListener('click',()=>{select(r);$('detail').focus({preventScroll:true});$('detail').scrollIntoView({block:'nearest',behavior:'instant'});});li.append(button);$('regions').append(li);
+   if($('show-evidence').checked)for(const p of r.evidence||[]){const box=node('div');box.append(node('h3',p.name),node('p',p.note));const list=node('ul');sourceList(list,p.sources);box.append(list);L.circleMarker([p.position[1],p.position[0]],{className:'evidence-marker',radius:5,color:'#26211b',fillColor:'#fff8ed',fillOpacity:1,weight:2}).bindPopup(box).addTo(evidenceLayer);}
+ }
+ const pending=shown.filter(r=>!analysis(r)).length;put('count','显示 '+shown.length+' / '+data.regions.length+' 个片区'+(pending?' · '+pending+' 区待分析':''));
+ if(shown.length){select(shown.find(r=>r.id===selected)||shown[0],false);}else{selected=null;$('regions').append(node('li','没有匹配片区，请调整口径、五行或搜索。','empty'));for(const id of ['tag','basis','boundary','reason','limitations'])put(id,'');put('region-title','没有匹配片区');for(const id of ['facts','sources','boundary-sources','evidence'])$(id).replaceChildren();}
+ document.querySelectorAll('.filter').forEach(b=>{const e=b.dataset.element;b.setAttribute('aria-pressed',String(e===active));const count=data.regions.filter(r=>e==='全部'||(analysis(r)?.primary||'待分析')===e).length;b.querySelector('.filter-text').textContent=e+' · '+count;});
+ put('view-note',$('method').value==='combined'?'每区标明取象口径；虚线为概化分析范围，空白处尚未收录。':'当前口径：'+methods[$('method').value]+'。灰色区块为本口径待分析，切换方法可能改变结论。');
+}
+for(const e of ['全部','金','木','水','火','土','待分析']){const b=node('button',undefined,'filter');b.dataset.element=e;if(colors[e]){const dot=node('span',undefined,'swatch');dot.style.setProperty('--element',colors[e]);b.append(dot);}b.append(node('span',e,'filter-text'));b.addEventListener('click',()=>{active=e;update();fit(visible());});$('filters').append(b);}
+$('search').addEventListener('input',update);$('method').addEventListener('change',()=>{active='全部';update();fit(visible());});$('show-evidence').addEventListener('change',update);
+$('reset').addEventListener('click',()=>{active='全部';$('search').value='';update();fit(data.regions);});
+update();fit(data.regions);
+const status=(message,error=false)=>{put('map-status',message);$('map-status').dataset.error=String(error);};
+if(location.protocol==='file:'){status('请通过 HTTP 加载真实底图：在本文件目录运行 python3 -m http.server 8000 --bind 127.0.0.1 。目前仅显示区域与分析。',true);}else{
+ const base=data.basemap,link=node('a',base.attribution);link.href=base.attribution_url;link.target='_blank';link.rel='noopener noreferrer';let loaded=0,errors=0;
+ L.tileLayer(base.url,{maxZoom:base.max_zoom,attribution:link.outerHTML}).on('loading',()=>{loaded=0;errors=0;status('正在加载真实地图…');}).on('tileload',()=>loaded++).on('tileerror',()=>{errors++;status('部分底图加载失败，请检查网络或更换瓦片服务。区域与分析仍可查阅。',true);}).on('load',()=>{if(!errors&&loaded)status('真实底图已加载 · 点击色块查看区域分析，证据地点可按需显示');}).addTo(map);
+ window.addEventListener('offline',()=>status('网络已断开，底图可能不完整；区域分析仍可查阅。',true));
 }
 </script>
 </body>

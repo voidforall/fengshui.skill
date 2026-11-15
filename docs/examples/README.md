@@ -20,6 +20,8 @@ python3 skills/city-wuxing-map/scripts/generate.py --example new-york --output d
 python3 -m http.server 8000 --bind 127.0.0.1
 ```
 
-访问 `http://127.0.0.1:8000/docs/examples/london-wuxing.html` 或 `http://127.0.0.1:8000/docs/examples/new-york-wuxing.html`。这些示例内嵌 Leaflet、模板与地点数据，真实地图瓦片需要联网，通过 HTTP 加载。直接双击 HTML 时只显示标注资料并提示启动本地服务。
+访问 `http://127.0.0.1:8000/docs/examples/london-wuxing.html` 或 `http://127.0.0.1:8000/docs/examples/new-york-wuxing.html`。这些示例内嵌 Leaflet、模板与区域几何和分析数据，真实地图瓦片需要联网，通过 HTTP 加载。直接双击 HTML 时只显示区域分析并提示启动本地服务。
 
-原始资料在 `skills/city-wuxing-map/examples/`，修改模板、生成器、库文件或资料后都要重新生成两个 HTML。`tests/test_city_map.py` 检查示例是否过期。README 截图来自实际浏览器加载后的伦敦地图，保留底图署名。
+原始区域资料在 `skills/city-wuxing-map/examples/`，修改模板、生成器、库文件或资料后都要重新生成两个 HTML。`tests/test_city_map.py` 检查示例是否过期。README 截图来自实际浏览器加载后的伦敦地图，保留底图署名。
+
+区域版默认显示半透明多边形与主象/兼象，点位为可开关证据层。检查口径切换（如 Canary Wharf 的金/水主象变化）、灰色待分析、区域点击与边界来源；不能只确认若干点位能显示。

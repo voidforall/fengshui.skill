@@ -1,87 +1,486 @@
 {
+  "schema_version": 2,
   "city": "纽约",
-  "subtitle": "New York · 曼哈顿的水岸、林地与文化节点",
-  "summary": "从下城港湾到中央公园，选取五处真实地点，展示纽约的金木水火土。标注描述具体地点，不给整座城区贴单一吉凶标签。",
+  "subtitle": "New York · 真实底图上的片区主象与兼象",
+  "summary": "5 个片区，读整体格局与主象兼象。点击色块查看分析、划界依据与来源；证据地点可按需打开。",
   "reviewed_at": "2026-11-15",
-  "coordinate_note": "坐标使用 WGS84，经公开地图手工选取代表位置，非测绘或导航精度。河流、公园与城区标注不表示边界；五行是本图的文化解读，事实来源只支持地理或功能描述。",
-  "places": [
+  "coordinate_note": "WGS84 坐标。所有示例区界均为依据公开地图与区域资料手工概化的解释性分析范围，并非官方风水区或精确法定边界；虚线表示概化，未着色区域尚未收录。",
+  "regions": [
     {
-      "id": "nyse",
-      "name": "纽约证券交易所 · Wall Street",
-      "lat": 40.7069,
-      "lon": -74.0113,
-      "element": "金",
-      "basis": "城市功能类比",
-      "fact": "纽约证券交易所是证券交易机构，位于曼哈顿下城的金融街区。",
-      "reading": "以证券交易与金融制度取金象，这是现代城市功能类比；不意味着到此投资就会获利。",
-      "sources": [
+      "id": "central-park",
+      "name": "Central Park · 绿地整体",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -73.9819,
+              40.7681
+            ],
+            [
+              -73.973,
+              40.7644
+            ],
+            [
+              -73.9492,
+              40.7969
+            ],
+            [
+              -73.9582,
+              40.8005
+            ],
+            [
+              -73.9819,
+              40.7681
+            ]
+          ]
+        ]
+      },
+      "label_position": [
+        -73.9655,
+        40.782
+      ],
+      "boundary": {
+        "kind": "解释性概化",
+        "description": "沿 Central Park 四周道路对公园整体轮廓手工概化，保留其相对曼哈顿街网的方向；不是官方精确公园边界，入口和细部边缘未逐一描绘。",
+        "sources": [
+          {
+            "title": "Central Park Conservancy · 公园与管理范围",
+            "url": "https://www.centralparknyc.org/about"
+          },
+          {
+            "title": "OpenStreetMap · 划界地理参照",
+            "url": "https://www.openstreetmap.org/#map=14/40.782/-73.9655"
+          }
+        ]
+      },
+      "analyses": {
+        "landscape": {
+          "primary": "木",
+          "secondary": [
+            "水"
+          ],
+          "reason": "整片连续公园将林地、草坪与树荫步道连成城市绿地骨架，以现代山水取象取木为主；湖池形成水的兼象。这里分析的是公园整体镶嵌，不把一个观鸟点代表整个曼哈顿。",
+          "facts": [
+            "公园内存在多个林地、草坪与水体景观单元。",
+            "公园作为连续绿地嵌在密集城市街网之中。"
+          ],
+          "limitations": "土的兼象仅为地形背景，不能把岩丘自动判为传统方形土体；水面、球场与道路的局部属性不同。",
+          "sources": [
+            {
+              "title": "Central Park Conservancy · 公园与管理范围",
+              "url": "https://www.centralparknyc.org/about"
+            },
+            {
+              "title": "Central Park Conservancy · 林地与小径",
+              "url": "https://www.centralparknyc.org/locations/the-ramble"
+            }
+          ]
+        }
+      },
+      "preferred_method": "landscape",
+      "evidence": [
         {
-          "title": "NYSE · History of NYSE",
-          "url": "https://www.nyse.com/history-of-nyse"
+          "name": "The Ramble",
+          "position": [
+            -73.9692,
+            40.7771
+          ],
+          "note": "连片公园中的林地证据，不单独决定区域主象。",
+          "sources": [
+            {
+              "title": "Central Park Conservancy · 林地与小径",
+              "url": "https://www.centralparknyc.org/locations/the-ramble"
+            }
+          ]
         }
       ]
     },
     {
-      "id": "ramble",
-      "name": "中央公园 · The Ramble",
-      "lat": 40.7771,
-      "lon": -73.9692,
-      "element": "木",
-      "basis": "地貌取象",
-      "fact": "The Ramble 是中央公园内的林地景观，有弯曲的小径、树木与观鸟空间。",
-      "reading": "以成片树木与林地取木象。公园的环境价值应结合实际绿量、可达性等考察，木象不能代替环境质量检测。",
-      "sources": [
+      "id": "lower-hudson",
+      "name": "Hudson · 下城西岸走廊",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -74.024,
+              40.704
+            ],
+            [
+              -74.022,
+              40.718
+            ],
+            [
+              -74.016,
+              40.735
+            ],
+            [
+              -74.009,
+              40.748
+            ],
+            [
+              -74.003,
+              40.761
+            ],
+            [
+              -73.998,
+              40.77
+            ],
+            [
+              -73.991,
+              40.768
+            ],
+            [
+              -73.997,
+              40.759
+            ],
+            [
+              -74.003,
+              40.746
+            ],
+            [
+              -74.009,
+              40.733
+            ],
+            [
+              -74.015,
+              40.716
+            ],
+            [
+              -74.017,
+              40.704
+            ],
+            [
+              -74.024,
+              40.704
+            ]
+          ]
+        ]
+      },
+      "label_position": [
+        -74.012,
+        40.736
+      ],
+      "boundary": {
+        "kind": "解释性概化",
+        "description": "沿曼哈顿下城至中城的 Hudson 西岸水域、码头与滨河公园带概化。参照公开水岸地图逐段勾勒，不是整个 Hudson 流域或 Hudson River Park 精确管辖线。",
+        "sources": [
+          {
+            "title": "Hudson River Park Trust · 公园与水岸地图",
+            "url": "https://hudsonriverpark.org/the-park/park-map/"
+          },
+          {
+            "title": "OpenStreetMap · 划界地理参照",
+            "url": "https://www.openstreetmap.org/#map=14/40.736/-74.012"
+          }
+        ]
+      },
+      "analyses": {
+        "landscape": {
+          "primary": "水",
+          "secondary": [
+            "木"
+          ],
+          "reason": "河面与连续岸线构成贯穿南北的空间骨架，码头、公园和步道沿水串联，故以水为主；滨河绿地兼木。判断来自水岸走廊的连续性，而非单个码头。",
+          "facts": [
+            "Hudson River Park 的地图展示多段滨水公共空间与码头。",
+            "水域、岸线与陆地交通形成连续但宽窄不一的界面。"
+          ],
+          "limitations": "不是任意等宽缓冲带，也不是洪水危险分区。用地在不同河段明显变化，实际水面比例和防洪条件需要另查。",
+          "sources": [
+            {
+              "title": "Hudson River Park Trust · 公园与水岸地图",
+              "url": "https://hudsonriverpark.org/the-park/park-map/"
+            }
+          ]
+        }
+      },
+      "preferred_method": "landscape",
+      "evidence": [
         {
-          "title": "Central Park Conservancy · The Ramble",
-          "url": "https://www.centralparknyc.org/locations/the-ramble"
+          "name": "Pier 40",
+          "position": [
+            -74.011,
+            40.729
+          ],
+          "note": "观察码头、开阔河面与连续岸线关系。",
+          "sources": [
+            {
+              "title": "Hudson River Park Trust · 公园与水岸地图",
+              "url": "https://hudsonriverpark.org/the-park/park-map/"
+            }
+          ]
         }
       ]
     },
     {
-      "id": "battery",
-      "name": "炮台公园 · 临港岸线",
-      "lat": 40.7033,
-      "lon": -74.0182,
-      "element": "水",
-      "basis": "地貌取象",
-      "fact": "The Battery 位于曼哈顿南端，临近纽约港，并连接前往自由女神像等地的渡船活动。点位选在临港岸线附近。",
-      "reading": "以港湾水面取水象，园内绿化兼木。临水同时需要关注真实的风、潮汐与防洪条件；这些条件不由五行标签代替。",
-      "sources": [
+      "id": "financial-district",
+      "name": "Lower Manhattan · 金融商务片",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -74.016,
+              40.704
+            ],
+            [
+              -74.015,
+              40.713
+            ],
+            [
+              -74.009,
+              40.716
+            ],
+            [
+              -73.999,
+              40.709
+            ],
+            [
+              -74.006,
+              40.702
+            ],
+            [
+              -74.016,
+              40.704
+            ]
+          ]
+        ]
+      },
+      "label_position": [
+        -74.008,
+        40.709
+      ],
+      "boundary": {
+        "kind": "解释性概化",
+        "description": "选取 City Hall 以南、West Street 与东岸之间的商务核心概化，参考 Downtown Alliance 的区域描述；不是 BID 精确法定边界，滨水过渡区按需另析。",
+        "sources": [
+          {
+            "title": "Downtown Alliance · 下城商务区域说明",
+            "url": "https://downtownny.com/about-us/"
+          },
+          {
+            "title": "OpenStreetMap · 划界地理参照",
+            "url": "https://www.openstreetmap.org/#map=14/40.709/-74.008"
+          }
+        ]
+      },
+      "analyses": {
+        "function": {
+          "primary": "金",
+          "secondary": [
+            "水"
+          ],
+          "reason": "证券、金融服务及商务办公在多个街坊中形成集中功能，现代城市功能类比以金为主；下城两侧临水作为地理兼象。NYSE 只是其中的证据机构，而不是给整个片区定性的唯一原因。",
+          "facts": [
+            "Downtown Alliance 将这一带作为下城中央商务区提供服务与区域研究。",
+            "Wall Street 的证券交易历史与多街坊商务环境相互关联。"
+          ],
+          "limitations": "功能金不等于传统金体，也不保证财运。该区有住宅、历史建筑和文化空间，不把主导功能说成唯一用途。",
+          "sources": [
+            {
+              "title": "Downtown Alliance · 下城商务区域说明",
+              "url": "https://downtownny.com/about-us/"
+            },
+            {
+              "title": "NYSE · 证券交易与金融街区历史",
+              "url": "https://www.nyse.com/history-of-nyse"
+            }
+          ]
+        }
+      },
+      "preferred_method": "function",
+      "evidence": [
         {
-          "title": "The Battery Conservancy · Visit",
-          "url": "https://www.thebattery.org/"
+          "name": "NYSE",
+          "position": [
+            -74.0113,
+            40.7069
+          ],
+          "note": "金融商务集群的证据节点。",
+          "sources": [
+            {
+              "title": "NYSE · 证券交易与金融街区历史",
+              "url": "https://www.nyse.com/history-of-nyse"
+            }
+          ]
         }
       ]
     },
     {
-      "id": "lincoln-center",
-      "name": "林肯中心 · Lincoln Center",
-      "lat": 40.7725,
-      "lon": -73.9835,
-      "element": "火",
-      "basis": "城市功能类比",
-      "fact": "林肯中心汇集音乐、歌剧、舞蹈与戏剧等表演艺术机构及场馆。",
-      "reading": "以表演、艺术传播与公共文化活动取火象，是现代功能类比，不代表此地气温、火灾风险或某种可测能量。",
-      "sources": [
+      "id": "theatre-district",
+      "name": "Broadway · 剧院街区",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -73.9925,
+              40.755
+            ],
+            [
+              -73.9858,
+              40.752
+            ],
+            [
+              -73.9764,
+              40.765
+            ],
+            [
+              -73.9828,
+              40.768
+            ],
+            [
+              -73.9925,
+              40.755
+            ]
+          ]
+        ]
+      },
+      "label_position": [
+        -73.985,
+        40.76
+      ],
+      "boundary": {
+        "kind": "解释性概化",
+        "description": "按第40至53街、第6至8大道之间的剧院与商业核心概化，参照 Times Square Alliance 的范围说明；未逐项复刻 BID 的街段延伸与例外，不是其精确区界。",
+        "sources": [
+          {
+            "title": "Times Square Alliance · 地区范围与文化功能",
+            "url": "https://www.timessquarenyc.org/times-square-alliance/about-the-alliance"
+          },
+          {
+            "title": "OpenStreetMap · 划界地理参照",
+            "url": "https://www.openstreetmap.org/#map=14/40.76/-73.985"
+          }
+        ]
+      },
+      "analyses": {
+        "function": {
+          "primary": "火",
+          "secondary": [
+            "金"
+          ],
+          "reason": "相邻街坊的剧院、演出、广告与公共文化活动构成集中传播场景，按现代功能类比取火为主；商业交易兼金。这是街区集群的功能观察，不是只看一块广告屏或一个剧院。",
+          "facts": [
+            "Times Square Alliance 将本区作为娱乐、文化与城市生活集聚区介绍。",
+            "其服务区大致跨第40至53街、第6至8大道，并含部分延伸街段。"
+          ],
+          "limitations": "火不表示火灾或气温；办公、酒店与居住街段存在差异。区域边缘是分析过渡，不能由文化热闹程度推断个体运势。",
+          "sources": [
+            {
+              "title": "Times Square Alliance · 地区范围与文化功能",
+              "url": "https://www.timessquarenyc.org/times-square-alliance/about-the-alliance"
+            }
+          ]
+        }
+      },
+      "preferred_method": "function",
+      "evidence": [
         {
-          "title": "Lincoln Center · Visit",
-          "url": "https://lincolncenter.org/series/visit"
+          "name": "Times Square",
+          "position": [
+            -73.9855,
+            40.758
+          ],
+          "note": "与周边剧院街坊一起观察传播与商业功能。",
+          "sources": [
+            {
+              "title": "Times Square Alliance · 地区范围与文化功能",
+              "url": "https://www.timessquarenyc.org/times-square-alliance/about-the-alliance"
+            }
+          ]
         }
       ]
     },
     {
-      "id": "belvedere",
-      "name": "眺望台城堡 · Vista Rock",
-      "lat": 40.7794,
-      "lon": -73.9691,
-      "element": "土",
-      "basis": "地貌取象",
-      "fact": "Belvedere Castle 建在中央公园的 Vista Rock 上，是园内的岩地高点与观景节点。",
-      "reading": "以裸露岩地和抬升地势取土象，周边树木兼木；不因为建筑叫城堡就推断存在特定风水格局。",
-      "sources": [
+      "id": "midtown-grid",
+      "name": "Bryant–Midtown · 规则街坊片",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -73.988,
+              40.752
+            ],
+            [
+              -73.982,
+              40.7495
+            ],
+            [
+              -73.976,
+              40.7575
+            ],
+            [
+              -73.982,
+              40.76
+            ],
+            [
+              -73.988,
+              40.752
+            ]
+          ]
+        ]
+      },
+      "label_position": [
+        -73.983,
+        40.7545
+      ],
+      "boundary": {
+        "kind": "解释性概化",
+        "description": "以 Bryant Park 及东南侧相连规则街坊为观察片，沿公开地图的主干街道概化；不是公园法定边界，也不把整个 Midtown 视为同质区域。",
+        "sources": [
+          {
+            "title": "Bryant Park · Midtown 网格与公园历史",
+            "url": "https://bryantpark.org/the-park/history"
+          },
+          {
+            "title": "OpenStreetMap · 划界地理参照",
+            "url": "https://www.openstreetmap.org/#map=14/40.7545/-73.983"
+          }
+        ]
+      },
+      "analyses": {
+        "landscape": {
+          "primary": "土",
+          "secondary": [
+            "木"
+          ],
+          "reason": "规则街网、矩形公园边界与相邻街坊构成重复的方整布局，借“方”的形体作土象的现代城市延伸；公园植被兼木。不是根据这个分析多边形本身画成四边形来判土。",
+          "facts": [
+            "公园官方历史记载 Midtown 街网的形成及公园的发展。",
+            "在真实底图上可观察公园与周围街坊共同构成的规则网格。"
+          ],
+          "limitations": "这是二维城市肌理的现代类比，不是对所有高楼三维形体的传统判定。功能上仍有办公、文化、商业等多种用途。",
+          "sources": [
+            {
+              "title": "Bryant Park · Midtown 网格与公园历史",
+              "url": "https://bryantpark.org/the-park/history"
+            },
+            {
+              "title": "OpenStreetMap · 划界地理参照",
+              "url": "https://www.openstreetmap.org/#map=14/40.7545/-73.983"
+            }
+          ]
+        }
+      },
+      "preferred_method": "landscape",
+      "evidence": [
         {
-          "title": "Central Park Conservancy · Belvedere Castle",
-          "url": "https://www.centralparknyc.org/locations/belvedere-castle"
+          "name": "Bryant Park",
+          "position": [
+            -73.9832,
+            40.7536
+          ],
+          "note": "用于观察公园平面、树阵及相邻网格街坊的关系。",
+          "sources": [
+            {
+              "title": "Bryant Park · Midtown 网格与公园历史",
+              "url": "https://bryantpark.org/the-park/history"
+            }
+          ]
         }
       ]
     }

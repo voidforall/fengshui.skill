@@ -1,49 +1,58 @@
-# 城市地点 JSON
+# 区域数据格式（schema_version: 2）
 
-生成器支持任意城市，不自动地理编码或编造五行判断。先研究事实，再写 UTF-8 JSON 并通过 `--input` 生成地图。单张地图限 1–200 个地点；建议先做覆盖不同区域的 5–20 个高质量代表点。
+任意城市均可输入。先研究区域整体特征、取得或概化多边形，再运行 `--input`。不要把旧版 `places` 点位自动加半径转成面；v1 输入会收到补齐区域数据的错误提示。
 
 ```json
 {
-  "city": "伦敦",
-  "subtitle": "London · 中心城区及周边",
-  "summary": "用河流、绿地与城市功能认识伦敦的五行取象。",
+  "schema_version": 2,
+  "city": "示例城市",
+  "subtitle": "中心城区 · 区域分析",
+  "summary": "一组有依据的区域主象和兼象。",
   "reviewed_at": "2026-11-15",
-  "coordinate_note": "WGS84 手工选取的代表位置，非测绘精度；点位不表示范围。",
-  "places": [
-    {
-      "id": "bank",
-      "name": "英格兰银行",
-      "lat": 51.5142,
-      "lon": -0.0885,
-      "element": "金",
-      "basis": "城市功能类比",
-      "fact": "英格兰银行是英国中央银行。",
-      "reading": "以货币与金融制度取金象，是现代类比，不据此推断财运。",
-      "sources": [
-        {"title": "Bank of England · About", "url": "https://www.bankofengland.co.uk/about"}
-      ]
-    }
-  ]
+  "coordinate_note": "WGS84；区界为公开地图参照下的解释性概化范围。",
+  "regions": [{
+    "id": "river-core",
+    "name": "河谷核心观察片",
+    "geometry": {"type": "Polygon", "coordinates": [[[0,51],[0.01,51],[0.01,51.01],[0,51.01],[0,51]]]},
+    "label_position": [0.005,51.005],
+    "boundary": {
+      "kind": "解释性概化",
+      "description": "说明观察范围及为什么以这些河岸或道路划界；此处坐标仅示范格式，并非真实研究结论。",
+      "sources": [{"title":"公开地图参照", "url":"https://www.openstreetmap.org/#map=14/51.005/0.005"}]
+    },
+    "preferred_method": "landscape",
+    "analyses": {
+      "landscape": {
+        "primary": "水",
+        "secondary": ["木"],
+        "facts": ["填写已核对的区域整体事实。"],
+        "reason": "解释为什么水系构成片区骨架，以及植被为何构成兼象。",
+        "limitations": "说明混合、过渡、资料日期与解释范围。",
+        "sources": [{"title":"事实来源标题", "url":"https://www.openstreetmap.org/"}]
+      }
+    },
+    "evidence": [{
+      "name": "观察点",
+      "position": [0.005,51.005],
+      "note": "说明它支持哪条区域观察，不靠一个点决定整区。",
+      "sources": [{"title":"观察点来源", "url":"https://www.openstreetmap.org/"}]
+    }]
+  }]
 }
 ```
 
-- 顶层文字字段均必填，`reviewed_at` 为真实核对日期（ISO `YYYY-MM-DD`），不是生成器随手填写的今天日期。
-- `id` 用唯一的小写字母、数字、连字符；`lat` 是纬度，`lon` 是经度，均为数字。Web Mercator 纬度须在 ±85.05112878 内，经度在 ±180 内。核对经纬顺序、正负号以及坐标系；内置地图使用北上方向。
-- `element` 为 `金`、`木`、`水`、`火`、`土` 之一；`basis` 为 `地貌取象` 或 `城市功能类比`。不要把主取象当作唯一属性。
-- `fact` 只写来源能支持的事实；`reading` 只写明确标识的五行解释。每条 `sources` 都需要 `title` 和 HTTPS `url`，至少一条。生成器校验格式，不会联网检验来源内容与事实是否一致，仍须人工核对。
-- 原始标注文字通过安全的 JSON 嵌入与 DOM `textContent` 呈现，不支持 HTML。
+- 顶层文字均必填，日期为资料实际核对日。`regions` 含1–200区；`id` 为唯一的小写字母/数字/连字符标识。
+- `geometry` 支持 GeoJSON `Polygon`（含内环）和 `MultiPolygon`。每环4–1000点，首尾相同，至少三个不同顶点且不退化。经度范围±180、纬度±85.05112878；两个数都必须有限。生成器不检验所有复杂拓扑，数据作者须核对自交、洞、重叠及范围。`label_position` 应选在片区内部。
+- `boundary.kind` 为 `官方边界` 或 `解释性概化`。描述中写范围、年份/精度、划界依据；至少一条来源。只有实际取得官方几何时才用“官方边界”。
+- `analyses` 可包含 `landscape` / `function`；`preferred_method` 必须指向已存在的分析。整区待分析时用空对象 `{}` 并令 `preferred_method` 为 `null`，综合视图也会显示灰色。缺失的方法保持待分析，不填猜测结论。
+- 分析包含 `primary`（金木水火土之一）、`secondary`（不重复且不同于主象的五行数组，可空）、非空 `facts` 数组、`reason`、`limitations` 和至少一条 `sources`。事实来源不自动证明解释。
+- `evidence` 可省略或为空；每点填写 `name`、`position`、`note`、`sources`。点应属于对应区域或在说明中明确其外部观察关系。
+- 全部来源需 `title` 与 HTTPS `url`。文字不支持 HTML，安全嵌入后通过 DOM textContent 显示。
 
-默认使用 OpenStreetMap 底图。需要更换时，可增加可选字段（所有子字段都必填）：
+可选 `basemap` 替换 XYZ 服务；下列子字段均必填，署名必须符合服务许可：
 
 ```json
-{
-  "basemap": {
-    "url": "https://tile.openstreetmap.org/{z}/{x}/{y}.png",
-    "attribution": "© OpenStreetMap contributors",
-    "attribution_url": "https://www.openstreetmap.org/copyright",
-    "max_zoom": 19
-  }
-}
+{"basemap":{"url":"https://tile.openstreetmap.org/{z}/{x}/{y}.png","attribution":"© OpenStreetMap contributors","attribution_url":"https://www.openstreetmap.org/copyright","max_zoom":19}}
 ```
 
-URL 必须是 HTTPS XYZ 模板；署名依服务许可填写。此配置只是更换底图，不会转换原始点位坐标。不要把私密 API key 写进要公开提交的 HTML 或 JSON。
+URL 包含 `{z}`、`{x}`、`{y}`；`max_zoom` 为1–22整数。不要公开私密 API key。底图配置不会转换原始区域坐标。

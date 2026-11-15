@@ -1,167 +1,672 @@
 {
+  "schema_version": 2,
   "city": "伦敦",
-  "subtitle": "London · 从泰晤士河到城市山丘",
-  "summary": "沿着河流、园林、金融与舞台，读伦敦的五行取象。十处真实地点，五种观察视角；点击标记查看事实、解读与来源。",
+  "subtitle": "London · 真实底图上的片区主象与兼象",
+  "summary": "6 个片区，读整体格局与主象兼象。点击色块查看分析、划界依据与来源；证据地点可按需打开。",
   "reviewed_at": "2026-11-15",
-  "coordinate_note": "坐标使用 WGS84，经公开地图手工选取代表位置，非测绘或导航精度。河流、公园与城区标注不表示边界；五行是本图的文化解读，事实来源只支持地理或功能描述。",
-  "places": [
+  "coordinate_note": "WGS84 坐标。所有示例区界均为依据公开地图与区域资料手工概化的解释性分析范围，并非官方风水区或精确法定边界；虚线表示概化，未着色区域尚未收录。",
+  "regions": [
     {
-      "id": "bank",
-      "name": "英格兰银行 · City",
-      "lat": 51.5142,
-      "lon": -0.0885,
-      "element": "金",
-      "basis": "城市功能类比",
-      "fact": "英格兰银行是英国中央银行，负责货币与金融稳定等事务。",
-      "reading": "以货币、制度与交易功能取金象；这是现代城市功能类比，不表示这一带必然旺财，也不代表整座 City 只有金。",
-      "sources": [
+      "id": "thames-corridor",
+      "name": "泰晤士河 · 中心河谷带",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -0.127,
+              51.499
+            ],
+            [
+              -0.124,
+              51.502
+            ],
+            [
+              -0.122,
+              51.507
+            ],
+            [
+              -0.116,
+              51.5105
+            ],
+            [
+              -0.106,
+              51.5115
+            ],
+            [
+              -0.096,
+              51.511
+            ],
+            [
+              -0.087,
+              51.5095
+            ],
+            [
+              -0.075,
+              51.5072
+            ],
+            [
+              -0.071,
+              51.506
+            ],
+            [
+              -0.071,
+              51.5038
+            ],
+            [
+              -0.075,
+              51.504
+            ],
+            [
+              -0.087,
+              51.5065
+            ],
+            [
+              -0.096,
+              51.5078
+            ],
+            [
+              -0.106,
+              51.5085
+            ],
+            [
+              -0.116,
+              51.5075
+            ],
+            [
+              -0.119,
+              51.505
+            ],
+            [
+              -0.12,
+              51.501
+            ],
+            [
+              -0.123,
+              51.498
+            ],
+            [
+              -0.127,
+              51.499
+            ]
+          ]
+        ]
+      },
+      "label_position": [
+        -0.105,
+        51.51
+      ],
+      "boundary": {
+        "kind": "解释性概化",
+        "description": "取 Westminster 至塔桥东侧河段及相邻岸带为连续观察范围。沿公开底图的河道弯折人工概化两岸，不是洪水风险区、法定河界或固定半径的影响带。",
+        "sources": [
+          {
+            "title": "GLA · 伦敦景观、水系与生境框架（2026，§2.4）",
+            "url": "https://www.london.gov.uk/sites/default/files/2026-03/MoL_LNR_Strategy_ANNEX_2_FA.pdf"
+          },
+          {
+            "title": "Tower Bridge · 泰晤士河及 Thames Path",
+            "url": "https://www.towerbridge.org.uk/plan-your-visit"
+          },
+          {
+            "title": "OpenStreetMap · 划界地理参照",
+            "url": "https://www.openstreetmap.org/#map=14/51.51/-0.105"
+          }
+        ]
+      },
+      "analyses": {
+        "landscape": {
+          "primary": "水",
+          "secondary": [
+            "土"
+          ],
+          "reason": "这一带的骨架是连续弯折的河道与两岸低地，空间联系由河流贯穿，因此以水为主；两岸人工平台与平展岸地作为土的兼象。这里采用现代山水形态取象，不用一个河边景点代表整条河谷。",
+          "facts": [
+            "河道在中心城区连续转折，两岸通过多座桥梁连接。",
+            "观察区包含水面与岸带，沿线建成环境明显混合。"
+          ],
+          "limitations": "土的兼象只描述平展岸地；不能从河流存在推断沿岸住宅一律旺财。概化范围不精确贴岸，港池、支路和局部绿地需要放大后另看。",
+          "sources": [
+            {
+              "title": "GLA · 伦敦景观、水系与生境框架（2026，§2.4）",
+              "url": "https://www.london.gov.uk/sites/default/files/2026-03/MoL_LNR_Strategy_ANNEX_2_FA.pdf"
+            },
+            {
+              "title": "Tower Bridge · 泰晤士河及 Thames Path",
+              "url": "https://www.towerbridge.org.uk/plan-your-visit"
+            }
+          ]
+        }
+      },
+      "preferred_method": "landscape",
+      "evidence": [
         {
-          "title": "Bank of England · About",
-          "url": "https://www.bankofengland.co.uk/about"
+          "name": "塔桥河段",
+          "position": [
+            -0.0754,
+            51.5055
+          ],
+          "note": "跨河桥位可用于观察主河道、两岸与交通联系，不决定整区取象。",
+          "sources": [
+            {
+              "title": "Tower Bridge · 泰晤士河及 Thames Path",
+              "url": "https://www.towerbridge.org.uk/plan-your-visit"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "hampstead-ridge",
+      "name": "Hampstead · 林地山脊片区",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -0.183,
+              51.558
+            ],
+            [
+              -0.179,
+              51.572
+            ],
+            [
+              -0.169,
+              51.579
+            ],
+            [
+              -0.155,
+              51.577
+            ],
+            [
+              -0.1485,
+              51.558
+            ],
+            [
+              -0.154,
+              51.557
+            ],
+            [
+              -0.165,
+              51.551
+            ],
+            [
+              -0.176,
+              51.55
+            ],
+            [
+              -0.183,
+              51.558
+            ]
+          ]
+        ]
+      },
+      "label_position": [
+        -0.166,
+        51.566
+      ],
+      "boundary": {
+        "kind": "解释性概化",
+        "description": "围绕 Hampstead Heath 的林地、草地与山脊连续景观概化，参考景观框架和公开地图的绿地边缘；不是完整 Hampstead Ridge 官方区界，也不覆盖整个 Camden。",
+        "sources": [
+          {
+            "title": "GLA · 伦敦景观、水系与生境框架（2026，§2.4）",
+            "url": "https://www.london.gov.uk/sites/default/files/2026-03/MoL_LNR_Strategy_ANNEX_2_FA.pdf"
+          },
+          {
+            "title": "City of London · Hampstead Heath",
+            "url": "https://www.cityoflondon.gov.uk/things-to-do/green-spaces/hampstead-heath"
+          },
+          {
+            "title": "OpenStreetMap · 划界地理参照",
+            "url": "https://www.openstreetmap.org/#map=14/51.566/-0.166"
+          }
+        ]
+      },
+      "analyses": {
+        "landscape": {
+          "primary": "木",
+          "secondary": [
+            "水"
+          ],
+          "reason": "这里的区域特征是山脊上连续林地、灌丛和草地的镶嵌，林木形成可辨识的连片景观，故在现代山水取象中以木为主；池塘形成水的兼象。地势抬升是骨架证据，不因山高就自动判土。",
+          "facts": [
+            "GLA 将 Hampstead Ridge 描述为山脊上的林地、灌丛与酸性草地组合。",
+            "Heath 内有多个水体与开敞地，绿地不是单一均质树林。"
+          ],
+          "limitations": "本图是生境与地貌的现代取象，不是传统“直形木体”的逐峰判定。区内住宅边缘、开敞草地与池塘的局部属性不同。",
+          "sources": [
+            {
+              "title": "GLA · 伦敦景观、水系与生境框架（2026，§2.4）",
+              "url": "https://www.london.gov.uk/sites/default/files/2026-03/MoL_LNR_Strategy_ANNEX_2_FA.pdf"
+            },
+            {
+              "title": "City of London · Hampstead Heath",
+              "url": "https://www.cityoflondon.gov.uk/things-to-do/green-spaces/hampstead-heath"
+            }
+          ]
+        }
+      },
+      "preferred_method": "landscape",
+      "evidence": [
+        {
+          "name": "Parliament Hill 观察点",
+          "position": [
+            -0.1518,
+            51.5605
+          ],
+          "note": "观察山脊与城市天际线关系；证据点只是片区中的一个视角。",
+          "sources": [
+            {
+              "title": "City of London · Hampstead Heath",
+              "url": "https://www.cityoflondon.gov.uk/things-to-do/green-spaces/hampstead-heath"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "bloomsbury-grid",
+      "name": "Bloomsbury · 方整街坊群",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -0.135,
+              51.517
+            ],
+            [
+              -0.136,
+              51.522
+            ],
+            [
+              -0.132,
+              51.526
+            ],
+            [
+              -0.123,
+              51.526
+            ],
+            [
+              -0.118,
+              51.522
+            ],
+            [
+              -0.121,
+              51.517
+            ],
+            [
+              -0.135,
+              51.517
+            ]
+          ]
+        ]
+      },
+      "label_position": [
+        -0.127,
+        51.522
+      ],
+      "boundary": {
+        "kind": "解释性概化",
+        "description": "选取 Bedford、Russell 等广场及相连街坊的核心观察片，按公开道路轮廓概化。参照 Camden 保护区与城市肌理图，但不是其完整法定边界；南缘与 West End 为分析过渡。",
+        "sources": [
+          {
+            "title": "Camden · Bloomsbury 保护区评估、城市肌理及地形图",
+            "url": "https://www.camden.gov.uk/bloomsbury-conservation-area"
+          },
+          {
+            "title": "OpenStreetMap · 划界地理参照",
+            "url": "https://www.openstreetmap.org/#map=14/51.522/-0.127"
+          }
+        ]
+      },
+      "analyses": {
+        "landscape": {
+          "primary": "土",
+          "secondary": [
+            "木"
+          ],
+          "reason": "这一片的主要观察对象是多个方整广场和规则街坊的重复组织，尺度较平展、空间边界清楚，借“方”的形体作土象的现代城市延伸；广场内树木与花园构成木的兼象。结论来自街坊群格局，而非博物馆或单个广场的名称。",
+          "facts": [
+            "Camden 的评估材料描述此区的街道网格、围合街坊与正式广场，并附城市肌理图。",
+            "多个广场花园嵌于规则街坊内，硬质空间与植被并置。"
+          ],
+          "limitations": "将街坊形态对应传统五体是现代延伸；不是把地图多边形画方就判土，也不是按“市中心属土”划分。小巷与不同年代建筑带来局部差异。",
+          "sources": [
+            {
+              "title": "Camden · Bloomsbury 保护区评估、城市肌理及地形图",
+              "url": "https://www.camden.gov.uk/bloomsbury-conservation-area"
+            }
+          ]
+        }
+      },
+      "preferred_method": "landscape",
+      "evidence": [
+        {
+          "name": "Russell Square",
+          "position": [
+            -0.1269,
+            51.522
+          ],
+          "note": "与附近广场、街坊一起观察方整布局及花园兼象。",
+          "sources": [
+            {
+              "title": "Camden · Bloomsbury 保护区评估、城市肌理及地形图",
+              "url": "https://www.camden.gov.uk/bloomsbury-conservation-area"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "west-end",
+      "name": "West End · 演艺街区",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -0.141,
+              51.508
+            ],
+            [
+              -0.14,
+              51.514
+            ],
+            [
+              -0.136,
+              51.517
+            ],
+            [
+              -0.121,
+              51.517
+            ],
+            [
+              -0.118,
+              51.513
+            ],
+            [
+              -0.125,
+              51.508
+            ],
+            [
+              -0.141,
+              51.508
+            ]
+          ]
+        ]
+      },
+      "label_position": [
+        -0.131,
+        51.512
+      ],
+      "boundary": {
+        "kind": "解释性概化",
+        "description": "以 Soho、Leicester Square、Covent Garden 一带剧院密集街区作观察范围，循主干道概化；不是整个 West End 的行政或商业组织边界。",
+        "sources": [
+          {
+            "title": "Visit London · West End Theatreland",
+            "url": "https://www.visitlondon.com/things-to-do/whats-on/theatre"
+          },
+          {
+            "title": "OpenStreetMap · 划界地理参照",
+            "url": "https://www.openstreetmap.org/#map=14/51.512/-0.131"
+          }
+        ]
+      },
+      "analyses": {
+        "function": {
+          "primary": "火",
+          "secondary": [
+            "金"
+          ],
+          "reason": "剧院、表演、广告与夜间文化活动在多个相邻街坊中集中，区域的传播与展示功能突出，因此按现代城市功能类比取火为主；商业交易兼金。判断针对演艺街区集群，不把一座歌剧院的标签扩散到周边。",
+          "facts": [
+            "伦敦官方旅游资料将 West End 作为 Theatreland 介绍，收录多种剧院与演出。",
+            "剧院之间是商业、餐饮、办公和住宅混合街坊，功能并不单一。"
+          ],
+          "limitations": "火是文化传播的功能类比，不是形体、火灾风险或实测热度。居住街道与剧院门前的环境不能用同一标签概括。",
+          "sources": [
+            {
+              "title": "Visit London · West End Theatreland",
+              "url": "https://www.visitlondon.com/things-to-do/whats-on/theatre"
+            }
+          ]
+        }
+      },
+      "preferred_method": "function",
+      "evidence": [
+        {
+          "name": "Covent Garden 演艺节点",
+          "position": [
+            -0.1223,
+            51.5129
+          ],
+          "note": "演艺集群中的证据节点，需与其他场馆及街区功能共同解读。",
+          "sources": [
+            {
+              "title": "Visit London · West End Theatreland",
+              "url": "https://www.visitlondon.com/things-to-do/whats-on/theatre"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "city-finance",
+      "name": "City · 金融办公核心",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -0.098,
+              51.5095
+            ],
+            [
+              -0.099,
+              51.5155
+            ],
+            [
+              -0.092,
+              51.52
+            ],
+            [
+              -0.08,
+              51.519
+            ],
+            [
+              -0.074,
+              51.514
+            ],
+            [
+              -0.079,
+              51.509
+            ],
+            [
+              -0.098,
+              51.5095
+            ]
+          ]
+        ]
+      },
+      "label_position": [
+        -0.087,
+        51.515
+      ],
+      "boundary": {
+        "kind": "解释性概化",
+        "description": "选取 Bank—Moorgate—保险办公街区的核心观察范围，按主路与河岸北侧概化。不是整个 City of London 法定界线，也不包含全部金融活动。",
+        "sources": [
+          {
+            "title": "Bank of England · 英国中央银行职能",
+            "url": "https://www.bankofengland.co.uk/about"
+          },
+          {
+            "title": "City of London · 商业与金融城区",
+            "url": "https://www.theglobalcity.uk/"
+          },
+          {
+            "title": "OpenStreetMap · 划界地理参照",
+            "url": "https://www.openstreetmap.org/#map=14/51.515/-0.087"
+          }
+        ]
+      },
+      "analyses": {
+        "function": {
+          "primary": "金",
+          "secondary": [],
+          "reason": "多街坊的银行、保险、交易及专业服务构成金融办公集群，因此按现代城市功能类比以金为主。英格兰银行是证据节点之一，结论并非仅由该机构所在位置决定。",
+          "facts": [
+            "City 是伦敦金融与专业服务集中的城区。",
+            "英格兰银行位于该办公核心，承担货币与金融稳定职能。"
+          ],
+          "limitations": "机构功能取金不等同于传统圆形金体；片区仍含住宅、教堂与文化设施。没有为该区强加山水形态结论，切换该口径时保留待分析。",
+          "sources": [
+            {
+              "title": "Bank of England · 英国中央银行职能",
+              "url": "https://www.bankofengland.co.uk/about"
+            },
+            {
+              "title": "City of London · The Global City",
+              "url": "https://www.theglobalcity.uk/"
+            }
+          ]
+        }
+      },
+      "preferred_method": "function",
+      "evidence": [
+        {
+          "name": "英格兰银行",
+          "position": [
+            -0.0885,
+            51.5142
+          ],
+          "note": "金融核心中的机构证据；不能单凭这一点划整区。",
+          "sources": [
+            {
+              "title": "Bank of England · 英国中央银行职能",
+              "url": "https://www.bankofengland.co.uk/about"
+            }
+          ]
         }
       ]
     },
     {
       "id": "canary-wharf",
-      "name": "金丝雀码头 · Canary Wharf",
-      "lat": 51.5054,
-      "lon": -0.0235,
-      "element": "金",
-      "basis": "城市功能类比",
-      "fact": "Canary Wharf 是伦敦商务与金融活动集中的城区，同时也有住宅、商店和公共空间。点位选在 One Canada Square 附近。",
-      "reading": "以金融办公的集中性取金象；周边船坞又兼水象，应把金水并见理解为城市景观组合，不推断财运吉凶。",
-      "sources": [
-        {
-          "title": "London Convention Bureau · Canary Wharf",
-          "url": "https://www.conventionbureau.london/neighbourhoods-of-london/canary-wharf"
+      "name": "Canary Wharf · 港池商务片",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -0.032,
+              51.5
+            ],
+            [
+              -0.033,
+              51.506
+            ],
+            [
+              -0.026,
+              51.509
+            ],
+            [
+              -0.014,
+              51.508
+            ],
+            [
+              -0.012,
+              51.503
+            ],
+            [
+              -0.018,
+              51.5
+            ],
+            [
+              -0.032,
+              51.5
+            ]
+          ]
+        ]
+      },
+      "label_position": [
+        -0.023,
+        51.505
+      ],
+      "boundary": {
+        "kind": "解释性概化",
+        "description": "围绕 West India Docks 与高密商务核心概化，按港池及主路选取范围；不是 Canary Wharf Estate 精确产权线，也不是整个 Isle of Dogs。",
+        "sources": [
+          {
+            "title": "London Convention Bureau · Canary Wharf 金融商务区",
+            "url": "https://www.conventionbureau.london/neighbourhoods-of-london/canary-wharf"
+          },
+          {
+            "title": "OpenStreetMap · 划界地理参照",
+            "url": "https://www.openstreetmap.org/#map=14/51.505/-0.023"
+          }
+        ]
+      },
+      "analyses": {
+        "function": {
+          "primary": "金",
+          "secondary": [
+            "水"
+          ],
+          "reason": "相邻街坊以金融办公和商务活动形成集群，功能口径以金为主；港池水网是该集群鲜明的地理背景，作为水的兼象并注明跨维度观察。",
+          "facts": [
+            "Canary Wharf 是伦敦商务与金融活动集中的片区。",
+            "原船坞、港池与现代办公组团并置，区域还包含住宅和公共空间。"
+          ],
+          "limitations": "水是地理兼象，不是金融成功的因果解释；不推断投资回报。功能视图与山水视图采用不同证据。",
+          "sources": [
+            {
+              "title": "London Convention Bureau · Canary Wharf 金融商务区",
+              "url": "https://www.conventionbureau.london/neighbourhoods-of-london/canary-wharf"
+            }
+          ]
+        },
+        "landscape": {
+          "primary": "水",
+          "secondary": [
+            "土"
+          ],
+          "reason": "在山水形态口径下，这片观察区以成组港池和岸线分隔的空间结构取水为主，规则人工岸地兼土；这与同一区域的金融功能取金属于不同观察维度。",
+          "facts": [
+            "商务组团周边保留清晰可辨的船坞港池。",
+            "港池与人工平台相间，水岸是片区结构的重要界面。"
+          ],
+          "limitations": "本区含大量陆地与建筑，水主象描述空间组织而非水面面积占比；几何概化不替代实际港池水面数据。",
+          "sources": [
+            {
+              "title": "London Convention Bureau · Canary Wharf 金融商务区",
+              "url": "https://www.conventionbureau.london/neighbourhoods-of-london/canary-wharf"
+            },
+            {
+              "title": "OpenStreetMap · 划界地理参照",
+              "url": "https://www.openstreetmap.org/#map=14/51.505/-0.023"
+            }
+          ]
         }
-      ]
-    },
-    {
-      "id": "hyde-park",
-      "name": "海德公园 · Hyde Park",
-      "lat": 51.5073,
-      "lon": -0.1657,
-      "element": "木",
-      "basis": "地貌取象",
-      "fact": "海德公园是伦敦皇家公园之一，拥有草地、树木和 Serpentine 湖等景观。",
-      "reading": "以树木与绿地的生长取木象，湖面兼水。适合观察城市绿地与密集街区的过渡；不能由公园存在推出周边住宅一律为吉。",
-      "sources": [
+      },
+      "preferred_method": "function",
+      "evidence": [
         {
-          "title": "The Royal Parks · Hyde Park",
-          "url": "https://www.royalparks.org.uk/visit/parks/hyde-park"
-        }
-      ]
-    },
-    {
-      "id": "kew",
-      "name": "邱园 · Kew Gardens",
-      "lat": 51.4787,
-      "lon": -0.2956,
-      "element": "木",
-      "basis": "地貌取象",
-      "fact": "邱园保存丰富的活体植物收藏，兼具植物园与科研功能。点位选在 Palm House 附近。",
-      "reading": "以植物收藏与持续生长取木象；这里只标代表点位，不把整个伦敦西部划为木区，也不替代具体住宅环境勘察。",
-      "sources": [
-        {
-          "title": "Royal Botanic Gardens, Kew · Kew Gardens",
-          "url": "https://www.kew.org/kew-gardens"
-        }
-      ]
-    },
-    {
-      "id": "thames",
-      "name": "泰晤士河 · 塔桥河段",
-      "lat": 51.5052,
-      "lon": -0.073,
-      "element": "水",
-      "basis": "地貌取象",
-      "fact": "塔桥横跨泰晤士河，沿河可连接 Thames Path。标注选在塔桥东侧的河面代表位置。",
-      "reading": "以真实河流的流动取水象。桥梁、河岸建筑与潮汐共同构成形势，是否适合某宅仍需具体坐向、距离及现场信息；不能见水就断旺财。",
-      "sources": [
-        {
-          "title": "Tower Bridge · Plan your visit / Getting here",
-          "url": "https://www.towerbridge.org.uk/plan-your-visit"
-        }
-      ]
-    },
-    {
-      "id": "little-venice",
-      "name": "小威尼斯 · Little Venice",
-      "lat": 51.5205,
-      "lon": -0.1835,
-      "element": "水",
-      "basis": "地貌取象",
-      "fact": "小威尼斯位于 Grand Union Canal 与 Regent’s Canal 相接处，水池和停泊船只形成鲜明的运河景观。",
-      "reading": "以运河汇合与水面取水象；这是可观察的水体取象，不把汇水自动解释成聚财，也不将地图点位当作水势影响范围。",
-      "sources": [
-        {
-          "title": "Canal & River Trust · Little Venice",
-          "url": "https://canalrivertrust.org.uk/canals-and-rivers/places-to-visit/little-venice"
-        }
-      ]
-    },
-    {
-      "id": "globe",
-      "name": "莎士比亚环球剧场 · Globe",
-      "lat": 51.5081,
-      "lon": -0.0972,
-      "element": "火",
-      "basis": "城市功能类比",
-      "fact": "莎士比亚环球剧场是伦敦的戏剧演出与参观场所，位于泰晤士河南岸。",
-      "reading": "以舞台表达、文化传播取火象，属于本图采用的现代功能类比。邻水又兼水象；火不是火灾风险，也不说明居住者性格。",
-      "sources": [
-        {
-          "title": "Shakespeare’s Globe · Visit",
-          "url": "https://www.shakespearesglobe.com/visit/"
-        }
-      ]
-    },
-    {
-      "id": "opera",
-      "name": "皇家歌剧院 · Covent Garden",
-      "lat": 51.5129,
-      "lon": -0.1223,
-      "element": "火",
-      "basis": "城市功能类比",
-      "fact": "皇家歌剧院位于 Covent Garden 的 Bow Street，是歌剧与芭蕾等演出的场所。",
-      "reading": "以表演和文化可见度取火象；此取象用于认识城市文化节点，不把演出热闹程度换算成能量分数或夜间噪声实测值。",
-      "sources": [
-        {
-          "title": "Royal Ballet and Opera · Visitor Information",
-          "url": "https://www.rbo.org.uk/visit/visitor-information"
-        }
-      ]
-    },
-    {
-      "id": "primrose-hill",
-      "name": "樱草山 · Primrose Hill",
-      "lat": 51.5393,
-      "lon": -0.1605,
-      "element": "土",
-      "basis": "地貌取象",
-      "fact": "樱草山的山顶接近海拔 63 米，是伦敦的受保护观景点之一。",
-      "reading": "以抬升的地形与山体取土象，草木兼木。观景开阔不等于某宅已有靠山；住宅与山体的位置关系需要另行实地判断。",
-      "sources": [
-        {
-          "title": "The Royal Parks · Primrose Hill",
-          "url": "https://www.royalparks.org.uk/visit/parks/regents-park-primrose-hill/primrose-hill"
-        }
-      ]
-    },
-    {
-      "id": "greenwich",
-      "name": "格林尼治公园 · 天文台山丘",
-      "lat": 51.4779,
-      "lon": -0.0015,
-      "element": "土",
-      "basis": "地貌取象",
-      "fact": "格林尼治公园内的皇家天文台位于山丘上，附近观景点可俯瞰伦敦。",
-      "reading": "以山丘与地势承托取土象，园林兼木。地图展示高地这一地貌特征，不据此推断全区居民运势，也不把本初子午线当作风水分界。",
-      "sources": [
-        {
-          "title": "The Royal Parks · Greenwich Park",
-          "url": "https://www.royalparks.org.uk/visit/parks/greenwich-park"
+          "name": "West India Docks",
+          "position": [
+            -0.024,
+            51.507
+          ],
+          "note": "港池与办公组团的关系可支持山水形态观察，与金融功能分析分开。",
+          "sources": [
+            {
+              "title": "London Convention Bureau · Canary Wharf 金融商务区",
+              "url": "https://www.conventionbureau.london/neighbourhoods-of-london/canary-wharf"
+            }
+          ]
         }
       ]
     }

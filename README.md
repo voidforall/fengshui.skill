@@ -24,7 +24,7 @@
 - 结合年月神煞，**筛选入宅/开业/动土吉日**，给出可操作时间窗口
 - 识别路冲、天斩、壁刀等**常见外煞**，提供化解方案
 - **解读风水术语**与经典原文，回答堪舆学理论问题
-- 使用独立的 **city-wuxing-map** skill，生成城市的**金木水火土真实地图**，点击地点查阅地理事实、五行解读与来源
+- 使用独立的 **city-wuxing-map** skill，生成城市的**金木水火土区域地图**，点击色块查阅主象、兼象、划界依据与分析原因
 
 **计算交给代码，解读交给模型。** 大模型擅长问询与解释，但并不擅长排盘、推算干支节气——这些地方「看起来对」的错误最难被发现。因此本 Skill 内置 `scripts/fengshui.py`，所有排盘、查表、历法计算由脚本确定性完成，并有回归测试覆盖；模型只负责收集信息、调用脚本、解读结果。
 
@@ -90,24 +90,30 @@ npx skills add voidforall/fengshui.skill --full-depth --skill city-wuxing-map
 《青囊序》里「山上龙神不下水」是什么意思？
 ```
 
-### 城市五行风水地图
+### 城市区域五行风水地图
 
 ```
-给伦敦做一张金木水火土风水地图，要真实地图，标出不同地方的取象和依据。
+给伦敦做一张区域五行风水地图，用区块颜色说明一整片地方偏金木水火土的什么相，
+点击片区能看到分析原因、兼象和划界依据，不要只标几个地标。
 ```
 
 ```
-用同样的方法做纽约的五行地图，把河流、园林、金融和文化地标标出来，附来源。
+用同样的方法做纽约，区分山水形态取象与城市功能类比；地标仅作证据，
+资料不足的区域保留待分析。
 ```
 
-新 skill [city-wuxing-map](skills/city-wuxing-map/SKILL.md) 使用 **OpenStreetMap 真实地理底图**，可拖动、缩放、按五行筛选和搜索地点；地图标记与地点索引联动，点击可查看地理事实、五行文化解读与资料来源。也支持为其他城市核对资料后，通过 JSON 生成地图，不限于内置城市。
+独立 skill [city-wuxing-map](skills/city-wuxing-map/SKILL.md) 在 **OpenStreetMap 真实底图上用半透明片区着色**。点击整片区域或区域索引，查看主象、兼象、整体特征、为什么这样划区、分析原因和来源。证据地点默认隐藏，可单独打开。
 
-![伦敦城市五行风水地图](docs/images/london-wuxing.png)
+支持综合展示、仅山水形态取象、仅城市功能类比三种视图；同一区域在不同口径下可以有不同主象，缺失的分析显示灰色。例如 Canary Wharf 在金融功能口径下以金为主，在港池水岸形态口径下以水为主。颜色不代表实测能量或统一的古法定性。
 
-| 示例 | 代表地点 | 文件 |
-|------|----------|------|
-| 伦敦 · 10 处 | 金：英格兰银行、Canary Wharf；木：海德公园、邱园；水：泰晤士河、小威尼斯；火：环球剧场、皇家歌剧院；土：Primrose Hill、格林尼治山丘 | [交互地图](docs/examples/london-wuxing.html) · [地点与来源 JSON](skills/city-wuxing-map/examples/london.json) |
-| 纽约 · 5 处 | NYSE、中央公园林地、炮台公园水岸、林肯中心、Vista Rock | [交互地图](docs/examples/new-york-wuxing.html) · [地点与来源 JSON](skills/city-wuxing-map/examples/new-york.json) |
+![伦敦区域五行风水地图](docs/images/london-wuxing.png)
+
+| 示例 | 片区与分析 | 文件 |
+|------|------------|------|
+| 伦敦 · 6区 | 泰晤士河中心河谷、Hampstead 林地山脊、Bloomsbury 方整街坊、West End 演艺区、City 金融核心、Canary Wharf 港池商务片 | [交互地图](docs/examples/london-wuxing.html) · [区域几何、分析与来源 JSON](skills/city-wuxing-map/examples/london.json) |
+| 纽约 · 5区 | Central Park 连续绿地、Hudson 西岸走廊、Lower Manhattan 金融商务片、Broadway 剧院街区、Bryant–Midtown 规则街坊 | [交互地图](docs/examples/new-york-wuxing.html) · [区域几何、分析与来源 JSON](skills/city-wuxing-map/examples/new-york.json) |
+
+两套示例都是依据公开地图、景观或城市资料手工概化的**解释性分析范围**，以虚线表示，并非官方风水区或精确法定界线。保留混合特征与过渡，不按行政区或地标等半径圆强行分色。未覆盖的底图区域表示尚未收录。
 
 从仓库根目录生成并预览，无需 API key 或第三方 Python 包：
 
@@ -118,9 +124,9 @@ python3 -m http.server 8000 --bind 127.0.0.1
 # 打开 http://127.0.0.1:8000/docs/examples/london-wuxing.html
 ```
 
-任意城市：按 [数据格式](skills/city-wuxing-map/references/data-format.md) 核对地点与来源后，运行 `python3 skills/city-wuxing-map/scripts/generate.py --input 城市地点.json --output 城市五行地图.html`。
+其他城市：按 [区域数据格式](skills/city-wuxing-map/references/data-format.md) 核对片区、GeoJSON 多边形与来源，再运行 `python3 skills/city-wuxing-map/scripts/generate.py --input 城市区域.json --output 城市区域五行地图.html`。旧点位数据须补充真实或有依据的分析区界，不能自动扩大成色块。
 
-**底图需要联网并通过 HTTP 打开**，HTML 已内嵌 Leaflet；直接双击文件时页面会提示启动本地服务。GitHub 文件预览不运行交互地图，请下载或本地启动上述服务。五行分类是明确标识的地貌取象或现代城市功能类比，来源支持地理事实；不代表实测能量、区域吉凶或住宅财运，点位也不表示五行影响范围。详见 [取象口径](skills/city-wuxing-map/references/method.md)。
+**真实底图需要联网并通过 HTTP 打开**，Leaflet 已内嵌。直接双击文件时会提示启动本地服务；GitHub 文件预览不运行交互地图。分析采用公开说明的现代山水形态取象或城市功能类比，不把山丘自动判为土，不从单座银行外推整个片区。详见 [分析方法](skills/city-wuxing-map/references/method.md) 与 [调研依据](docs/research/city-wuxing-regional-model.md)。
 
 ---
 
@@ -131,7 +137,7 @@ python3 -m http.server 8000 --bind 127.0.0.1
 | 用例 | 交互 | 状态 |
 |------|------|------|
 | **飞星揭盘** | 二十四山罗盘 + 九宫；「起盘」按洛书逐宫飞布；分层看运盘、山星、向星、流年；点宫看批注 | ✅ 已上线 |
-| **城市五行地图** | 真实地图 + 金木水火土地点标记；五行筛选、搜索、事实 / 解读 / 来源分层；伦敦与纽约示例 | ✅ 独立 skill 已上线 |
+| **城市五行地图** | 真实底图 + 片区着色；主象/兼象、分析口径切换、划界依据与可选证据层；伦敦与纽约示例 | ✅ 独立 skill 已上线 |
 | **罗盘定向** | 拖动罗盘，或在手机上用陀螺仪对准大门，实时显示坐向、兼向度数、是否空亡 | 计划中 |
 | **户型对位** | 把「大门、主卧、厨房」卡片拖到九宫方位，逐个房间显示飞星与八宅吉凶 | 计划中 |
 | **八宅方位** | 八个扇区按吉凶着色，叠加家人命卦外环，宅命配不配一眼可见 | 计划中 |
