@@ -180,8 +180,11 @@ def validate_coverage(data):
     overlap=max(0,sum(p.area for p in polygons)-union.area)
     if missing>tolerance or outside>tolerance or overlap>tolerance:
         raise ValueError(f"全城分区不完整：漏区比例 {missing/scope.area:.8%}，越界比例 {outside/scope.area:.8%}，重叠比例 {overlap/scope.area:.8%}")
-    return {"coverage_percent":100*(1-missing/scope.area),"overlap_percent":100*overlap/scope.area,
-            "outside_percent":100*outside/scope.area,"region_count":len(polygons)}
+    # Preserve full precision for validation above; serialize below the tolerance
+    # consistently across Python/GEOS builds instead of publishing floating-point noise.
+    return {"coverage_percent":round(100*(1-missing/scope.area), 8),
+            "overlap_percent":round(100*overlap/scope.area, 8),
+            "outside_percent":round(100*outside/scope.area, 8),"region_count":len(polygons)}
 
 
 def render(data):
