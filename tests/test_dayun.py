@@ -43,7 +43,7 @@ class TestAgainstLunar(unittest.TestCase):
         for d, g in [(dt.datetime(1990, 6, 1, 8, 30), "f"), (dt.datetime(1985, 12, 20, 23, 30), "m"),
                      (dt.datetime(2001, 3, 3, 3, 3), "m"), (dt.datetime(1977, 9, 9, 9, 9), "f")]:
             b = bazi(d, g)
-            self.assertEqual(dayun_from_pillars(b.pillars, g, 8), [x.ganzhi for x in b.dayun], (d, g))
+            self.assertEqual(dayun_from_pillars(b.ganzhi, g, 10), [x.ganzhi for x in b.dayun], (d, g))
 
 
 if __name__ == "__main__":

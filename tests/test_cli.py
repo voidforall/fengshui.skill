@@ -83,6 +83,36 @@ class TestJson(unittest.TestCase):
         self.assertEqual(d["younian"]["生气"], "坤")
 
 
+@support.needs_lunar
+class TestBaziCli(unittest.TestCase):
+    def test_date_only_means_time_unknown(self):
+        out, _ = cli.run(["bazi", "--birth", "1985-12-20", "--gender", "m"])
+        self.assertIn("时辰不详", out.text)
+        self.assertEqual(len(out.data["pillars"]), 3)
+
+    def test_lunar_input(self):
+        out, _ = cli.run(["bazi", "--birth", "1990-04-26 08:30", "--lunar", "--gender", "m"])
+        self.assertIn("公历 1990-05-20", out.text)
+        out, _ = cli.run(["bazi", "--birth", "1990-05-10", "--lunar", "--leap", "--gender", "m"])
+        self.assertIn("公历 1990-07-02", out.text)          # 1990 年闰五月
+        with self.assertRaises(ValueError):
+            cli.run(["bazi", "--birth", "1990-04-10", "--lunar", "--leap", "--gender", "m"])
+        with self.assertRaises(cli.UsageError):
+            cli.run(["bazi", "--birth", "1990-04-10", "--leap", "--gender", "m"])
+
+    def test_year_only_rejected(self):
+        with self.assertRaises(cli.UsageError):
+            cli.run(["bazi", "--birth", "1985", "--gender", "m"])
+
+    def test_json_fields(self):
+        out, _ = cli.run(["bazi", "--birth", "1988-07-01 09:20", "--gender", "m", "--year", "2030", "--json"])
+        d = json.loads(json.dumps(cli._jsonable(out.data), ensure_ascii=False))
+        self.assertEqual(d["moment"]["dst_minutes"], 60)
+        self.assertEqual(d["focus"]["year"], 2030)
+        self.assertEqual(d["pillars"][3]["ganzhi"][1], "辰")
+        self.assertIn("passages", d["tiaohou"])
+
+
 class TestErrors(unittest.TestCase):
     def test_usage(self):
         for args in (["feixing", "--facing", "午"], ["feixing", "--yun", "8"], ["bazhai"]):
