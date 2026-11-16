@@ -4,8 +4,9 @@ description: |
   传统堪舆风水顾问。三元玄空飞星、八宅明镜、形势峦头，兼及择日与八字。
   排盘、命卦、游年、流年、历法、择日等计算均由内置脚本确定性完成，模型负责问询与解读。
   触发词：「风水」「堪舆」「看房」「看宅」「择日」「八宅」「飞星」「旺位」「煞气」「化解」
-         「朝向」「摆放」「布局」「命卦」「流年」「山水」「龙穴砂水」等。
-  适用：阳宅分析、家居办公布局、择日择时、八字配合风水、风水理论问答。
+         「朝向」「摆放」「布局」「命卦」「流年」「山水」「龙穴砂水」「八字」「生辰八字」「命盘」
+         「五行缺什么」「喜用神」「大运」等。
+  适用：阳宅分析、家居办公布局、择日择时、八字排盘与解读（大运流年、八字配合风水）、风水理论问答。
 metadata:
   version: "2.3.0"
   author: voidforall
@@ -29,7 +30,7 @@ metadata:
 | 流年/流月紫白、太岁、岁破、三煞、五黄方 | `python3 scripts/fengshui.py liunian --year 2026 [--span N]` |
 | 某日四柱、建除、黄黑道、神煞、宜忌、冲煞 | `python3 scripts/fengshui.py day --date YYYY-MM-DD` |
 | 择日候选（排除月破/正四废/冲当事人/黄历明忌；岁破日、受死只标注） | `python3 scripts/fengshui.py zeri --event 入宅 --start ... --end ... --birth-year 1988` |
-| 八字四柱、十神、藏干、大运 | `python3 scripts/fengshui.py bazi --birth "YYYY-MM-DD HH:MM" --gender m/f [--longitude 116.4]` |
+| 八字：四柱、藏干十神、通根透干、合冲刑害、司令、神煞、《穷通宝鉴》调候原文、大运流年 + 交互命盘 | `python3 scripts/fengshui.py bazi --birth "YYYY-MM-DD HH:MM" --gender m/f --longitude <经度> [--tz 时区] [--lunar [--leap]] [--year 年] --html <路径> [--notes 批注.json]` |
 
 - 路径相对于本 skill 目录；`day` / `zeri` / `bazi` 需要 `pip install lunar_python`，若未安装，先提示用户安装（或代为安装），**不要**改为凭记忆推算日干支、节气、建除。
 - 方向优先用罗盘度数（`--facing 187`），脚本会判断所在山、兼向度数、空亡；只有用户说「大概朝南」时才用山名，并说明精度有限。
@@ -79,7 +80,7 @@ metadata:
 |---------|---------|------------|
 | 房子、办公室的布局、方位、摆放、坐向、旺衰 | `references/playbook-yangzhai.md` | `references/feixing.md`、`references/sources.md` |
 | 搬家、入宅、开业、动土装修、嫁娶、安葬选日子 | `references/playbook-zeri.md` | `references/zeri.md`、`references/sources.md` |
-| 八字、日主强弱、用神、八字配合风水 | `references/playbook-bazi.md` | `references/wuxing-ganzhi.md`、`references/sources.md` |
+| 八字、五行缺什么、日主强弱、用神、大运流年、桃花贵人等神煞、八字配合风水 | `references/playbook-bazi.md` | `references/wuxing-ganzhi.md`、`references/sources.md` |
 | 风水、命理原理与术语 | 按话题读上面对应的流程文档 | `references/sources.md`；涉及具体盘仍须调脚本举例 |
 | 说得模糊（如「我家运不好」） | 先按下文「诊断问询」问清楚，再分流 | — |
 
@@ -87,7 +88,7 @@ metadata:
 
 **排了飞星盘就默认生成交互盘面**（做法见 `references/playbook-yangzhai.md`「交互盘面」一节）。
 生成后，**回答的开头部分必须给出链接**：`[打开交互盘面](file:///脚本打印的绝对路径)`，并用一句话说明可点「起盘」、点宫看批注。
-只生成文件而不在回答里给链接，用户就看不到盘面。
+只生成文件而不在回答里给链接，用户就看不到盘面。**排了八字同样默认生成交互命盘**（见 `references/playbook-bazi.md`「交互命盘」一节），链接写作 `[打开命盘](file:///…)`。
 页面写到**用户的当前工作目录**（不给 `--html` 路径时脚本默认如此），不要写进临时目录或 scratchpad，否则用户打不开。
 
 ---
