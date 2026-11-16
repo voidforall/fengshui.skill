@@ -51,3 +51,4 @@ jobs:
           mv "$RUNNER_TEMP/skill" "$RUNNER_TEMP/fengshui-master"
           agentskills validate "$RUNNER_TEMP/fengshui-master"
           agentskills validate "$RUNNER_TEMP/fengshui-master/skills/city-wuxing-map"
+          agentskills validate "$RUNNER_TEMP/fengshui-master/skills/bazi-mingli"

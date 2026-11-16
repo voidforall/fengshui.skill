@@ -263,6 +263,6 @@ def bazi_data(b: Bazi, *, notes: dict) -> dict:
         "birth_year": m.clock.year, "focus_year": b.focus_year,
         "today_year": _dt.date.today().year,
         "notes": notes,
-        "source": f"堪舆子 fengshui-master v{__version__} · 生成于 {_dt.date.today():%Y-%m-%d} · "
-                  "排盘与查表由 scripts/fengshui.py 计算；批注为解读，非计算结果",
+        "source": f"bazi-mingli · 计算库 kanyu v{__version__} · 生成于 {_dt.date.today():%Y-%m-%d} · "
+                  "排盘与查表由 scripts/bazi.py 计算；批注为解读，非计算结果",
     }

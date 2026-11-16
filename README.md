@@ -39,11 +39,18 @@
 npx skills add voidforall/fengshui.skill
 ```
 
-仓库另含城市地图 skill，可单独安装（主顾问可用 `--skill fengshui-master` 指定）：
+仓库另含两个独立 skill，可单独安装（主顾问可用 `--skill fengshui-master` 指定）：
 
 ```bash
-npx skills add voidforall/fengshui.skill --full-depth --skill city-wuxing-map
+npx skills add voidforall/fengshui.skill --full-depth --skill bazi-mingli        # 子平八字
+npx skills add voidforall/fengshui.skill --full-depth --skill city-wuxing-map    # 城市五行地图
 ```
+
+| skill | 用途 |
+|-------|------|
+| `fengshui-master`（仓库根目录） | 看宅、飞星、八宅、择日、煞气、风水问答 |
+| [`bazi-mingli`](skills/bazi-mingli/SKILL.md) | 排八字、五行喜用、大运流年、交互命盘 |
+| [`city-wuxing-map`](skills/city-wuxing-map/SKILL.md) | 城市全域五行地图 |
 
 ---
 
@@ -77,7 +84,7 @@ npx skills add voidforall/fengshui.skill --full-depth --skill city-wuxing-map
 我家大门正对着一条笔直的道路，这算不算路冲？怎么化解？
 ```
 
-### 八字
+### 八字（bazi-mingli）
 
 ```
 我是1990年6月1日早上8点半在北京出生的女生，帮我看看八字，五行缺什么？今年运势怎么样？
@@ -184,12 +191,17 @@ python3 scripts/fengshui.py mingua --birth 1990-01-20 --gender f                
 python3 scripts/fengshui.py liunian --year 2026 --span 5                        # 流年紫白、太岁、三煞
 python3 scripts/fengshui.py day --date 2026-05-20                               # 单日四柱、建除、神煞、宜忌
 python3 scripts/fengshui.py zeri --event 入宅 --start 2026-05-10 --end 2026-05-31 --birth-year 1988
-python3 scripts/fengshui.py bazi --birth "1990-06-01 08:30" --gender f --longitude 116.4 \
+
+# 八字（bazi-mingli skill 的入口）
+python3 skills/bazi-mingli/scripts/bazi.py --birth "1990-06-01 08:30" --gender f --longitude 116.4 \
         --year 2026 --html 命盘.html --notes 批注.json                                # 八字 + 交互命盘
-python3 scripts/fengshui.py bazi --birth "1985-11-09 23:30" --lunar --gender m \
+python3 skills/bazi-mingli/scripts/bazi.py --birth "1985-11-09 23:30" --lunar --gender m \
         --tz America/New_York --longitude -74.0                                   # 农历输入、海外出生
-python3 scripts/fengshui.py bazi --birth 1985-12-20 --gender m                     # 时辰不详：排三柱
+python3 skills/bazi-mingli/scripts/bazi.py --birth 1985-12-20 --gender m           # 时辰不详：排三柱
 ```
+
+计算包只有一份源头：根目录 `scripts/kanyu/`。`bazi-mingli` 安装后是独立目录，随 skill 带一份副本；
+修改 `scripts/kanyu/` 后运行 `python3 tools/sync_kanyu.py` 同步，`tests/test_skill_bazi.py` 检查两边一致。
 
 每个命令都可以加 `--json` 输出结构化数据，便于程序处理。
 
@@ -254,7 +266,7 @@ fengshui.skill/
 │       ├── ganzhi.py           #   干支查表：十神、藏干、长生、司令、合冲刑害、神煞、旬空（纯标准库）
 │       ├── data/qiongtong.json #   《穷通宝鉴》日干 × 月令调候原文索引
 │       ├── render.py           #   文字输出（计算模块不做格式化）
-│       ├── pages.py            #   交互 HTML 盘面（模板在 assets/templates/）
+│       ├── pages.py            #   交互 HTML 盘面（模板在各 skill 的 assets/templates/）
 │       └── cli.py              #   参数解析、--json
 ├── tests/
 │   ├── test_<模块>.py          # 每个模块一份单元测试
@@ -265,7 +277,6 @@ fengshui.skill/
 ├── references/
 │   ├── playbook-yangzhai.md    # 看宅流程（含交互盘面）
 │   ├── playbook-zeri.md        # 择日流程
-│   ├── playbook-bazi.md        # 八字流程
 │   ├── feixing.md              # 玄空飞星速查（九宫飞布规则、各运旺衰、流年星表）
 │   ├── wuxing-ganzhi.md        # 五行干支速查（天干地支、生克、命卦算法）
 │   ├── zeri.md                 # 择日规则（节气月、大忌、通书俗忌、年神方位）
@@ -273,7 +284,10 @@ fengshui.skill/
 ├── assets/
 │   └── templates/              # 交互盘面模板
 ├── skills/
+│   ├── bazi-mingli/            # 独立八字 skill：SKILL、流程与出处、命盘模板、入口 scripts/bazi.py、kanyu 副本
 │   └── city-wuxing-map/        # 独立城市五行地图 skill：生成器、模板、示例与取象口径
+├── tools/
+│   └── sync_kanyu.py           # 把 scripts/kanyu/ 同步到 skills/bazi-mingli/scripts/kanyu/
 ├── docs/
 │   ├── images/                 # README 用图
 │   └── examples/               # 交互盘面示例

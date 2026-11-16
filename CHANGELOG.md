@@ -6,6 +6,13 @@
 
 ## [Unreleased]
 
+### 结构
+- **八字拆为独立 skill `bazi-mingli`**（`skills/bazi-mingli/`，入口 `scripts/bazi.py`），可单独安装：
+  `npx skills add voidforall/fengshui.skill --full-depth --skill bazi-mingli`。`fengshui-master` 不再排八字，
+  `fengshui.py bazi` 改为提示迁移；按喜用五行配合风水仍在主 skill。
+- 计算包仍只有一份源头 `scripts/kanyu/`，由 `tools/sync_kanyu.py` 同步到子 skill，测试检查两边一致。
+- eval 工作区同时安装两个 skill。
+
 ### 八字
 - 出生时间口径：按 IANA 时区自动扣夏令时（中国大陆 1986–1991 年夏季此前未处理，时柱可能差一个时辰）；`--tz` 支持海外出生；
   年柱、月柱按同一时刻的北京时间比对立春与节气，日柱、时柱用出生地真太阳时。
@@ -16,7 +23,7 @@
 - 《穷通宝鉴》调候原文索引：日干 × 节气月共 120 格，只录原文（专论、合论、季论），由 `evals/tools/build_qiongtong.py` 从维基文库原文生成。
 - 起运交运日期与周岁；十步大运，每步展开十个流年，标出与原局的合冲刑害；`--year` 指定重点看的流年。
 - 交互命盘 `bazi --html --notes`：四柱依次翻开、柱间弧线标关系、点干支看通根透干，大运流年可点选与拖动，支持手机与深色模式。
-- `playbook-bazi.md` 重写：问询出生时间、论命顺序（调候、月令、通根透干、燥湿、合冲、从化、定用神并写依据）、按问题分流与表达边界。
+- 八字流程（`skills/bazi-mingli/references/playbook.md`）重写：问询出生时间、论命顺序（调候、月令、通根透干、燥湿、合冲、从化、定用神并写依据）、按问题分流与表达边界。
 
 ## [2.3.0] - 2026-11-15
 

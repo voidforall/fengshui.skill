@@ -7,7 +7,7 @@
     python3 evals/run.py                           # 全部案例
 
 每题两次调用：
-  1. 作答：在临时工作区装好本 skill（.claude/skills/fengshui-master），`claude -p` 提问，
+  1. 作答：在临时工作区装好本 skill（.claude/skills/fengshui-master）与 bazi-mingli，`claude -p` 提问，
      记录工具调用、是否触发 skill、最终回答、花费。
   2. 判分：另起一次 `claude -p`（不给工具），把书中原文、本项目对结论的概括与回答一并给出，
      要求输出 JSON：{"verdict": "一致|部分一致|不一致", "reason": "..."}。
@@ -23,6 +23,7 @@ import argparse
 import concurrent.futures as cf
 import datetime as dt
 import json
+import re
 import os
 import shutil
 import subprocess
@@ -82,6 +83,7 @@ def keyword_check(answer: str, keywords: list[str]) -> dict:
 # --- 调用 claude ------------------------------------------------------------------------
 
 def make_workspace() -> str:
+    """临时工作区，装好风水主 skill 与八字 skill（与用户两者都装的情形一致）。"""
     ws = tempfile.mkdtemp(prefix="fengshui-eval-")
     dst = os.path.join(ws, ".claude", "skills", "fengshui-master")
     os.makedirs(dst)
@@ -91,6 +93,8 @@ def make_workspace() -> str:
             shutil.copytree(src, os.path.join(dst, name), ignore=shutil.ignore_patterns("__pycache__"))
         elif os.path.exists(src):
             shutil.copy(src, dst)
+    shutil.copytree(os.path.join(ROOT, "skills", "bazi-mingli"), os.path.join(ws, ".claude", "skills", "bazi-mingli"),
+                    ignore=shutil.ignore_patterns("__pycache__"))
     return ws
 
 
@@ -137,7 +141,7 @@ def run_case(case: dict, args) -> dict:
     finally:
         shutil.rmtree(ws, ignore_errors=True)
     used_skill = any(t["name"] == "Skill" for t in ans["tool_calls"])
-    used_script = any(t["name"] == "Bash" and "fengshui.py" in json.dumps(t["input"], ensure_ascii=False)
+    used_script = any(t["name"] == "Bash" and re.search(r"fengshui\.py|bazi\.py", json.dumps(t["input"], ensure_ascii=False))
                       for t in ans["tool_calls"])
     rec = {"id": case["id"], "category": case["category"], "prompt": case["prompt"],
            "source": case["source"], "expected": case["expected"],

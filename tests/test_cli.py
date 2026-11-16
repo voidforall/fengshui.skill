@@ -138,6 +138,15 @@ class TestEntryScript(unittest.TestCase):
         self.assertEqual(r.returncode, 1)
         self.assertIn("错误", r.stderr)
 
+    def test_bazi_moved_to_own_skill(self):
+        script = os.path.join(support.SCRIPTS, "fengshui.py")
+        r = subprocess.run([sys.executable, script, "bazi", "--birth", "1990-06-01 08:30", "--gender", "f"],
+                           capture_output=True, text=True)
+        self.assertEqual(r.returncode, 1)
+        self.assertIn("bazi-mingli", r.stderr)
+        r = subprocess.run([sys.executable, script, "-h"], capture_output=True, text=True)
+        self.assertNotIn("{mingua,bazhai,feixing,liunian,day,zeri,bazi}", r.stdout)
+
 
 if __name__ == "__main__":
     unittest.main()
