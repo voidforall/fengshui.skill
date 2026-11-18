@@ -1,1 +1,2 @@
 lunar_python>=1.4
+tzdata; sys_platform == "win32"   # Windows 上的 zoneinfo 时区数据（夏令时换算）

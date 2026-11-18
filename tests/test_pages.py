@@ -91,5 +91,110 @@ class TestCli(unittest.TestCase):
         self.assertTrue(demo.startswith(head), "示例页面已过期：重新运行 docs/examples/README 中的命令")
 
 
+BAZI_NOTES = {"plain": "白话总结", "summary": "总断 </script><b>x</b>", "basis": "依《穷通宝鉴》", "pillars": {"日": "日柱批注"},
+              "dayun": {"戊寅": "大运批注"}, "years": {"2026": "流年批注"}, "advice": ["建议"]}
+
+
+BAZI_SKILL = os.path.join(support.ROOT, "skills", "bazi-mingli")
+
+
+@support.needs_lunar
+class TestBaziPage(unittest.TestCase):
+    """命盘模板随 bazi-mingli skill 发布；这里把模板目录指向该 skill。"""
+
+    def setUp(self):
+        import datetime as dt
+        from unittest import mock
+        from kanyu.bazi import bazi
+        self.b = bazi(dt.datetime(1990, 6, 1, 8, 30), "f", 116.4, focus_year=2026)
+        patcher = mock.patch.object(pages, "TEMPLATES", os.path.join(BAZI_SKILL, "assets", "templates"))
+        patcher.start()
+        self.addCleanup(patcher.stop)
+
+    def page(self, notes=None, b=None):
+        b = b or self.b
+        return pages.render("bazi.html", pages.bazi_title(b), pages.bazi_data(b, notes=notes or {}))
+
+    def test_data_matches_chart(self):
+        d = pages.extract_data(self.page())
+        self.assertEqual([p["gz"] for p in d["pillars"]], self.b.ganzhi)
+        self.assertEqual([x["gz"] for x in d["dayun"]], [x.ganzhi for x in self.b.dayun])
+        self.assertEqual(d["focus_year"], 2026)
+        self.assertEqual(d["pre_years"][0]["year"], 1990)        # 起运前流年 1990–1998
+        self.assertEqual(d["pre_years"][-1]["year"], 1998)
+        rel = {r["label"]: r for r in d["relations"]["zhi"]}
+        self.assertEqual(rel["日支酉、时支辰 六合"]["at"], [2, 3])
+        self.assertEqual(rel["日支酉、时支辰 六合"]["short"], "六合")
+        self.assertEqual(d["tiaohou"]["passages"], self.b.tiaohou["passages"])
+
+    def test_plain_language_data(self):
+        d = pages.extract_data(self.page())
+        self.assertEqual(d["wangxiang"]["day"], "旺")              # 丁火生于巳月（夏），火旺
+        g = d["glossary"]
+        for p in d["pillars"]:                                      # 页面上出现的十神、长生都有白话
+            self.assertTrue(p["gan_ss"] == "日主" or p["gan_ss"] in g["shishen"])
+            self.assertIn(p["changsheng"], g["changsheng"])
+            for x in p["hidden"]:
+                self.assertIn(x["ss"], g["shishen"])
+        for x in d["shensha"]:
+            self.assertIn(x["name"].replace("（桃花）", ""), g["terms"])
+        for k in ("合", "冲", "刑", "害", "三合", "三会", "三合缺一", "大运", "调候", "司令", "五行个数", "纳音", "空亡"):
+            self.assertIn(k, g["terms"])
+        self.assertEqual(g["gan_xiang"]["丁"], "在天为列星，在地为灯火")
+
+    def test_time_unknown_three_columns(self):
+        import datetime as dt
+        from kanyu.bazi import bazi
+        b = bazi(dt.datetime(1985, 12, 20), "m", time_known=False)
+        d = pages.extract_data(self.page(b=b))
+        self.assertEqual(len(d["pillars"]), 3)
+        self.assertFalse(d["time_known"])
+
+    def test_notes_embedded_safely(self):
+        html = self.page(BAZI_NOTES)
+        self.assertNotIn("</script><b>", html)
+        self.assertEqual(pages.extract_data(html)["notes"], BAZI_NOTES)
+        self.assertNotIn("<script src", html)
+        self.assertNotIn("__DATA__", html)
+
+    def test_load_bazi_notes_validation(self):
+        with tempfile.TemporaryDirectory() as td:
+            def write(obj):
+                p = os.path.join(td, "n.json")
+                with open(p, "w", encoding="utf-8") as f:
+                    json.dump(obj, f, ensure_ascii=False)
+                return p
+            self.assertEqual(pages.load_bazi_notes(write(BAZI_NOTES)), BAZI_NOTES)
+            for bad in ({"palaces": {}}, {"plain": 1}, {"pillars": {"子": "x"}}, {"years": {"明年": "x"}},
+                        {"dayun": {"甲": "x"}}, {"advice": [1]}, {"summary": 1}, ["x"]):
+                with self.assertRaises(ValueError, msg=bad):
+                    pages.load_bazi_notes(write(bad))
+
+    def test_cli_html(self):
+        with tempfile.TemporaryDirectory() as td:
+            cwd = os.getcwd()
+            os.chdir(td)
+            try:
+                out, _ = cli.run(["bazi", "--birth", "1990-06-01 08:30", "--gender", "f", "--html"])
+            finally:
+                os.chdir(cwd)
+            self.assertTrue(out.data["html"].endswith("八字命盘-庚午辛巳丁酉甲辰.html"))
+            self.assertTrue(os.path.exists(out.data["html"]))
+            self.assertIn("交互命盘已生成", out.text)
+        with self.assertRaises(cli.UsageError):
+            cli.run(["bazi", "--birth", "1990-06-01 08:30", "--gender", "f", "--notes", "x.json"])
+
+    def test_example_page_is_current(self):
+        root = support.ROOT
+        with open(os.path.join(root, "docs", "examples", "bazi-demo.html"), encoding="utf-8") as f:
+            demo = f.read()
+        with open(os.path.join(BAZI_SKILL, "assets", "templates", "bazi.html"), encoding="utf-8") as f:
+            tpl = f.read()
+        head = tpl.split("__DATA__")[0].replace("__TITLE__", "坤造 庚午 辛巳 丁酉 甲辰")
+        self.assertTrue(demo.startswith(head), "示例页面已过期：重新运行 docs/examples/README 中的命令")
+        with open(os.path.join(root, "docs", "examples", "bazi-notes.json"), encoding="utf-8") as f:
+            self.assertEqual(pages.extract_data(demo)["notes"], json.load(f))
+
+
 if __name__ == "__main__":
     unittest.main()

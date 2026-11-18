@@ -10,6 +10,19 @@ python3 scripts/fengshui.py feixing --facing 180 --year 2018-09-01 --annual 2026
 修改 `assets/templates/feixing.html` 后请重新运行此命令；`tests/test_pages.py` 会检查示例是否过期。
 README 中的动图与截图用 Playwright 录制（见 PR 说明），不参与测试。
 
+## 八字命盘
+
+`bazi-demo.html` 由下面的命令生成（批注见 `bazi-notes.json`）：
+
+```bash
+python3 skills/bazi-mingli/scripts/bazi.py --birth "1990-06-01 08:30" --gender f --longitude 116.4 --year 2026 \
+        --html docs/examples/bazi-demo.html --notes docs/examples/bazi-notes.json
+```
+
+修改 `skills/bazi-mingli/assets/templates/bazi.html` 或 `scripts/kanyu/` 后（先运行 `python3 tools/sync_kanyu.py`）请重新运行此命令；`tests/test_pages.py` 会检查示例是否过期。
+在浏览器检查：「一眼看懂」、点术语弹出白话解释、「白话」开关、四柱翻开动画、点干支与弧线、大运卡片与年份拖动、「藏干」「合冲刑害」开关、时辰不详（三柱）、手机宽度与深色模式。
+README 中的 `docs/images/bazi-chart.png` 用 Playwright 截取此页（2 倍像素）。
+
 ## 城市五行地图
 
 从仓库根目录重新生成两座城市的交互示例：

@@ -61,6 +61,17 @@ def has_time(s: str) -> bool:
     return len(s.strip()) > 10
 
 
+def lunar_to_solar(d: _dt.datetime, leap: bool = False) -> _dt.datetime:
+    """农历（年 月 日，时分照搬）→ 公历。闰月须 leap=True。"""
+    require_lunar()
+    from lunar_python import Lunar  # type: ignore
+    try:
+        s = Lunar.fromYmdHms(d.year, -d.month if leap else d.month, d.day, d.hour, d.minute, 0).getSolar()
+    except Exception as e:   # lunar_python 对不存在的日期抛 Exception
+        raise ValueError(f"农历 {d.year} 年{'闰' if leap else ''}{d.month} 月 {d.day} 日不存在：{e}") from None
+    return _dt.datetime(s.getYear(), s.getMonth(), s.getDay(), d.hour, d.minute)
+
+
 # --- 立春分年 / 节气月 ------------------------------------------------------------
 
 def lichun_year(d: _dt.date | _dt.datetime) -> tuple[int, bool]:
@@ -180,7 +191,77 @@ def equation_of_time(d: _dt.date) -> float:
     return 9.87 * math.sin(2 * b) - 7.53 * math.cos(b) - 1.5 * math.sin(b)
 
 
-def true_solar_time(d: _dt.datetime, longitude: float) -> tuple[_dt.datetime, float]:
-    """北京时间 → 真太阳时（经度差 + 均时差）。返回 (校正后时间, 修正分钟)。"""
-    delta = (longitude - 120) * 4 + equation_of_time(d)
-    return d + _dt.timedelta(minutes=delta), delta
+def true_solar_time(d: _dt.datetime, longitude: float, std_meridian: float = 120) -> tuple[_dt.datetime, float]:
+    """当地标准时 → 真太阳时（经度差 + 均时差）。默认北京时间（东经 120° 标准时）。返回 (校正后时间, 修正分钟)。"""
+    delta = (longitude - std_meridian) * 4 + equation_of_time(d)
+    return (d + _dt.timedelta(minutes=delta)).replace(microsecond=0), delta
+
+
+# --- 出生时刻：时区、夏令时、真太阳时 ---------------------------------------------------
+
+DEFAULT_TZ = "Asia/Shanghai"
+
+
+@dataclass
+class BirthMoment:
+    clock: _dt.datetime            # 用户给的钟表时间（时辰不详时为当日正午）
+    tz: str
+    time_known: bool
+    dst_minutes: int               # 当时实行夏令时则为 60（钟表比标准时快）
+    std_offset_minutes: int        # 当地标准时与 UTC 之差
+    standard: _dt.datetime         # 当地标准时 = 钟表时间 - 夏令时
+    beijing: _dt.datetime          # 同一时刻的北京时间（UTC+8），用于比对节气、立春
+    longitude: float | None
+    solar: _dt.datetime | None     # 真太阳时（给了经度才有）
+    solar_delta: float | None      # 真太阳时相对当地标准时的修正分钟
+    notes: list[str] = field(default_factory=list)
+
+    @property
+    def local(self) -> _dt.datetime:
+        """排日柱、时柱所用的当地时间：有经度用真太阳时，否则用当地标准时。"""
+        return self.solar or self.standard
+
+
+def _zone(tz: str) -> _dt.tzinfo:
+    import re
+    m = re.fullmatch(r"(?:UTC|GMT)?([+-])(\d{1,2})(?::?(\d{2}))?", tz.strip())
+    if m:
+        mins = int(m.group(2)) * 60 + int(m.group(3) or 0)
+        return _dt.timezone(_dt.timedelta(minutes=mins if m.group(1) == "+" else -mins))
+    try:
+        from zoneinfo import ZoneInfo, ZoneInfoNotFoundError
+    except ImportError:  # pragma: no cover - Python < 3.9
+        raise ValueError("当前 Python 不支持时区名，请改用 UTC+8 之类的固定偏移") from None
+    try:
+        return ZoneInfo(tz)
+    except (ZoneInfoNotFoundError, ValueError):
+        raise ValueError(f"未知时区 {tz!r}：请用 IANA 时区名（如 Asia/Shanghai、America/New_York）"
+                         "或 UTC+8 之类的固定偏移；Windows 需先 pip install tzdata") from None
+
+
+def birth_moment(clock: _dt.datetime, tz: str = DEFAULT_TZ, longitude: float | None = None,
+                 time_known: bool = True) -> BirthMoment:
+    """把出生地钟表时间换算为：当地标准时（扣夏令时）、北京时间（比节气）、真太阳时（排时柱）。
+
+    中国大陆 1986–1991 年实行夏令时，其间 4–9 月出生者钟表时间比标准时快 1 小时；
+    时区库（IANA tzdata）记有各地历史夏令时，据此扣除。
+    """
+    zone = _zone(tz)
+    aware = clock.replace(tzinfo=zone)
+    utc = aware.astimezone(_dt.timezone.utc)
+    notes = []
+    if utc.astimezone(zone).replace(tzinfo=None) != clock and time_known:
+        notes.append(f"{clock:%Y-%m-%d %H:%M} 在当地夏令时切换中不存在（钟表拨快的那一小时），请核对出生时间")
+    dst = aware.dst() or _dt.timedelta(0)
+    std = (aware.utcoffset() or _dt.timedelta(0)) - dst
+    standard = clock - dst
+    beijing = (utc + _dt.timedelta(hours=8)).replace(tzinfo=None)
+    dst_min = int(dst.total_seconds() // 60)
+    solar = delta = None
+    if longitude is not None:
+        if not -180 <= longitude <= 180:
+            raise ValueError("经度应在 -180 到 180 之间（东经为正）")
+        solar, delta = true_solar_time(standard, longitude, std.total_seconds() / 240)
+    return BirthMoment(clock=clock, tz=tz, time_known=time_known, dst_minutes=dst_min,
+                       std_offset_minutes=int(std.total_seconds() // 60), standard=standard, beijing=beijing,
+                       longitude=longitude, solar=solar, solar_delta=delta, notes=notes)

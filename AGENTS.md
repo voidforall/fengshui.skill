@@ -11,6 +11,7 @@
 ## 修改方式
 
 - `scripts/fengshui.py` 是命令行入口；计算放在对应领域模块，参数处理放在 `scripts/kanyu/cli.py`，文字输出放在 `scripts/kanyu/render.py`，HTML 生成放在 `scripts/kanyu/pages.py` 与 `assets/templates/`。保持计算与呈现分离。
+- 计算包只有一份源头 `scripts/kanyu/`；独立 skill（如 `skills/bazi-mingli/`）带的副本及由它生成的 `references/glossary.md` 由 `python3 tools/sync_kanyu.py` 同步，不直接改。
 - 保持纯标准库计算路径可用；历法依赖见 `requirements.txt`，缺失依赖时保留明确提示，不以猜测结果兜底。
 - 保持 `SKILL.md` 精简，详细流程放在 `references/playbook-*.md` 并从主文件分流；结构约束见 `tests/test_structure.py`。
 - 优先采用简单、直接的端到端实现；技术取舍优先考虑质量、简单性、稳健性、扩展性和长期维护，不因节省开发成本牺牲这些目标。
@@ -23,7 +24,7 @@
 - 常规测试：`python3 -m unittest discover -s tests`。CI 矩阵与 skill 校验命令以 `.github/workflows/tests.yml` 为准；缺少 `lunar_python` 时历法测试会跳过，涉及历法改动时须安装依赖并确认相关测试实际运行。
 - 有意调整 CLI 输出后，按 `README.md` 的快照更新命令重新生成 `tests/golden/`，逐项检查 diff，不能用更新快照掩盖计算错误。
 - 城市地图拓扑校验依赖 `skills/city-wuxing-map/requirements.txt`；源数据重建另需该目录的 `requirements-build.txt`。地址搜索另运行 `node --test tests/city_search.test.cjs`（Node 22）。模板或输入变更后按 `docs/examples/README.md` 重新生成示例，保留第三方数据和底图署名。
-- 修改飞星 HTML 模板后，按 `docs/examples/README.md` 重新生成示例，并在浏览器检查起盘、点宫批注、移动端与深色模式。
+- 修改飞星或八字 HTML 模板后，按 `docs/examples/README.md` 重新生成示例，并在浏览器检查动画、点选批注、移动端与深色模式。
 - 修改 eval 案例后运行 `python3 evals/run.py --dry-run`；模型评测流程及结果提交边界见 `evals/README.md`。
 - 仅文档改动检查内容准确性、引用路径及 `git diff --check`，不必为文案新增测试。
 

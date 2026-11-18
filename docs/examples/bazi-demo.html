@@ -1,0 +1,762 @@
+<!doctype html>
+<html lang="zh-Hans">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>坤造 庚午 辛巳 丁酉 甲辰</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Ma+Shan+Zheng&family=Noto+Serif+SC:wght@400;600&display=swap">
+<style>
+/* 命书：册页上并列四柱，干在上、支在下；柱间以弧线标合冲刑害。下方为大运流年的岁月轴。
+   与飞星盘同一套册页配色：浅色宣纸，深色黑漆描金。五行取《五行大义》五色：木青、火赤、土黄、金白、水黑
+   （白、黑在纸上难辨，以银灰、玄青代之）。 */
+:root {
+  --paper: #ece2cb; --paper-2: #e3d6b8; --ink: #26211b; --ink-soft: #5d5446; --rule: #b9a985;
+  --cinnabar: #b03a2e; --azurite: #2f5d6e; --gold: #9a7431; --seal-text: #f6efe0;
+  --wx-mu: #2f7356; --wx-huo: #b23a2c; --wx-tu: #95701f; --wx-jin: #6f737b; --wx-shui: #1f3a55;
+  --font-brush: "Ma Shan Zheng", "STKaiti", "KaiTi", "Kaiti SC", "BiauKai", serif;
+  --font-song: "Noto Serif SC", "Songti SC", "STSong", "SimSun", "Noto Serif CJK SC", serif;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --paper: #16120e; --paper-2: #211a14; --ink: #eadcbf; --ink-soft: #b3a283; --rule: #5a4a33;
+    --cinnabar: #d9604f; --azurite: #7fb0bf; --gold: #d2a856; --seal-text: #1b130d;
+    --wx-mu: #79c29b; --wx-huo: #e5765f; --wx-tu: #d8b05a; --wx-jin: #e4dfd3; --wx-shui: #8db4dc;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --paper: #16120e; --paper-2: #211a14; --ink: #eadcbf; --ink-soft: #b3a283; --rule: #5a4a33;
+  --cinnabar: #d9604f; --azurite: #7fb0bf; --gold: #d2a856; --seal-text: #1b130d;
+  --wx-mu: #79c29b; --wx-huo: #e5765f; --wx-tu: #d8b05a; --wx-jin: #e4dfd3; --wx-shui: #8db4dc;
+  color-scheme: dark;
+}
+
+* { box-sizing: border-box; }
+html, body { margin: 0; }
+body {
+  background: var(--paper);
+  background-image:
+    radial-gradient(ellipse at 20% 0%, color-mix(in srgb, var(--gold) 10%, transparent), transparent 60%),
+    radial-gradient(ellipse at 100% 100%, color-mix(in srgb, var(--cinnabar) 6%, transparent), transparent 55%);
+  color: var(--ink); font-family: var(--font-song); font-size: 15px; line-height: 1.75;
+  padding-block: max(24px, env(safe-area-inset-top, 0px)) max(32px, env(safe-area-inset-bottom, 0px));
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+}
+.page { max-width: 1120px; margin: 0 auto; display: grid; gap: 28px; min-width: 0; }
+.wx-木 { color: var(--wx-mu); } .wx-火 { color: var(--wx-huo); } .wx-土 { color: var(--wx-tu); }
+.wx-金 { color: var(--wx-jin); } .wx-水 { color: var(--wx-shui); }
+.bg-木 { background: var(--wx-mu); } .bg-火 { background: var(--wx-huo); } .bg-土 { background: var(--wx-tu); }
+.bg-金 { background: var(--wx-jin); } .bg-水 { background: var(--wx-shui); }
+:focus-visible { outline: 2px solid var(--gold); outline-offset: 3px; }
+
+/* 题签 */
+header.title { display: flex; gap: 20px; align-items: flex-start; flex-wrap: wrap; border-bottom: 1px solid var(--rule); padding-bottom: 18px; }
+.seal { width: 64px; height: 64px; flex: none; margin-top: 6px; }
+.seal rect { fill: var(--cinnabar); }
+.seal text { fill: var(--seal-text); font-family: var(--font-brush); font-size: 21px; text-anchor: middle; dominant-baseline: central; }
+.title-text { min-width: 0; flex: 1 1 320px; }
+h1 { font-family: var(--font-brush); font-weight: 400; font-size: clamp(34px, 6vw, 52px); line-height: 1.1; margin: 0; letter-spacing: .04em; text-wrap: balance; }
+.facts { display: flex; flex-wrap: wrap; gap: 4px 18px; margin: 8px 0 0; padding: 0; list-style: none; color: var(--ink-soft); font-size: 14px; }
+.facts b { color: var(--ink); font-weight: 600; }
+.warn { color: var(--cinnabar); font-size: 14px; margin: 6px 0 0; }
+.time-lines { margin: 6px 0 0; color: var(--ink-soft); font-size: 13px; }
+.time-lines summary { cursor: pointer; width: fit-content; }
+.time-lines p { margin: 2px 0; }
+
+h2.sec, h3 { font-family: var(--font-brush); font-weight: 400; }
+h2.sec { font-size: 28px; margin: 0 0 8px; line-height: 1.3; }
+h3 { font-size: 22px; margin: 0 0 6px; line-height: 1.3; }
+
+/* 版心：左命盘、右批注 */
+.board-wrap { display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr); gap: 28px; align-items: start; }
+@media (max-width: 860px) { .board-wrap { grid-template-columns: minmax(0, 1fr); } }
+.plate { display: grid; gap: 10px; min-width: 0; }
+.toolbar { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; align-items: center; }
+.chip { font: inherit; font-size: 14px; color: var(--ink-soft); background: transparent; border: 1px solid var(--rule); border-radius: 999px; padding: 4px 14px; cursor: pointer; }
+.chip[aria-pressed="true"] { color: var(--ink); border-color: var(--ink-soft); background: var(--paper-2); }
+.btn-cast { font-family: var(--font-brush); font-size: 22px; color: var(--seal-text); background: var(--cinnabar); border: 0; border-radius: 4px; padding: 2px 22px; cursor: pointer; letter-spacing: .2em; }
+.btn-cast:hover { filter: brightness(1.08); }
+
+.chart { display: grid; gap: 0; }
+.band { width: 100%; height: auto; display: block; overflow: visible; }
+.band .arc { fill: none; stroke-width: 1.6; cursor: pointer; }
+.band .arc.he { stroke: var(--gold); }
+.band .arc.chong { stroke: var(--cinnabar); stroke-width: 2; }
+.band .arc.xing, .band .arc.hai { stroke: var(--cinnabar); stroke-dasharray: 5 4; }
+.band .arc.que { stroke: var(--rule); stroke-dasharray: 2 4; }
+.band .arc.on { stroke-width: 3.2; }
+.band g { outline: none; }
+.band g:focus-visible .arc { stroke-width: 3.2; filter: drop-shadow(0 0 2px var(--gold)); }
+.band .hit { stroke: transparent; stroke-width: 14; fill: none; cursor: pointer; }
+.band text { font-family: var(--font-song); font-size: 13px; fill: var(--ink-soft); text-anchor: middle; dominant-baseline: central; pointer-events: none; }
+.band text.lab-bg { stroke: var(--paper); stroke-width: 5px; paint-order: stroke; }
+.band.off { display: none; }
+
+.cols { display: grid; grid-template-columns: repeat(var(--n, 4), minmax(0, 1fr)); gap: 8px; }
+.col { background: var(--paper-2); border: 1px solid var(--rule); border-radius: 4px; padding: 8px 4px 10px; text-align: center; display: grid; gap: 2px; justify-items: center; align-content: start; min-width: 0;
+       transform-origin: 50% 50%; transition: transform .55s cubic-bezier(.2,.7,.2,1), opacity .55s; }
+.col.day { border-color: var(--cinnabar); box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--cinnabar) 40%, transparent); }
+.col.flip { transform: perspective(600px) rotateY(88deg); opacity: 0; }
+.col-label { font-size: 13px; color: var(--ink-soft); letter-spacing: .1em; }
+.ss { font-size: 13px; color: var(--ink-soft); min-height: 1.6em; }
+.col.day .ss { color: var(--cinnabar); }
+.glyph { font-family: var(--font-brush); font-size: clamp(40px, 9vw, 62px); line-height: 1.1; background: transparent; border: 0; border-radius: 4px; padding: 0 6px; cursor: pointer; }
+.glyph:hover { background: color-mix(in srgb, var(--gold) 12%, transparent); }
+.glyph.sel { background: color-mix(in srgb, var(--gold) 24%, transparent); box-shadow: 0 0 0 1.5px var(--gold); }
+.glyph.lit { text-shadow: 0 0 0.5px currentColor; background: color-mix(in srgb, var(--gold) 16%, transparent); }
+.hid { list-style: none; margin: 4px 0 0; padding: 0; display: grid; gap: 0; font-size: 13px; line-height: 1.5; }
+.hid li { white-space: nowrap; }
+.hid b { font-family: var(--font-brush); font-weight: 400; font-size: 18px; margin-right: 3px; }
+.hid span { color: var(--ink-soft); }
+.hid.off { display: none; }
+.meta { font-size: 12px; color: var(--ink-soft); line-height: 1.5; }
+.tag { display: inline-block; font-size: 11px; border: 1px solid var(--rule); border-radius: 3px; padding: 0 4px; margin: 1px; color: var(--ink-soft); white-space: nowrap; }
+.tag.kong { border-color: var(--cinnabar); color: var(--cinnabar); }
+.legend-line { display: flex; flex-wrap: wrap; gap: 4px 14px; justify-content: center; font-size: 12px; color: var(--ink-soft); margin: 2px 0 0; }
+.legend-line i { display: inline-block; width: 18px; height: 0; border-top: 2px solid; vertical-align: 3px; margin-right: 4px; }
+.legend-line .dot { display: inline-block; width: 9px; height: 9px; border-radius: 50%; margin-right: 4px; vertical-align: 0; }
+@media (max-width: 420px) { .hid { font-size: 12px; } .hid b { font-size: 16px; } .hid span.qi { display: none; } .tag .g { display: block; margin-left: 0; } .tag { white-space: normal; } }
+
+/* 批注栏 */
+aside.notes { display: grid; gap: 18px; min-width: 0; }
+.leaf { border-left: 3px solid var(--cinnabar); padding: 2px 0 2px 16px; min-width: 0; }
+.leaf h2 { font-family: var(--font-brush); font-weight: 400; font-size: 28px; margin: 0; line-height: 1.3; }
+.leaf .sub { color: var(--ink-soft); font-size: 13px; margin: 0 0 6px; }
+.leaf ul.facts-list { margin: 6px 0; padding-left: 1.2em; }
+.leaf ul.facts-list li { margin: 2px 0; }
+.note { margin: 8px 0 0; white-space: pre-wrap; }
+.note.empty { color: var(--ink-soft); font-size: 14px; }
+.advice { margin: 6px 0 0; padding-left: 1.3em; }
+
+/* 岁月轴 */
+section.yun { display: grid; gap: 12px; min-width: 0; }
+.track { display: grid; grid-auto-flow: column; grid-auto-columns: minmax(84px, 1fr); gap: 6px; overflow-x: auto; padding: 4px 2px 8px; scroll-snap-type: x proximity; }
+.yun-card { font: inherit; background: var(--paper-2); color: var(--ink); border: 1px solid var(--rule); border-radius: 4px; padding: 6px 4px; cursor: pointer; text-align: center; scroll-snap-align: start; position: relative; }
+.yun-card .gz { font-family: var(--font-brush); font-size: 28px; line-height: 1.15; display: block; }
+.yun-card .y { font-size: 12px; color: var(--ink-soft); display: block; }
+.yun-card[aria-pressed="true"] { border-color: var(--gold); box-shadow: inset 0 0 0 1.5px var(--gold); }
+.yun-card.pre .gz { font-size: 20px; color: var(--ink-soft); }
+.now { position: absolute; top: -8px; right: -4px; font-family: var(--font-brush); font-size: 14px; color: var(--seal-text); background: var(--cinnabar); border-radius: 3px; padding: 0 5px; line-height: 1.5; }
+.slider-row { display: flex; gap: 12px; align-items: center; flex-wrap: wrap; }
+.slider-row input[type=range] { flex: 1 1 240px; accent-color: var(--cinnabar); min-width: 0; }
+.slider-row output { font-family: var(--font-brush); font-size: 22px; min-width: 9em; }
+.years { display: grid; grid-template-columns: repeat(10, minmax(0, 1fr)); gap: 4px; }
+@media (max-width: 640px) { .years { grid-template-columns: repeat(5, minmax(0, 1fr)); } }
+.year { font: inherit; background: transparent; color: var(--ink); border: 1px solid var(--rule); border-radius: 3px; padding: 2px 0; cursor: pointer; text-align: center; position: relative; }
+.year .gz { font-family: var(--font-brush); font-size: 20px; display: block; line-height: 1.2; }
+.year .y { font-size: 11px; color: var(--ink-soft); display: block; }
+.year[aria-pressed="true"] { background: var(--paper-2); border-color: var(--gold); box-shadow: inset 0 0 0 1.5px var(--gold); }
+.year.has-rel::after { content: ""; position: absolute; top: 3px; right: 3px; width: 5px; height: 5px; border-radius: 50%; background: var(--cinnabar); }
+.year.has-note::before { content: ""; position: absolute; top: 3px; left: 3px; width: 5px; height: 5px; border-radius: 50%; background: var(--gold); }
+.yun-detail { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 18px; }
+@media (max-width: 700px) { .yun-detail { grid-template-columns: minmax(0, 1fr); } }
+
+/* 下栏 */
+.lower { display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr); gap: 28px; align-items: start; }
+@media (max-width: 860px) { .lower { grid-template-columns: minmax(0, 1fr); } }
+blockquote { margin: 8px 0; padding: 8px 14px; border-left: 3px solid var(--gold); background: color-mix(in srgb, var(--paper-2) 70%, transparent); font-size: 15px; }
+blockquote .k { display: inline-block; font-size: 12px; color: var(--ink-soft); border: 1px solid var(--rule); border-radius: 3px; padding: 0 5px; margin-right: 6px; }
+.src { font-size: 13px; color: var(--ink-soft); margin: 4px 0 0; }
+.src a { color: inherit; }
+.wx-bars { margin-top: 4px; display: grid; grid-template-columns: auto minmax(0, 1fr) minmax(0, 1fr); gap: 4px 10px; align-items: center; font-size: 13px; }
+.wx-bars .h { color: var(--ink-soft); font-size: 12px; }
+.wx-bars .name { font-family: var(--font-brush); font-size: 20px; line-height: 1; }
+.bar { height: 12px; display: flex; align-items: center; gap: 6px; }
+.bar span.fill { display: inline-block; height: 10px; border-radius: 2px; min-width: 2px; }
+.bar span.n { font-size: 12px; color: var(--ink-soft); }
+.siling { display: flex; gap: 4px; margin: 6px 0; }
+.siling div { border: 1px solid var(--rule); border-radius: 3px; padding: 2px 6px; font-size: 13px; text-align: center; color: var(--ink-soft); }
+.siling div.on { border-color: var(--gold); color: var(--ink); background: var(--paper-2); box-shadow: inset 0 0 0 1px var(--gold); }
+#wx, #shensha { margin-top: 20px; }
+.ss-list { list-style: none; padding: 0; margin: 6px 0; display: grid; gap: 4px; font-size: 14px; }
+.ss-list b { font-weight: 600; }
+
+/* 白话：一眼看懂、术语按钮、释义卡、术语表 */
+section.plain { display: grid; gap: 12px; }
+.plain-lead { font-size: 17px; line-height: 1.85; margin: 0; padding: 12px 16px; border-left: 3px solid var(--gold); background: color-mix(in srgb, var(--paper-2) 70%, transparent); }
+.plain-lead p { margin: 0 0 8px; } .plain-lead p:last-child { margin: 0; }
+.plain-lead.empty { font-size: 14px; color: var(--ink-soft); }
+.plain-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 12px; }
+.pcard { background: var(--paper-2); border: 1px solid var(--rule); border-radius: 4px; padding: 12px 14px; min-width: 0; }
+.pcard h3 { font-size: 20px; margin: 0 0 4px; }
+.pcard p { margin: 4px 0; }
+.pcard .big { font-family: var(--font-brush); font-size: 52px; line-height: 1; float: left; margin: 2px 12px 0 0; }
+.pcard .q { color: var(--ink-soft); font-size: 14px; }
+.pcard .hint { color: var(--ink-soft); font-size: 13px; }
+.term { font: inherit; color: inherit; background: none; border: 0; padding: 0; margin: 0; cursor: help; border-bottom: 1px dotted currentColor; text-underline-offset: 3px; }
+.term:hover { color: var(--gold); }
+.qmark { font: inherit; font-size: 13px; color: var(--ink-soft); background: none; border: 1px solid var(--rule); border-radius: 50%; width: 1.6em; height: 1.6em; line-height: 1.4; padding: 0; margin-left: 8px; cursor: help; vertical-align: 4px; font-family: var(--font-song); }
+.gloss { font-size: 12px; color: var(--gold); line-height: 1.2; min-height: 1.2em; }
+.plain-off .gloss, .plain-off .tag .g { display: none; }
+.tag .g { color: var(--gold); margin-left: 2px; }
+#tip { position: fixed; left: 50%; bottom: max(16px, env(safe-area-inset-bottom, 0px)); transform: translateX(-50%); width: min(560px, calc(100vw - 32px)); background: var(--paper-2); color: var(--ink); border: 1px solid var(--gold); border-radius: 6px; box-shadow: 0 8px 28px rgba(0,0,0,.25); padding: 12px 40px 12px 16px; z-index: 10; }
+#tip[hidden] { display: none; }
+#tip h4 { font-family: var(--font-brush); font-weight: 400; font-size: 22px; margin: 0 0 2px; }
+#tip p { margin: 4px 0; }
+#tip .basis { font-size: 12px; color: var(--ink-soft); }
+#tip button.x { position: absolute; top: 6px; right: 8px; font-size: 20px; background: none; border: 0; color: var(--ink-soft); cursor: pointer; }
+details.glossary summary { cursor: pointer; font-family: var(--font-brush); font-size: 22px; }
+details.glossary dl { display: grid; grid-template-columns: max-content minmax(0, 1fr); gap: 4px 14px; margin: 10px 0 0; font-size: 14px; }
+details.glossary dt { font-weight: 600; }
+details.glossary dd { margin: 0; }
+details.glossary dd .basis { color: var(--ink-soft); font-size: 12px; }
+details.glossary h4 { grid-column: 1 / -1; margin: 10px 0 0; font-family: var(--font-brush); font-weight: 400; font-size: 18px; }
+.why { margin: 6px 0 0; padding-left: 1.2em; font-size: 13px; color: var(--ink-soft); }
+
+footer { border-top: 1px solid var(--rule); padding-top: 14px; color: var(--ink-soft); font-size: 13px; display: grid; gap: 4px; }
+footer p { margin: 0; }
+@media (prefers-reduced-motion: reduce) { .col { transition: none; } }
+</style>
+</head>
+<body>
+<div class="page">
+  <header class="title">
+    <svg class="seal" viewBox="0 0 64 64" aria-hidden="true">
+      <rect x="2" y="2" width="60" height="60" rx="5"></rect>
+      <text x="45" y="20">堪</text><text x="45" y="44">輿</text>
+      <text x="19" y="20">子</text><text x="19" y="44">印</text>
+    </svg>
+    <div class="title-text">
+      <h1 id="title"></h1>
+      <ul class="facts" id="facts"></ul>
+      <div id="warnings"></div>
+      <details class="time-lines" id="time-lines"><summary>排盘口径</summary></details>
+    </div>
+  </header>
+
+  <section class="plain" aria-labelledby="plain-title">
+    <h2 class="sec" id="plain-title">一眼看懂</h2>
+    <div class="plain-lead" id="plain-lead"></div>
+    <div class="plain-grid" id="plain-grid"></div>
+  </section>
+
+  <div class="board-wrap">
+    <div class="plate">
+      <div class="toolbar" role="group" aria-label="显示">
+        <button class="btn-cast" id="cast" type="button">排盘</button>
+        <button class="chip" type="button" data-toggle="plain" aria-pressed="true">白话</button>
+        <button class="chip" type="button" data-toggle="rel" aria-pressed="true">合冲刑害</button>
+        <button class="chip" type="button" data-toggle="hid" aria-pressed="true">藏干</button>
+      </div>
+      <div class="chart" id="chart">
+        <svg class="band" id="band-gan" role="img" aria-label="天干关系"></svg>
+        <div class="cols" id="cols"></div>
+        <svg class="band" id="band-zhi" role="img" aria-label="地支关系"></svg>
+      </div>
+      <div class="legend-line" id="legend"></div>
+    </div>
+    <aside class="notes" aria-live="polite">
+      <div class="leaf" id="detail"></div>
+    </aside>
+  </div>
+
+  <section class="yun" aria-labelledby="yun-title">
+    <h2 class="sec" id="yun-title">大运流年</h2>
+    <div class="track" id="track" role="group" aria-label="大运"></div>
+    <div class="slider-row">
+      <input type="range" id="slider" aria-label="拖动选择年份">
+      <output id="slider-out" for="slider"></output>
+    </div>
+    <div class="years" id="years" role="group" aria-label="流年"></div>
+    <div class="yun-detail">
+      <div class="leaf" id="dayun-detail"></div>
+      <div class="leaf" id="year-detail"></div>
+    </div>
+  </section>
+
+  <div class="lower">
+    <section aria-labelledby="th-title">
+      <h2 class="sec" id="th-title">调候 · 《穷通宝鉴》原文</h2>
+      <div id="tiaohou"></div>
+    </section>
+    <section aria-labelledby="facts-title">
+      <h2 class="sec" id="facts-title">月令 · 五行 · 神煞</h2>
+      <div id="siling"></div>
+      <div id="wx"></div>
+      <div id="shensha"></div>
+    </section>
+  </div>
+
+  <section class="leaf" id="overall"></section>
+
+  <details class="glossary" id="glossary"><summary>术语表：看不懂的词都在这里</summary><dl id="glossary-list"></dl></details>
+
+  <div id="tip" role="dialog" aria-live="polite" hidden><button class="x" type="button" aria-label="关闭">×</button><h4></h4><p class="plain-text"></p><p class="basis"></p></div>
+
+  <footer>
+    <p id="source"></p>
+    <p>命理为传统文化的一种推演，不定人生。柱中干支、藏干、关系与神煞由脚本查表得出；旺衰、格局、用神是解读，见批注与对话。</p>
+  </footer>
+</div>
+
+<script id="chart-data" type="application/json">{"title": "坤造 庚午 辛巳 丁酉 甲辰", "gender": "坤造", "day_gan": "丁", "day_wx": "火", "day_yy": "阴", "month_zhi": "巳", "time_known": true, "facts": [["出生", "1990-06-01 08:30"], ["农历", "一九九〇年五月初九"], ["时区", "Asia/Shanghai"], ["真太阳时", "07:17（经度 116.4°）"], ["子时", "23:00 换日"], ["起运", "8年9月0天（1999-03-01）"], ["命卦", "艮卦 · 西四命"]], "warnings": [], "time_lines": ["夏令时：出生时当地实行夏令时，钟表 08:30 扣 60 分钟 → 当地标准时 07:30", "真太阳时：1990-06-01 07:17（经度 116.4°，相对标准时修正 -12.1 分钟）", "口径：年柱、月柱按北京时间 1990-06-01 07:30 比对立春与节气；日柱、时柱用真太阳时；子时：23:00 起换日（子初换日）"], "pillars": [{"name": "年", "gz": "庚午", "gan": "庚", "zhi": "午", "gan_wx": "金", "zhi_wx": "火", "gan_yy": "阳", "zhi_yy": "阳", "gan_ss": "正财", "nayin": "路旁土", "changsheng": "临官", "xunkong": "戌亥", "zizuo": "沐浴", "hidden": [{"gan": "丁", "qi": "本气", "ss": "比肩", "wx": "火"}, {"gan": "己", "qi": "中气", "ss": "食神", "wx": "土"}], "roots": [{"pillar": "月", "zhi": "巳", "hidden": "庚", "qi": "中气"}, {"pillar": "日", "zhi": "酉", "hidden": "辛", "qi": "本气"}], "tou": [{"pillar": "年", "zhi": "午", "hidden": "丁", "qi": "本气", "at": ["日"]}], "shensha": ["禄", "咸池（桃花）"]}, {"name": "月", "gz": "辛巳", "gan": "辛", "zhi": "巳", "gan_wx": "金", "zhi_wx": "火", "gan_yy": "阴", "zhi_yy": "阴", "gan_ss": "偏财", "nayin": "白蜡金", "changsheng": "帝旺", "xunkong": "申酉", "zizuo": "死", "hidden": [{"gan": "丙", "qi": "本气", "ss": "劫财", "wx": "火"}, {"gan": "庚", "qi": "中气", "ss": "正财", "wx": "金"}, {"gan": "戊", "qi": "余气", "ss": "伤官", "wx": "土"}], "roots": [{"pillar": "月", "zhi": "巳", "hidden": "庚", "qi": "中气"}, {"pillar": "日", "zhi": "酉", "hidden": "辛", "qi": "本气"}], "tou": [{"pillar": "月", "zhi": "巳", "hidden": "庚", "qi": "中气", "at": ["年"]}], "shensha": ["空亡"]}, {"name": "日", "gz": "丁酉", "gan": "丁", "zhi": "酉", "gan_wx": "火", "zhi_wx": "金", "gan_yy": "阴", "zhi_yy": "阴", "gan_ss": "日主", "nayin": "山下火", "changsheng": "长生", "xunkong": "辰巳", "zizuo": "长生", "hidden": [{"gan": "辛", "qi": "本气", "ss": "偏财", "wx": "金"}], "roots": [{"pillar": "年", "zhi": "午", "hidden": "丁", "qi": "本气"}, {"pillar": "月", "zhi": "巳", "hidden": "丙", "qi": "本气"}], "tou": [{"pillar": "日", "zhi": "酉", "hidden": "辛", "qi": "本气", "at": ["月"]}], "shensha": ["天乙贵人"]}, {"name": "时", "gz": "甲辰", "gan": "甲", "zhi": "辰", "gan_wx": "木", "zhi_wx": "土", "gan_yy": "阳", "zhi_yy": "阳", "gan_ss": "正印", "nayin": "覆灯火", "changsheng": "衰", "xunkong": "寅卯", "zizuo": "衰", "hidden": [{"gan": "戊", "qi": "本气", "ss": "伤官", "wx": "土"}, {"gan": "乙", "qi": "中气", "ss": "偏印", "wx": "木"}, {"gan": "癸", "qi": "余气", "ss": "七杀", "wx": "水"}], "roots": [{"pillar": "时", "zhi": "辰", "hidden": "乙", "qi": "中气"}], "tou": [], "shensha": ["空亡"]}], "relations": {"gan": [], "zhi": [{"kind": "六合", "label": "日支酉、时支辰 六合", "at": [2, 3], "short": "六合"}, {"kind": "三合缺一", "label": "巳酉（月支、日支）三合缺丑，不成局", "at": [1, 2], "short": "缺丑"}]}, "wuxing": {"count": {"木": 1, "火": 3, "土": 1, "金": 3, "水": 0}, "hidden": {"木": 1, "火": 2, "土": 3, "金": 2, "水": 1}}, "wangxiang": {"season": "夏", "wang": "火", "states": {"木": "休", "火": "旺", "土": "相", "金": "死", "水": "囚"}, "day": "旺"}, "glossary": {"gan_xiang": {"甲": "在天为雷为龙，在地为梁为栋", "乙": "在天为风，在地为树", "丙": "在天为日为电，在地为炉为冶", "丁": "在天为列星，在地为灯火", "戊": "在天为雾，在地为山", "己": "乃天之元气，地之真土", "庚": "在天为风霜，在地为金铁", "辛": "在天为日月，乃太阴之精，在地为金，金乃山石之矿", "壬": "在天为云，在地为泽", "癸": "在天为雨露，在地为泉脉"}, "shishen": {"比肩": ["同辈", "与日主同五行、同阴阳", "像兄弟朋友、同辈，也代表自我、独立"], "劫财": ["竞争", "与日主同五行、阴阳不同", "像竞争的同辈，也代表冲劲、争夺"], "食神": ["才华", "日主所生、同阴阳", "才华、口福、温和的表达"], "伤官": ["锋芒", "日主所生、阴阳不同", "锋芒、创意、不受拘束的表达"], "偏财": ["机会财", "日主所克、同阴阳", "流动的钱财、机会、人缘"], "正财": ["稳定财", "日主所克、阴阳不同", "稳定收入、勤劳所得"], "七杀": ["压力", "克日主、同阴阳", "压力、挑战，也代表魄力"], "正官": ["规矩", "克日主、阴阳不同", "规矩、责任、名誉"], "偏印": ["灵感", "生日主、同阴阳", "偏门学问、灵感、独处"], "正印": ["庇护", "生日主、阴阳不同", "学习、庇护、长辈的支持"]}, "changsheng": {"长生": ["起步成长", "万物发生向荣，如人始生而向长也"], "沐浴": ["稚嫩易损", "万物始生，形体柔脆，易为所损"], "冠带": ["渐趋成熟", "万物渐荣秀，如人具衣冠也"], "临官": ["自立有成", "万物既秀实，如人之临官也"], "帝旺": ["最旺盛", "万物成熟，如人之兴旺也"], "衰": ["开始衰退", "万物形衰，如人之气衰也"], "病": ["力量减弱", "万物病，如人之病也"], "死": ["气势最弱", "万物死，如人之死也"], "墓": ["收藏", "万物成功而藏之库，如人之终而归墓也"], "绝": ["最空、待重生", "万物在地中未有其象，如母腹空，未有物也"], "胎": ["萌芽", "其物在地中萌芽，始有其气，如人受父母之气也"], "养": ["孕育成形", "万物在地中成形，如人在母腹成形也"]}, "wangxiang": {"旺": "当令，这个季节最强的五行", "相": "当令者所生，次强", "休": "生出当令者，退而休息", "囚": "克当令者，反被困住", "死": "被当令者所克，最弱"}, "terms": {"日主": ["出生那天的天干，代表你自己。整张盘都围绕它来看：哪些字帮它、哪些字耗它。", "子平法通则"], "四柱": ["出生的年、月、日、时各用一对干支表示，共四对八个字，所以叫「八字」。", "子平法通则"], "天干地支": ["每柱上面的字叫天干（甲乙丙丁……十个），下面的叫地支（子丑寅卯……十二个），各属五行。", "子平法通则"], "十神": ["其他字和日主的关系：生我、我生、克我、我克、同类，再分阴阳，共十种，用来比喻人事。", "子平法通则 ⚖ 释义为通行说法"], "藏干": ["地支里面藏着的天干。本气最主要，中气、余气次之。", "通行藏干表 ⚖"], "通根": ["天干在地支的藏干里找到同五行的字，好比树有根。根越多、越是本气，站得越稳。", "子平通行看法 ⚖"], "透干": ["地支里藏着的字也出现在天干上，力量显露出来。", "子平通行看法 ⚖"], "月令": ["出生月份的地支，决定那个季节哪种五行最旺，是判断日主强弱最重要的一项。", "子平法通则"], "司令": ["一个月里不同时段轮流当值的字。《三命通会》「论人元司事」列出交节后各几日。", "✅《三命通会》卷二"], "旺相休囚死": ["五行随季节的强弱：当令为旺，其次为相，再次休、囚，最弱为死。", "✅《三命通会》卷二"], "十二长生": ["日主在每个地支上的状态，古书比作人从出生到归墓的十二个阶段。", "✅《三命通会》卷二；原书言见生旺「未必便作吉论」"], "合": ["两字相合、彼此牵绊。《三命通会》：「夫合者，乃和谐之义。」合而化为另一五行要有条件，这里只标合。", "✅《三命通会》卷二"], "冲": ["位置正对的两个地支相冲，主变动。原书说「冲破有吉有凶，不可概论」，要看冲的是有利还是不利的字。", "✅《三命通会》卷二"], "刑": ["相刑。原书比作「夫妇相合而反致刑伤」，亲近之中带伤。自刑是同一个字重复相见。", "✅《三命通会》卷二"], "害": ["相害，原书称「十二支凌战之辰」，彼此妨碍。", "✅《三命通会》卷二"], "三合": ["三个地支凑齐，结成一股五行力量（如申子辰成水局）。", "✅《三命通会》卷二"], "三会": ["同一方位的三个地支凑齐（如寅卯辰东方木），力量集中。", "✅《渊海子平》"], "三合缺一": ["三合只见到两个字，原书说「三字缺一则化不成局」。大运、流年补上第三个字时再看。", "✅《三命通会》卷二"], "空亡": ["六十甲子每一旬里轮空的两个地支，古称落空。原书说空亡「未可便为凶论」。", "✅《三命通会》卷三"], "禄": ["日干的本位。原书：「禄，爵禄也，当得势而享。」", "✅《三命通会》卷三"], "羊刃": ["比禄再进一步的位置，过旺而锋芒太露。原书：「禄过则刃生。」", "✅《三命通会》卷三"], "天乙贵人": ["古书最尊贵的吉神，「所至之处，一切凶煞隐然而避」，俗称有贵人相助。", "✅《三命通会》卷三"], "驿马": ["主走动、迁移、变化。原书称「喜庆之神」。", "✅《三命通会》卷三"], "咸池": ["俗称桃花，主人缘、异性缘。原书断语偏负面，本 skill 不转述，也不据此论品行。", "✅《三命通会》卷二"], "纳音": ["六十甲子各配一种五行物象（如路旁土、山下火）的传统名称。", "✅《三命通会》卷一"], "起运": ["从几岁几个月开始走第一步大运，由出生到下一个（或上一个）节气的天数推出。", "子平法通则"], "大运": ["每十年一换的大环境，像人生的季节。", "子平法通则"], "流年": ["每一年的干支，像当年的天气；要和原局、大运一起看。", "子平法通则"], "调候": ["按出生季节的冷暖燥湿，看需要什么五行来调和。《穷通宝鉴》专讲这一点。", "✅《穷通宝鉴》"], "用神": ["对这张盘最有帮助的五行。这是判断，不同派别可能取得不同，要看依据。", "⚖ 属判断"], "喜神": ["对盘有帮助、辅助用神的五行。", "⚖ 属判断"], "忌神": ["对盘不利的五行。", "⚖ 属判断"], "五行个数": ["八个字里各五行出现的次数。只是字数，不等于强弱，也不等于「缺什么就要补什么」。", "本项目说明"]}}, "siling": {"jie": "立夏", "day_n": 27, "ruler": "丙火", "jie_time": "1990-05-06 02:35", "table": [{"name": "戊土", "days": 7}, {"name": "庚金", "days": 5}, {"name": "丙火", "days": 18}]}, "tiaohou": {"gan": "丁", "month_zhi": "巳", "month": "四月", "section": "论丁火 · 三夏丁火", "passages": [{"line": 697, "kind": "专论", "text": "四月丁火乘旺，虽取甲引丁，必用庚噼甲。伐甲、方云木火通明。甲多、又取庚为先。但四柱忌见癸水。癸水一见，洩金、溼甲、伤丁，故以癸为病。或癸水藏支，壬水出干制丙，不夺丁光，自是雁塔题名，玉堂清贵。"}], "book": "《穷通宝鉴》", "url": "https://zh.wikisource.org/wiki/窮通寶鑑"}, "shensha": [{"name": "禄", "basis": "日干丁", "targets": "午", "hits": ["年支午"]}, {"name": "天乙贵人", "basis": "日干丁", "targets": "亥酉", "hits": ["日支酉"]}, {"name": "咸池（桃花）", "basis": "日支酉", "targets": "午", "hits": ["年支午"]}, {"name": "空亡", "basis": "日柱丁酉旬", "targets": "辰巳", "hits": ["月支巳", "时支辰"]}], "dayun": [{"gz": "庚辰", "start": "1999-03", "start_year": 1999, "age": "8岁9个月", "age_short": "8岁9月", "gan_ss": "正财", "zhi_ss": "伤官", "cs": "衰", "relations": ["大运支辰六合日支酉", "大运支辰与时支辰自刑"], "gan_wx": "金", "zhi_wx": "土", "years": [{"year": 1999, "gz": "己卯", "age": 9, "ss": "食神", "cs": "病", "relations": ["流年干己合时干甲", "流年支卯冲日支酉", "流年支卯害时支辰"]}, {"year": 2000, "gz": "庚辰", "age": 10, "ss": "正财", "cs": "衰", "relations": ["流年支辰六合日支酉", "流年支辰与时支辰自刑"]}, {"year": 2001, "gz": "辛巳", "age": 11, "ss": "偏财", "cs": "帝旺", "relations": []}, {"year": 2002, "gz": "壬午", "age": 12, "ss": "正官", "cs": "临官", "relations": ["流年干壬合日干丁", "流年支午与年支午自刑"]}, {"year": 2003, "gz": "癸未", "age": 13, "ss": "七杀", "cs": "冠带", "relations": ["流年支未六合年支午", "流年支未与月支巳、年支午三会火方"]}, {"year": 2004, "gz": "甲申", "age": 14, "ss": "正印", "cs": "沐浴", "relations": ["流年支申六合月支巳", "流年支申无恩之刑月支巳"]}, {"year": 2005, "gz": "乙酉", "age": 15, "ss": "偏印", "cs": "长生", "relations": ["流年干乙合年干庚", "流年支酉与日支酉自刑", "流年支酉六合时支辰"]}, {"year": 2006, "gz": "丙戌", "age": 16, "ss": "劫财", "cs": "养", "relations": ["流年干丙合月干辛", "流年支戌害日支酉", "流年支戌冲时支辰"]}, {"year": 2007, "gz": "丁亥", "age": 17, "ss": "比肩", "cs": "胎", "relations": ["流年支亥冲月支巳"]}, {"year": 2008, "gz": "戊子", "age": 18, "ss": "伤官", "cs": "绝", "relations": ["流年支子冲年支午"]}]}, {"gz": "己卯", "start": "2009-03", "start_year": 2009, "age": "18岁9个月", "age_short": "18岁9月", "gan_ss": "食神", "zhi_ss": "偏印", "cs": "病", "relations": ["大运干己合时干甲", "大运支卯冲日支酉", "大运支卯害时支辰"], "gan_wx": "土", "zhi_wx": "木", "years": [{"year": 2009, "gz": "己丑", "age": 19, "ss": "食神", "cs": "墓", "relations": ["流年干己合时干甲", "流年支丑害年支午", "流年支丑与月支巳、日支酉三合金局"]}, {"year": 2010, "gz": "庚寅", "age": 20, "ss": "正财", "cs": "死", "relations": ["流年支寅无恩之刑月支巳", "流年支寅害月支巳"]}, {"year": 2011, "gz": "辛卯", "age": 21, "ss": "偏财", "cs": "病", "relations": ["流年支卯冲日支酉", "流年支卯害时支辰"]}, {"year": 2012, "gz": "壬辰", "age": 22, "ss": "正官", "cs": "衰", "relations": ["流年干壬合日干丁", "流年支辰六合日支酉", "流年支辰与时支辰自刑"]}, {"year": 2013, "gz": "癸巳", "age": 23, "ss": "七杀", "cs": "帝旺", "relations": []}, {"year": 2014, "gz": "甲午", "age": 24, "ss": "正印", "cs": "临官", "relations": ["流年支午与年支午自刑"]}, {"year": 2015, "gz": "乙未", "age": 25, "ss": "偏印", "cs": "冠带", "relations": ["流年干乙合年干庚", "流年支未六合年支午", "流年支未与月支巳、年支午三会火方"]}, {"year": 2016, "gz": "丙申", "age": 26, "ss": "劫财", "cs": "沐浴", "relations": ["流年干丙合月干辛", "流年支申六合月支巳", "流年支申无恩之刑月支巳"]}, {"year": 2017, "gz": "丁酉", "age": 27, "ss": "比肩", "cs": "长生", "relations": ["流年支酉与日支酉自刑", "流年支酉六合时支辰"]}, {"year": 2018, "gz": "戊戌", "age": 28, "ss": "伤官", "cs": "养", "relations": ["流年支戌害日支酉", "流年支戌冲时支辰"]}]}, {"gz": "戊寅", "start": "2019-03", "start_year": 2019, "age": "28岁9个月", "age_short": "28岁9月", "gan_ss": "伤官", "zhi_ss": "正印", "cs": "死", "relations": ["大运支寅无恩之刑月支巳", "大运支寅害月支巳"], "gan_wx": "土", "zhi_wx": "木", "years": [{"year": 2019, "gz": "己亥", "age": 29, "ss": "食神", "cs": "胎", "relations": ["流年干己合时干甲", "流年支亥冲月支巳"]}, {"year": 2020, "gz": "庚子", "age": 30, "ss": "正财", "cs": "绝", "relations": ["流年支子冲年支午"]}, {"year": 2021, "gz": "辛丑", "age": 31, "ss": "偏财", "cs": "墓", "relations": ["流年支丑害年支午", "流年支丑与月支巳、日支酉三合金局"]}, {"year": 2022, "gz": "壬寅", "age": 32, "ss": "正官", "cs": "死", "relations": ["流年干壬合日干丁", "流年支寅无恩之刑月支巳", "流年支寅害月支巳"]}, {"year": 2023, "gz": "癸卯", "age": 33, "ss": "七杀", "cs": "病", "relations": ["流年支卯冲日支酉", "流年支卯害时支辰"]}, {"year": 2024, "gz": "甲辰", "age": 34, "ss": "正印", "cs": "衰", "relations": ["流年支辰六合日支酉", "流年支辰与时支辰自刑"]}, {"year": 2025, "gz": "乙巳", "age": 35, "ss": "偏印", "cs": "帝旺", "relations": ["流年干乙合年干庚"]}, {"year": 2026, "gz": "丙午", "age": 36, "ss": "劫财", "cs": "临官", "relations": ["流年干丙合月干辛", "流年支午与年支午自刑"]}, {"year": 2027, "gz": "丁未", "age": 37, "ss": "比肩", "cs": "冠带", "relations": ["流年支未六合年支午", "流年支未与月支巳、年支午三会火方"]}, {"year": 2028, "gz": "戊申", "age": 38, "ss": "伤官", "cs": "沐浴", "relations": ["流年支申六合月支巳", "流年支申无恩之刑月支巳"]}]}, {"gz": "丁丑", "start": "2029-03", "start_year": 2029, "age": "38岁9个月", "age_short": "38岁9月", "gan_ss": "比肩", "zhi_ss": "食神", "cs": "墓", "relations": ["大运支丑害年支午", "大运支丑与月支巳、日支酉三合金局"], "gan_wx": "火", "zhi_wx": "土", "years": [{"year": 2029, "gz": "己酉", "age": 39, "ss": "食神", "cs": "长生", "relations": ["流年干己合时干甲", "流年支酉与日支酉自刑", "流年支酉六合时支辰"]}, {"year": 2030, "gz": "庚戌", "age": 40, "ss": "正财", "cs": "养", "relations": ["流年支戌害日支酉", "流年支戌冲时支辰"]}, {"year": 2031, "gz": "辛亥", "age": 41, "ss": "偏财", "cs": "胎", "relations": ["流年支亥冲月支巳"]}, {"year": 2032, "gz": "壬子", "age": 42, "ss": "正官", "cs": "绝", "relations": ["流年干壬合日干丁", "流年支子冲年支午"]}, {"year": 2033, "gz": "癸丑", "age": 43, "ss": "七杀", "cs": "墓", "relations": ["流年支丑害年支午", "流年支丑与月支巳、日支酉三合金局"]}, {"year": 2034, "gz": "甲寅", "age": 44, "ss": "正印", "cs": "死", "relations": ["流年支寅无恩之刑月支巳", "流年支寅害月支巳"]}, {"year": 2035, "gz": "乙卯", "age": 45, "ss": "偏印", "cs": "病", "relations": ["流年干乙合年干庚", "流年支卯冲日支酉", "流年支卯害时支辰"]}, {"year": 2036, "gz": "丙辰", "age": 46, "ss": "劫财", "cs": "衰", "relations": ["流年干丙合月干辛", "流年支辰六合日支酉", "流年支辰与时支辰自刑"]}, {"year": 2037, "gz": "丁巳", "age": 47, "ss": "比肩", "cs": "帝旺", "relations": []}, {"year": 2038, "gz": "戊午", "age": 48, "ss": "伤官", "cs": "临官", "relations": ["流年支午与年支午自刑"]}]}, {"gz": "丙子", "start": "2039-03", "start_year": 2039, "age": "48岁9个月", "age_short": "48岁9月", "gan_ss": "劫财", "zhi_ss": "七杀", "cs": "绝", "relations": ["大运干丙合月干辛", "大运支子冲年支午"], "gan_wx": "火", "zhi_wx": "水", "years": [{"year": 2039, "gz": "己未", "age": 49, "ss": "食神", "cs": "冠带", "relations": ["流年干己合时干甲", "流年支未六合年支午", "流年支未与月支巳、年支午三会火方"]}, {"year": 2040, "gz": "庚申", "age": 50, "ss": "正财", "cs": "沐浴", "relations": ["流年支申六合月支巳", "流年支申无恩之刑月支巳"]}, {"year": 2041, "gz": "辛酉", "age": 51, "ss": "偏财", "cs": "长生", "relations": ["流年支酉与日支酉自刑", "流年支酉六合时支辰"]}, {"year": 2042, "gz": "壬戌", "age": 52, "ss": "正官", "cs": "养", "relations": ["流年干壬合日干丁", "流年支戌害日支酉", "流年支戌冲时支辰"]}, {"year": 2043, "gz": "癸亥", "age": 53, "ss": "七杀", "cs": "胎", "relations": ["流年支亥冲月支巳"]}, {"year": 2044, "gz": "甲子", "age": 54, "ss": "正印", "cs": "绝", "relations": ["流年支子冲年支午"]}, {"year": 2045, "gz": "乙丑", "age": 55, "ss": "偏印", "cs": "墓", "relations": ["流年干乙合年干庚", "流年支丑害年支午", "流年支丑与月支巳、日支酉三合金局"]}, {"year": 2046, "gz": "丙寅", "age": 56, "ss": "劫财", "cs": "死", "relations": ["流年干丙合月干辛", "流年支寅无恩之刑月支巳", "流年支寅害月支巳"]}, {"year": 2047, "gz": "丁卯", "age": 57, "ss": "比肩", "cs": "病", "relations": ["流年支卯冲日支酉", "流年支卯害时支辰"]}, {"year": 2048, "gz": "戊辰", "age": 58, "ss": "伤官", "cs": "衰", "relations": ["流年支辰六合日支酉", "流年支辰与时支辰自刑"]}]}, {"gz": "乙亥", "start": "2049-03", "start_year": 2049, "age": "58岁9个月", "age_short": "58岁9月", "gan_ss": "偏印", "zhi_ss": "正官", "cs": "胎", "relations": ["大运干乙合年干庚", "大运支亥冲月支巳"], "gan_wx": "木", "zhi_wx": "水", "years": [{"year": 2049, "gz": "己巳", "age": 59, "ss": "食神", "cs": "帝旺", "relations": ["流年干己合时干甲"]}, {"year": 2050, "gz": "庚午", "age": 60, "ss": "正财", "cs": "临官", "relations": ["流年支午与年支午自刑"]}, {"year": 2051, "gz": "辛未", "age": 61, "ss": "偏财", "cs": "冠带", "relations": ["流年支未六合年支午", "流年支未与月支巳、年支午三会火方"]}, {"year": 2052, "gz": "壬申", "age": 62, "ss": "正官", "cs": "沐浴", "relations": ["流年干壬合日干丁", "流年支申六合月支巳", "流年支申无恩之刑月支巳"]}, {"year": 2053, "gz": "癸酉", "age": 63, "ss": "七杀", "cs": "长生", "relations": ["流年支酉与日支酉自刑", "流年支酉六合时支辰"]}, {"year": 2054, "gz": "甲戌", "age": 64, "ss": "正印", "cs": "养", "relations": ["流年支戌害日支酉", "流年支戌冲时支辰"]}, {"year": 2055, "gz": "乙亥", "age": 65, "ss": "偏印", "cs": "胎", "relations": ["流年干乙合年干庚", "流年支亥冲月支巳"]}, {"year": 2056, "gz": "丙子", "age": 66, "ss": "劫财", "cs": "绝", "relations": ["流年干丙合月干辛", "流年支子冲年支午"]}, {"year": 2057, "gz": "丁丑", "age": 67, "ss": "比肩", "cs": "墓", "relations": ["流年支丑害年支午", "流年支丑与月支巳、日支酉三合金局"]}, {"year": 2058, "gz": "戊寅", "age": 68, "ss": "伤官", "cs": "死", "relations": ["流年支寅无恩之刑月支巳", "流年支寅害月支巳"]}]}, {"gz": "甲戌", "start": "2059-03", "start_year": 2059, "age": "68岁9个月", "age_short": "68岁9月", "gan_ss": "正印", "zhi_ss": "伤官", "cs": "养", "relations": ["大运支戌害日支酉", "大运支戌冲时支辰"], "gan_wx": "木", "zhi_wx": "土", "years": [{"year": 2059, "gz": "己卯", "age": 69, "ss": "食神", "cs": "病", "relations": ["流年干己合时干甲", "流年支卯冲日支酉", "流年支卯害时支辰"]}, {"year": 2060, "gz": "庚辰", "age": 70, "ss": "正财", "cs": "衰", "relations": ["流年支辰六合日支酉", "流年支辰与时支辰自刑"]}, {"year": 2061, "gz": "辛巳", "age": 71, "ss": "偏财", "cs": "帝旺", "relations": []}, {"year": 2062, "gz": "壬午", "age": 72, "ss": "正官", "cs": "临官", "relations": ["流年干壬合日干丁", "流年支午与年支午自刑"]}, {"year": 2063, "gz": "癸未", "age": 73, "ss": "七杀", "cs": "冠带", "relations": ["流年支未六合年支午", "流年支未与月支巳、年支午三会火方"]}, {"year": 2064, "gz": "甲申", "age": 74, "ss": "正印", "cs": "沐浴", "relations": ["流年支申六合月支巳", "流年支申无恩之刑月支巳"]}, {"year": 2065, "gz": "乙酉", "age": 75, "ss": "偏印", "cs": "长生", "relations": ["流年干乙合年干庚", "流年支酉与日支酉自刑", "流年支酉六合时支辰"]}, {"year": 2066, "gz": "丙戌", "age": 76, "ss": "劫财", "cs": "养", "relations": ["流年干丙合月干辛", "流年支戌害日支酉", "流年支戌冲时支辰"]}, {"year": 2067, "gz": "丁亥", "age": 77, "ss": "比肩", "cs": "胎", "relations": ["流年支亥冲月支巳"]}, {"year": 2068, "gz": "戊子", "age": 78, "ss": "伤官", "cs": "绝", "relations": ["流年支子冲年支午"]}]}, {"gz": "癸酉", "start": "2069-03", "start_year": 2069, "age": "78岁9个月", "age_short": "78岁9月", "gan_ss": "七杀", "zhi_ss": "偏财", "cs": "长生", "relations": ["大运支酉与日支酉自刑", "大运支酉六合时支辰"], "gan_wx": "水", "zhi_wx": "金", "years": [{"year": 2069, "gz": "己丑", "age": 79, "ss": "食神", "cs": "墓", "relations": ["流年干己合时干甲", "流年支丑害年支午", "流年支丑与月支巳、日支酉三合金局"]}, {"year": 2070, "gz": "庚寅", "age": 80, "ss": "正财", "cs": "死", "relations": ["流年支寅无恩之刑月支巳", "流年支寅害月支巳"]}, {"year": 2071, "gz": "辛卯", "age": 81, "ss": "偏财", "cs": "病", "relations": ["流年支卯冲日支酉", "流年支卯害时支辰"]}, {"year": 2072, "gz": "壬辰", "age": 82, "ss": "正官", "cs": "衰", "relations": ["流年干壬合日干丁", "流年支辰六合日支酉", "流年支辰与时支辰自刑"]}, {"year": 2073, "gz": "癸巳", "age": 83, "ss": "七杀", "cs": "帝旺", "relations": []}, {"year": 2074, "gz": "甲午", "age": 84, "ss": "正印", "cs": "临官", "relations": ["流年支午与年支午自刑"]}, {"year": 2075, "gz": "乙未", "age": 85, "ss": "偏印", "cs": "冠带", "relations": ["流年干乙合年干庚", "流年支未六合年支午", "流年支未与月支巳、年支午三会火方"]}, {"year": 2076, "gz": "丙申", "age": 86, "ss": "劫财", "cs": "沐浴", "relations": ["流年干丙合月干辛", "流年支申六合月支巳", "流年支申无恩之刑月支巳"]}, {"year": 2077, "gz": "丁酉", "age": 87, "ss": "比肩", "cs": "长生", "relations": ["流年支酉与日支酉自刑", "流年支酉六合时支辰"]}, {"year": 2078, "gz": "戊戌", "age": 88, "ss": "伤官", "cs": "养", "relations": ["流年支戌害日支酉", "流年支戌冲时支辰"]}]}, {"gz": "壬申", "start": "2079-03", "start_year": 2079, "age": "88岁9个月", "age_short": "88岁9月", "gan_ss": "正官", "zhi_ss": "正财", "cs": "沐浴", "relations": ["大运干壬合日干丁", "大运支申六合月支巳", "大运支申无恩之刑月支巳"], "gan_wx": "水", "zhi_wx": "金", "years": [{"year": 2079, "gz": "己亥", "age": 89, "ss": "食神", "cs": "胎", "relations": ["流年干己合时干甲", "流年支亥冲月支巳"]}, {"year": 2080, "gz": "庚子", "age": 90, "ss": "正财", "cs": "绝", "relations": ["流年支子冲年支午"]}, {"year": 2081, "gz": "辛丑", "age": 91, "ss": "偏财", "cs": "墓", "relations": ["流年支丑害年支午", "流年支丑与月支巳、日支酉三合金局"]}, {"year": 2082, "gz": "壬寅", "age": 92, "ss": "正官", "cs": "死", "relations": ["流年干壬合日干丁", "流年支寅无恩之刑月支巳", "流年支寅害月支巳"]}, {"year": 2083, "gz": "癸卯", "age": 93, "ss": "七杀", "cs": "病", "relations": ["流年支卯冲日支酉", "流年支卯害时支辰"]}, {"year": 2084, "gz": "甲辰", "age": 94, "ss": "正印", "cs": "衰", "relations": ["流年支辰六合日支酉", "流年支辰与时支辰自刑"]}, {"year": 2085, "gz": "乙巳", "age": 95, "ss": "偏印", "cs": "帝旺", "relations": ["流年干乙合年干庚"]}, {"year": 2086, "gz": "丙午", "age": 96, "ss": "劫财", "cs": "临官", "relations": ["流年干丙合月干辛", "流年支午与年支午自刑"]}, {"year": 2087, "gz": "丁未", "age": 97, "ss": "比肩", "cs": "冠带", "relations": ["流年支未六合年支午", "流年支未与月支巳、年支午三会火方"]}, {"year": 2088, "gz": "戊申", "age": 98, "ss": "伤官", "cs": "沐浴", "relations": ["流年支申六合月支巳", "流年支申无恩之刑月支巳"]}]}, {"gz": "辛未", "start": "2089-03", "start_year": 2089, "age": "98岁9个月", "age_short": "98岁9月", "gan_ss": "偏财", "zhi_ss": "食神", "cs": "冠带", "relations": ["大运支未六合年支午", "大运支未与月支巳、年支午三会火方"], "gan_wx": "金", "zhi_wx": "土", "years": [{"year": 2089, "gz": "己酉", "age": 99, "ss": "食神", "cs": "长生", "relations": ["流年干己合时干甲", "流年支酉与日支酉自刑", "流年支酉六合时支辰"]}, {"year": 2090, "gz": "庚戌", "age": 100, "ss": "正财", "cs": "养", "relations": ["流年支戌害日支酉", "流年支戌冲时支辰"]}, {"year": 2091, "gz": "辛亥", "age": 101, "ss": "偏财", "cs": "胎", "relations": ["流年支亥冲月支巳"]}, {"year": 2092, "gz": "壬子", "age": 102, "ss": "正官", "cs": "绝", "relations": ["流年干壬合日干丁", "流年支子冲年支午"]}, {"year": 2093, "gz": "癸丑", "age": 103, "ss": "七杀", "cs": "墓", "relations": ["流年支丑害年支午", "流年支丑与月支巳、日支酉三合金局"]}, {"year": 2094, "gz": "甲寅", "age": 104, "ss": "正印", "cs": "死", "relations": ["流年支寅无恩之刑月支巳", "流年支寅害月支巳"]}, {"year": 2095, "gz": "乙卯", "age": 105, "ss": "偏印", "cs": "病", "relations": ["流年干乙合年干庚", "流年支卯冲日支酉", "流年支卯害时支辰"]}, {"year": 2096, "gz": "丙辰", "age": 106, "ss": "劫财", "cs": "衰", "relations": ["流年干丙合月干辛", "流年支辰六合日支酉", "流年支辰与时支辰自刑"]}, {"year": 2097, "gz": "丁巳", "age": 107, "ss": "比肩", "cs": "帝旺", "relations": []}, {"year": 2098, "gz": "戊午", "age": 108, "ss": "伤官", "cs": "临官", "relations": ["流年支午与年支午自刑"]}]}], "pre_years": [{"year": 1990, "gz": "庚午", "age": 0, "ss": "正财", "cs": "临官", "relations": ["流年支午与年支午自刑"]}, {"year": 1991, "gz": "辛未", "age": 1, "ss": "偏财", "cs": "冠带", "relations": ["流年支未六合年支午", "流年支未与月支巳、年支午三会火方"]}, {"year": 1992, "gz": "壬申", "age": 2, "ss": "正官", "cs": "沐浴", "relations": ["流年干壬合日干丁", "流年支申六合月支巳", "流年支申无恩之刑月支巳"]}, {"year": 1993, "gz": "癸酉", "age": 3, "ss": "七杀", "cs": "长生", "relations": ["流年支酉与日支酉自刑", "流年支酉六合时支辰"]}, {"year": 1994, "gz": "甲戌", "age": 4, "ss": "正印", "cs": "养", "relations": ["流年支戌害日支酉", "流年支戌冲时支辰"]}, {"year": 1995, "gz": "乙亥", "age": 5, "ss": "偏印", "cs": "胎", "relations": ["流年干乙合年干庚", "流年支亥冲月支巳"]}, {"year": 1996, "gz": "丙子", "age": 6, "ss": "劫财", "cs": "绝", "relations": ["流年干丙合月干辛", "流年支子冲年支午"]}, {"year": 1997, "gz": "丁丑", "age": 7, "ss": "比肩", "cs": "墓", "relations": ["流年支丑害年支午", "流年支丑与月支巳、日支酉三合金局"]}, {"year": 1998, "gz": "戊寅", "age": 8, "ss": "伤官", "cs": "死", "relations": ["流年支寅无恩之刑月支巳", "流年支寅害月支巳"]}], "birth_year": 1990, "focus_year": 2026, "today_year": 2026, "notes": {"plain": "一句话：你的八字里「你自己」（丁火，像一盏灯火）和「钱财」两边都有力量，属于比较均衡的格局。\n\n为什么：你生在初夏，正是火最旺的时候，所以你本身不弱；同时盘里的金（代表钱财）也有两个、而且有根。古书《穷通宝鉴》说这个季节的丁火最需要木来引火、金来劈木，你的盘里木和金都有，正好合用。\n\n这几年：2019–2029 年这步大运，木在地支里得到支撑，对你有利，适合稳中求进；2026 年有「比劫争财」的味道，花钱和合伙上宜稳一点。\n\n这些都只是传统命理的倾向，不是定数。", "basis": "调候依《穷通宝鉴》四月丁火条（原文已核对）；旺衰按子平法看月令、通根、透干。以下为解读，非脚本计算结果，他派可能有不同取法。", "summary": "丁火生于巳月，丙火司令，年支午为丁禄，日主得令有根，不作弱论。年月庚辛两透，坐下酉金、辰酉相合，财星同样有力，大致是身财两停之局。《穷通宝鉴》论四月丁火「取甲引丁，必用庚噼甲」，忌癸水透出；此造时上甲木、年上庚金俱透，癸水只藏于辰中余气，与原文取法相合。合而论之，可以甲木为用、庚金为佐，忌水旺伤丁、湿甲。", "pillars": {"年": "庚午：庚金正财透出，午为丁火之禄。祖上一柱财与比劫同见。", "月": "辛巳：月令巳火为丁火帝旺之地，丙火司令；辛金偏财透出，以巳中庚金为根。", "日": "丁酉：坐下酉金为偏财，又为丁火长生、天乙贵人所在（查表）。酉与时支辰六合。", "时": "甲辰：甲木正印透出，是《穷通宝鉴》此月所重之神；但地支只有辰中中气乙木为根，甲木本身不旺。"}, "dayun": {"戊寅": "戊土伤官盖头，寅木为甲木之根，印星得地，用神有气。寅与月支巳相刑、相害，月令受扰，宜稳不宜急。", "丁丑": "丁火比肩助身；丑与巳酉凑成三合金局，财星成势。身与财都旺，重在取舍。"}, "years": {"2026": "丙午流年：丙火劫财合月干辛金，午火与年支午自刑。比劫争财之象，财务上宜守不宜冒进。只是倾向，不必过虑。"}, "advice": ["以甲木为用：木主东方、色青（《三命通会》《五行大义》），书桌、床头可参考东方，这只是传统取象，并非必需", "八宅命卦为艮卦西四命，与五行喜用是两套方法，两者冲突时以实际居住条件为先", "流年、大运只说倾向，事业、财务决定仍以现实情况为准"]}, "source": "bazi-mingli · 计算库 kanyu v2.3.0 · 生成于 2026-11-18 · 排盘与查表由 scripts/bazi.py 计算；批注为解读，非计算结果"}</script>
+<script>
+(function () {
+  "use strict";
+  var D = JSON.parse(document.getElementById("chart-data").textContent);
+  var N = D.pillars.length;
+  var notes = D.notes || {};
+  var reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  var SVGNS = "http://www.w3.org/2000/svg";
+  function h(tag, cls, text, parent) {
+    var n = document.createElement(tag);
+    if (cls) n.className = cls;
+    if (text != null) n.textContent = text;
+    if (parent) parent.appendChild(n);
+    return n;
+  }
+  function s(tag, attrs, text, parent) {
+    var n = document.createElementNS(SVGNS, tag);
+    for (var k in attrs) n.setAttribute(k, attrs[k]);
+    if (text != null) n.textContent = text;
+    if (parent) parent.appendChild(n);
+    return n;
+  }
+  function wxSpan(ch, wx, parent, cls) { return h("span", "wx-" + wx + (cls ? " " + cls : ""), ch, parent); }
+  var WX_OF = {};
+  "甲乙寅卯".split("").forEach(function (c) { WX_OF[c] = "木"; });
+  "丙丁巳午".split("").forEach(function (c) { WX_OF[c] = "火"; });
+  "戊己辰戌丑未".split("").forEach(function (c) { WX_OF[c] = "土"; });
+  "庚辛申酉".split("").forEach(function (c) { WX_OF[c] = "金"; });
+  "壬癸亥子".split("").forEach(function (c) { WX_OF[c] = "水"; });
+  function gzSpans(gz, parent) { wxSpan(gz[0], WX_OF[gz[0]], parent); wxSpan(gz[1], WX_OF[gz[1]], parent); }
+
+  /* ---- 白话：术语释义 ---- */
+  var G = D.glossary;
+  function explain(key) {
+    if (G.shishen[key]) return { title: key + "（" + G.shishen[key][0] + "）", text: G.shishen[key][1] + "。通行释义：" + G.shishen[key][2] + "。", basis: "子平通行释义 ⚖；十神是比喻，不是命定" };
+    if (key === "日主") return { title: "日主", text: G.terms["日主"][0], basis: G.terms["日主"][1] };
+    if (G.changsheng[key]) return { title: key + "（" + G.changsheng[key][0] + "）", text: "日主在这个地支上的状态。《三命提要》：「" + G.changsheng[key][1] + "」", basis: "✅《三命通会》卷二；原书言见生旺「未必便作吉论」，见休囚死绝「未必便作凶言」" };
+    if (G.wangxiang[key]) return { title: "「" + key + "」", text: G.wangxiang[key] + "。", basis: G.terms["旺相休囚死"][1] };
+    var t = G.terms[key] || G.terms[key.replace("（桃花）", "")];
+    if (t) return { title: key, text: t[0], basis: t[1] };
+    return null;
+  }
+  var tip = document.getElementById("tip");
+  tip.querySelector(".x").addEventListener("click", function () { tip.hidden = true; });
+  document.addEventListener("keydown", function (e) { if (e.key === "Escape") tip.hidden = true; });
+  function showTerm(key) {
+    var e = explain(key); if (!e) return;
+    tip.querySelector("h4").textContent = e.title;
+    tip.querySelector(".plain-text").textContent = e.text;
+    tip.querySelector(".basis").textContent = "出处 / 口径：" + e.basis;
+    tip.hidden = false;
+  }
+  function term(label, key, parent) {
+    var b = h("button", "term", label, parent);
+    b.type = "button"; b.setAttribute("aria-label", label + "：查看白话解释");
+    b.addEventListener("click", function (ev) { ev.stopPropagation(); showTerm(key || label); });
+    return b;
+  }
+  function qmark(key, parent) {
+    var b = h("button", "qmark", "?", parent);
+    b.type = "button"; b.setAttribute("aria-label", key + "是什么");
+    b.addEventListener("click", function () { showTerm(key); });
+    return b;
+  }
+  function relKinds(list) {   // 关系文字 → 涉及的术语
+    var ks = [];
+    list.forEach(function (r) {
+      var k = r.indexOf("三会") >= 0 ? "三会" : r.indexOf("三合") >= 0 ? "三合" : r.indexOf("冲") >= 0 ? "冲" :
+              r.indexOf("刑") >= 0 ? "刑" : r.indexOf("害") >= 0 ? "害" : r.indexOf("合") >= 0 ? "合" : null;
+      if (k && ks.indexOf(k) < 0) ks.push(k);
+    });
+    return ks;
+  }
+  function whyList(list, parent) {
+    var ks = relKinds(list); if (!ks.length) return;
+    var ul = h("ul", "why", null, parent);
+    ks.forEach(function (k) { var li = h("li", null, null, ul); term(k, k, li); li.appendChild(document.createTextNode("：" + G.terms[k][0])); });
+  }
+  function ssShort(ss) { return ss === "日主" ? "你自己" : (G.shishen[ss] ? G.shishen[ss][0] : ""); }
+
+  /* ---- 题签 ---- */
+  document.getElementById("title").textContent = D.gender + " · " + D.day_gan + D.day_wx + "日主";
+  var facts = document.getElementById("facts");
+  D.facts.forEach(function (f) { var li = h("li", null, null, facts); h("span", null, f[0] + "：", li); h("b", null, f[1], li); });
+  D.warnings.forEach(function (w) { h("p", "warn", "⚠ " + w, document.getElementById("warnings")); });
+  var tl = document.getElementById("time-lines");
+  D.time_lines.forEach(function (t) { h("p", null, t, tl); });
+
+  /* ---- 四柱 ---- */
+  var cols = document.getElementById("cols");
+  cols.style.setProperty("--n", N);
+  var glyphs = {};     // "年干" -> button
+  var colEls = [];
+  D.pillars.forEach(function (p, i) {
+    var c = h("div", "col" + (p.name === "日" ? " day" : ""), null, cols);
+    colEls.push(c);
+    h("div", "col-label", p.name + "柱", c);
+    var ssd = h("div", "ss", null, c); term(p.gan_ss, p.gan_ss, ssd);
+    h("div", "gloss", ssShort(p.gan_ss), c);
+    var g = h("button", "glyph wx-" + p.gan_wx, p.gan, c);
+    g.type = "button"; g.setAttribute("aria-label", p.name + "干" + p.gan + "，" + p.gan_ss);
+    var z = h("button", "glyph wx-" + p.zhi_wx, p.zhi, c);
+    z.type = "button"; z.setAttribute("aria-label", p.name + "支" + p.zhi);
+    g.addEventListener("click", function () { pick(i, "gan"); });
+    z.addEventListener("click", function () { pick(i, "zhi"); });
+    glyphs[p.name + "干"] = g; glyphs[p.name + "支"] = z;
+    var ul = h("ul", "hid", null, c);
+    p.hidden.forEach(function (x) {
+      var li = h("li", null, null, ul);
+      h("b", "wx-" + x.wx, x.gan, li); var sp = h("span", null, x.ss, li); sp.title = x.ss + "：" + G.shishen[x.ss][2];
+    });
+    var meta = h("div", "meta", null, c);
+    var t1 = h("span", "tag", null, meta); term(p.changsheng, p.changsheng, t1); h("span", "g", G.changsheng[p.changsheng][0], t1);
+    var t2 = h("span", "tag", null, meta); term(p.nayin, "纳音", t2);
+    if (D.pillars[2] && D.pillars[2].xunkong.indexOf(p.zhi) >= 0 && p.name !== "日") { var t3 = h("span", "tag kong", null, meta); term("空亡", "空亡", t3); }
+  });
+
+  /* ---- 合冲刑害弧线 ---- */
+  var KIND = { "合": "he", "六合": "he", "三合": "he", "三会": "he", "冲": "chong", "刑": "xing", "自刑": "xing", "害": "hai", "三合缺一": "que" };
+  var KIND_NAME = { he: "合", chong: "冲", xing: "刑", hai: "害", que: "三合缺一" };
+  var arcs = [];
+  function xOf(i) { return (i + 0.5) * 400 / N; }
+  function drawBand(svgId, rels, up) {
+    var svg = document.getElementById(svgId);
+    svg.textContent = "";
+    if (!rels.length) { svg.setAttribute("viewBox", "0 0 400 6"); return; }
+    var levels = [];
+    var items = rels.map(function (r) {
+      var a = Math.min.apply(null, r.at), b = Math.max.apply(null, r.at);
+      var lv = 0;
+      while ((levels[lv] || []).some(function (q) { return !(b < q[0] || a > q[1]) ; })) lv++;
+      (levels[lv] = levels[lv] || []).push([a, b]);
+      return { r: r, a: a, b: b, lv: lv };
+    });
+    var H = 22 + levels.length * 22;
+    svg.setAttribute("viewBox", "0 0 400 " + H);
+    items.forEach(function (it) {
+      var cls = KIND[it.r.kind] || "he";
+      var base = up ? H - 2 : 2, peak = up ? H - 18 - it.lv * 22 : 18 + it.lv * 22;
+      var d;
+      if (it.r.at.length >= 3 || it.a === it.b) {
+        d = "M" + xOf(it.a) + "," + base + " L" + xOf(it.a) + "," + peak + " L" + xOf(it.b) + "," + peak + " L" + xOf(it.b) + "," + base;
+        it.r.at.slice(1, -1).forEach(function (m) { d += " M" + xOf(m) + "," + peak + " L" + xOf(m) + "," + base; });
+      } else {
+        var x1 = xOf(it.a), x2 = xOf(it.b);
+        d = "M" + x1 + "," + base + " C" + x1 + "," + peak + " " + x2 + "," + peak + " " + x2 + "," + base;
+      }
+      var g = s("g", { tabindex: "0", role: "button", "aria-label": it.r.label }, null, svg);
+      var path = s("path", { d: d, "class": "arc " + cls }, null, g);
+      s("path", { d: d, "class": "hit" }, null, g);
+      var lx = (xOf(it.a) + xOf(it.b)) / 2, ly = up ? peak - 0 : peak;
+      var name = it.r.short;
+      s("text", { x: lx, y: ly + (up ? -7 : 7), "class": "lab-bg" }, name, g);
+      s("text", { x: lx, y: ly + (up ? -7 : 7) }, name, g);
+      var rec = { r: it.r, path: path, side: up ? "干" : "支" };
+      arcs.push(rec);
+      function act() { showRelation(rec); }
+      g.addEventListener("click", act);
+      g.addEventListener("keydown", function (e) { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); act(); } });
+    });
+  }
+  drawBand("band-gan", D.relations.gan, true);
+  drawBand("band-zhi", D.relations.zhi, false);
+  var lg = document.getElementById("legend");
+  [["木", "木"], ["火", "火"], ["土", "土"], ["金", "金"], ["水", "水"]].forEach(function (w) {
+    var sp = h("span", null, null, lg); h("span", "dot bg-" + w[0], null, sp); sp.appendChild(document.createTextNode(w[1]));
+  });
+  [["he", "合", "var(--gold)", ""], ["chong", "冲", "var(--cinnabar)", ""], ["xing", "刑·害", "var(--cinnabar)", "dashed"], ["que", "三合缺一", "var(--rule)", "dotted"]].forEach(function (k) {
+    var sp = h("span", null, null, lg); var i = h("i", null, null, sp);
+    i.style.borderTopColor = k[2]; if (k[3]) i.style.borderTopStyle = k[3];
+    sp.appendChild(document.createTextNode(k[1]));
+  });
+
+  /* ---- 批注 ---- */
+  var detail = document.getElementById("detail");
+  function clearSel() {
+    Object.keys(glyphs).forEach(function (k) { glyphs[k].classList.remove("sel", "lit"); });
+    arcs.forEach(function (a) { a.path.classList.remove("on"); });
+  }
+  function relList(pos) {
+    var side = pos.slice(1);
+    var rels = (side === "干" ? D.relations.gan : D.relations.zhi);
+    var idx = "年月日时".indexOf(pos[0]);
+    return rels.filter(function (r) { return r.at.indexOf(idx) >= 0; });
+  }
+  function pillarNote(box, name) {
+    var note = (notes.pillars || {})[name];
+    h("p", note ? "note" : "note empty", note || "此柱未作批注。点其他干支查看，或在对话中继续追问。", box);
+  }
+  function item(ul, key, label, value) {
+    var li = h("li", null, null, ul); term(label, key, li); li.appendChild(document.createTextNode("：" + value)); return li;
+  }
+  function pick(i, side) {
+    clearSel();
+    var p = D.pillars[i], pos = p.name + (side === "gan" ? "干" : "支");
+    glyphs[pos].classList.add("sel");
+    detail.textContent = "";
+    var ul;
+    if (side === "gan") {
+      var t = h("h2", null, null, detail);
+      t.appendChild(document.createTextNode(pos + " "));
+      wxSpan(p.gan, p.gan_wx, t);
+      var e = p.name === "日" ? null : G.shishen[p.gan_ss];
+      h("p", "sub", p.gan_yy + p.gan_wx + " · " + (p.name === "日" ? "日主：代表你自己" : p.gan_ss + "（" + e[0] + "）：" + e[1]), detail);
+      h("p", "note", p.name === "日" ? "《三命通会》：" + p.gan + "「" + G.gan_xiang[p.gan] + "」。" : "通行释义：" + e[2] + "。", detail);
+      ul = h("ul", "facts-list", null, detail);
+      item(ul, "通根", "通根", p.roots.length ? "在" + p.roots.map(function (r) { return r.pillar + "支" + r.zhi + "（" + r.qi + r.hidden + "）"; }).join("、") + "有根，站得住"
+                                              : "四个地支里都没有同五行的字，无根");
+      var from = [];
+      D.pillars.forEach(function (q) { q.tou.forEach(function (t) { if (t.at.indexOf(p.name) >= 0) from.push(q.name + "支" + q.zhi + t.qi + t.hidden); }); });
+      if (from.length) item(ul, "透干", "透干", "这个字从" + from.join("、") + "透出");
+      p.roots.forEach(function (r) { glyphs[r.pillar + "支"].classList.add("lit"); });
+    } else {
+      var t2 = h("h2", null, null, detail);
+      t2.appendChild(document.createTextNode(pos + " "));
+      wxSpan(p.zhi, p.zhi_wx, t2);
+      h("p", "sub", p.zhi_yy + p.zhi_wx + " · 日主" + D.day_gan + "在这里是「" + p.changsheng + "」（" + G.changsheng[p.changsheng][0] + "）", detail);
+      ul = h("ul", "facts-list", null, detail);
+      item(ul, "藏干", "藏干", p.hidden.map(function (x) { return x.gan + "（" + x.qi + "·" + x.ss + "，" + G.shishen[x.ss][0] + "）"; }).join("　"));
+      if (p.tou.length) {
+        item(ul, "透干", "透干", p.tou.map(function (t) { return t.hidden + "透到" + t.at.map(function (a) { return a + "干"; }).join("、"); }).join("；"));
+        p.tou.forEach(function (t) { t.at.forEach(function (a) { glyphs[a + "干"].classList.add("lit"); }); });
+      }
+      if (p.name === "月") item(ul, "月令", "月令", "出生在" + D.wangxiang.season + "，" + D.wangxiang.wang + "当令；" + D.siling.jie + "后第" + D.siling.day_n + "日，" + D.siling.ruler + "司令");
+      if (p.shensha.length) { var li = h("li", null, "神煞（查表）：", ul); p.shensha.forEach(function (n, k) { if (k) li.appendChild(document.createTextNode("、")); term(n, n, li); }); }
+      if (D.pillars[2] && D.pillars[2].xunkong.indexOf(p.zhi) >= 0 && p.name !== "日") item(ul, "空亡", "空亡", "落在日柱的旬空（" + D.pillars[2].xunkong + "）里");
+    }
+    var rs = relList(pos);
+    if (rs.length) { h("li", null, "和其他字的关系：" + rs.map(function (r) { return r.label; }).join("；"), ul); whyList(rs.map(function (r) { return r.label; }), detail); }
+    rs.forEach(function (r) {
+      arcs.forEach(function (a) { if (a.r === r) a.path.classList.add("on"); });
+      r.at.forEach(function (k) { var g = glyphs["年月日时"[k] + pos.slice(1)]; if (g && g !== glyphs[pos]) g.classList.add("lit"); });
+    });
+    pillarNote(detail, p.name);
+  }
+  function showRelation(rec) {
+    clearSel();
+    rec.path.classList.add("on");
+    rec.r.at.forEach(function (k) { glyphs["年月日时"[k] + rec.side].classList.add("lit"); });
+    detail.textContent = "";
+    h("h2", null, KIND_NAME[KIND[rec.r.kind]] === "三合缺一" ? "三合缺一" : rec.r.kind, detail);
+    h("p", "sub", rec.r.label, detail);
+    var key = { "六合": "合", "合": "合", "自刑": "刑" }[rec.r.kind] || rec.r.kind;
+    var e = G.terms[key];
+    h("p", "note", e[0], detail);
+    h("p", "sub", "出处 / 口径：" + e[1], detail);
+  }
+
+  /* ---- 显示切换 ---- */
+  Array.prototype.forEach.call(document.querySelectorAll(".chip[data-toggle]"), function (b) {
+    b.addEventListener("click", function () {
+      var on = b.getAttribute("aria-pressed") !== "true";
+      b.setAttribute("aria-pressed", String(on));
+      var k = b.getAttribute("data-toggle");
+      if (k === "rel") ["band-gan", "band-zhi"].forEach(function (id) { document.getElementById(id).classList.toggle("off", !on); });
+      if (k === "hid") Array.prototype.forEach.call(document.querySelectorAll(".hid"), function (u) { u.classList.toggle("off", !on); });
+      if (k === "plain") document.body.classList.toggle("plain-off", !on);
+    });
+  });
+
+  /* ---- 排盘：四柱依次翻开 ---- */
+  var timers = [];
+  function cast() {
+    timers.forEach(clearTimeout); timers = [];
+    if (reduce) return;
+    colEls.forEach(function (c) { c.classList.add("flip"); });
+    ["band-gan", "band-zhi"].forEach(function (id) { document.getElementById(id).style.opacity = 0; });
+    colEls.forEach(function (c, i) { timers.push(setTimeout(function () { c.classList.remove("flip"); }, 250 + i * 380)); });
+    timers.push(setTimeout(function () {
+      ["band-gan", "band-zhi"].forEach(function (id) { var e = document.getElementById(id); e.style.transition = "opacity .5s"; e.style.opacity = 1; });
+    }, 250 + N * 380 + 200));
+  }
+  document.getElementById("cast").addEventListener("click", cast);
+
+  /* ---- 大运流年 ---- */
+  var track = document.getElementById("track"), yearsBox = document.getElementById("years");
+  var slider = document.getElementById("slider"), out = document.getElementById("slider-out");
+  var spans = [];   // {label, gz|null, years: [...] , card}
+  if (D.pre_years.length) spans.push({ pre: true, gz: null, years: D.pre_years, start: D.birth_year + "", age: "0岁" });
+  D.dayun.forEach(function (d) { spans.push({ pre: false, gz: d.gz, years: d.years, d: d }); });
+  var lastYear = spans[spans.length - 1].years.slice(-1)[0].year;
+  slider.min = D.birth_year; slider.max = lastYear; slider.step = 1;
+  spans.forEach(function (sp, k) {
+    var b = h("button", "yun-card" + (sp.pre ? " pre" : ""), null, track);
+    b.type = "button";
+    var gz = h("span", "gz", null, b);
+    if (sp.pre) gz.textContent = "起运前"; else gzSpans(sp.gz, gz);
+    h("span", "y", sp.pre ? sp.start + "–" + (sp.years.slice(-1)[0].year) : sp.d.start_year + " · " + sp.d.age_short, b);
+    if (!sp.pre) { h("span", "y", sp.d.gan_ss + " / " + sp.d.zhi_ss, b); h("span", "gloss", ssShort(sp.d.gan_ss) + " / " + ssShort(sp.d.zhi_ss), b); }
+    if (sp.years.some(function (y) { return y.year === D.today_year; })) h("span", "now", "今", b);
+    b.addEventListener("click", function () {
+      var y = sp.years.some(function (x) { return x.year === cur; }) ? cur : (sp.years.some(function (x) { return x.year === D.today_year; }) ? D.today_year : sp.years[0].year);
+      setYear(y);
+    });
+    sp.card = b;
+  });
+  var cur = null;
+  function spanOf(y) { for (var k = 0; k < spans.length; k++) if (spans[k].years.some(function (x) { return x.year === y; })) return spans[k]; return spans[0]; }
+  function setYear(y) {
+    y = Math.max(D.birth_year, Math.min(lastYear, y));
+    cur = y; slider.value = y;
+    var sp = spanOf(y), yr = sp.years.filter(function (x) { return x.year === y; })[0];
+    spans.forEach(function (q) { q.card.setAttribute("aria-pressed", String(q === sp)); });
+    out.textContent = y + " " + yr.gz + " · " + yr.age + "岁";
+    yearsBox.textContent = "";
+    sp.years.forEach(function (x) {
+      var b = h("button", "year" + (x.relations.length ? " has-rel" : "") + ((notes.years || {})[x.year] ? " has-note" : ""), null, yearsBox);
+      b.type = "button"; b.setAttribute("aria-pressed", String(x.year === y));
+      b.setAttribute("aria-label", x.year + "年" + x.gz);
+      gzSpans(x.gz, h("span", "gz", null, b));
+      h("span", "y", x.year + (x.year === D.today_year ? " 今" : ""), b);
+      b.addEventListener("click", function () { setYear(x.year); });
+    });
+    var dd = document.getElementById("dayun-detail"); dd.textContent = "";
+    if (sp.pre) {
+      h("h3", null, "起运前", dd);
+      h("p", "sub", "出生到第一次交运之前，还没有进入大运。", dd);
+    } else {
+      var t = h("h3", null, null, dd); t.appendChild(document.createTextNode("大运 ")); gzSpans(sp.gz, t);
+      h("p", "sub", sp.d.start + " 起这十年 · " + sp.d.age + "开始", dd);
+      var pl = h("p", "note", null, dd);
+      pl.appendChild(document.createTextNode("天干" + sp.gz[0] + "是你的")); term(sp.d.gan_ss, sp.d.gan_ss, pl);
+      pl.appendChild(document.createTextNode("（" + G.shishen[sp.d.gan_ss][2] + "），地支" + sp.gz[1] + "是")); term(sp.d.zhi_ss, sp.d.zhi_ss, pl);
+      pl.appendChild(document.createTextNode("（" + G.shishen[sp.d.zhi_ss][0] + "）；日主在" + sp.gz[1] + "为「")); term(sp.d.cs, sp.d.cs, pl);
+      pl.appendChild(document.createTextNode("」（" + G.changsheng[sp.d.cs][0] + "）。"));
+      var ul = h("ul", "facts-list", null, dd);
+      (sp.d.relations.length ? sp.d.relations : ["与原局无合冲刑害"]).forEach(function (r) { h("li", null, r, ul); });
+      whyList(sp.d.relations, dd);
+      var n1 = (notes.dayun || {})[sp.gz];
+      h("p", n1 ? "note" : "note empty", n1 || "此步大运未作批注。", dd);
+    }
+    var yd = document.getElementById("year-detail"); yd.textContent = "";
+    var t2 = h("h3", null, null, yd); t2.appendChild(document.createTextNode(y + " 流年 ")); gzSpans(yr.gz, t2);
+    h("p", "sub", yr.age + "周岁", yd);
+    var py = h("p", "note", null, yd);
+    py.appendChild(document.createTextNode("这一年的天干" + yr.gz[0] + "是你的")); term(yr.ss, yr.ss, py);
+    py.appendChild(document.createTextNode("（" + G.shishen[yr.ss][2] + "）；日主在" + yr.gz[1] + "为「")); term(yr.cs, yr.cs, py);
+    py.appendChild(document.createTextNode("」（" + G.changsheng[yr.cs][0] + "）。"));
+    var ul2 = h("ul", "facts-list", null, yd);
+    (yr.relations.length ? yr.relations : ["与原局无合冲刑害"]).forEach(function (r) { h("li", null, r, ul2); });
+    whyList(yr.relations, yd);
+    var n2 = (notes.years || {})[y];
+    h("p", n2 ? "note" : "note empty", n2 || "此年未作批注。", yd);
+  }
+  slider.addEventListener("input", function () { setYear(parseInt(slider.value, 10)); });
+  setYear(D.focus_year >= D.birth_year && D.focus_year <= lastYear ? D.focus_year : D.birth_year);
+  (function () { var c = spanOf(cur).card; if (c && c.scrollIntoView && track.scrollWidth > track.clientWidth) track.scrollLeft = c.offsetLeft - track.offsetLeft - 8; })();
+
+  qmark("大运", document.getElementById("yun-title"));
+  qmark("调候", document.getElementById("th-title"));
+
+  /* ---- 调候 ---- */
+  var th = document.getElementById("tiaohou");
+  h("p", "sub", D.tiaohou.section + " · " + D.tiaohou.month + D.day_gan + D.day_wx + "（月令按节气，" + D.month_zhi + "月）", th);
+  D.tiaohou.passages.forEach(function (q) {
+    var bq = h("blockquote", null, null, th);
+    h("span", "k", q.kind, bq); bq.appendChild(document.createTextNode(q.text));
+  });
+  var src = h("p", "src", null, th);
+  src.appendChild(document.createTextNode("维基文库《窮通寶鑑》原文，按日干与月令检出，未作概括。专论＝本月专段，合论＝两月共段，季论＝一季总论。"));
+
+  /* ---- 月令、五行、神煞 ---- */
+  var sl = document.getElementById("siling");
+  var slh = h("h3", null, "月令 " + D.month_zhi + " · " + D.siling.ruler + "司令", sl); qmark("司令", slh);
+  h("p", "note", "生于" + D.wangxiang.season + "，" + D.wangxiang.wang + "当令（这个季节最强）。各五行此时：" +
+    "木火土金水".split("").map(function (k) { return k + D.wangxiang.states[k]; }).join(" ") + "。", sl);
+  h("p", "sub", "交" + D.siling.jie + "于 " + D.siling.jie_time + "（北京时间），生于其后第 " + D.siling.day_n + " 日。《三命通会》人元司事：", sl);
+  var row = h("div", "siling", null, sl);
+  D.siling.table.forEach(function (t) { h("div", t.name === D.siling.ruler ? "on" : "", t.name + " " + t.days + "日", row); });
+
+  var wx = document.getElementById("wx");
+  qmark("五行个数", h("h3", null, "五行个数", wx));
+  h("p", "sub", "只是字数统计，不代表强弱；某个五行是 0，也不等于需要「补」。", wx);
+  var grid = h("div", "wx-bars", null, wx);
+  h("span", "h", "", grid); h("span", "h", "天干地支（" + N * 2 + "字）", grid); h("span", "h", "藏干", grid);
+  var maxv = 0; "木火土金水".split("").forEach(function (k) { maxv = Math.max(maxv, D.wuxing.count[k], D.wuxing.hidden[k]); });
+  "木火土金水".split("").forEach(function (k) {
+    h("span", "name wx-" + k, k, grid);
+    [D.wuxing.count[k], D.wuxing.hidden[k]].forEach(function (v) {
+      var bar = h("span", "bar", null, grid);
+      var f = h("span", "fill bg-" + k, null, bar); f.style.width = (v ? (v / maxv * 100) : 0) * 0.8 + "%";
+      if (!v) f.style.opacity = .25;
+      h("span", "n", v, bar);
+    });
+  });
+
+  var ss = document.getElementById("shensha");
+  var ssh = h("h3", null, "神煞（查表）", ss);
+  if (!D.shensha.length) h("p", "sub", "禄、羊刃、天乙贵人、驿马、咸池、空亡均未见于柱中。", ss);
+  else {
+    var ul3 = h("ul", "ss-list", null, ss);
+    D.shensha.forEach(function (x) {
+      var li = h("li", null, null, ul3); term(x.name, x.name, h("b", null, null, li));
+      li.appendChild(document.createTextNode("：依" + x.basis + "查得" + x.targets + "，见于" + x.hits.join("、") + "。"));
+      var ex = explain(x.name); if (ex) h("span", "q", ex.text, li).style.color = "var(--ink-soft)";
+    });
+  }
+  h("p", "src", "据《三命通会》查表。原书亦言见生旺者「未必便作吉论」、休囚死绝「未必便作凶言」，神煞不单独定吉凶。", ss);
+
+  /* ---- 盘断 ---- */
+  var ov = document.getElementById("overall");
+  h("h3", null, "盘断（专业版）", ov);
+  if (notes.basis) h("p", "sub", "依据：" + notes.basis, ov);
+  if (notes.summary) h("p", "note", notes.summary, ov);
+  if (notes.advice && notes.advice.length) { var ua = h("ul", "advice", null, ov); notes.advice.forEach(function (a) { h("li", null, a, ua); }); }
+  if (!notes.summary && !(notes.advice || []).length) h("p", "note empty", "旺衰、格局、用神的论断见对话。", ov);
+  document.getElementById("source").textContent = D.source;
+
+  /* ---- 一眼看懂 ---- */
+  var lead = document.getElementById("plain-lead");
+  if (notes.plain) notes.plain.split(/\n+/).forEach(function (t) { if (t.trim()) h("p", null, t, lead); });
+  else { lead.textContent = "下面是排盘得出的几条事实。强弱、喜用的判断请看对话中的解读。"; lead.classList.add("empty"); }
+  var pg = document.getElementById("plain-grid");
+  function card(title) { var c = h("div", "pcard", null, pg); h("h3", null, title, c); return c; }
+  var c1 = card("代表你的字");
+  wxSpan(D.day_gan, D.day_wx, c1, "big");
+  var p1 = h("p", null, null, c1); term("日主", "日主", p1);
+  p1.appendChild(document.createTextNode("是" + D.day_gan + D.day_wx + "（" + D.day_yy + D.day_wx + "）。"));
+  h("p", "q", "《三命通会》：" + D.day_gan + D.day_wx + "「" + G.gan_xiang[D.day_gan] + "」。", c1);
+  h("p", "hint", "八字以出生那天的天干代表你自己，其余七个字都是围绕它的环境。", c1);
+
+  var w = D.wangxiang, c2 = card("出生的季节");
+  var p2 = h("p", null, "生在" + w.season + "（" + D.month_zhi + "月，" + D.siling.jie + "后第 " + D.siling.day_n + " 日），这时" + w.wang + "最旺。你的" + D.day_wx + "此时为", c2);
+  term("「" + w.day + "」", w.day, p2); p2.appendChild(document.createTextNode("：" + G.wangxiang[w.day] + "。"));
+  h("p", "hint", "季节只是看强弱的第一步，还要看地支里有没有根、周围有没有帮手。", c2);
+
+  var c3 = card("五行个数");
+  var zero = "木火土金水".split("").filter(function (k) { return !D.wuxing.count[k]; });
+  h("p", null, "木火土金水".split("").map(function (k) { return k + D.wuxing.count[k]; }).join("、") + "（天干地支共 " + N * 2 + " 字）。", c3);
+  h("p", "hint", zero.length ? "没有" + zero.join("、") + "：这只是字面上没有，不等于「缺什么就要补什么」，要看整张盘需要什么。" : "五行都有出现。个数只是字数，不代表强弱。", c3);
+
+  var fy = D.focus_year, fsp = null, fyr = null;
+  spans.forEach(function (q) { q.years.forEach(function (x) { if (x.year === fy) { fsp = q; fyr = x; } }); });
+  if (fyr) {
+    var c4 = card(fy === D.today_year ? "现在这几年" : fy + " 年前后");
+    var p4 = h("p", null, null, c4);
+    if (fsp.pre) p4.appendChild(document.createTextNode("还没有交运（" + D.dayun[0].start + " 起第一步大运）。"));
+    else {
+      p4.appendChild(document.createTextNode(fsp.d.start_year + " 起走" + fsp.gz + "大运，天干是"));
+      term(fsp.d.gan_ss, fsp.d.gan_ss, p4); p4.appendChild(document.createTextNode("（" + G.shishen[fsp.d.gan_ss][2] + "）。"));
+    }
+    var p5 = h("p", null, fy + " 年是" + fyr.gz + "年，天干是", c4);
+    term(fyr.ss, fyr.ss, p5); p5.appendChild(document.createTextNode("（" + G.shishen[fyr.ss][2] + "）"));
+    p5.appendChild(document.createTextNode(fyr.relations.length ? "，与你的盘有 " + fyr.relations.length + " 处关系。" : "，与你的盘没有合冲刑害。"));
+    h("p", "hint", "十神是比喻，说的是倾向，不是定数。点下面「大运流年」里的年份看细节。", c4);
+  }
+
+  /* ---- 术语表 ---- */
+  var gl = document.getElementById("glossary-list");
+  function gsec(title) { h("h4", null, title, gl); }
+  function gitem(k, text, basis) { h("dt", null, k, gl); var dd = h("dd", null, text, gl); if (basis) h("div", "basis", basis, dd); }
+  gsec("常用术语");
+  Object.keys(G.terms).forEach(function (k) { gitem(k, G.terms[k][0], G.terms[k][1]); });
+  gsec("十神（子平通行释义 ⚖）");
+  Object.keys(G.shishen).forEach(function (k) { var x = G.shishen[k]; gitem(k + " · " + x[0], x[1] + "。" + x[2] + "。"); });
+  gsec("十二长生（✅《三命通会》引《三命提要》）");
+  Object.keys(G.changsheng).forEach(function (k) { var x = G.changsheng[k]; gitem(k + " · " + x[0], "「" + x[1] + "」"); });
+  gsec("旺相休囚死（✅《三命通会》）");
+  Object.keys(G.wangxiang).forEach(function (k) { gitem(k, G.wangxiang[k]); });
+
+  pick(2, "gan");
+  if (!reduce) cast();
+})();
+</script>
+</body>
+</html>

@@ -1,11 +1,12 @@
 ---
 name: fengshui-master
 description: |
-  传统堪舆风水顾问。三元玄空飞星、八宅明镜、形势峦头，兼及择日与八字。
+  传统堪舆风水顾问。三元玄空飞星、八宅明镜、形势峦头，兼及择日。
   排盘、命卦、游年、流年、历法、择日等计算均由内置脚本确定性完成，模型负责问询与解读。
   触发词：「风水」「堪舆」「看房」「看宅」「择日」「八宅」「飞星」「旺位」「煞气」「化解」
          「朝向」「摆放」「布局」「命卦」「流年」「山水」「龙穴砂水」等。
-  适用：阳宅分析、家居办公布局、择日择时、八字配合风水、风水理论问答。
+  适用：阳宅分析、家居办公布局、择日择时、按喜用五行配合风水、风水理论问答。
+  排八字、论命用独立的 bazi-mingli skill。
 metadata:
   version: "2.3.0"
   author: voidforall
@@ -29,9 +30,8 @@ metadata:
 | 流年/流月紫白、太岁、岁破、三煞、五黄方 | `python3 scripts/fengshui.py liunian --year 2026 [--span N]` |
 | 某日四柱、建除、黄黑道、神煞、宜忌、冲煞 | `python3 scripts/fengshui.py day --date YYYY-MM-DD` |
 | 择日候选（排除月破/正四废/冲当事人/黄历明忌；岁破日、受死只标注） | `python3 scripts/fengshui.py zeri --event 入宅 --start ... --end ... --birth-year 1988` |
-| 八字四柱、十神、藏干、大运 | `python3 scripts/fengshui.py bazi --birth "YYYY-MM-DD HH:MM" --gender m/f [--longitude 116.4]` |
 
-- 路径相对于本 skill 目录；`day` / `zeri` / `bazi` 需要 `pip install lunar_python`，若未安装，先提示用户安装（或代为安装），**不要**改为凭记忆推算日干支、节气、建除。
+- 路径相对于本 skill 目录；`day` / `zeri` 需要 `pip install lunar_python`，若未安装，先提示用户安装（或代为安装），**不要**改为凭记忆推算日干支、节气、建除。
 - 方向优先用罗盘度数（`--facing 187`），脚本会判断所在山、兼向度数、空亡；只有用户说「大概朝南」时才用山名，并说明精度有限。
 - 默认输出为可读文本；需要精确核对数字时可加 `--json`。
 - 解读必须以脚本输出为准；若你的「印象」与脚本结果不同，以脚本为准。
@@ -73,13 +73,15 @@ metadata:
 
 **城市五行地图**（如「给伦敦做金木水火土地图」）使用仓库独立 skill [city-wuxing-map](skills/city-wuxing-map/SKILL.md)，不以单宅飞星盘代替真实地理地图。若只安装了本主顾问 skill、该路径不存在，提示安装 `npx skills add voidforall/fengshui.skill --full-depth --skill city-wuxing-map`。
 
+**八字**（排八字、五行缺什么、喜用神、大运流年、桃花贵人等）使用仓库独立 skill [bazi-mingli](skills/bazi-mingli/SKILL.md)，本 skill 不再排八字。未安装时提示 `npx skills add voidforall/fengshui.skill --full-depth --skill bazi-mingli`。
+**按八字配合风水**时，喜用五行取自 bazi-mingli 的论断（或用户已知的喜用）；方位、五色查 `references/wuxing-ganzhi.md`，个人吉方用 `mingua` 命卦，两者是不同体系，冲突时说明并以实际居住条件为先。
+
 判断用户问的是哪一类，**先读表中列出的文件，再作答**。流程文档写明了问询顺序、调用哪些命令、输出格式；规则资料是查对用的速查表。
 
 | 用户问的 | 先读流程 | 配合规则资料 |
 |---------|---------|------------|
 | 房子、办公室的布局、方位、摆放、坐向、旺衰 | `references/playbook-yangzhai.md` | `references/feixing.md`、`references/sources.md` |
 | 搬家、入宅、开业、动土装修、嫁娶、安葬选日子 | `references/playbook-zeri.md` | `references/zeri.md`、`references/sources.md` |
-| 八字、日主强弱、用神、八字配合风水 | `references/playbook-bazi.md` | `references/wuxing-ganzhi.md`、`references/sources.md` |
 | 风水、命理原理与术语 | 按话题读上面对应的流程文档 | `references/sources.md`；涉及具体盘仍须调脚本举例 |
 | 说得模糊（如「我家运不好」） | 先按下文「诊断问询」问清楚，再分流 | — |
 

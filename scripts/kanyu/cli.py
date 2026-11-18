@@ -9,7 +9,7 @@ import json
 import sys
 
 from . import __version__, pages, render
-from .almanac import LunarUnavailable, day_info, has_time, lichun_year, month_index, parse_date
+from .almanac import LunarUnavailable, day_info, has_time, lichun_year, lunar_to_solar, month_index, parse_date
 from .bazhai import east_west, mingua_of, younian
 from .bazi import bazi
 from .core import mountain_palace, opposite, parse_direction, yun_of_year, yun_range
@@ -28,9 +28,10 @@ DESCRIPTION = """堪舆确定性计算工具 —— 供 fengshui-master skill �
   liunian  流年 / 流月紫白飞星
   day      某日历法信息：四柱、节气、建除、黄黑道、神煞、宜忌
   zeri     在日期范围内按事项筛选择日候选
-  bazi     八字四柱、五行、十神、大运
 
-飞星 / 八宅 / 命卦只依赖标准库；历法相关命令（day / zeri / bazi，
+八字已移至独立的 bazi-mingli skill（skills/bazi-mingli/scripts/bazi.py）。
+
+飞星 / 八宅 / 命卦只依赖标准库；历法相关命令（day / zeri，
 以及按立春精确分年）需要 `pip install lunar_python`。
 加 --json 输出结构化数据。
 """
@@ -189,13 +190,52 @@ def cmd_zeri(a) -> Output:
 
 
 def cmd_bazi(a) -> Output:
-    b = bazi(parse_date(a.birth), a.gender, a.longitude)
-    return Output(render.bazi(b), _jsonable(b))
+    if len(a.birth.strip()) == 4:
+        raise UsageError("八字至少需要出生年月日：--birth YYYY-MM-DD（时辰不详时只给日期）")
+    d = parse_date(a.birth)
+    if a.leap and not a.lunar:
+        raise UsageError("--leap 需与 --lunar 一起使用")
+    if a.lunar:
+        d = lunar_to_solar(d, a.leap)
+    b = bazi(d, a.gender, a.longitude, tz=a.tz, time_known=has_time(a.birth),
+             zi=a.zi, focus_year=a.year or today().year)
+    text, data = render.bazi(b), _jsonable(b)
+    if a.lunar:
+        note = f"农历输入：{a.birth.strip()[:10]}{'（闰月）' if a.leap else ''} → 公历 {d:%Y-%m-%d}"
+        text = note + "\n" + text
+        data["lunar_input"] = note
+    if a.html is not None:
+        notes = pages.load_bazi_notes(a.notes)
+        page = pages.render("bazi.html", pages.bazi_title(b), pages.bazi_data(b, notes=notes))
+        path = pages.write_page(a.html or pages.bazi_default_name(b), page)
+        text += f"\n\n交互命盘已生成：{path}"
+        data["html"] = path
+    elif a.notes:
+        raise UsageError("--notes 需与 --html 一起使用")
+    return Output(text, data)
 
 
 # --- 参数 --------------------------------------------------------------------------
 
-def build_parser() -> argparse.ArgumentParser:
+def add_bazi_args(s: argparse.ArgumentParser) -> None:
+    s.add_argument("--birth", required=True,
+                   help="出生地钟表时间 'YYYY-MM-DD HH:MM'；时辰不详只给 YYYY-MM-DD（排三柱）")
+    s.add_argument("--gender", required=True)
+    s.add_argument("--longitude", type=float, help="出生地经度（东经为正），给出则按真太阳时排时柱")
+    s.add_argument("--lunar", action="store_true", help="--birth 为农历日期（月、日用数字，如 1990-04-26 08:30）")
+    s.add_argument("--leap", action="store_true", help="农历闰月（与 --lunar 一起用）")
+    s.add_argument("--tz", default="Asia/Shanghai",
+                   help="出生地时区（IANA 名或 UTC+8），默认 Asia/Shanghai；据此自动扣夏令时")
+    s.add_argument("--zi", choices=["next", "same"], default="next",
+                   help="子时口径：next=23:00 起换日（默认）；same=晚子时日柱仍按当日")
+    s.add_argument("--year", type=int, help="重点看的流年（默认今年）")
+    s.add_argument("--html", nargs="?", const="", metavar="PATH",
+                   help="同时生成可交互的命盘 HTML（不给路径则写到当前目录）")
+    s.add_argument("--notes", metavar="JSON",
+                   help="写入命盘的批注：{summary, basis, pillars:{年月日时:文字}, dayun:{干支:文字}, years:{年份:文字}, advice:[...]}")
+
+
+def build_parser(include_bazi: bool = True) -> argparse.ArgumentParser:
     common = argparse.ArgumentParser(add_help=False)
     common.add_argument("--json", action="store_true", help="输出结构化 JSON")
 
@@ -245,22 +285,54 @@ def build_parser() -> argparse.ArgumentParser:
     s.add_argument("--birth-year", type=int, action="append", help="当事人出生年（可多次）")
     s.add_argument("--top", type=int, default=8)
 
-    s = add("bazi", cmd_bazi, "八字排盘")
-    s.add_argument("--birth", required=True, help="'YYYY-MM-DD HH:MM'（北京时间）")
-    s.add_argument("--gender", required=True)
-    s.add_argument("--longitude", type=float, help="出生地经度，给出则换算真太阳时")
+    if include_bazi:
+        add_bazi_args(add("bazi", cmd_bazi, "八字排盘（已移至 bazi-mingli skill）"))
     return p
 
 
-def run(argv=None) -> tuple[Output, argparse.Namespace]:
+BAZI_DESCRIPTION = """八字确定性计算工具 —— 供 bazi-mingli skill 调用。
+
+排盘、查表、历法由脚本完成：四柱、藏干十神、十二长生、月令司令、通根透干、合冲刑害、
+查表神煞、《穷通宝鉴》调候原文、起运与大运流年；可同时生成交互命盘（--html）。
+不判定日主旺衰、格局、用神。需要 `pip install lunar_python`。加 --json 输出结构化数据。
+"""
+
+BAZI_MOVED = ("八字已移至独立的 bazi-mingli skill。安装：npx skills add voidforall/fengshui.skill --full-depth "
+              "--skill bazi-mingli；在本仓库中运行 python3 skills/bazi-mingli/scripts/bazi.py --birth ... --gender ...")
+
+
+def build_bazi_parser() -> argparse.ArgumentParser:
+    p = argparse.ArgumentParser(prog="bazi.py", description=BAZI_DESCRIPTION,
+                                formatter_class=argparse.RawDescriptionHelpFormatter)
+    p.add_argument("--version", action="version", version=f"%(prog)s（kanyu {__version__}）")
+    p.add_argument("--json", action="store_true", help="输出结构化 JSON")
+    add_bazi_args(p)
+    p.set_defaults(func=cmd_bazi)
+    return p
+
+
+def run(argv=None, parser: argparse.ArgumentParser | None = None) -> tuple[Output, argparse.Namespace]:
     """解析并执行，返回 (Output, args)；出错抛异常（供测试调用）。"""
-    a = build_parser().parse_args(argv)
+    a = (parser or build_parser()).parse_args(argv)
     return a.func(a), a
 
 
+def bazi_main(argv=None) -> None:
+    """bazi-mingli skill 的入口：python3 scripts/bazi.py --birth ... --gender ..."""
+    _execute(argv, build_bazi_parser())
+
+
 def main(argv=None) -> None:
+    """fengshui-master 的入口：python3 scripts/fengshui.py <子命令> ..."""
+    argv = sys.argv[1:] if argv is None else argv
+    if argv[:1] == ["bazi"]:
+        sys.exit(BAZI_MOVED)
+    _execute(argv, build_parser(include_bazi=False))
+
+
+def _execute(argv, parser) -> None:
     try:
-        out, a = run(argv)
+        out, a = run(argv, parser)
     except LunarUnavailable as e:
         sys.exit(str(e))
     except UsageError as e:
