@@ -91,7 +91,7 @@ class TestCli(unittest.TestCase):
         self.assertTrue(demo.startswith(head), "示例页面已过期：重新运行 docs/examples/README 中的命令")
 
 
-BAZI_NOTES = {"summary": "总断 </script><b>x</b>", "basis": "依《穷通宝鉴》", "pillars": {"日": "日柱批注"},
+BAZI_NOTES = {"plain": "白话总结", "summary": "总断 </script><b>x</b>", "basis": "依《穷通宝鉴》", "pillars": {"日": "日柱批注"},
               "dayun": {"戊寅": "大运批注"}, "years": {"2026": "流年批注"}, "advice": ["建议"]}
 
 
@@ -127,6 +127,21 @@ class TestBaziPage(unittest.TestCase):
         self.assertEqual(rel["日支酉、时支辰 六合"]["short"], "六合")
         self.assertEqual(d["tiaohou"]["passages"], self.b.tiaohou["passages"])
 
+    def test_plain_language_data(self):
+        d = pages.extract_data(self.page())
+        self.assertEqual(d["wangxiang"]["day"], "旺")              # 丁火生于巳月（夏），火旺
+        g = d["glossary"]
+        for p in d["pillars"]:                                      # 页面上出现的十神、长生都有白话
+            self.assertTrue(p["gan_ss"] == "日主" or p["gan_ss"] in g["shishen"])
+            self.assertIn(p["changsheng"], g["changsheng"])
+            for x in p["hidden"]:
+                self.assertIn(x["ss"], g["shishen"])
+        for x in d["shensha"]:
+            self.assertIn(x["name"].replace("（桃花）", ""), g["terms"])
+        for k in ("合", "冲", "刑", "害", "三合", "三会", "三合缺一", "大运", "调候", "司令", "五行个数", "纳音", "空亡"):
+            self.assertIn(k, g["terms"])
+        self.assertEqual(g["gan_xiang"]["丁"], "在天为列星，在地为灯火")
+
     def test_time_unknown_three_columns(self):
         import datetime as dt
         from kanyu.bazi import bazi
@@ -150,7 +165,7 @@ class TestBaziPage(unittest.TestCase):
                     json.dump(obj, f, ensure_ascii=False)
                 return p
             self.assertEqual(pages.load_bazi_notes(write(BAZI_NOTES)), BAZI_NOTES)
-            for bad in ({"palaces": {}}, {"pillars": {"子": "x"}}, {"years": {"明年": "x"}},
+            for bad in ({"palaces": {}}, {"plain": 1}, {"pillars": {"子": "x"}}, {"years": {"明年": "x"}},
                         {"dayun": {"甲": "x"}}, {"advice": [1]}, {"summary": 1}, ["x"]):
                 with self.assertRaises(ValueError, msg=bad):
                     pages.load_bazi_notes(write(bad))

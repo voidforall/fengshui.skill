@@ -11,7 +11,7 @@ import json
 import os
 import re
 
-from . import __version__
+from . import __version__, glossary
 from . import render as text
 from .bazi import Bazi, liunian
 from .ganzhi import changsheng
@@ -153,11 +153,11 @@ def extract_data(html: str) -> dict:
 
 # --- 八字命盘 --------------------------------------------------------------------
 
-BAZI_NOTES_KEYS = {"summary", "basis", "pillars", "dayun", "years", "advice"}
+BAZI_NOTES_KEYS = {"plain", "summary", "basis", "pillars", "dayun", "years", "advice"}
 
 
 def load_bazi_notes(path: str | None) -> dict:
-    """读取八字批注 JSON：{"summary", "basis": str, "pillars": {年|月|日|时: str},
+    """读取八字批注 JSON：{"plain": 白话总结, "summary", "basis": str, "pillars": {年|月|日|时: str},
     "dayun": {大运干支: str}, "years": {"2026": str}, "advice": [str]}。"""
     if not path:
         return {}
@@ -168,7 +168,7 @@ def load_bazi_notes(path: str | None) -> dict:
     unknown = set(notes) - BAZI_NOTES_KEYS
     if unknown:
         raise ValueError(f"notes 含未知字段：{'、'.join(sorted(unknown))}（可用：{'、'.join(sorted(BAZI_NOTES_KEYS))}）")
-    for k in ("summary", "basis"):
+    for k in ("plain", "summary", "basis"):
         if not isinstance(notes.get(k, ""), str):
             raise ValueError(f"notes.{k} 应为文字")
     for k, keys in (("pillars", set("年月日时")), ("dayun", None), ("years", None)):
@@ -255,6 +255,8 @@ def bazi_data(b: Bazi, *, notes: dict) -> dict:
         "pillars": pillars,
         "relations": {"gan": rel(b.relations["gan"]), "zhi": rel(b.relations["zhi"])},
         "wuxing": {"count": b.wuxing_count, "hidden": b.wuxing_hidden},
+        "wangxiang": b.wangxiang,
+        "glossary": glossary.page_data(),
         "siling": {"jie": s["jie"], "day_n": s["day_n"], "ruler": s["ruler"],
                    "jie_time": f"{s['jie_time']:%Y-%m-%d %H:%M}", "table": s["table"]},
         "tiaohou": b.tiaohou,

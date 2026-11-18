@@ -11,7 +11,7 @@
 ## 修改方式
 
 - `scripts/fengshui.py` 是命令行入口；计算放在对应领域模块，参数处理放在 `scripts/kanyu/cli.py`，文字输出放在 `scripts/kanyu/render.py`，HTML 生成放在 `scripts/kanyu/pages.py` 与 `assets/templates/`。保持计算与呈现分离。
-- 计算包只有一份源头 `scripts/kanyu/`；独立 skill（如 `skills/bazi-mingli/`）带的副本由 `python3 tools/sync_kanyu.py` 同步，不直接改副本。
+- 计算包只有一份源头 `scripts/kanyu/`；独立 skill（如 `skills/bazi-mingli/`）带的副本及由它生成的 `references/glossary.md` 由 `python3 tools/sync_kanyu.py` 同步，不直接改。
 - 保持纯标准库计算路径可用；历法依赖见 `requirements.txt`，缺失依赖时保留明确提示，不以猜测结果兜底。
 - 保持 `SKILL.md` 精简，详细流程放在 `references/playbook-*.md` 并从主文件分流；结构约束见 `tests/test_structure.py`。
 - 优先采用简单、直接的端到端实现；技术取舍优先考虑质量、简单性、稳健性、扩展性和长期维护，不因节省开发成本牺牲这些目标。

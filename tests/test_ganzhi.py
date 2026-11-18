@@ -44,6 +44,17 @@ class TestSiling(unittest.TestCase):
         self.assertEqual(g.siling("寅", 31), "甲木")
 
 
+class TestWangxiang(unittest.TestCase):
+    def test_sanming_text(self):
+        # 《三命通会》：夏火旺火，生土则土相，木生火则木休，水克火则水囚，火克金则金死
+        self.assertEqual(g.wangxiang("午"), {"木": "休", "火": "旺", "土": "相", "金": "死", "水": "囚"})
+        # 六月土旺，土生金则金相，火生土则火休，木克土则木囚，土克水则水死
+        self.assertEqual(g.wangxiang("未"), {"木": "囚", "火": "休", "土": "旺", "金": "相", "水": "死"})
+        # 春木旺：火相、水休、金囚、土死；冬水旺：木相、金休、土囚、火死
+        self.assertEqual(g.wangxiang("辰"), {"木": "旺", "火": "相", "土": "死", "金": "囚", "水": "休"})
+        self.assertEqual(g.wangxiang("丑"), {"木": "相", "火": "死", "土": "囚", "金": "休", "水": "旺"})
+
+
 class TestRelations(unittest.TestCase):
     def test_pairs(self):
         self.assertEqual(g.pair_relations("子", "午"), ["冲"])

@@ -36,6 +36,11 @@ class TestSync(unittest.TestCase):
             self.assertTrue(filecmp.cmp(os.path.join(src, rel), os.path.join(dst, rel), shallow=False),
                             f"{rel} 与源头不一致：只改 scripts/kanyu/，再运行 python3 tools/sync_kanyu.py")
 
+    def test_glossary_md_is_generated(self):
+        from kanyu import glossary
+        self.assertEqual(read(SKILL, "references", "glossary.md"), glossary.markdown(),
+                         "glossary.md 由 scripts/kanyu/glossary.py 生成：运行 python3 tools/sync_kanyu.py")
+
     def test_requirements_match(self):
         self.assertEqual(read(support.ROOT, "requirements.txt"), read(SKILL, "requirements.txt"))
 

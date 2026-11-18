@@ -227,3 +227,24 @@ def against_natal(gz: str, natal: list[str], who: str) -> list[str]:
                 others = "、".join(f"{zhis[x]}支{x}" for x in trio if x != z)
                 out.append(f"{who}支{z}与{others}{kind}{wx}{tail}")
     return out
+
+
+# --- 旺相休囚死 ✅《三命通会》卷二：春木旺、夏火旺、六月土旺、秋金旺、冬水旺 ------------------------
+# 原文只单列六月（未）为土旺，辰、戌、丑随所在之季。
+
+SEASON_WANG = {**dict.fromkeys("寅卯辰", "木"), **dict.fromkeys("巳午", "火"), "未": "土",
+               **dict.fromkeys("申酉戌", "金"), **dict.fromkeys("亥子丑", "水")}
+SEASON_NAME = {**dict.fromkeys("寅卯辰", "春"), **dict.fromkeys("巳午", "夏"), "未": "六月",
+               **dict.fromkeys("申酉戌", "秋"), **dict.fromkeys("亥子丑", "冬")}
+
+
+def wangxiang(month_zhi: str) -> dict[str, str]:
+    """月令下五行的旺相休囚死：当令为旺，旺者所生为相，生旺者为休，克旺者为囚，旺者所克为死。"""
+    w = SEASON_WANG[month_zhi]
+    states = {w: "旺", _SHENG[w]: "相", _KE[w]: "死"}
+    for x in "木火土金水":
+        if _SHENG[x] == w:
+            states[x] = "休"
+        elif _KE[x] == w:
+            states[x] = "囚"
+    return {x: states[x] for x in "木火土金水"}

@@ -91,6 +91,7 @@ class Bazi:
     month_zhi: str
     zi_alt: dict | None                # 23 点后出生：另一种子时口径的日柱、时柱
     siling: dict                       # 月令人元司事
+    wangxiang: dict                    # 月令下五行旺相休囚死 {season, wang, states, day}
     roots: list[dict]                  # 天干通根
     tou: list[dict]                    # 地支藏干透出
     relations: dict                    # 原局 {"gan": [...], "zhi": [...]}
@@ -286,6 +287,9 @@ def bazi(d: _dt.datetime, gender: str, longitude: float | None = None, *, tz: st
               "table": [{"name": n, "days": k} for n, k in gzr.SILING[month_zhi]]}
 
     roots, tou = roots_and_tou(gz_list)
+    states = gzr.wangxiang(month_zhi)
+    wx = {"season": gzr.SEASON_NAME[month_zhi], "wang": gzr.SEASON_WANG[month_zhi], "states": states,
+          "day": states[wuxing_of(day_gan)]}
 
     # 起运、大运
     yun = ec_abs.getYun(1 if g == "m" else 0)
@@ -314,7 +318,7 @@ def bazi(d: _dt.datetime, gender: str, longitude: float | None = None, *, tz: st
     return Bazi(
         moment=m, gender=g, zi_rule=zi,
         lunar=f"{lu_loc.getYearInChinese()}年{lu_loc.getMonthInChinese()}月{lu_loc.getDayInChinese()}",
-        pillars=pillars, day_gan=day_gan, month_zhi=month_zhi, zi_alt=zi_alt, siling=siling,
+        pillars=pillars, day_gan=day_gan, month_zhi=month_zhi, zi_alt=zi_alt, siling=siling, wangxiang=wx,
         roots=roots, tou=tou, relations=natal_relations(gz_list),
         wuxing_count=wuxing_count(gz_list), wuxing_hidden=wuxing_hidden(gz_list),
         shensha=gzr.shensha(gz_list),

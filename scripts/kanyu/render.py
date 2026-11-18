@@ -225,6 +225,9 @@ def bazi(b: Bazi) -> str:
     s = b.siling
     out.append(f"日主：{b.day_gan}（{'阳' if b.day_gan in '甲丙戊庚壬' else '阴'}{wuxing_of(b.day_gan)}）  "
                f"月令：{b.month_zhi}（{s['jie']}后第 {s['day_n']} 日，{s['ruler']}司令）")
+    w = b.wangxiang
+    out.append(f"旺相休囚死（《三命通会》）：生于{w['season']}，{w['wang']}当令；日主{wuxing_of(b.day_gan)}为「{w['day']}」。"
+               + " ".join(f"{k}{v}" for k, v in w["states"].items()))
     out.append("十神（天干）：" + "  ".join(f"{p.name}{p.gan}{p.gan_shishen}" for p in ps))
     out.append("藏干（本气/中气/余气·十神）：")
     for p in ps:
