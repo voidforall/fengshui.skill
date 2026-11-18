@@ -4,7 +4,13 @@
 `scripts/kanyu/__init__.py` 的 `__version__` 与本文件最新条目保持一致（有测试校验）。
 新改动先记在 `## [Unreleased]` 下；发版时改为 `## [版本号] - 日期`，合并到 main 后自动发布 Release。
 
-## [Unreleased]
+## [3.0.0] - 2026-11-18
+
+主版本号提升，因为有两处不兼容变更：
+- `fengshui.py bazi` 不再排盘，改为提示迁移到 bazi-mingli（`skills/bazi-mingli/scripts/bazi.py`，参数相同）；
+- 八字子时默认改为 23:00 起换日，23 点后出生者的日柱可能与旧版不同（加 `--zi same` 可按旧口径排）。
+
+新增独立 skill `bazi-mingli` 1.0.0。
 
 ### 结构
 - **八字拆为独立 skill `bazi-mingli`**（`skills/bazi-mingli/`，入口 `scripts/bazi.py`），可单独安装：
