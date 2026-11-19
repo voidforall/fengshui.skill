@@ -338,3 +338,15 @@ fengshui.skill/
 ## 免责声明
 
 本项目基于传统堪舆学理论，仅供学习、参考与文化探讨。风水为辅，人为为主。重大居住与人生决策请结合实际情况综合考量，勿作为唯一依据。
+
+---
+
+## Star History
+
+<a href="https://www.star-history.com/#voidforall/fengshui.skill&Date">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/svg?repos=voidforall/fengshui.skill&type=Date&theme=dark" />
+    <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/svg?repos=voidforall/fengshui.skill&type=Date" />
+    <img alt="Star History Chart" src="https://api.star-history.com/svg?repos=voidforall/fengshui.skill&type=Date" />
+  </picture>
+</a>
