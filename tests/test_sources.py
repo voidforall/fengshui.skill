@@ -9,7 +9,7 @@ import os
 import re
 import unittest
 
-FILES = ["SKILL.md", "README.md"] + sorted(
+FILES = ["SKILL.md", "README.md", "CONTRIBUTING.md"] + sorted(
     glob.glob(os.path.join(support.ROOT, "references", "*.md"))
     + glob.glob(os.path.join(support.ROOT, "examples", "*.md")))
 
