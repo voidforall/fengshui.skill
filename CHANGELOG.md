@@ -4,6 +4,13 @@
 `scripts/kanyu/__init__.py` 的 `__version__` 与本文件最新条目保持一致（有测试校验）。
 新改动先记在 `## [Unreleased]` 下；发版时改为 `## [版本号] - 日期`，合并到 main 后自动发布 Release。
 
+## [Unreleased]
+
+### 文档
+- README 精简为面向用户的首页（能做什么、安装、效果、为什么可信、参考典籍、路线图），不再列脚本命令；
+  工作原理与计算口径移到 `docs/how-it-works.md`，勘误、开发约定、测试与发版移到新的 `CONTRIBUTING.md`。
+- README 末尾加 Star History 图。
+
 ## [3.0.0] - 2026-11-18
 
 主版本号提升，因为有两处不兼容变更：
