@@ -49,8 +49,19 @@ npx skills add voidforall/fengshui.skill --full-depth --skill city-wuxing-map  #
 ## 为什么可信
 
 - **计算交给代码，解读交给模型。** 大模型不擅长排盘、推节气，这类错误「看起来对」，最难发现。所有排盘、历法、查表都由确定性脚本完成，并有回归测试。
-- **说法要有出处。** 每条规则、引文都标明出处与核对状态（[sources.md](references/sources.md)），不把通行做法说成经典原文。依据《宅经》《沈氏玄空学》《协纪辨方书》《三命通会》《穷通宝鉴》等典籍。
+- **说法要有出处。** 每条规则、引文都标明出处与核对状态，不把通行做法说成经典原文。
 - **不恐吓，不卖摆件。** 风水为辅，人为为主；只说倾向，不说「命中注定」。
+
+想知道背后怎么算，见[工作原理](docs/how-it-works.md)。
+
+## 参考典籍
+
+| 方向 | 典籍 |
+|------|------|
+| 风水 | 《宅经》《葬书》《青囊序》《天玉经》《撼龙经》《周易·说卦传》✅ · 《沈氏玄空学》《八宅明镜》《协纪辨方书》《地理五诀》《紫白诀》📖 |
+| 八字 | 《三命通会》《渊海子平》《穷通宝鉴》《滴天髓阐微》《五行大义》✅ |
+
+✅ 原文已对照维基文库核对　📖 公认出处，原文尚未取得。逐条出处与核对状态见 [风水](references/sources.md)、[八字](skills/bazi-mingli/references/sources.md)。
 
 ## 路线图
 
@@ -65,15 +76,9 @@ npx skills add voidforall/fengshui.skill --full-depth --skill city-wuxing-map  #
 
 - 各 skill 的规则与流程：[fengshui-master](SKILL.md) · [bazi-mingli](skills/bazi-mingli/SKILL.md) · [city-wuxing-map](skills/city-wuxing-map/SKILL.md)
 - 完整对话示例：[看宅](examples/yangzhai.md) · [择日](examples/zeri-example.md)
-- [参与开发](CONTRIBUTING.md)（命令行、测试、发版）· [变更记录](CHANGELOG.md)
+- [工作原理](docs/how-it-works.md)：skill 如何分工、各项按什么口径计算
+- [参与贡献](CONTRIBUTING.md)（勘误、测试、发版）· [变更记录](CHANGELOG.md)
 - 发现错误？欢迎提 issue，请附出处（典籍卷次或可核对的资料）。
-
-## 相关项目
-
-- [agentskills/agentskills](https://github.com/agentskills/agentskills)：Agent Skills 开放标准
-- [vercel-labs/skills](https://github.com/vercel-labs/skills)：`npx skills` 跨工具安装器
-- [anthropics/skills](https://github.com/anthropics/skills)：官方 Skill 仓库
-- [awesome-persona-distill-skills](https://github.com/xixu-me/awesome-persona-distill-skills)：Persona Skill 合集
 
 ## 免责声明
 

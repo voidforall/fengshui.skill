@@ -2,7 +2,7 @@
 
 ## 项目边界
 
-这是一个遵循 Agent Skills 标准的传统堪舆顾问 skill。项目介绍以 `README.md` 为准，命令用法、代码结构、测试与发版流程以 `CONTRIBUTING.md` 为准；运行时问询、分流与表达规则以 `SKILL.md` 为准。
+这是一个遵循 Agent Skills 标准的传统堪舆顾问 skill。项目介绍以 `README.md` 为准，工作原理与计算口径见 `docs/how-it-works.md`，开发约定、测试与发版流程以 `CONTRIBUTING.md` 为准；运行时问询、分流与表达规则以 `SKILL.md` 为准。
 
 - 计算交给 `scripts/kanyu/` 的确定性代码，模型负责问询与解读。不要用模型推算替代排盘、历法、命卦等计算。
 - 修改传统规则或引文前，核对 `references/sources.md` 的出处与验证状态；区分经典原文、已验证计算与流派口径，不虚构出处。
@@ -32,5 +32,5 @@
 
 - 提交只包含当前任务相关改动；commit message 不自动添加 agent 为 co-author。
 - 发版时按 `CONTRIBUTING.md` 同步版本与 `CHANGELOG.md`；普通改动不要随意提升版本号。
-- README 保持简短，面向用户；开发细节写进 `CONTRIBUTING.md`，规则细节写进各 skill 的 references。
+- README 保持简短，面向用户，不写脚本命令（用户通过 skill 使用）；原理写进 `docs/how-it-works.md`，开发流程写进 `CONTRIBUTING.md`，规则细节写进各 skill 的 references。
 - 本文件只保留对多数后续会话都有用的约定。优先重写、删减并指向权威文件，避免复制容易过时的实现细节。
