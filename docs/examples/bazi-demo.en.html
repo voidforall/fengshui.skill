@@ -1,0 +1,950 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Bazi Chart · Female · Gengwu Xinsi Dingyou Jiachen</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,600;1,400&family=Ma+Shan+Zheng&family=Noto+Serif+SC:wght@400;600&display=swap">
+<style>
+/* 命书：册页上并列四柱，干在上、支在下；柱间以弧线标合冲刑害。下方为大运流年的岁月轴。
+   与飞星盘同一套册页配色：浅色宣纸，深色黑漆描金。五行取《五行大义》五色：木青、火赤、土黄、金白、水黑
+   （白、黑在纸上难辨，以银灰、玄青代之）。 */
+:root {
+  --paper: #ece2cb; --paper-2: #e3d6b8; --ink: #26211b; --ink-soft: #5d5446; --rule: #b9a985;
+  --cinnabar: #b03a2e; --azurite: #2f5d6e; --gold: #9a7431; --seal-text: #f6efe0;
+  --wx-mu: #2f7356; --wx-huo: #b23a2c; --wx-tu: #95701f; --wx-jin: #6f737b; --wx-shui: #1f3a55;
+  --font-brush: "Ma Shan Zheng", "STKaiti", "KaiTi", "Kaiti SC", "BiauKai", serif;
+  --font-song: "Noto Serif SC", "Songti SC", "STSong", "SimSun", "Noto Serif CJK SC", serif;
+  color-scheme: light;
+}
+/* 英文页：西文用 Garamond；干支字形（命盘本身）仍用楷体 */
+:root[lang="en"] { --font-song: "EB Garamond", "Garamond", "Noto Serif SC", "Songti SC", serif; --font-latin: "EB Garamond", "Garamond", serif; }
+:root[lang="en"] body { font-size: 16px; line-height: 1.6; }
+:root[lang="en"] h1, :root[lang="en"] h2.sec, :root[lang="en"] h3, :root[lang="en"] .leaf h2, :root[lang="en"] .btn-cast,
+:root[lang="en"] .now, :root[lang="en"] .yun-card.pre .gz, :root[lang="en"] .slider-row output, :root[lang="en"] .wx-bars .name,
+:root[lang="en"] #tip h4, :root[lang="en"] details.glossary summary, :root[lang="en"] details.glossary h4 { font-family: var(--font-latin); font-weight: 600; letter-spacing: 0; }
+:root[lang="en"] .wx-bars .name { font-size: 16px; }
+:root[lang="en"] .slider-row output { font-size: 19px; }
+:root[lang="en"] details.glossary summary { font-size: 19px; }
+:root[lang="en"] h1 { font-size: clamp(30px, 5vw, 44px); }
+:root[lang="en"] h2.sec, :root[lang="en"] .leaf h2 { font-size: 25px; }
+:root[lang="en"] h3 { font-size: 20px; }
+:root[lang="en"] .btn-cast { font-size: 18px; padding: 3px 18px; letter-spacing: .04em; }
+:root[lang="en"] .col-label { letter-spacing: 0; }
+:root[lang="en"] .hid li { white-space: normal; line-height: 1.25; margin-bottom: 3px; }
+:root[lang="en"] .hid span { font-size: 12px; }
+.glyph .py { display: block; font-family: var(--font-song); font-size: 12px; line-height: 1.2; color: var(--ink-soft); }
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --paper: #16120e; --paper-2: #211a14; --ink: #eadcbf; --ink-soft: #b3a283; --rule: #5a4a33;
+    --cinnabar: #d9604f; --azurite: #7fb0bf; --gold: #d2a856; --seal-text: #1b130d;
+    --wx-mu: #79c29b; --wx-huo: #e5765f; --wx-tu: #d8b05a; --wx-jin: #e4dfd3; --wx-shui: #8db4dc;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --paper: #16120e; --paper-2: #211a14; --ink: #eadcbf; --ink-soft: #b3a283; --rule: #5a4a33;
+  --cinnabar: #d9604f; --azurite: #7fb0bf; --gold: #d2a856; --seal-text: #1b130d;
+  --wx-mu: #79c29b; --wx-huo: #e5765f; --wx-tu: #d8b05a; --wx-jin: #e4dfd3; --wx-shui: #8db4dc;
+  color-scheme: dark;
+}
+
+* { box-sizing: border-box; }
+html, body { margin: 0; }
+body {
+  background: var(--paper);
+  background-image:
+    radial-gradient(ellipse at 20% 0%, color-mix(in srgb, var(--gold) 10%, transparent), transparent 60%),
+    radial-gradient(ellipse at 100% 100%, color-mix(in srgb, var(--cinnabar) 6%, transparent), transparent 55%);
+  color: var(--ink); font-family: var(--font-song); font-size: 15px; line-height: 1.75;
+  padding-block: max(24px, env(safe-area-inset-top, 0px)) max(32px, env(safe-area-inset-bottom, 0px));
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+}
+.page { max-width: 1120px; margin: 0 auto; display: grid; gap: 28px; min-width: 0; }
+.wx-木 { color: var(--wx-mu); } .wx-火 { color: var(--wx-huo); } .wx-土 { color: var(--wx-tu); }
+.wx-金 { color: var(--wx-jin); } .wx-水 { color: var(--wx-shui); }
+.bg-木 { background: var(--wx-mu); } .bg-火 { background: var(--wx-huo); } .bg-土 { background: var(--wx-tu); }
+.bg-金 { background: var(--wx-jin); } .bg-水 { background: var(--wx-shui); }
+:focus-visible { outline: 2px solid var(--gold); outline-offset: 3px; }
+
+/* 题签 */
+header.title { display: flex; gap: 20px; align-items: flex-start; flex-wrap: wrap; border-bottom: 1px solid var(--rule); padding-bottom: 18px; }
+.seal { width: 64px; height: 64px; flex: none; margin-top: 6px; }
+.seal rect { fill: var(--cinnabar); }
+.seal text { fill: var(--seal-text); font-family: var(--font-brush); font-size: 21px; text-anchor: middle; dominant-baseline: central; }
+.title-text { min-width: 0; flex: 1 1 320px; }
+h1 { font-family: var(--font-brush); font-weight: 400; font-size: clamp(34px, 6vw, 52px); line-height: 1.1; margin: 0; letter-spacing: .04em; text-wrap: balance; }
+.facts { display: flex; flex-wrap: wrap; gap: 4px 18px; margin: 8px 0 0; padding: 0; list-style: none; color: var(--ink-soft); font-size: 14px; }
+.facts b { color: var(--ink); font-weight: 600; }
+.warn { color: var(--cinnabar); font-size: 14px; margin: 6px 0 0; }
+.time-lines { margin: 6px 0 0; color: var(--ink-soft); font-size: 13px; }
+.time-lines summary { cursor: pointer; width: fit-content; }
+.time-lines p { margin: 2px 0; }
+
+h2.sec, h3 { font-family: var(--font-brush); font-weight: 400; }
+h2.sec { font-size: 28px; margin: 0 0 8px; line-height: 1.3; }
+h3 { font-size: 22px; margin: 0 0 6px; line-height: 1.3; }
+
+/* 版心：左命盘、右批注 */
+.board-wrap { display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr); gap: 28px; align-items: start; }
+@media (max-width: 860px) { .board-wrap { grid-template-columns: minmax(0, 1fr); } }
+.plate { display: grid; gap: 10px; min-width: 0; }
+.toolbar { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; align-items: center; }
+.chip { font: inherit; font-size: 14px; color: var(--ink-soft); background: transparent; border: 1px solid var(--rule); border-radius: 999px; padding: 4px 14px; cursor: pointer; }
+.chip[aria-pressed="true"] { color: var(--ink); border-color: var(--ink-soft); background: var(--paper-2); }
+.btn-cast { font-family: var(--font-brush); font-size: 22px; color: var(--seal-text); background: var(--cinnabar); border: 0; border-radius: 4px; padding: 2px 22px; cursor: pointer; letter-spacing: .2em; }
+.btn-cast:hover { filter: brightness(1.08); }
+
+.chart { display: grid; gap: 0; }
+.band { width: 100%; height: auto; display: block; overflow: visible; }
+.band .arc { fill: none; stroke-width: 1.6; cursor: pointer; }
+.band .arc.he { stroke: var(--gold); }
+.band .arc.chong { stroke: var(--cinnabar); stroke-width: 2; }
+.band .arc.xing, .band .arc.hai { stroke: var(--cinnabar); stroke-dasharray: 5 4; }
+.band .arc.que { stroke: var(--rule); stroke-dasharray: 2 4; }
+.band .arc.on { stroke-width: 3.2; }
+.band g { outline: none; }
+.band g:focus-visible .arc { stroke-width: 3.2; filter: drop-shadow(0 0 2px var(--gold)); }
+.band .hit { stroke: transparent; stroke-width: 14; fill: none; cursor: pointer; }
+.band text { font-family: var(--font-song); font-size: 13px; fill: var(--ink-soft); text-anchor: middle; dominant-baseline: central; pointer-events: none; }
+.band text.lab-bg { stroke: var(--paper); stroke-width: 5px; paint-order: stroke; }
+.band.off { display: none; }
+
+.cols { display: grid; grid-template-columns: repeat(var(--n, 4), minmax(0, 1fr)); gap: 8px; }
+.col { background: var(--paper-2); border: 1px solid var(--rule); border-radius: 4px; padding: 8px 4px 10px; text-align: center; display: grid; gap: 2px; justify-items: center; align-content: start; min-width: 0;
+       transform-origin: 50% 50%; transition: transform .55s cubic-bezier(.2,.7,.2,1), opacity .55s; }
+.col.day { border-color: var(--cinnabar); box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--cinnabar) 40%, transparent); }
+.col.flip { transform: perspective(600px) rotateY(88deg); opacity: 0; }
+.col-label { font-size: 13px; color: var(--ink-soft); letter-spacing: .1em; }
+.ss { font-size: 13px; color: var(--ink-soft); min-height: 1.6em; }
+.col.day .ss { color: var(--cinnabar); }
+.glyph { font-family: var(--font-brush); font-size: clamp(40px, 9vw, 62px); line-height: 1.1; background: transparent; border: 0; border-radius: 4px; padding: 0 6px; cursor: pointer; }
+.glyph:hover { background: color-mix(in srgb, var(--gold) 12%, transparent); }
+.glyph.sel { background: color-mix(in srgb, var(--gold) 24%, transparent); box-shadow: 0 0 0 1.5px var(--gold); }
+.glyph.lit { text-shadow: 0 0 0.5px currentColor; background: color-mix(in srgb, var(--gold) 16%, transparent); }
+.hid { list-style: none; margin: 4px 0 0; padding: 0; display: grid; gap: 0; font-size: 13px; line-height: 1.5; }
+.hid li { white-space: nowrap; }
+.hid b { font-family: var(--font-brush); font-weight: 400; font-size: 18px; margin-right: 3px; }
+.hid span { color: var(--ink-soft); }
+.hid.off { display: none; }
+.meta { font-size: 12px; color: var(--ink-soft); line-height: 1.5; }
+.tag { display: inline-block; font-size: 11px; border: 1px solid var(--rule); border-radius: 3px; padding: 0 4px; margin: 1px; color: var(--ink-soft); white-space: nowrap; }
+.tag.kong { border-color: var(--cinnabar); color: var(--cinnabar); }
+.legend-line { display: flex; flex-wrap: wrap; gap: 4px 14px; justify-content: center; font-size: 12px; color: var(--ink-soft); margin: 2px 0 0; }
+.legend-line i { display: inline-block; width: 18px; height: 0; border-top: 2px solid; vertical-align: 3px; margin-right: 4px; }
+.legend-line .dot { display: inline-block; width: 9px; height: 9px; border-radius: 50%; margin-right: 4px; vertical-align: 0; }
+@media (max-width: 420px) { .hid { font-size: 12px; } .hid b { font-size: 16px; } .hid span.qi { display: none; } .tag .g { display: block; margin-left: 0; } .tag { white-space: normal; } }
+
+/* 批注栏 */
+aside.notes { display: grid; gap: 18px; min-width: 0; }
+.leaf { border-left: 3px solid var(--cinnabar); padding: 2px 0 2px 16px; min-width: 0; }
+.leaf h2 { font-family: var(--font-brush); font-weight: 400; font-size: 28px; margin: 0; line-height: 1.3; }
+.leaf .sub { color: var(--ink-soft); font-size: 13px; margin: 0 0 6px; }
+.leaf ul.facts-list { margin: 6px 0; padding-left: 1.2em; }
+.leaf ul.facts-list li { margin: 2px 0; }
+.note { margin: 8px 0 0; white-space: pre-wrap; }
+.note.empty { color: var(--ink-soft); font-size: 14px; }
+.advice { margin: 6px 0 0; padding-left: 1.3em; }
+
+/* 岁月轴 */
+section.yun { display: grid; gap: 12px; min-width: 0; }
+.track { display: grid; grid-auto-flow: column; grid-auto-columns: minmax(84px, 1fr); gap: 6px; overflow-x: auto; padding: 4px 2px 8px; scroll-snap-type: x proximity; }
+.yun-card { font: inherit; background: var(--paper-2); color: var(--ink); border: 1px solid var(--rule); border-radius: 4px; padding: 6px 4px; cursor: pointer; text-align: center; scroll-snap-align: start; position: relative; }
+.yun-card .gz { font-family: var(--font-brush); font-size: 28px; line-height: 1.15; display: block; }
+.yun-card .y { font-size: 12px; color: var(--ink-soft); display: block; }
+.yun-card[aria-pressed="true"] { border-color: var(--gold); box-shadow: inset 0 0 0 1.5px var(--gold); }
+.yun-card.pre .gz { font-size: 20px; color: var(--ink-soft); }
+.now { position: absolute; top: -8px; right: -4px; font-family: var(--font-brush); font-size: 14px; color: var(--seal-text); background: var(--cinnabar); border-radius: 3px; padding: 0 5px; line-height: 1.5; }
+.slider-row { display: flex; gap: 12px; align-items: center; flex-wrap: wrap; }
+.slider-row input[type=range] { flex: 1 1 240px; accent-color: var(--cinnabar); min-width: 0; }
+.slider-row output { font-family: var(--font-brush); font-size: 22px; min-width: 9em; }
+.years { display: grid; grid-template-columns: repeat(10, minmax(0, 1fr)); gap: 4px; }
+@media (max-width: 640px) { .years { grid-template-columns: repeat(5, minmax(0, 1fr)); } }
+.year { font: inherit; background: transparent; color: var(--ink); border: 1px solid var(--rule); border-radius: 3px; padding: 2px 0; cursor: pointer; text-align: center; position: relative; }
+.year .gz { font-family: var(--font-brush); font-size: 20px; display: block; line-height: 1.2; }
+.year .y { font-size: 11px; color: var(--ink-soft); display: block; }
+.year[aria-pressed="true"] { background: var(--paper-2); border-color: var(--gold); box-shadow: inset 0 0 0 1.5px var(--gold); }
+.year.has-rel::after { content: ""; position: absolute; top: 3px; right: 3px; width: 5px; height: 5px; border-radius: 50%; background: var(--cinnabar); }
+.year.has-note::before { content: ""; position: absolute; top: 3px; left: 3px; width: 5px; height: 5px; border-radius: 50%; background: var(--gold); }
+.yun-detail { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 18px; }
+@media (max-width: 700px) { .yun-detail { grid-template-columns: minmax(0, 1fr); } }
+
+/* 下栏 */
+.lower { display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr); gap: 28px; align-items: start; }
+@media (max-width: 860px) { .lower { grid-template-columns: minmax(0, 1fr); } }
+blockquote { margin: 8px 0; padding: 8px 14px; border-left: 3px solid var(--gold); background: color-mix(in srgb, var(--paper-2) 70%, transparent); font-size: 15px; }
+blockquote .k { display: inline-block; font-size: 12px; color: var(--ink-soft); border: 1px solid var(--rule); border-radius: 3px; padding: 0 5px; margin-right: 6px; }
+.src { font-size: 13px; color: var(--ink-soft); margin: 4px 0 0; }
+.src a { color: inherit; }
+.wx-bars { margin-top: 4px; display: grid; grid-template-columns: auto minmax(0, 1fr) minmax(0, 1fr); gap: 4px 10px; align-items: center; font-size: 13px; }
+.wx-bars .h { color: var(--ink-soft); font-size: 12px; }
+.wx-bars .name { font-family: var(--font-brush); font-size: 20px; line-height: 1; }
+.bar { height: 12px; display: flex; align-items: center; gap: 6px; }
+.bar span.fill { display: inline-block; height: 10px; border-radius: 2px; min-width: 2px; }
+.bar span.n { font-size: 12px; color: var(--ink-soft); }
+.siling { display: flex; gap: 4px; margin: 6px 0; }
+.siling div { border: 1px solid var(--rule); border-radius: 3px; padding: 2px 6px; font-size: 13px; text-align: center; color: var(--ink-soft); }
+.siling div.on { border-color: var(--gold); color: var(--ink); background: var(--paper-2); box-shadow: inset 0 0 0 1px var(--gold); }
+#wx, #shensha { margin-top: 20px; }
+.ss-list { list-style: none; padding: 0; margin: 6px 0; display: grid; gap: 4px; font-size: 14px; }
+.ss-list b { font-weight: 600; }
+
+/* 白话：一眼看懂、术语按钮、释义卡、术语表 */
+section.plain { display: grid; gap: 12px; }
+.plain-lead { font-size: 17px; line-height: 1.85; margin: 0; padding: 12px 16px; border-left: 3px solid var(--gold); background: color-mix(in srgb, var(--paper-2) 70%, transparent); }
+.plain-lead p { margin: 0 0 8px; } .plain-lead p:last-child { margin: 0; }
+.plain-lead.empty { font-size: 14px; color: var(--ink-soft); }
+.plain-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 12px; }
+.pcard { background: var(--paper-2); border: 1px solid var(--rule); border-radius: 4px; padding: 12px 14px; min-width: 0; }
+.pcard h3 { font-size: 20px; margin: 0 0 4px; }
+.pcard p { margin: 4px 0; }
+.pcard .big { font-family: var(--font-brush); font-size: 52px; line-height: 1; float: left; margin: 2px 12px 0 0; }
+.pcard .q { color: var(--ink-soft); font-size: 14px; }
+.pcard .hint { color: var(--ink-soft); font-size: 13px; }
+.term { font: inherit; color: inherit; background: none; border: 0; padding: 0; margin: 0; cursor: help; border-bottom: 1px dotted currentColor; text-underline-offset: 3px; }
+.term:hover { color: var(--gold); }
+.qmark { font: inherit; font-size: 13px; color: var(--ink-soft); background: none; border: 1px solid var(--rule); border-radius: 50%; width: 1.6em; height: 1.6em; line-height: 1.4; padding: 0; margin-left: 8px; cursor: help; vertical-align: 4px; font-family: var(--font-song); }
+.gloss { font-size: 12px; color: var(--gold); line-height: 1.2; min-height: 1.2em; }
+.plain-off .gloss, .plain-off .tag .g { display: none; }
+.tag .g { color: var(--gold); margin-left: 2px; }
+#tip { position: fixed; left: 50%; bottom: max(16px, env(safe-area-inset-bottom, 0px)); transform: translateX(-50%); width: min(560px, calc(100vw - 32px)); background: var(--paper-2); color: var(--ink); border: 1px solid var(--gold); border-radius: 6px; box-shadow: 0 8px 28px rgba(0,0,0,.25); padding: 12px 40px 12px 16px; z-index: 10; }
+#tip[hidden] { display: none; }
+#tip h4 { font-family: var(--font-brush); font-weight: 400; font-size: 22px; margin: 0 0 2px; }
+#tip p { margin: 4px 0; }
+#tip .basis { font-size: 12px; color: var(--ink-soft); }
+#tip button.x { position: absolute; top: 6px; right: 8px; font-size: 20px; background: none; border: 0; color: var(--ink-soft); cursor: pointer; }
+details.glossary summary { cursor: pointer; font-family: var(--font-brush); font-size: 22px; }
+details.glossary dl { display: grid; grid-template-columns: max-content minmax(0, 1fr); gap: 4px 14px; margin: 10px 0 0; font-size: 14px; }
+details.glossary dt { font-weight: 600; }
+details.glossary dd { margin: 0; }
+details.glossary dd .basis { color: var(--ink-soft); font-size: 12px; }
+:root[lang="en"] details.glossary dl { grid-template-columns: minmax(0, 16em) minmax(0, 1fr); }
+@media (max-width: 560px) { :root[lang="en"] details.glossary dl { grid-template-columns: minmax(0, 1fr); } :root[lang="en"] details.glossary dd { margin-bottom: 8px; } }
+details.glossary h4 { grid-column: 1 / -1; margin: 10px 0 0; font-family: var(--font-brush); font-weight: 400; font-size: 18px; }
+.why { margin: 6px 0 0; padding-left: 1.2em; font-size: 13px; color: var(--ink-soft); }
+
+footer { border-top: 1px solid var(--rule); padding-top: 14px; color: var(--ink-soft); font-size: 13px; display: grid; gap: 4px; }
+footer p { margin: 0; }
+@media (prefers-reduced-motion: reduce) { .col { transition: none; } }
+</style>
+</head>
+<body>
+<div class="page">
+  <header class="title">
+    <svg class="seal" viewBox="0 0 64 64" aria-hidden="true">
+      <rect x="2" y="2" width="60" height="60" rx="5"></rect>
+      <text x="45" y="20">堪</text><text x="45" y="44">輿</text>
+      <text x="19" y="20">子</text><text x="19" y="44">印</text>
+    </svg>
+    <div class="title-text">
+      <h1 id="title"></h1>
+      <ul class="facts" id="facts"></ul>
+      <div id="warnings"></div>
+      <details class="time-lines" id="time-lines"><summary data-t="method"></summary></details>
+    </div>
+  </header>
+
+  <section class="plain" aria-labelledby="plain-title">
+    <h2 class="sec" id="plain-title" data-t="plainTitle"></h2>
+    <div class="plain-lead" id="plain-lead"></div>
+    <div class="plain-grid" id="plain-grid"></div>
+  </section>
+
+  <div class="board-wrap">
+    <div class="plate">
+      <div class="toolbar" role="group" id="toolbar">
+        <button class="btn-cast" id="cast" type="button" data-t="cast"></button>
+        <button class="chip" type="button" data-toggle="plain" aria-pressed="true" data-t="tPlain"></button>
+        <button class="chip" type="button" data-toggle="rel" aria-pressed="true" data-t="tRel"></button>
+        <button class="chip" type="button" data-toggle="hid" aria-pressed="true" data-t="tHid"></button>
+      </div>
+      <div class="chart" id="chart">
+        <svg class="band" id="band-gan" role="img"></svg>
+        <div class="cols" id="cols"></div>
+        <svg class="band" id="band-zhi" role="img"></svg>
+      </div>
+      <div class="legend-line" id="legend"></div>
+    </div>
+    <aside class="notes" aria-live="polite">
+      <div class="leaf" id="detail"></div>
+    </aside>
+  </div>
+
+  <section class="yun" aria-labelledby="yun-title">
+    <h2 class="sec" id="yun-title" data-t="yunTitle"></h2>
+    <div class="track" id="track" role="group"></div>
+    <div class="slider-row">
+      <input type="range" id="slider">
+      <output id="slider-out" for="slider"></output>
+    </div>
+    <div class="years" id="years" role="group"></div>
+    <div class="yun-detail">
+      <div class="leaf" id="dayun-detail"></div>
+      <div class="leaf" id="year-detail"></div>
+    </div>
+  </section>
+
+  <div class="lower">
+    <section aria-labelledby="th-title">
+      <h2 class="sec" id="th-title" data-t="thTitle"></h2>
+      <div id="tiaohou"></div>
+    </section>
+    <section aria-labelledby="facts-title">
+      <h2 class="sec" id="facts-title" data-t="factsTitle"></h2>
+      <div id="siling"></div>
+      <div id="wx"></div>
+      <div id="shensha"></div>
+    </section>
+  </div>
+
+  <section class="leaf" id="overall"></section>
+
+  <details class="glossary" id="glossary"><summary data-t="glossary"></summary><dl id="glossary-list"></dl></details>
+
+  <div id="tip" role="dialog" aria-live="polite" hidden><button class="x" type="button">×</button><h4></h4><p class="plain-text"></p><p class="basis"></p></div>
+
+  <footer>
+    <p id="source"></p>
+    <p data-t="disclaimer"></p>
+  </footer>
+</div>
+
+<script id="chart-data" type="application/json">{"title": "Bazi Chart · Female · Gengwu Xinsi Dingyou Jiachen", "gender": "Female", "day_gan": "丁", "day_wx": "火", "day_yy": "阴", "month_zhi": "巳", "time_known": true, "facts": [["Born", "1990-06-01 08:30"], ["Lunar date", "year 1990, month 5, day 9"], ["Time zone", "Asia/Shanghai"], ["True solar time", "07:17 (longitude 116.4°)"], ["Zi hour", "day changes at 23:00"], ["Luck Pillars start", "8 y 9 m 0 d after birth (1999-03-01)"], ["Kua", "Gen · West Group"]], "warnings": [], "time_lines": ["Daylight saving time was in force: clock 08:30 minus 60 min → local standard time 07:30.", "True solar time: 1990-06-01 07:17 (longitude 116.4°, -12.1 min from standard time).", "Method: the year and month pillars compare Beijing time 1990-06-01 07:30 with the Start of Spring and the solar terms; the day and hour pillars use true solar time; Zi hour: day changes at 23:00 (start of the Zi hour)."], "pillars": [{"name": "年", "gz": "庚午", "gan": "庚", "zhi": "午", "gan_wx": "金", "zhi_wx": "火", "gan_yy": "阳", "zhi_yy": "阳", "gan_ss": "正财", "nayin": "路旁土", "changsheng": "临官", "xunkong": "戌亥", "zizuo": "沐浴", "hidden": [{"gan": "丁", "qi": "本气", "ss": "比肩", "wx": "火"}, {"gan": "己", "qi": "中气", "ss": "食神", "wx": "土"}], "roots": [{"pillar": "月", "zhi": "巳", "hidden": "庚", "qi": "中气"}, {"pillar": "日", "zhi": "酉", "hidden": "辛", "qi": "本气"}], "tou": [{"pillar": "年", "zhi": "午", "hidden": "丁", "qi": "本气", "at": ["日"]}], "shensha": ["禄", "咸池（桃花）"]}, {"name": "月", "gz": "辛巳", "gan": "辛", "zhi": "巳", "gan_wx": "金", "zhi_wx": "火", "gan_yy": "阴", "zhi_yy": "阴", "gan_ss": "偏财", "nayin": "白蜡金", "changsheng": "帝旺", "xunkong": "申酉", "zizuo": "死", "hidden": [{"gan": "丙", "qi": "本气", "ss": "劫财", "wx": "火"}, {"gan": "庚", "qi": "中气", "ss": "正财", "wx": "金"}, {"gan": "戊", "qi": "余气", "ss": "伤官", "wx": "土"}], "roots": [{"pillar": "月", "zhi": "巳", "hidden": "庚", "qi": "中气"}, {"pillar": "日", "zhi": "酉", "hidden": "辛", "qi": "本气"}], "tou": [{"pillar": "月", "zhi": "巳", "hidden": "庚", "qi": "中气", "at": ["年"]}], "shensha": ["空亡"]}, {"name": "日", "gz": "丁酉", "gan": "丁", "zhi": "酉", "gan_wx": "火", "zhi_wx": "金", "gan_yy": "阴", "zhi_yy": "阴", "gan_ss": "日主", "nayin": "山下火", "changsheng": "长生", "xunkong": "辰巳", "zizuo": "长生", "hidden": [{"gan": "辛", "qi": "本气", "ss": "偏财", "wx": "金"}], "roots": [{"pillar": "年", "zhi": "午", "hidden": "丁", "qi": "本气"}, {"pillar": "月", "zhi": "巳", "hidden": "丙", "qi": "本气"}], "tou": [{"pillar": "日", "zhi": "酉", "hidden": "辛", "qi": "本气", "at": ["月"]}], "shensha": ["天乙贵人"]}, {"name": "时", "gz": "甲辰", "gan": "甲", "zhi": "辰", "gan_wx": "木", "zhi_wx": "土", "gan_yy": "阳", "zhi_yy": "阳", "gan_ss": "正印", "nayin": "覆灯火", "changsheng": "衰", "xunkong": "寅卯", "zizuo": "衰", "hidden": [{"gan": "戊", "qi": "本气", "ss": "伤官", "wx": "土"}, {"gan": "乙", "qi": "中气", "ss": "偏印", "wx": "木"}, {"gan": "癸", "qi": "余气", "ss": "七杀", "wx": "水"}], "roots": [{"pillar": "时", "zhi": "辰", "hidden": "乙", "qi": "中气"}], "tou": [], "shensha": ["空亡"]}], "relations": {"gan": [], "zhi": [{"kind": "六合", "label": "Day branch You and Hour branch Chen: Six Harmonies", "at": [2, 3], "short": "harmony"}, {"kind": "三合缺一", "label": "Si, You (Month branch, Day branch): Three Harmony missing Chou, not formed", "at": [1, 2], "short": "needs Chou"}]}, "wuxing": {"count": {"木": 1, "火": 3, "土": 1, "金": 3, "水": 0}, "hidden": {"木": 1, "火": 2, "土": 3, "金": 2, "水": 1}}, "wangxiang": {"season": "夏", "wang": "火", "states": {"木": "休", "火": "旺", "土": "相", "金": "死", "水": "囚"}, "day": "旺", "season_en": "summer"}, "glossary": {"gan_xiang": {"甲": "在天为雷为龙，在地为梁为栋", "乙": "在天为风，在地为树", "丙": "在天为日为电，在地为炉为冶", "丁": "在天为列星，在地为灯火", "戊": "在天为雾，在地为山", "己": "乃天之元气，地之真土", "庚": "在天为风霜，在地为金铁", "辛": "在天为日月，乃太阴之精，在地为金，金乃山石之矿", "壬": "在天为云，在地为泽", "癸": "在天为雨露，在地为泉脉"}, "gan_xiang_en": {"甲": "in heaven it is thunder and the dragon; on earth, beams and pillars", "乙": "in heaven it is wind; on earth, trees", "丙": "in heaven it is the sun and lightning; on earth, the furnace and the forge", "丁": "in heaven it is the stars; on earth, lamplight", "戊": "in heaven it is mist; on earth, mountains", "己": "it is the primal qi of heaven and the true soil of earth", "庚": "in heaven it is wind and frost; on earth, metal and iron", "辛": "in heaven it is the sun and moon, the essence of the great yin; on earth it is metal, the ore in mountain rock", "壬": "in heaven it is clouds; on earth, marshes", "癸": "in heaven it is rain and dew; on earth, springs and hidden streams"}, "shishen": {"比肩": ["peer", "same element and same polarity as the Day Master", "siblings, friends and peers; also selfhood and independence"], "劫财": ["rival", "same element as the Day Master, opposite polarity", "competing peers; also drive and contention"], "食神": ["talent", "produced by the Day Master, same polarity", "talent, enjoyment of food, gentle self-expression"], "伤官": ["sharp edge", "produced by the Day Master, opposite polarity", "brilliance, creativity, unrestrained expression"], "偏财": ["windfall wealth", "controlled by the Day Master, same polarity", "money that comes and goes, opportunities, popularity"], "正财": ["steady wealth", "controlled by the Day Master, opposite polarity", "steady income, money earned by hard work"], "七杀": ["pressure", "controls the Day Master, same polarity", "pressure and challenges; also boldness"], "正官": ["rules", "controls the Day Master, opposite polarity", "rules, responsibility, reputation"], "偏印": ["inspiration", "produces the Day Master, same polarity", "unconventional learning, inspiration, solitude"], "正印": ["support", "produces the Day Master, opposite polarity", "learning, protection, support from elders"]}, "changsheng": {"长生": ["growing", "万物发生向荣，如人始生而向长也", "all things begin to flourish, like a person just born and starting to grow"], "沐浴": ["tender and easily hurt", "万物始生，形体柔脆，易为所损", "things newly born are soft and fragile, easily harmed"], "冠带": ["maturing", "万物渐荣秀，如人具衣冠也", "things grow fine and lush, like a person putting on cap and sash"], "临官": ["established", "万物既秀实，如人之临官也", "things have grown full, like a person taking office"], "帝旺": ["at its strongest", "万物成熟，如人之兴旺也", "things are ripe, like a person at the height of vigour"], "衰": ["starting to wane", "万物形衰，如人之气衰也", "things wane in form, like a person whose vigour declines"], "病": ["weakening", "万物病，如人之病也", "things sicken, like a person falling ill"], "死": ["at its weakest", "万物死，如人之死也", "things die, like a person dying"], "墓": ["stored away", "万物成功而藏之库，如人之终而归墓也", "their work done, things are stored in the vault, like a person returning to the grave"], "绝": ["empty, awaiting renewal", "万物在地中未有其象，如母腹空，未有物也", "things in the earth have no form yet, like an empty womb"], "胎": ["sprouting", "其物在地中萌芽，始有其气，如人受父母之气也", "things sprout in the earth and first have qi, like a person receiving the qi of father and mother"], "养": ["taking shape", "万物在地中成形，如人在母腹成形也", "things take shape in the earth, like a person forming in the mother's womb"]}, "wangxiang": {"旺": "in season: the strongest element this season", "相": "produced by the element in season: second strongest", "休": "produces the element in season, so it retires to rest", "囚": "tries to control the element in season and is trapped instead", "死": "controlled by the element in season: the weakest"}, "terms": {"日主": ["The stem of your birth day. It stands for you; the whole chart is read around it: which characters help it and which drain it.", "general rule of the Ziping method"], "四柱": ["Your birth year, month, day and hour, each written as a stem and a branch: four pairs, eight characters, hence 'Bazi'.", "general rule of the Ziping method"], "天干地支": ["The top character of each pillar is a Heavenly Stem (ten of them: Jia, Yi, Bing…); the bottom one is an Earthly Branch (twelve: Zi, Chou, Yin…). Each belongs to one of the Five Elements.", "general rule of the Ziping method"], "十神": ["How each other character relates to the Day Master: produces it, is produced by it, controls it, is controlled by it, or is the same element, each split by polarity. Ten in all, used as metaphors for people and affairs.", "general rule of the Ziping method ⚖ meanings are the common reading"], "藏干": ["Stems hidden inside a branch. The main qi matters most, then the middle and residual qi.", "common hidden-stem table ⚖"], "通根": ["A stem finds the same element among the hidden stems of a branch, like a tree with roots. More roots, and main-qi roots, make it steadier.", "common Ziping reading ⚖"], "透干": ["A stem hidden in a branch also appears as a stem, so its strength shows openly.", "common Ziping reading ⚖"], "月令": ["The branch of your birth month. It decides which element is strongest in that season and is the most important factor in judging the Day Master's strength.", "general rule of the Ziping method"], "司令": ["Within a month, different stems take turns to rule. The San Ming Tong Hui 三命通会 section on the ruling stems lists how many days each rules after the solar term.", "✅ San Ming Tong Hui 三命通会, vol. 2"], "旺相休囚死": ["How strong each element is in the season: in season it is Prosperous, then Strong, Resting, Trapped, and weakest Dead.", "✅ San Ming Tong Hui 三命通会, vol. 2"], "十二长生": ["The Day Master's state on each branch. Old books compare it to twelve stages of a life, from birth to the grave.", "✅ San Ming Tong Hui 三命通会, vol. 2; the book says strong stages are 'not necessarily good'"], "合": ["Two characters combine and hold on to each other. San Ming Tong Hui 三命通会: 'combination means harmony.' Combining into another element needs conditions; only the combination is marked here.", "✅ San Ming Tong Hui 三命通会, vol. 2"], "冲": ["Two opposite branches clash, which brings change. The book says a clash 'may be good or bad and cannot be judged in general': it depends on whether a helpful or harmful character is hit.", "✅ San Ming Tong Hui 三命通会, vol. 2"], "刑": ["Punishment. The book compares it to 'husband and wife who come together yet hurt each other': harm within closeness. Self-punishment is the same branch meeting itself.", "✅ San Ming Tong Hui 三命通会, vol. 2"], "害": ["Harm: the book calls these 'branches that encroach on each other'; they get in each other's way.", "✅ San Ming Tong Hui 三命通会, vol. 2"], "三合": ["Three branches complete a set and form one strong element (e.g. Shen, Zi and Chen form Water).", "✅ San Ming Tong Hui 三命通会, vol. 2"], "三会": ["The three branches of one direction are all present (e.g. Yin, Mao, Chen: the Wood of the east), concentrating that element.", "✅ Yuan Hai Zi Ping 渊海子平"], "三合缺一": ["Only two of a Three Harmony set are present. The book says 'with one of the three missing, the set does not form.' Watch for a Luck Pillar or year that brings the third.", "✅ San Ming Tong Hui 三命通会, vol. 2"], "空亡": ["In each ten-day cycle of the sixty, two branches are left out: they are 'void'. The book says Void 'should not be read as bad on that account'.", "✅ San Ming Tong Hui 三命通会, vol. 3"], "禄": ["The home position of the day stem. The book: 'Lu is rank and salary, to be enjoyed when in power.'", "✅ San Ming Tong Hui 三命通会, vol. 3"], "羊刃": ["One step beyond Prosperity: too strong, with its edge too exposed. The book: 'when Lu goes too far, the blade appears.'", "✅ San Ming Tong Hui 三命通会, vol. 3"], "天乙贵人": ["The most honoured auspicious star in the old books: 'wherever it goes, all malign stars quietly withdraw.' Popularly, help from benefactors.", "✅ San Ming Tong Hui 三命通会, vol. 3"], "驿马": ["Movement, relocation and change. The book calls it 'a spirit of happy events'.", "✅ San Ming Tong Hui 三命通会, vol. 3"], "咸池": ["Popularly 'Peach Blossom': charm and romantic attraction. The book's comments are negative; this skill does not repeat them or judge character from it.", "✅ San Ming Tong Hui 三命通会, vol. 2"], "纳音": ["The traditional image element of each of the sixty pairs (e.g. Roadside Earth, Fire below the Mountain).", "✅ San Ming Tong Hui 三命通会, vol. 1"], "起运": ["The age, in years and months, at which the first Luck Pillar starts, counted from birth to the next (or previous) solar term.", "general rule of the Ziping method"], "大运": ["The background that changes every ten years, like the seasons of a life.", "general rule of the Ziping method"], "流年": ["The stem and branch of each year, like that year's weather; read it together with the chart and the Luck Pillar.", "general rule of the Ziping method"], "调候": ["Which element the chart needs to balance the warmth, cold, dryness or damp of the birth season. The Qiong Tong Bao Jian 穷通宝鉴 is devoted to this.", "✅ Qiong Tong Bao Jian 穷通宝鉴"], "用神": ["The element that helps this chart most. This is a judgement; schools may choose differently, so look at the reasons.", "⚖ a judgement"], "喜神": ["An element that helps the chart and supports the Useful God.", "⚖ a judgement"], "忌神": ["An element that works against the chart.", "⚖ a judgement"], "五行个数": ["How many of the eight characters belong to each element. It is only a count: not strength, and not 'add whatever is missing'.", "note by this project"]}}, "siling": {"jie": "立夏", "day_n": 27, "ruler": "丙火", "jie_time": "1990-05-06 02:35", "table": [{"name": "戊土", "days": 7, "name_en": "Wu Earth"}, {"name": "庚金", "days": 5, "name_en": "Geng Metal"}, {"name": "丙火", "days": 18, "name_en": "Bing Fire"}], "jie_en": "Start of Summer", "ruler_en": "Bing Fire"}, "tiaohou": {"gan": "丁", "month_zhi": "巳", "month": "四月", "section": "论丁火 · 三夏丁火", "passages": [{"line": 697, "kind": "专论", "text": "四月丁火乘旺，虽取甲引丁，必用庚噼甲。伐甲、方云木火通明。甲多、又取庚为先。但四柱忌见癸水。癸水一见，洩金、溼甲、伤丁，故以癸为病。或癸水藏支，壬水出干制丙，不夺丁光，自是雁塔题名，玉堂清贵。"}], "book": "《穷通宝鉴》", "url": "https://zh.wikisource.org/wiki/窮通寶鑑", "kind_en": {"专论": "This month", "合论": "Shared", "季论": "Season"}}, "shensha": [{"name": "禄", "basis": "Day stem Ding", "targets": "Wu", "hits": ["Year branch Wu"], "label": "Prosperity"}, {"name": "天乙贵人", "basis": "Day stem Ding", "targets": "Hai, You", "hits": ["Day branch You"], "label": "Nobleman star"}, {"name": "咸池（桃花）", "basis": "Day branch You", "targets": "Wu", "hits": ["Year branch Wu"], "label": "Peach Blossom"}, {"name": "空亡", "basis": "the ten-day cycle of the Day pillar Dingyou", "targets": "Chen, Si", "hits": ["Month branch Si", "Hour branch Chen"], "label": "Void"}], "dayun": [{"gz": "庚辰", "start": "1999-03", "start_year": 1999, "age": "age 8 and 9 months", "age_short": "age 8", "gan_ss": "正财", "zhi_ss": "伤官", "cs": "衰", "relations": ["Luck Pillar branch Chen forms a Six Harmonies combination with Day branch You", "Luck Pillar branch Chen and Hour branch Chen: self-punishment"], "gan_wx": "金", "zhi_wx": "土", "years": [{"year": 1999, "gz": "己卯", "age": 9, "ss": "食神", "cs": "病", "relations": ["Year stem Ji combines with Hour stem Jia", "Year branch Mao clashes with Day branch You", "Year branch Mao harms Hour branch Chen"]}, {"year": 2000, "gz": "庚辰", "age": 10, "ss": "正财", "cs": "衰", "relations": ["Year branch Chen forms a Six Harmonies combination with Day branch You", "Year branch Chen and Hour branch Chen: self-punishment"]}, {"year": 2001, "gz": "辛巳", "age": 11, "ss": "偏财", "cs": "帝旺", "relations": []}, {"year": 2002, "gz": "壬午", "age": 12, "ss": "正官", "cs": "临官", "relations": ["Year stem Ren combines with Day stem Ding", "Year branch Wu and Year branch Wu: self-punishment"]}, {"year": 2003, "gz": "癸未", "age": 13, "ss": "七杀", "cs": "冠带", "relations": ["Year branch Wei forms a Six Harmonies combination with Year branch Wu", "Year branch Wei completes a Directional Fire set with Month branch Si and Year branch Wu"]}, {"year": 2004, "gz": "甲申", "age": 14, "ss": "正印", "cs": "沐浴", "relations": ["Year branch Shen forms a Six Harmonies combination with Month branch Si", "Year branch Shen punishes Month branch Si (ungrateful punishment)"]}, {"year": 2005, "gz": "乙酉", "age": 15, "ss": "偏印", "cs": "长生", "relations": ["Year stem Yi combines with Year stem Geng", "Year branch You and Day branch You: self-punishment", "Year branch You forms a Six Harmonies combination with Hour branch Chen"]}, {"year": 2006, "gz": "丙戌", "age": 16, "ss": "劫财", "cs": "养", "relations": ["Year stem Bing combines with Month stem Xin", "Year branch Xu harms Day branch You", "Year branch Xu clashes with Hour branch Chen"]}, {"year": 2007, "gz": "丁亥", "age": 17, "ss": "比肩", "cs": "胎", "relations": ["Year branch Hai clashes with Month branch Si"]}, {"year": 2008, "gz": "戊子", "age": 18, "ss": "伤官", "cs": "绝", "relations": ["Year branch Zi clashes with Year branch Wu"]}]}, {"gz": "己卯", "start": "2009-03", "start_year": 2009, "age": "age 18 and 9 months", "age_short": "age 18", "gan_ss": "食神", "zhi_ss": "偏印", "cs": "病", "relations": ["Luck Pillar stem Ji combines with Hour stem Jia", "Luck Pillar branch Mao clashes with Day branch You", "Luck Pillar branch Mao harms Hour branch Chen"], "gan_wx": "土", "zhi_wx": "木", "years": [{"year": 2009, "gz": "己丑", "age": 19, "ss": "食神", "cs": "墓", "relations": ["Year stem Ji combines with Hour stem Jia", "Year branch Chou harms Year branch Wu", "Year branch Chou completes a Three Harmony Metal set with Month branch Si and Day branch You"]}, {"year": 2010, "gz": "庚寅", "age": 20, "ss": "正财", "cs": "死", "relations": ["Year branch Yin punishes Month branch Si (ungrateful punishment)", "Year branch Yin harms Month branch Si"]}, {"year": 2011, "gz": "辛卯", "age": 21, "ss": "偏财", "cs": "病", "relations": ["Year branch Mao clashes with Day branch You", "Year branch Mao harms Hour branch Chen"]}, {"year": 2012, "gz": "壬辰", "age": 22, "ss": "正官", "cs": "衰", "relations": ["Year stem Ren combines with Day stem Ding", "Year branch Chen forms a Six Harmonies combination with Day branch You", "Year branch Chen and Hour branch Chen: self-punishment"]}, {"year": 2013, "gz": "癸巳", "age": 23, "ss": "七杀", "cs": "帝旺", "relations": []}, {"year": 2014, "gz": "甲午", "age": 24, "ss": "正印", "cs": "临官", "relations": ["Year branch Wu and Year branch Wu: self-punishment"]}, {"year": 2015, "gz": "乙未", "age": 25, "ss": "偏印", "cs": "冠带", "relations": ["Year stem Yi combines with Year stem Geng", "Year branch Wei forms a Six Harmonies combination with Year branch Wu", "Year branch Wei completes a Directional Fire set with Month branch Si and Year branch Wu"]}, {"year": 2016, "gz": "丙申", "age": 26, "ss": "劫财", "cs": "沐浴", "relations": ["Year stem Bing combines with Month stem Xin", "Year branch Shen forms a Six Harmonies combination with Month branch Si", "Year branch Shen punishes Month branch Si (ungrateful punishment)"]}, {"year": 2017, "gz": "丁酉", "age": 27, "ss": "比肩", "cs": "长生", "relations": ["Year branch You and Day branch You: self-punishment", "Year branch You forms a Six Harmonies combination with Hour branch Chen"]}, {"year": 2018, "gz": "戊戌", "age": 28, "ss": "伤官", "cs": "养", "relations": ["Year branch Xu harms Day branch You", "Year branch Xu clashes with Hour branch Chen"]}]}, {"gz": "戊寅", "start": "2019-03", "start_year": 2019, "age": "age 28 and 9 months", "age_short": "age 28", "gan_ss": "伤官", "zhi_ss": "正印", "cs": "死", "relations": ["Luck Pillar branch Yin punishes Month branch Si (ungrateful punishment)", "Luck Pillar branch Yin harms Month branch Si"], "gan_wx": "土", "zhi_wx": "木", "years": [{"year": 2019, "gz": "己亥", "age": 29, "ss": "食神", "cs": "胎", "relations": ["Year stem Ji combines with Hour stem Jia", "Year branch Hai clashes with Month branch Si"]}, {"year": 2020, "gz": "庚子", "age": 30, "ss": "正财", "cs": "绝", "relations": ["Year branch Zi clashes with Year branch Wu"]}, {"year": 2021, "gz": "辛丑", "age": 31, "ss": "偏财", "cs": "墓", "relations": ["Year branch Chou harms Year branch Wu", "Year branch Chou completes a Three Harmony Metal set with Month branch Si and Day branch You"]}, {"year": 2022, "gz": "壬寅", "age": 32, "ss": "正官", "cs": "死", "relations": ["Year stem Ren combines with Day stem Ding", "Year branch Yin punishes Month branch Si (ungrateful punishment)", "Year branch Yin harms Month branch Si"]}, {"year": 2023, "gz": "癸卯", "age": 33, "ss": "七杀", "cs": "病", "relations": ["Year branch Mao clashes with Day branch You", "Year branch Mao harms Hour branch Chen"]}, {"year": 2024, "gz": "甲辰", "age": 34, "ss": "正印", "cs": "衰", "relations": ["Year branch Chen forms a Six Harmonies combination with Day branch You", "Year branch Chen and Hour branch Chen: self-punishment"]}, {"year": 2025, "gz": "乙巳", "age": 35, "ss": "偏印", "cs": "帝旺", "relations": ["Year stem Yi combines with Year stem Geng"]}, {"year": 2026, "gz": "丙午", "age": 36, "ss": "劫财", "cs": "临官", "relations": ["Year stem Bing combines with Month stem Xin", "Year branch Wu and Year branch Wu: self-punishment"]}, {"year": 2027, "gz": "丁未", "age": 37, "ss": "比肩", "cs": "冠带", "relations": ["Year branch Wei forms a Six Harmonies combination with Year branch Wu", "Year branch Wei completes a Directional Fire set with Month branch Si and Year branch Wu"]}, {"year": 2028, "gz": "戊申", "age": 38, "ss": "伤官", "cs": "沐浴", "relations": ["Year branch Shen forms a Six Harmonies combination with Month branch Si", "Year branch Shen punishes Month branch Si (ungrateful punishment)"]}]}, {"gz": "丁丑", "start": "2029-03", "start_year": 2029, "age": "age 38 and 9 months", "age_short": "age 38", "gan_ss": "比肩", "zhi_ss": "食神", "cs": "墓", "relations": ["Luck Pillar branch Chou harms Year branch Wu", "Luck Pillar branch Chou completes a Three Harmony Metal set with Month branch Si and Day branch You"], "gan_wx": "火", "zhi_wx": "土", "years": [{"year": 2029, "gz": "己酉", "age": 39, "ss": "食神", "cs": "长生", "relations": ["Year stem Ji combines with Hour stem Jia", "Year branch You and Day branch You: self-punishment", "Year branch You forms a Six Harmonies combination with Hour branch Chen"]}, {"year": 2030, "gz": "庚戌", "age": 40, "ss": "正财", "cs": "养", "relations": ["Year branch Xu harms Day branch You", "Year branch Xu clashes with Hour branch Chen"]}, {"year": 2031, "gz": "辛亥", "age": 41, "ss": "偏财", "cs": "胎", "relations": ["Year branch Hai clashes with Month branch Si"]}, {"year": 2032, "gz": "壬子", "age": 42, "ss": "正官", "cs": "绝", "relations": ["Year stem Ren combines with Day stem Ding", "Year branch Zi clashes with Year branch Wu"]}, {"year": 2033, "gz": "癸丑", "age": 43, "ss": "七杀", "cs": "墓", "relations": ["Year branch Chou harms Year branch Wu", "Year branch Chou completes a Three Harmony Metal set with Month branch Si and Day branch You"]}, {"year": 2034, "gz": "甲寅", "age": 44, "ss": "正印", "cs": "死", "relations": ["Year branch Yin punishes Month branch Si (ungrateful punishment)", "Year branch Yin harms Month branch Si"]}, {"year": 2035, "gz": "乙卯", "age": 45, "ss": "偏印", "cs": "病", "relations": ["Year stem Yi combines with Year stem Geng", "Year branch Mao clashes with Day branch You", "Year branch Mao harms Hour branch Chen"]}, {"year": 2036, "gz": "丙辰", "age": 46, "ss": "劫财", "cs": "衰", "relations": ["Year stem Bing combines with Month stem Xin", "Year branch Chen forms a Six Harmonies combination with Day branch You", "Year branch Chen and Hour branch Chen: self-punishment"]}, {"year": 2037, "gz": "丁巳", "age": 47, "ss": "比肩", "cs": "帝旺", "relations": []}, {"year": 2038, "gz": "戊午", "age": 48, "ss": "伤官", "cs": "临官", "relations": ["Year branch Wu and Year branch Wu: self-punishment"]}]}, {"gz": "丙子", "start": "2039-03", "start_year": 2039, "age": "age 48 and 9 months", "age_short": "age 48", "gan_ss": "劫财", "zhi_ss": "七杀", "cs": "绝", "relations": ["Luck Pillar stem Bing combines with Month stem Xin", "Luck Pillar branch Zi clashes with Year branch Wu"], "gan_wx": "火", "zhi_wx": "水", "years": [{"year": 2039, "gz": "己未", "age": 49, "ss": "食神", "cs": "冠带", "relations": ["Year stem Ji combines with Hour stem Jia", "Year branch Wei forms a Six Harmonies combination with Year branch Wu", "Year branch Wei completes a Directional Fire set with Month branch Si and Year branch Wu"]}, {"year": 2040, "gz": "庚申", "age": 50, "ss": "正财", "cs": "沐浴", "relations": ["Year branch Shen forms a Six Harmonies combination with Month branch Si", "Year branch Shen punishes Month branch Si (ungrateful punishment)"]}, {"year": 2041, "gz": "辛酉", "age": 51, "ss": "偏财", "cs": "长生", "relations": ["Year branch You and Day branch You: self-punishment", "Year branch You forms a Six Harmonies combination with Hour branch Chen"]}, {"year": 2042, "gz": "壬戌", "age": 52, "ss": "正官", "cs": "养", "relations": ["Year stem Ren combines with Day stem Ding", "Year branch Xu harms Day branch You", "Year branch Xu clashes with Hour branch Chen"]}, {"year": 2043, "gz": "癸亥", "age": 53, "ss": "七杀", "cs": "胎", "relations": ["Year branch Hai clashes with Month branch Si"]}, {"year": 2044, "gz": "甲子", "age": 54, "ss": "正印", "cs": "绝", "relations": ["Year branch Zi clashes with Year branch Wu"]}, {"year": 2045, "gz": "乙丑", "age": 55, "ss": "偏印", "cs": "墓", "relations": ["Year stem Yi combines with Year stem Geng", "Year branch Chou harms Year branch Wu", "Year branch Chou completes a Three Harmony Metal set with Month branch Si and Day branch You"]}, {"year": 2046, "gz": "丙寅", "age": 56, "ss": "劫财", "cs": "死", "relations": ["Year stem Bing combines with Month stem Xin", "Year branch Yin punishes Month branch Si (ungrateful punishment)", "Year branch Yin harms Month branch Si"]}, {"year": 2047, "gz": "丁卯", "age": 57, "ss": "比肩", "cs": "病", "relations": ["Year branch Mao clashes with Day branch You", "Year branch Mao harms Hour branch Chen"]}, {"year": 2048, "gz": "戊辰", "age": 58, "ss": "伤官", "cs": "衰", "relations": ["Year branch Chen forms a Six Harmonies combination with Day branch You", "Year branch Chen and Hour branch Chen: self-punishment"]}]}, {"gz": "乙亥", "start": "2049-03", "start_year": 2049, "age": "age 58 and 9 months", "age_short": "age 58", "gan_ss": "偏印", "zhi_ss": "正官", "cs": "胎", "relations": ["Luck Pillar stem Yi combines with Year stem Geng", "Luck Pillar branch Hai clashes with Month branch Si"], "gan_wx": "木", "zhi_wx": "水", "years": [{"year": 2049, "gz": "己巳", "age": 59, "ss": "食神", "cs": "帝旺", "relations": ["Year stem Ji combines with Hour stem Jia"]}, {"year": 2050, "gz": "庚午", "age": 60, "ss": "正财", "cs": "临官", "relations": ["Year branch Wu and Year branch Wu: self-punishment"]}, {"year": 2051, "gz": "辛未", "age": 61, "ss": "偏财", "cs": "冠带", "relations": ["Year branch Wei forms a Six Harmonies combination with Year branch Wu", "Year branch Wei completes a Directional Fire set with Month branch Si and Year branch Wu"]}, {"year": 2052, "gz": "壬申", "age": 62, "ss": "正官", "cs": "沐浴", "relations": ["Year stem Ren combines with Day stem Ding", "Year branch Shen forms a Six Harmonies combination with Month branch Si", "Year branch Shen punishes Month branch Si (ungrateful punishment)"]}, {"year": 2053, "gz": "癸酉", "age": 63, "ss": "七杀", "cs": "长生", "relations": ["Year branch You and Day branch You: self-punishment", "Year branch You forms a Six Harmonies combination with Hour branch Chen"]}, {"year": 2054, "gz": "甲戌", "age": 64, "ss": "正印", "cs": "养", "relations": ["Year branch Xu harms Day branch You", "Year branch Xu clashes with Hour branch Chen"]}, {"year": 2055, "gz": "乙亥", "age": 65, "ss": "偏印", "cs": "胎", "relations": ["Year stem Yi combines with Year stem Geng", "Year branch Hai clashes with Month branch Si"]}, {"year": 2056, "gz": "丙子", "age": 66, "ss": "劫财", "cs": "绝", "relations": ["Year stem Bing combines with Month stem Xin", "Year branch Zi clashes with Year branch Wu"]}, {"year": 2057, "gz": "丁丑", "age": 67, "ss": "比肩", "cs": "墓", "relations": ["Year branch Chou harms Year branch Wu", "Year branch Chou completes a Three Harmony Metal set with Month branch Si and Day branch You"]}, {"year": 2058, "gz": "戊寅", "age": 68, "ss": "伤官", "cs": "死", "relations": ["Year branch Yin punishes Month branch Si (ungrateful punishment)", "Year branch Yin harms Month branch Si"]}]}, {"gz": "甲戌", "start": "2059-03", "start_year": 2059, "age": "age 68 and 9 months", "age_short": "age 68", "gan_ss": "正印", "zhi_ss": "伤官", "cs": "养", "relations": ["Luck Pillar branch Xu harms Day branch You", "Luck Pillar branch Xu clashes with Hour branch Chen"], "gan_wx": "木", "zhi_wx": "土", "years": [{"year": 2059, "gz": "己卯", "age": 69, "ss": "食神", "cs": "病", "relations": ["Year stem Ji combines with Hour stem Jia", "Year branch Mao clashes with Day branch You", "Year branch Mao harms Hour branch Chen"]}, {"year": 2060, "gz": "庚辰", "age": 70, "ss": "正财", "cs": "衰", "relations": ["Year branch Chen forms a Six Harmonies combination with Day branch You", "Year branch Chen and Hour branch Chen: self-punishment"]}, {"year": 2061, "gz": "辛巳", "age": 71, "ss": "偏财", "cs": "帝旺", "relations": []}, {"year": 2062, "gz": "壬午", "age": 72, "ss": "正官", "cs": "临官", "relations": ["Year stem Ren combines with Day stem Ding", "Year branch Wu and Year branch Wu: self-punishment"]}, {"year": 2063, "gz": "癸未", "age": 73, "ss": "七杀", "cs": "冠带", "relations": ["Year branch Wei forms a Six Harmonies combination with Year branch Wu", "Year branch Wei completes a Directional Fire set with Month branch Si and Year branch Wu"]}, {"year": 2064, "gz": "甲申", "age": 74, "ss": "正印", "cs": "沐浴", "relations": ["Year branch Shen forms a Six Harmonies combination with Month branch Si", "Year branch Shen punishes Month branch Si (ungrateful punishment)"]}, {"year": 2065, "gz": "乙酉", "age": 75, "ss": "偏印", "cs": "长生", "relations": ["Year stem Yi combines with Year stem Geng", "Year branch You and Day branch You: self-punishment", "Year branch You forms a Six Harmonies combination with Hour branch Chen"]}, {"year": 2066, "gz": "丙戌", "age": 76, "ss": "劫财", "cs": "养", "relations": ["Year stem Bing combines with Month stem Xin", "Year branch Xu harms Day branch You", "Year branch Xu clashes with Hour branch Chen"]}, {"year": 2067, "gz": "丁亥", "age": 77, "ss": "比肩", "cs": "胎", "relations": ["Year branch Hai clashes with Month branch Si"]}, {"year": 2068, "gz": "戊子", "age": 78, "ss": "伤官", "cs": "绝", "relations": ["Year branch Zi clashes with Year branch Wu"]}]}, {"gz": "癸酉", "start": "2069-03", "start_year": 2069, "age": "age 78 and 9 months", "age_short": "age 78", "gan_ss": "七杀", "zhi_ss": "偏财", "cs": "长生", "relations": ["Luck Pillar branch You and Day branch You: self-punishment", "Luck Pillar branch You forms a Six Harmonies combination with Hour branch Chen"], "gan_wx": "水", "zhi_wx": "金", "years": [{"year": 2069, "gz": "己丑", "age": 79, "ss": "食神", "cs": "墓", "relations": ["Year stem Ji combines with Hour stem Jia", "Year branch Chou harms Year branch Wu", "Year branch Chou completes a Three Harmony Metal set with Month branch Si and Day branch You"]}, {"year": 2070, "gz": "庚寅", "age": 80, "ss": "正财", "cs": "死", "relations": ["Year branch Yin punishes Month branch Si (ungrateful punishment)", "Year branch Yin harms Month branch Si"]}, {"year": 2071, "gz": "辛卯", "age": 81, "ss": "偏财", "cs": "病", "relations": ["Year branch Mao clashes with Day branch You", "Year branch Mao harms Hour branch Chen"]}, {"year": 2072, "gz": "壬辰", "age": 82, "ss": "正官", "cs": "衰", "relations": ["Year stem Ren combines with Day stem Ding", "Year branch Chen forms a Six Harmonies combination with Day branch You", "Year branch Chen and Hour branch Chen: self-punishment"]}, {"year": 2073, "gz": "癸巳", "age": 83, "ss": "七杀", "cs": "帝旺", "relations": []}, {"year": 2074, "gz": "甲午", "age": 84, "ss": "正印", "cs": "临官", "relations": ["Year branch Wu and Year branch Wu: self-punishment"]}, {"year": 2075, "gz": "乙未", "age": 85, "ss": "偏印", "cs": "冠带", "relations": ["Year stem Yi combines with Year stem Geng", "Year branch Wei forms a Six Harmonies combination with Year branch Wu", "Year branch Wei completes a Directional Fire set with Month branch Si and Year branch Wu"]}, {"year": 2076, "gz": "丙申", "age": 86, "ss": "劫财", "cs": "沐浴", "relations": ["Year stem Bing combines with Month stem Xin", "Year branch Shen forms a Six Harmonies combination with Month branch Si", "Year branch Shen punishes Month branch Si (ungrateful punishment)"]}, {"year": 2077, "gz": "丁酉", "age": 87, "ss": "比肩", "cs": "长生", "relations": ["Year branch You and Day branch You: self-punishment", "Year branch You forms a Six Harmonies combination with Hour branch Chen"]}, {"year": 2078, "gz": "戊戌", "age": 88, "ss": "伤官", "cs": "养", "relations": ["Year branch Xu harms Day branch You", "Year branch Xu clashes with Hour branch Chen"]}]}, {"gz": "壬申", "start": "2079-03", "start_year": 2079, "age": "age 88 and 9 months", "age_short": "age 88", "gan_ss": "正官", "zhi_ss": "正财", "cs": "沐浴", "relations": ["Luck Pillar stem Ren combines with Day stem Ding", "Luck Pillar branch Shen forms a Six Harmonies combination with Month branch Si", "Luck Pillar branch Shen punishes Month branch Si (ungrateful punishment)"], "gan_wx": "水", "zhi_wx": "金", "years": [{"year": 2079, "gz": "己亥", "age": 89, "ss": "食神", "cs": "胎", "relations": ["Year stem Ji combines with Hour stem Jia", "Year branch Hai clashes with Month branch Si"]}, {"year": 2080, "gz": "庚子", "age": 90, "ss": "正财", "cs": "绝", "relations": ["Year branch Zi clashes with Year branch Wu"]}, {"year": 2081, "gz": "辛丑", "age": 91, "ss": "偏财", "cs": "墓", "relations": ["Year branch Chou harms Year branch Wu", "Year branch Chou completes a Three Harmony Metal set with Month branch Si and Day branch You"]}, {"year": 2082, "gz": "壬寅", "age": 92, "ss": "正官", "cs": "死", "relations": ["Year stem Ren combines with Day stem Ding", "Year branch Yin punishes Month branch Si (ungrateful punishment)", "Year branch Yin harms Month branch Si"]}, {"year": 2083, "gz": "癸卯", "age": 93, "ss": "七杀", "cs": "病", "relations": ["Year branch Mao clashes with Day branch You", "Year branch Mao harms Hour branch Chen"]}, {"year": 2084, "gz": "甲辰", "age": 94, "ss": "正印", "cs": "衰", "relations": ["Year branch Chen forms a Six Harmonies combination with Day branch You", "Year branch Chen and Hour branch Chen: self-punishment"]}, {"year": 2085, "gz": "乙巳", "age": 95, "ss": "偏印", "cs": "帝旺", "relations": ["Year stem Yi combines with Year stem Geng"]}, {"year": 2086, "gz": "丙午", "age": 96, "ss": "劫财", "cs": "临官", "relations": ["Year stem Bing combines with Month stem Xin", "Year branch Wu and Year branch Wu: self-punishment"]}, {"year": 2087, "gz": "丁未", "age": 97, "ss": "比肩", "cs": "冠带", "relations": ["Year branch Wei forms a Six Harmonies combination with Year branch Wu", "Year branch Wei completes a Directional Fire set with Month branch Si and Year branch Wu"]}, {"year": 2088, "gz": "戊申", "age": 98, "ss": "伤官", "cs": "沐浴", "relations": ["Year branch Shen forms a Six Harmonies combination with Month branch Si", "Year branch Shen punishes Month branch Si (ungrateful punishment)"]}]}, {"gz": "辛未", "start": "2089-03", "start_year": 2089, "age": "age 98 and 9 months", "age_short": "age 98", "gan_ss": "偏财", "zhi_ss": "食神", "cs": "冠带", "relations": ["Luck Pillar branch Wei forms a Six Harmonies combination with Year branch Wu", "Luck Pillar branch Wei completes a Directional Fire set with Month branch Si and Year branch Wu"], "gan_wx": "金", "zhi_wx": "土", "years": [{"year": 2089, "gz": "己酉", "age": 99, "ss": "食神", "cs": "长生", "relations": ["Year stem Ji combines with Hour stem Jia", "Year branch You and Day branch You: self-punishment", "Year branch You forms a Six Harmonies combination with Hour branch Chen"]}, {"year": 2090, "gz": "庚戌", "age": 100, "ss": "正财", "cs": "养", "relations": ["Year branch Xu harms Day branch You", "Year branch Xu clashes with Hour branch Chen"]}, {"year": 2091, "gz": "辛亥", "age": 101, "ss": "偏财", "cs": "胎", "relations": ["Year branch Hai clashes with Month branch Si"]}, {"year": 2092, "gz": "壬子", "age": 102, "ss": "正官", "cs": "绝", "relations": ["Year stem Ren combines with Day stem Ding", "Year branch Zi clashes with Year branch Wu"]}, {"year": 2093, "gz": "癸丑", "age": 103, "ss": "七杀", "cs": "墓", "relations": ["Year branch Chou harms Year branch Wu", "Year branch Chou completes a Three Harmony Metal set with Month branch Si and Day branch You"]}, {"year": 2094, "gz": "甲寅", "age": 104, "ss": "正印", "cs": "死", "relations": ["Year branch Yin punishes Month branch Si (ungrateful punishment)", "Year branch Yin harms Month branch Si"]}, {"year": 2095, "gz": "乙卯", "age": 105, "ss": "偏印", "cs": "病", "relations": ["Year stem Yi combines with Year stem Geng", "Year branch Mao clashes with Day branch You", "Year branch Mao harms Hour branch Chen"]}, {"year": 2096, "gz": "丙辰", "age": 106, "ss": "劫财", "cs": "衰", "relations": ["Year stem Bing combines with Month stem Xin", "Year branch Chen forms a Six Harmonies combination with Day branch You", "Year branch Chen and Hour branch Chen: self-punishment"]}, {"year": 2097, "gz": "丁巳", "age": 107, "ss": "比肩", "cs": "帝旺", "relations": []}, {"year": 2098, "gz": "戊午", "age": 108, "ss": "伤官", "cs": "临官", "relations": ["Year branch Wu and Year branch Wu: self-punishment"]}]}], "pre_years": [{"year": 1990, "gz": "庚午", "age": 0, "ss": "正财", "cs": "临官", "relations": ["Year branch Wu and Year branch Wu: self-punishment"]}, {"year": 1991, "gz": "辛未", "age": 1, "ss": "偏财", "cs": "冠带", "relations": ["Year branch Wei forms a Six Harmonies combination with Year branch Wu", "Year branch Wei completes a Directional Fire set with Month branch Si and Year branch Wu"]}, {"year": 1992, "gz": "壬申", "age": 2, "ss": "正官", "cs": "沐浴", "relations": ["Year stem Ren combines with Day stem Ding", "Year branch Shen forms a Six Harmonies combination with Month branch Si", "Year branch Shen punishes Month branch Si (ungrateful punishment)"]}, {"year": 1993, "gz": "癸酉", "age": 3, "ss": "七杀", "cs": "长生", "relations": ["Year branch You and Day branch You: self-punishment", "Year branch You forms a Six Harmonies combination with Hour branch Chen"]}, {"year": 1994, "gz": "甲戌", "age": 4, "ss": "正印", "cs": "养", "relations": ["Year branch Xu harms Day branch You", "Year branch Xu clashes with Hour branch Chen"]}, {"year": 1995, "gz": "乙亥", "age": 5, "ss": "偏印", "cs": "胎", "relations": ["Year stem Yi combines with Year stem Geng", "Year branch Hai clashes with Month branch Si"]}, {"year": 1996, "gz": "丙子", "age": 6, "ss": "劫财", "cs": "绝", "relations": ["Year stem Bing combines with Month stem Xin", "Year branch Zi clashes with Year branch Wu"]}, {"year": 1997, "gz": "丁丑", "age": 7, "ss": "比肩", "cs": "墓", "relations": ["Year branch Chou harms Year branch Wu", "Year branch Chou completes a Three Harmony Metal set with Month branch Si and Day branch You"]}, {"year": 1998, "gz": "戊寅", "age": 8, "ss": "伤官", "cs": "死", "relations": ["Year branch Yin punishes Month branch Si (ungrateful punishment)", "Year branch Yin harms Month branch Si"]}], "birth_year": 1990, "focus_year": 2026, "today_year": 2026, "notes": {"plain": "In one line: in your chart, 'you' (Ding Fire, like the flame of a lamp) and 'wealth' are both strong, so the chart is fairly balanced.\n\nWhy: you were born in early summer, when Fire is at its strongest, so you are not weak; at the same time the chart has two Metal characters (Metal stands for wealth here), and they have roots. The Qiong Tong Bao Jian 穷通宝鉴 says Ding Fire in this season most needs Wood to feed the flame and Metal to split the Wood. Your chart has both, which suits it.\n\nThese years: in the Luck Pillar of 2019–2029, Wood gets support in the branches, which helps you; steady progress suits it. 2026 carries a sense of 'peers competing for wealth', so be careful with spending and partnerships.\n\nThese are tendencies in a traditional system, not fate.", "basis": "Climate adjustment follows the Qiong Tong Bao Jian 穷通宝鉴 entry for Ding Fire in the fourth month (original text checked); strength follows the Ziping method: Month Command, roots and revealed stems. What follows is interpretation, not computed by the script; other schools may read it differently.", "summary": "Ding Fire born in the Si month with Bing Fire ruling; the Year branch Wu is Ding's Prosperity, so the Day Master is in season and rooted, not weak. Geng and Xin are revealed in the year and month, the Day Master sits on You Metal, and Chen and You combine: wealth is equally strong, roughly a balance of self and wealth. The Qiong Tong Bao Jian says of Ding Fire in the fourth month 「取甲引丁，必用庚噼甲」 ('take Jia to kindle Ding; Geng must split the Jia'; our translation) and warns against a revealed Gui Water. Here Jia in the hour and Geng in the year are both revealed, and Gui is only hidden as the residual qi of Chen, which agrees with the text. Taken together, Jia Wood can be the Useful God with Geng Metal assisting; strong Water, which hurts Ding and soaks Jia, is unfavourable.", "pillars": {"年": "Gengwu: Geng Metal, Direct Wealth, is revealed; Wu is Ding Fire's Prosperity. Wealth and peers appear together in the ancestral pillar.", "月": "Xinsi: the Month Command Si is the Peak stage for Ding Fire, with Bing Fire ruling; Xin Metal, Indirect Wealth, is revealed, rooted in the Geng hidden in Si.", "日": "Dingyou: the Day Master sits on You Metal, Indirect Wealth, which is also Ding Fire's Birth stage and a Nobleman star (by table). You combines with the Hour branch Chen (Six Harmonies).", "时": "Jiachen: Jia Wood, Direct Resource, is revealed, the very element the Qiong Tong Bao Jian values for this month; but its only root is the Yi Wood middle qi in Chen, so Jia itself is not strong."}, "dayun": {"戊寅": "Wu Earth, Hurting Officer, sits on top; Yin Wood is a root for Jia, so the Resource star gains ground and the Useful God has strength. Yin punishes and harms the Month branch Si, unsettling the Month Command: steady rather than hasty.", "丁丑": "Ding Fire, Friend, supports the Day Master; Chou completes a Three Harmony Metal set with Si and You, so wealth gathers force. Both self and wealth are strong; the key is choosing well."}, "years": {"2026": "Bingwu year: Bing Fire, Rob Wealth, combines with the Month stem Xin, and Wu meets the Year branch Wu in self-punishment. A picture of peers competing for wealth: hold steady with money rather than take risks. Only a tendency, no need to worry."}, "advice": ["Jia Wood as the Useful God: Wood belongs to the east and the colour green (San Ming Tong Hui 三命通会, Wu Xing Da Yi 五行大义). A desk or bed head facing east is an option; this is traditional imagery, not a requirement", "Your Kua is Gen, West Group. The Eight Mansions and the favourable elements are two separate methods; when they conflict, put real living conditions first", "Luck Pillars and years only show tendencies; base career and money decisions on your actual situation"]}, "source": "bazi-mingli · kanyu v3.1.0 · generated 2026-11-23 · chart and tables computed by scripts/bazi.py; notes are interpretation, not computed results", "lang": "en", "names": {"比肩": "Friend", "劫财": "Rob Wealth", "食神": "Eating God", "伤官": "Hurting Officer", "偏财": "Indirect Wealth", "正财": "Direct Wealth", "七杀": "Seven Killings", "正官": "Direct Officer", "偏印": "Indirect Resource", "正印": "Direct Resource", "长生": "Birth", "沐浴": "Bath", "冠带": "Crown and Belt", "临官": "Coming of Age", "帝旺": "Peak", "衰": "Decline", "病": "Sickness", "死": "Death", "墓": "Tomb", "绝": "Extinction", "胎": "Conception", "养": "Nurture", "旺相:旺": "Prosperous", "旺相:相": "Strong", "旺相:休": "Resting", "旺相:囚": "Trapped", "旺相:死": "Dead", "木": "Wood", "火": "Fire", "土": "Earth", "金": "Metal", "水": "Water", "阳": "Yang", "阴": "Yin", "海中金": "Gold in the Sea", "炉中火": "Furnace Fire", "大林木": "Great Forest Wood", "路旁土": "Roadside Earth", "剑锋金": "Sword-edge Metal", "山头火": "Mountaintop Fire", "涧下水": "Valley Stream Water", "城头土": "City-wall Earth", "白蜡金": "White Wax Metal", "杨柳木": "Willow Wood", "泉中水": "Spring Water", "屋上土": "Rooftop Earth", "霹雳火": "Thunderbolt Fire", "松柏木": "Pine and Cypress Wood", "长流水": "Long River Water", "沙中金": "Gold in the Sand", "山下火": "Fire below the Mountain", "平地木": "Flatland Wood", "壁上土": "Wall Earth", "金箔金": "Gold Leaf Metal", "覆灯火": "Lamp Fire", "天河水": "Heavenly River Water", "大驿土": "Post-road Earth", "钗钏金": "Hairpin Metal", "桑柘木": "Mulberry Wood", "大溪水": "Great Stream Water", "沙中土": "Earth in the Sand", "天上火": "Fire in the Sky", "石榴木": "Pomegranate Wood", "大海水": "Great Sea Water", "本气": "main qi", "中气": "middle qi", "余气": "residual qi", "年": "Year", "月": "Month", "日": "Day", "时": "Hour", "日主": "Day Master", "四柱": "Four Pillars", "天干地支": "Heavenly Stems and Earthly Branches", "十神": "Ten Gods", "藏干": "Hidden Stems", "通根": "rooted", "透干": "revealed", "月令": "Month Command", "司令": "ruling qi of the month", "旺相休囚死": "Prosperous, Strong, Resting, Trapped, Dead", "十二长生": "Twelve Life Stages", "合": "combination", "冲": "clash", "刑": "punishment", "害": "harm", "三合": "Three Harmony combination", "三会": "Directional combination", "三合缺一": "incomplete Three Harmony", "空亡": "Void", "禄": "Prosperity", "羊刃": "Goat Blade", "天乙贵人": "Nobleman star", "驿马": "Travelling Horse", "咸池": "Peach Blossom", "纳音": "Na Yin", "起运": "start of the Luck Pillars", "大运": "Luck Pillar", "流年": "Annual Pillar", "调候": "climate adjustment", "用神": "Useful God", "喜神": "favorable element", "忌神": "unfavorable element", "五行个数": "element count", "六合": "Six Harmonies", "自刑": "self-punishment", "咸池（桃花）": "Peach Blossom", "甲": "Jia", "乙": "Yi", "丙": "Bing", "丁": "Ding", "戊": "Wu", "己": "Ji", "庚": "Geng", "辛": "Xin", "壬": "Ren", "癸": "Gui", "子": "Zi", "丑": "Chou", "寅": "Yin", "卯": "Mao", "辰": "Chen", "巳": "Si", "午": "Wu", "未": "Wei", "申": "Shen", "酉": "You", "戌": "Xu", "亥": "Hai"}, "term_py": {"比肩": "Bi Jian", "劫财": "Jie Cai", "食神": "Shi Shen", "伤官": "Shang Guan", "偏财": "Pian Cai", "正财": "Zheng Cai", "七杀": "Qi Sha", "正官": "Zheng Guan", "偏印": "Pian Yin", "正印": "Zheng Yin", "八字": "Ba Zi", "四柱": "Si Zhu", "年柱": "Nian Zhu", "月柱": "Yue Zhu", "日柱": "Ri Zhu", "时柱": "Shi Zhu", "日主": "Ri Zhu", "天干地支": "Tian Gan Di Zhi", "十神": "Shi Shen", "藏干": "Cang Gan", "本气": "Ben Qi", "中气": "Zhong Qi", "余气": "Yu Qi", "通根": "Tong Gen", "透干": "Tou Gan", "月令": "Yue Ling", "司令": "Si Ling", "旺相休囚死": "Wang Xiang Xiu Qiu Si", "十二长生": "Shi Er Chang Sheng", "合": "He", "六合": "Liu He", "三合": "San He", "三会": "San Hui", "三合缺一": "San He Que Yi", "冲": "Chong", "刑": "Xing", "害": "Hai", "空亡": "Kong Wang", "禄": "Lu", "羊刃": "Yang Ren", "天乙贵人": "Tian Yi Gui Ren", "驿马": "Yi Ma", "咸池": "Xian Chi", "纳音": "Na Yin", "起运": "Qi Yun", "大运": "Da Yun", "流年": "Liu Nian", "调候": "Tiao Hou", "格局": "Ge Ju", "从格": "Cong Ge", "用神": "Yong Shen", "喜神": "Xi Shen", "忌神": "Ji Shen", "五行个数": "Wu Xing Ge Shu", "子时换日": "Zi Shi Huan Ri", "时辰": "Shi Chen", "五行": "Wu Xing", "阴阳": "Yin Yang", "相生": "Xiang Sheng", "相克": "Xiang Ke", "天干": "Tian Gan", "地支": "Di Zhi", "干支": "Gan Zhi", "六十甲子": "Liu Shi Jia Zi", "生肖": "Sheng Xiao", "八卦": "Ba Gua", "节气": "Jie Qi", "二十四节气": "Er Shi Si Jie Qi", "气": "Qi", "立春": "Li Chun", "农历": "Nong Li", "闰月": "Run Yue", "真太阳时": "Zhen Tai Yang Shi", "夏令时": "Xia Ling Shi", "五色": "Wu Se", "长生": "Chang Sheng", "沐浴": "Mu Yu", "冠带": "Guan Dai", "临官": "Lin Guan", "帝旺": "Di Wang", "衰": "Shuai", "病": "Bing", "死": "Si", "墓": "Mu", "绝": "Jue", "胎": "Tai", "养": "Yang"}}</script>
+<script>
+(function () {
+  "use strict";
+  var D = JSON.parse(document.getElementById("chart-data").textContent);
+  var EN = D.lang === "en";
+  var N = D.pillars.length;
+  var notes = D.notes || {};
+  var reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  var SVGNS = "http://www.w3.org/2000/svg";
+  var WXS = "木火土金水".split("");
+  function h(tag, cls, text, parent) {
+    var n = document.createElement(tag);
+    if (cls) n.className = cls;
+    if (text != null) n.textContent = text;
+    if (parent) parent.appendChild(n);
+    return n;
+  }
+  function s(tag, attrs, text, parent) {
+    var n = document.createElementNS(SVGNS, tag);
+    for (var k in attrs) n.setAttribute(k, attrs[k]);
+    if (text != null) n.textContent = text;
+    if (parent) parent.appendChild(n);
+    return n;
+  }
+  function txt(parent, t) { parent.appendChild(document.createTextNode(t)); }
+  /* 显示名：数据键是中文，英文页查 D.names（脚本由 terms_en 生成） */
+  function nm(k) { return EN ? (D.names[k] || k) : k; }
+  function wxName(k) { return nm(k); }
+  function gzName(gz) { return EN ? nm(gz[0]) + nm(gz[1]).toLowerCase() : gz; }
+  function ganName(c) { return EN ? nm(c) + " " + nm(WX_OF[c]) : c + WX_OF[c]; }
+  function wxSpan(ch, wx, parent, cls) { return h("span", "wx-" + wx + (cls ? " " + cls : ""), ch, parent); }
+  var WX_OF = {};
+  "甲乙寅卯".split("").forEach(function (c) { WX_OF[c] = "木"; });
+  "丙丁巳午".split("").forEach(function (c) { WX_OF[c] = "火"; });
+  "戊己辰戌丑未".split("").forEach(function (c) { WX_OF[c] = "土"; });
+  "庚辛申酉".split("").forEach(function (c) { WX_OF[c] = "金"; });
+  "壬癸亥子".split("").forEach(function (c) { WX_OF[c] = "水"; });
+  function gzSpans(gz, parent) { wxSpan(gz[0], WX_OF[gz[0]], parent); wxSpan(gz[1], WX_OF[gz[1]], parent); if (EN) txt(parent, " " + gzName(gz)); }
+  var G = D.glossary;
+
+  /* ---- 界面文字 ---- */
+  var SM = "San Ming Tong Hui 三命通会";
+  var I18N = {
+    zh: {
+      method: "排盘口径", plainTitle: "一眼看懂", cast: "排盘", tPlain: "白话", tRel: "合冲刑害", tHid: "藏干",
+      display: "显示", bandGan: "天干关系", bandZhi: "地支关系", yunTitle: "大运流年", track: "大运", slider: "拖动选择年份", years: "流年",
+      thTitle: "调候 · 《穷通宝鉴》原文", factsTitle: "月令 · 五行 · 神煞", glossary: "术语表：看不懂的词都在这里", close: "关闭",
+      disclaimer: "命理为传统文化的一种推演，不定人生。柱中干支、藏干、关系与神煞由脚本查表得出；旺衰、格局、用神是解读，见批注与对话。",
+      sep: "：", list: "、", semi: "；", basis: "出处 / 口径：", explainOf: function (l) { return l + "：查看白话解释"; }, whatIs: function (k) { return k + "是什么"; },
+      title: function () { return D.gender + " · " + D.day_gan + D.day_wx + "日主"; },
+      col: function (p) { return p.name + "柱"; }, pos: function (name, side) { return name + side; },
+      you: "你自己",
+      ssExplain: function (k) { var x = G.shishen[k]; return { title: k + "（" + x[0] + "）", text: x[1] + "。通行释义：" + x[2] + "。", basis: "子平通行释义 ⚖；十神是比喻，不是命定" }; },
+      csExplain: function (k) { var x = G.changsheng[k]; return { title: k + "（" + x[0] + "）", text: "日主在这个地支上的状态。《三命提要》：「" + x[1] + "」", basis: "✅《三命通会》卷二；原书言见生旺「未必便作吉论」，见休囚死绝「未必便作凶言」" }; },
+      wxExplain: function (k) { return { title: "「" + k + "」", text: G.wangxiang[k] + "。", basis: G.terms["旺相休囚死"][1] }; },
+      termTitle: function (k) { return k; },
+      csGloss: function (k) { return G.changsheng[k][0]; },
+      kinds: [["he", "合"], ["chong", "冲"], ["xing", "刑·害"], ["que", "三合缺一"]],
+      emptyPillar: "此柱未作批注。点其他干支查看，或在对话中继续追问。",
+      ganSub: function (p) { var e = G.shishen[p.gan_ss]; return p.gan_yy + p.gan_wx + " · " + (p.name === "日" ? "日主：代表你自己" : p.gan_ss + "（" + e[0] + "）：" + e[1]); },
+      ganNote: function (p) { return p.name === "日" ? "《三命通会》：" + p.gan + "「" + G.gan_xiang[p.gan] + "」。" : "通行释义：" + G.shishen[p.gan_ss][2] + "。"; },
+      roots: function (rs) { return rs.length ? "在" + rs.map(function (r) { return r.pillar + "支" + r.zhi + "（" + r.qi + r.hidden + "）"; }).join("、") + "有根，站得住" : "四个地支里都没有同五行的字，无根"; },
+      touFrom: function (from) { return "这个字从" + from.map(function (q) { return q.p + "支" + q.zhi + q.qi + q.hidden; }).join("、") + "透出"; },
+      zhiSub: function (p) { return p.zhi_yy + p.zhi_wx + " · 日主" + D.day_gan + "在这里是「" + p.changsheng + "」（" + G.changsheng[p.changsheng][0] + "）"; },
+      hidden: function (x) { return x.gan + "（" + x.qi + "·" + x.ss + "，" + G.shishen[x.ss][0] + "）"; }, hiddenSep: "　",
+      touTo: function (t) { return t.hidden + "透到" + t.at.map(function (a) { return a + "干"; }).join("、"); },
+      monthCmd: function () { return "出生在" + D.wangxiang.season + "，" + D.wangxiang.wang + "当令；" + D.siling.jie + "后第" + D.siling.day_n + "日，" + D.siling.ruler + "司令"; },
+      shenshaHere: "神煞（查表）：", kong: function () { return "落在日柱的旬空（" + D.pillars[2].xunkong + "）里"; },
+      relsHere: "和其他字的关系：", relTitle: function (k) { return k === "三合缺一" ? k : k; },
+      pre: "起运前", preSub: "出生到第一次交运之前，还没有进入大运。", now: "今", age: function (a) { return a + "岁"; },
+      sliderOut: function (y, yr) { return y + " " + yr.gz + " · " + yr.age + "岁"; }, yearAria: function (x) { return x.year + "年" + x.gz; },
+      dayunHead: "大运 ", dayunSub: function (d) { return d.start + " 起这十年 · " + d.age + "开始"; },
+      dayunPlain: function (gz, d, el) {
+        txt(el, "天干" + gz[0] + "是你的"); term(d.gan_ss, d.gan_ss, el);
+        txt(el, "（" + G.shishen[d.gan_ss][2] + "），地支" + gz[1] + "是"); term(d.zhi_ss, d.zhi_ss, el);
+        txt(el, "（" + G.shishen[d.zhi_ss][0] + "）；日主在" + gz[1] + "为「"); term(d.cs, d.cs, el);
+        txt(el, "」（" + G.changsheng[d.cs][0] + "）。");
+      },
+      noRel: "与原局无合冲刑害", emptyDayun: "此步大运未作批注。",
+      yearHead: function (y) { return y + " 流年 "; }, yearSub: function (yr) { return yr.age + "周岁"; },
+      yearPlain: function (yr, el) {
+        txt(el, "这一年的天干" + yr.gz[0] + "是你的"); term(yr.ss, yr.ss, el);
+        txt(el, "（" + G.shishen[yr.ss][2] + "）；日主在" + yr.gz[1] + "为「"); term(yr.cs, yr.cs, el);
+        txt(el, "」（" + G.changsheng[yr.cs][0] + "）。");
+      },
+      emptyYear: "此年未作批注。",
+      thSub: function () { return D.tiaohou.section + " · " + D.tiaohou.month + D.day_gan + D.day_wx + "（月令按节气，" + D.month_zhi + "月）"; },
+      thKind: function (k) { return k; },
+      thSrc: "维基文库《窮通寶鑑》原文，按日干与月令检出，未作概括。专论＝本月专段，合论＝两月共段，季论＝一季总论。",
+      slHead: function () { return "月令 " + D.month_zhi + " · " + D.siling.ruler + "司令"; },
+      slNote: function () { return "生于" + D.wangxiang.season + "，" + D.wangxiang.wang + "当令（这个季节最强）。各五行此时：" + WXS.map(function (k) { return k + D.wangxiang.states[k]; }).join(" ") + "。"; },
+      slSub: function () { return "交" + D.siling.jie + "于 " + D.siling.jie_time + "（北京时间），生于其后第 " + D.siling.day_n + " 日。《三命通会》人元司事："; },
+      slCell: function (t) { return t.name + " " + t.days + "日"; }, slOn: function (t) { return t.name === D.siling.ruler; },
+      wxHead: "五行个数", wxSub: "只是字数统计，不代表强弱；某个五行是 0，也不等于需要「补」。",
+      wxCols: function () { return ["天干地支（" + N * 2 + "字）", "藏干"]; },
+      ssHead: "神煞（查表）", ssNone: "禄、羊刃、天乙贵人、驿马、咸池、空亡均未见于柱中。",
+      ssItem: function (x) { return "：依" + x.basis + "查得" + x.targets + "，见于" + x.hits.join("、") + "。"; }, ssLabel: function (x) { return x.name; },
+      ssSrc: "据《三命通会》查表。原书亦言见生旺者「未必便作吉论」、休囚死绝「未必便作凶言」，神煞不单独定吉凶。",
+      overall: "盘断（专业版）", basisOf: "依据：", overallEmpty: "旺衰、格局、用神的论断见对话。",
+      leadEmpty: "下面是排盘得出的几条事实。强弱、喜用的判断请看对话中的解读。",
+      c1: "代表你的字", c1p: function (el) { term("日主", "日主", el); txt(el, "是" + D.day_gan + D.day_wx + "（" + D.day_yy + D.day_wx + "）。"); },
+      c1q: function () { return "《三命通会》：" + D.day_gan + D.day_wx + "「" + G.gan_xiang[D.day_gan] + "」。"; },
+      c1h: "八字以出生那天的天干代表你自己，其余七个字都是围绕它的环境。",
+      c2: "出生的季节",
+      c2p: function (w, el) { txt(el, "生在" + w.season + "（" + D.month_zhi + "月，" + D.siling.jie + "后第 " + D.siling.day_n + " 日），这时" + w.wang + "最旺。你的" + D.day_wx + "此时为"); term("「" + w.day + "」", "旺相:" + w.day, el); txt(el, "：" + G.wangxiang[w.day] + "。"); },
+      c2h: "季节只是看强弱的第一步，还要看地支里有没有根、周围有没有帮手。",
+      c3: "五行个数", c3p: function () { return WXS.map(function (k) { return k + D.wuxing.count[k]; }).join("、") + "（天干地支共 " + N * 2 + " 字）。"; },
+      c3h: function (zero) { return zero.length ? "没有" + zero.join("、") + "：这只是字面上没有，不等于「缺什么就要补什么」，要看整张盘需要什么。" : "五行都有出现。个数只是字数，不代表强弱。"; },
+      c4: function (fy) { return fy === D.today_year ? "现在这几年" : fy + " 年前后"; },
+      c4pre: function () { return "还没有交运（" + D.dayun[0].start + " 起第一步大运）。"; },
+      c4yun: function (sp, el) { txt(el, sp.d.start_year + " 起走" + sp.gz + "大运，天干是"); term(sp.d.gan_ss, sp.d.gan_ss, el); txt(el, "（" + G.shishen[sp.d.gan_ss][2] + "）。"); },
+      c4year: function (fy, yr, el) { txt(el, fy + " 年是" + yr.gz + "年，天干是"); term(yr.ss, yr.ss, el); txt(el, "（" + G.shishen[yr.ss][2] + "）"); txt(el, yr.relations.length ? "，与你的盘有 " + yr.relations.length + " 处关系。" : "，与你的盘没有合冲刑害。"); },
+      c4h: "十神是比喻，说的是倾向，不是定数。点下面「大运流年」里的年份看细节。",
+      gTerms: "常用术语", gSs: "十神（子平通行释义 ⚖）", gCs: "十二长生（✅《三命通会》引《三命提要》）", gWx: "旺相休囚死（✅《三命通会》）",
+      gSsItem: function (k, x) { return [k + " · " + x[0], x[1] + "。" + x[2] + "。"]; },
+      gCsItem: function (k, x) { return [k + " · " + x[0], "「" + x[1] + "」"]; },
+      gWxItem: function (k) { return [k, G.wangxiang[k]]; }, gTermItem: function (k) { return k; }
+    },
+    en: {
+      method: "How the chart was cast", plainTitle: "At a glance", cast: "Cast the chart", tPlain: "Plain English", tRel: "Relations", tHid: "Hidden stems",
+      display: "Display", bandGan: "Stem relations", bandZhi: "Branch relations", yunTitle: "Luck Pillars and years", track: "Luck Pillars", slider: "Drag to choose a year", years: "Years",
+      thTitle: "Climate adjustment · Qiong Tong Bao Jian 穷通宝鉴 original text", factsTitle: "Month Command · Elements · Auxiliary stars",
+      glossary: "Glossary: every term on this page", close: "Close",
+      disclaimer: "Bazi is a traditional way of reasoning about life, not a verdict on it. The stems, branches, hidden stems, relations and auxiliary stars are looked up by script; strength, structure and the Useful God are interpretation: see the notes and the chat.",
+      sep: ": ", list: ", ", semi: "; ", basis: "Source / school: ", explainOf: function (l) { return l + ": plain explanation"; }, whatIs: function (k) { return "What is " + nm(k) + "?"; },
+      title: function () { return D.gender + " · Day Master " + ganName(D.day_gan); },
+      col: function (p) { return nm(p.name); }, pos: function (name, side) { return nm(name) + (side === "干" ? " stem" : " branch"); },
+      you: "you",
+      ssExplain: function (k) { var x = G.shishen[k]; return { title: nm(k) + " (" + D.term_py[k] + " " + k + ")", text: "Relation: " + x[1] + ". Common reading: " + x[2] + ".", basis: "common Ziping reading ⚖; the Ten Gods are metaphors, not fate" }; },
+      csExplain: function (k) { var x = G.changsheng[k]; return { title: nm(k) + " (" + D.term_py[k] + " " + k + ")", text: "The Day Master's state on this branch: " + x[0] + ". San Ming Ti Yao 三命提要: 「" + x[1] + "」 “" + x[2] + "” (our translation)", basis: "✅ " + SM + ", vol. 2; the book says strong stages are 'not necessarily good' and weak ones 'not necessarily bad'" }; },
+      wxExplain: function (k) { return { title: nm("旺相:" + k) + " (" + k + ")", text: G.wangxiang[k] + ".", basis: G.terms["旺相休囚死"][1] }; },
+      termTitle: function (k) { return nm(k) + (D.term_py[k] ? " (" + D.term_py[k] + " " + k.replace("（桃花）", "") + ")" : ""); },
+      csGloss: function (k) { return G.changsheng[k][0]; },
+      kinds: [["he", "combine"], ["chong", "clash"], ["xing", "punish · harm"], ["que", "incomplete trio"]],
+      emptyPillar: "No note for this pillar. Tap another character, or ask in the chat.",
+      ganSub: function (p) { var e = G.shishen[p.gan_ss]; return nm(p.gan_yy) + " " + nm(p.gan_wx) + " · " + (p.name === "日" ? "Day Master: this stands for you" : nm(p.gan_ss) + " (" + e[0] + "): " + e[1]); },
+      ganNote: function (p) { return p.name === "日" ? SM + ": " + ganName(p.gan) + " 「" + G.gan_xiang[p.gan] + "」 “" + G.gan_xiang_en[p.gan] + "” (our translation)." : "Common reading: " + G.shishen[p.gan_ss][2] + "."; },
+      roots: function (rs) { return rs.length ? "rooted in " + rs.map(function (r) { return nm(r.pillar) + " branch " + nm(r.zhi) + " (" + nm(r.hidden) + ", " + nm(r.qi) + ")"; }).join(", ") + "; it stands firm" : "no branch holds the same element: no root"; },
+      touFrom: function (from) { return "revealed from " + from.map(function (q) { return nm(q.p) + " branch " + nm(q.zhi) + " (" + nm(q.hidden) + ", " + nm(q.qi) + ")"; }).join(", "); },
+      zhiSub: function (p) { return nm(p.zhi_yy) + " " + nm(p.zhi_wx) + " · here the Day Master " + nm(D.day_gan) + " is " + G.changsheng[p.changsheng][0] + " (" + nm(p.changsheng) + " stage)"; },
+      hidden: function (x) { return nm(x.gan) + " (" + nm(x.qi) + " · " + nm(x.ss) + ", " + G.shishen[x.ss][0] + ")"; }, hiddenSep: "; ",
+      touTo: function (t) { return nm(t.hidden) + " appears in the " + t.at.map(function (a) { return nm(a) + " stem"; }).join(", "); },
+      monthCmd: function () { return "born in " + D.wangxiang.season_en + ", when " + nm(D.wangxiang.wang) + " is in season; day " + D.siling.day_n + " after " + D.siling.jie_en + ", " + D.siling.ruler_en + " rules"; },
+      shenshaHere: "Auxiliary stars (by table): ", kong: function () { return "falls in the Void of the Day pillar (" + D.pillars[2].xunkong.split("").map(nm).join(", ") + ")"; },
+      relsHere: "Relations with other characters: ", relTitle: function (k) { return nm(k).replace(/^./, function (c) { return c.toUpperCase(); }); },
+      pre: "Before luck", preSub: "From birth until the first Luck Pillar begins.", now: "now", age: function (a) { return "age " + a; },
+      sliderOut: function (y, yr) { return y + " " + gzName(yr.gz) + " · age " + yr.age; }, yearAria: function (x) { return x.year + " " + gzName(x.gz); },
+      dayunHead: "Luck Pillar ", dayunSub: function (d) { return "ten years from " + d.start + " · from " + d.age; },
+      dayunPlain: function (gz, d, el) {
+        txt(el, "The stem " + nm(gz[0]) + " is your "); term(nm(d.gan_ss), d.gan_ss, el);
+        txt(el, " (" + G.shishen[d.gan_ss][2] + "); the branch " + nm(gz[1]) + " is your "); term(nm(d.zhi_ss), d.zhi_ss, el);
+        txt(el, " (" + G.shishen[d.zhi_ss][0] + "); on " + nm(gz[1]) + " the Day Master is " + G.changsheng[d.cs][0] + " ("); term(nm(d.cs), d.cs, el);
+        txt(el, " stage).");
+      },
+      noRel: "No combinations, clashes, punishments or harms with the natal chart", emptyDayun: "No note for this Luck Pillar.",
+      yearHead: function (y) { return y + " · "; }, yearSub: function (yr) { return "age " + yr.age; },
+      yearPlain: function (yr, el) {
+        txt(el, "This year's stem " + nm(yr.gz[0]) + " is your "); term(nm(yr.ss), yr.ss, el);
+        txt(el, " (" + G.shishen[yr.ss][2] + "); on " + nm(yr.gz[1]) + " the Day Master is " + G.changsheng[yr.cs][0] + " ("); term(nm(yr.cs), yr.cs, el);
+        txt(el, " stage).");
+      },
+      emptyYear: "No note for this year.",
+      thSub: function () { return ganName(D.day_gan) + " born in the " + nm(D.month_zhi) + " month (months follow the solar terms)"; },
+      thKind: function (k) { return D.tiaohou.kind_en[k] || k; },
+      thSrc: "Original classical Chinese from Wikisource, selected by day stem and month, not summarised; ask in the chat for a translation. This month = passage for this month; Shared = passage covering two months; Season = general passage for the season.",
+      slHead: function () { return "Month " + nm(D.month_zhi) + " · " + D.siling.ruler_en + " rules"; },
+      slNote: function () { return "Born in " + D.wangxiang.season_en + ", when " + nm(D.wangxiang.wang) + " is in season (strongest). The elements now: " + WXS.map(function (k) { return nm(k) + " " + nm("旺相:" + D.wangxiang.states[k]); }).join(", ") + "."; },
+      slSub: function () { return D.siling.jie_en + " began " + D.siling.jie_time + " (Beijing time); born on day " + D.siling.day_n + " after it. " + SM + " on the ruling stems:"; },
+      slCell: function (t) { return t.name_en + " " + t.days + " d"; }, slOn: function (t) { return t.name === D.siling.ruler; },
+      wxHead: "Element count", wxSub: "Only a count of characters, not strength; an element at 0 does not need to be 'added'.",
+      wxCols: function () { return ["Stems and branches (" + N * 2 + ")", "Hidden stems"]; },
+      ssHead: "Auxiliary stars (by table)", ssNone: "None of Prosperity, Goat Blade, Nobleman, Travelling Horse, Peach Blossom or Void appears in the pillars.",
+      ssItem: function (x) { return ": looked up from " + x.basis + " → " + x.targets + "; found at " + x.hits.join(", ") + "."; }, ssLabel: function (x) { return x.label; },
+      ssSrc: "Looked up in the " + SM + ". The book itself says strong stages are 'not necessarily good' and weak ones 'not necessarily bad'; auxiliary stars alone do not decide good or bad.",
+      overall: "Reading for practitioners", basisOf: "Basis: ", overallEmpty: "See the chat for strength, structure and the Useful God.",
+      leadEmpty: "Below are a few facts from the chart. For strength and favourable elements, see the reading in the chat.",
+      c1: "The character that is you", c1p: function (el) { term(nm("日主"), "日主", el); txt(el, " is " + ganName(D.day_gan) + " (" + nm(D.day_yy) + " " + nm(D.day_wx) + ")."); },
+      c1q: function () { return SM + ": " + ganName(D.day_gan) + " 「" + G.gan_xiang[D.day_gan] + "」 “" + G.gan_xiang_en[D.day_gan] + "” (our translation)."; },
+      c1h: "Bazi uses the stem of your birth day for you; the other seven characters are the setting around it.",
+      c2: "Birth season",
+      c2p: function (w, el) { txt(el, "Born in " + w.season_en + " (month " + nm(D.month_zhi) + ", day " + D.siling.day_n + " after " + D.siling.jie_en + "), when " + nm(w.wang) + " is strongest. Your " + nm(D.day_wx) + " is now "); term(nm("旺相:" + w.day), "旺相:" + w.day, el); txt(el, ": " + G.wangxiang[w.day] + "."); },
+      c2h: "The season is only the first step; also look at whether the branches give roots and whether there is help around.",
+      c3: "Element count", c3p: function () { return WXS.map(function (k) { return nm(k) + " " + D.wuxing.count[k]; }).join(", ") + " (" + N * 2 + " characters in stems and branches)."; },
+      c3h: function (zero) { return zero.length ? "No " + zero.map(nm).join(" or ") + ": missing on paper only. It does not mean 'add whatever is missing'; look at what the whole chart needs." : "All five elements appear. The count is not strength."; },
+      c4: function (fy) { return fy === D.today_year ? "These years" : "Around " + fy; },
+      c4pre: function () { return "The Luck Pillars have not started yet (the first one begins " + D.dayun[0].start + ")."; },
+      c4yun: function (sp, el) { txt(el, "Since " + sp.d.start_year + " you are in the Luck Pillar " + gzName(sp.gz) + "; its stem is your "); term(nm(sp.d.gan_ss), sp.d.gan_ss, el); txt(el, " (" + G.shishen[sp.d.gan_ss][2] + ")."); },
+      c4year: function (fy, yr, el) { txt(el, fy + " is a " + gzName(yr.gz) + " year; its stem is your "); term(nm(yr.ss), yr.ss, el); txt(el, " (" + G.shishen[yr.ss][2] + ")"); txt(el, yr.relations.length ? ", with " + yr.relations.length + " relation" + (yr.relations.length > 1 ? "s" : "") + " to your chart." : ", with no combinations, clashes, punishments or harms with your chart."); },
+      c4h: "The Ten Gods are metaphors for tendencies, not fate. Tap a year under Luck Pillars and years for details.",
+      gTerms: "Common terms", gSs: "Ten Gods (common Ziping reading ⚖)", gCs: "Twelve Life Stages (✅ " + SM + ", quoting San Ming Ti Yao 三命提要; our translation)", gWx: "Prosperous, Strong, Resting, Trapped, Dead (✅ " + SM + ")",
+      gSsItem: function (k, x) { return [nm(k) + " (" + D.term_py[k] + " " + k + ") · " + x[0], x[1] + ". " + x[2] + "."]; },
+      gCsItem: function (k, x) { return [nm(k) + " (" + D.term_py[k] + " " + k + ") · " + x[0], "「" + x[1] + "」 “" + x[2] + "”"]; },
+      gWxItem: function (k) { return [nm("旺相:" + k) + " (" + k + ")", G.wangxiang[k]]; }, gTermItem: function (k) { return I18N.en.termTitle(k); }
+    }
+  };
+  var T = I18N[D.lang] || I18N.zh;
+  Array.prototype.forEach.call(document.querySelectorAll("[data-t]"), function (n) { n.textContent = T[n.getAttribute("data-t")]; });
+  document.getElementById("toolbar").setAttribute("aria-label", T.display);
+  document.getElementById("band-gan").setAttribute("aria-label", T.bandGan);
+  document.getElementById("band-zhi").setAttribute("aria-label", T.bandZhi);
+  document.getElementById("track").setAttribute("aria-label", T.track);
+  document.getElementById("slider").setAttribute("aria-label", T.slider);
+  document.getElementById("years").setAttribute("aria-label", T.years);
+
+  /* ---- 白话：术语释义 ---- */
+  function explain(key) {
+    if (key.indexOf("旺相:") === 0) return T.wxExplain(key.slice(3));      // 旺相休囚死的「死」与十二长生的「死」同字，加前缀区分
+    if (G.shishen[key]) return T.ssExplain(key);
+    if (key === "日主") return { title: T.termTitle("日主"), text: G.terms["日主"][0], basis: G.terms["日主"][1] };
+    if (G.changsheng[key]) return T.csExplain(key);
+    var t = G.terms[key] || G.terms[key.replace("（桃花）", "")];
+    if (t) return { title: T.termTitle(key), text: t[0], basis: t[1] };
+    return null;
+  }
+  var tip = document.getElementById("tip");
+  tip.querySelector(".x").setAttribute("aria-label", T.close);
+  tip.querySelector(".x").addEventListener("click", function () { tip.hidden = true; });
+  document.addEventListener("keydown", function (e) { if (e.key === "Escape") tip.hidden = true; });
+  function showTerm(key) {
+    var e = explain(key); if (!e) return;
+    tip.querySelector("h4").textContent = e.title;
+    tip.querySelector(".plain-text").textContent = e.text;
+    tip.querySelector(".basis").textContent = T.basis + e.basis;
+    tip.hidden = false;
+  }
+  function term(label, key, parent) {
+    var b = h("button", "term", label, parent);
+    b.type = "button"; b.setAttribute("aria-label", T.explainOf(label));
+    b.addEventListener("click", function (ev) { ev.stopPropagation(); showTerm(key || label); });
+    return b;
+  }
+  function qmark(key, parent) {
+    var b = h("button", "qmark", "?", parent);
+    b.type = "button"; b.setAttribute("aria-label", T.whatIs(key));
+    b.addEventListener("click", function () { showTerm(key); });
+    return b;
+  }
+  /* 关系 → 涉及的术语。英文页的关系文字是英文，所以按关系种类（数据里的 kind）找术语 */
+  var KIND_TERM = { "合": "合", "六合": "合", "三合": "三合", "三会": "三会", "冲": "冲", "刑": "刑", "自刑": "刑", "害": "害", "三合缺一": "三合缺一" };
+  function relKinds(list) {
+    var ks = [];
+    list.forEach(function (r) {
+      var k = null;
+      if (EN) k = /Directional/.test(r) ? "三会" : /Three Harmony/.test(r) ? "三合" : /clash/.test(r) ? "冲" :
+                  /punish/.test(r) ? "刑" : /harm/.test(r) ? "害" : /combin/.test(r) ? "合" : null;
+      else k = r.indexOf("三会") >= 0 ? "三会" : r.indexOf("三合") >= 0 ? "三合" : r.indexOf("冲") >= 0 ? "冲" :
+               r.indexOf("刑") >= 0 ? "刑" : r.indexOf("害") >= 0 ? "害" : r.indexOf("合") >= 0 ? "合" : null;
+      if (k && ks.indexOf(k) < 0) ks.push(k);
+    });
+    return ks;
+  }
+  function whyList(list, parent) {
+    var ks = relKinds(list); if (!ks.length) return;
+    var ul = h("ul", "why", null, parent);
+    ks.forEach(function (k) { var li = h("li", null, null, ul); term(nm(k), k, li); txt(li, T.sep + G.terms[k][0]); });
+  }
+  function ssShort(ss) { return ss === "日主" ? T.you : (G.shishen[ss] ? G.shishen[ss][0] : ""); }
+
+  /* ---- 题签 ---- */
+  document.getElementById("title").textContent = T.title();
+  var facts = document.getElementById("facts");
+  D.facts.forEach(function (f) { var li = h("li", null, null, facts); h("span", null, f[0] + T.sep, li); h("b", null, f[1], li); });
+  D.warnings.forEach(function (w) { h("p", "warn", "⚠ " + w, document.getElementById("warnings")); });
+  var tl = document.getElementById("time-lines");
+  D.time_lines.forEach(function (t) { h("p", null, t, tl); });
+
+  /* ---- 四柱 ---- */
+  var cols = document.getElementById("cols");
+  cols.style.setProperty("--n", N);
+  var glyphs = {};     // "年干" -> button
+  var colEls = [];
+  D.pillars.forEach(function (p, i) {
+    var c = h("div", "col" + (p.name === "日" ? " day" : ""), null, cols);
+    colEls.push(c);
+    h("div", "col-label", T.col(p), c);
+    var ssd = h("div", "ss", null, c); term(nm(p.gan_ss), p.gan_ss, ssd);
+    h("div", "gloss", ssShort(p.gan_ss), c);
+    var g = h("button", "glyph wx-" + p.gan_wx, p.gan, c);
+    g.type = "button"; g.setAttribute("aria-label", T.pos(p.name, "干") + " " + (EN ? ganName(p.gan) + ", " + nm(p.gan_ss) : p.gan + "，" + p.gan_ss));
+    var z = h("button", "glyph wx-" + p.zhi_wx, p.zhi, c);
+    z.type = "button"; z.setAttribute("aria-label", T.pos(p.name, "支") + " " + (EN ? nm(p.zhi) + " " + nm(p.zhi_wx) : p.zhi));
+    if (EN) { h("span", "py", ganName(p.gan), g); h("span", "py", nm(p.zhi) + " " + nm(p.zhi_wx), z); }
+    g.addEventListener("click", function () { pick(i, "gan"); });
+    z.addEventListener("click", function () { pick(i, "zhi"); });
+    glyphs[p.name + "干"] = g; glyphs[p.name + "支"] = z;
+    var ul = h("ul", "hid", null, c);
+    p.hidden.forEach(function (x) {
+      var li = h("li", null, null, ul);
+      h("b", "wx-" + x.wx, x.gan, li); var sp = h("span", null, nm(x.ss), li); sp.title = nm(x.ss) + T.sep + G.shishen[x.ss][2];
+    });
+    var meta = h("div", "meta", null, c);
+    var t1 = h("span", "tag", null, meta); term(nm(p.changsheng), p.changsheng, t1); h("span", "g", T.csGloss(p.changsheng), t1);
+    var t2 = h("span", "tag", null, meta); term(nm(p.nayin), "纳音", t2);
+    if (D.pillars[2] && D.pillars[2].xunkong.indexOf(p.zhi) >= 0 && p.name !== "日") { var t3 = h("span", "tag kong", null, meta); term(nm("空亡"), "空亡", t3); }
+  });
+
+  /* ---- 合冲刑害弧线 ---- */
+  var KIND = { "合": "he", "六合": "he", "三合": "he", "三会": "he", "冲": "chong", "刑": "xing", "自刑": "xing", "害": "hai", "三合缺一": "que" };
+  var arcs = [];
+  function xOf(i) { return (i + 0.5) * 400 / N; }
+  function drawBand(svgId, rels, up) {
+    var svg = document.getElementById(svgId);
+    svg.textContent = "";
+    if (!rels.length) { svg.setAttribute("viewBox", "0 0 400 6"); return; }
+    var levels = [];
+    var items = rels.map(function (r) {
+      var a = Math.min.apply(null, r.at), b = Math.max.apply(null, r.at);
+      var lv = 0;
+      while ((levels[lv] || []).some(function (q) { return !(b < q[0] || a > q[1]) ; })) lv++;
+      (levels[lv] = levels[lv] || []).push([a, b]);
+      return { r: r, a: a, b: b, lv: lv };
+    });
+    var H = 22 + levels.length * 22;
+    svg.setAttribute("viewBox", "0 0 400 " + H);
+    items.forEach(function (it) {
+      var cls = KIND[it.r.kind] || "he";
+      var base = up ? H - 2 : 2, peak = up ? H - 18 - it.lv * 22 : 18 + it.lv * 22;
+      var d;
+      if (it.r.at.length >= 3 || it.a === it.b) {
+        d = "M" + xOf(it.a) + "," + base + " L" + xOf(it.a) + "," + peak + " L" + xOf(it.b) + "," + peak + " L" + xOf(it.b) + "," + base;
+        it.r.at.slice(1, -1).forEach(function (m) { d += " M" + xOf(m) + "," + peak + " L" + xOf(m) + "," + base; });
+      } else {
+        var x1 = xOf(it.a), x2 = xOf(it.b);
+        d = "M" + x1 + "," + base + " C" + x1 + "," + peak + " " + x2 + "," + peak + " " + x2 + "," + base;
+      }
+      var g = s("g", { tabindex: "0", role: "button", "aria-label": it.r.label }, null, svg);
+      var path = s("path", { d: d, "class": "arc " + cls }, null, g);
+      s("path", { d: d, "class": "hit" }, null, g);
+      var lx = (xOf(it.a) + xOf(it.b)) / 2, ly = up ? peak - 0 : peak;
+      var name = it.r.short;
+      s("text", { x: lx, y: ly + (up ? -7 : 7), "class": "lab-bg" }, name, g);
+      s("text", { x: lx, y: ly + (up ? -7 : 7) }, name, g);
+      var rec = { r: it.r, path: path, side: up ? "干" : "支" };
+      arcs.push(rec);
+      function act() { showRelation(rec); }
+      g.addEventListener("click", act);
+      g.addEventListener("keydown", function (e) { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); act(); } });
+    });
+  }
+  drawBand("band-gan", D.relations.gan, true);
+  drawBand("band-zhi", D.relations.zhi, false);
+  var lg = document.getElementById("legend");
+  WXS.forEach(function (w) {
+    var sp = h("span", null, null, lg); h("span", "dot bg-" + w, null, sp); txt(sp, nm(w));
+  });
+  var KSTYLE = { he: ["var(--gold)", ""], chong: ["var(--cinnabar)", ""], xing: ["var(--cinnabar)", "dashed"], que: ["var(--rule)", "dotted"] };
+  T.kinds.forEach(function (k) {
+    var sp = h("span", null, null, lg); var i = h("i", null, null, sp);
+    i.style.borderTopColor = KSTYLE[k[0]][0]; if (KSTYLE[k[0]][1]) i.style.borderTopStyle = KSTYLE[k[0]][1];
+    txt(sp, k[1]);
+  });
+
+  /* ---- 批注 ---- */
+  var detail = document.getElementById("detail");
+  function clearSel() {
+    Object.keys(glyphs).forEach(function (k) { glyphs[k].classList.remove("sel", "lit"); });
+    arcs.forEach(function (a) { a.path.classList.remove("on"); });
+  }
+  function relList(pos) {
+    var side = pos.slice(1);
+    var rels = (side === "干" ? D.relations.gan : D.relations.zhi);
+    var idx = "年月日时".indexOf(pos[0]);
+    return rels.filter(function (r) { return r.at.indexOf(idx) >= 0; });
+  }
+  function pillarNote(box, name) {
+    var note = (notes.pillars || {})[name];
+    h("p", note ? "note" : "note empty", note || T.emptyPillar, box);
+  }
+  function item(ul, key, value) {
+    var li = h("li", null, null, ul); term(nm(key), key, li); txt(li, T.sep + value); return li;
+  }
+  function pick(i, side) {
+    clearSel();
+    var p = D.pillars[i], pos = p.name + (side === "gan" ? "干" : "支");
+    glyphs[pos].classList.add("sel");
+    detail.textContent = "";
+    var ul;
+    if (side === "gan") {
+      var t = h("h2", null, null, detail);
+      txt(t, T.pos(p.name, "干") + " ");
+      wxSpan(p.gan, p.gan_wx, t);
+      if (EN) txt(t, " " + nm(p.gan));
+      h("p", "sub", T.ganSub(p), detail);
+      h("p", "note", T.ganNote(p), detail);
+      ul = h("ul", "facts-list", null, detail);
+      item(ul, "通根", T.roots(p.roots));
+      var from = [];
+      D.pillars.forEach(function (q) { q.tou.forEach(function (t) { if (t.at.indexOf(p.name) >= 0) from.push({ p: q.name, zhi: q.zhi, qi: t.qi, hidden: t.hidden }); }); });
+      if (from.length) item(ul, "透干", T.touFrom(from));
+      p.roots.forEach(function (r) { glyphs[r.pillar + "支"].classList.add("lit"); });
+    } else {
+      var t2 = h("h2", null, null, detail);
+      txt(t2, T.pos(p.name, "支") + " ");
+      wxSpan(p.zhi, p.zhi_wx, t2);
+      if (EN) txt(t2, " " + nm(p.zhi));
+      h("p", "sub", T.zhiSub(p), detail);
+      ul = h("ul", "facts-list", null, detail);
+      item(ul, "藏干", p.hidden.map(T.hidden).join(T.hiddenSep));
+      if (p.tou.length) {
+        item(ul, "透干", p.tou.map(T.touTo).join(T.semi));
+        p.tou.forEach(function (t) { t.at.forEach(function (a) { glyphs[a + "干"].classList.add("lit"); }); });
+      }
+      if (p.name === "月") item(ul, "月令", T.monthCmd());
+      if (p.shensha.length) { var li = h("li", null, T.shenshaHere, ul); p.shensha.forEach(function (n, k) { if (k) txt(li, T.list); term(nm(n), n, li); }); }
+      if (D.pillars[2] && D.pillars[2].xunkong.indexOf(p.zhi) >= 0 && p.name !== "日") item(ul, "空亡", T.kong());
+    }
+    var rs = relList(pos);
+    if (rs.length) { h("li", null, T.relsHere + rs.map(function (r) { return r.label; }).join(T.semi), ul); whyTerms(rs, detail); }
+    rs.forEach(function (r) {
+      arcs.forEach(function (a) { if (a.r === r) a.path.classList.add("on"); });
+      r.at.forEach(function (k) { var g = glyphs["年月日时"[k] + pos.slice(1)]; if (g && g !== glyphs[pos]) g.classList.add("lit"); });
+    });
+    pillarNote(detail, p.name);
+  }
+  function whyTerms(rs, parent) {   // 原局关系带 kind，直接按种类列术语
+    var ks = [];
+    rs.forEach(function (r) { var k = KIND_TERM[r.kind]; if (k && ks.indexOf(k) < 0) ks.push(k); });
+    if (!ks.length) return;
+    var ul = h("ul", "why", null, parent);
+    ks.forEach(function (k) { var li = h("li", null, null, ul); term(nm(k), k, li); txt(li, T.sep + G.terms[k][0]); });
+  }
+  function showRelation(rec) {
+    clearSel();
+    rec.path.classList.add("on");
+    rec.r.at.forEach(function (k) { glyphs["年月日时"[k] + rec.side].classList.add("lit"); });
+    detail.textContent = "";
+    h("h2", null, T.relTitle(rec.r.kind), detail);
+    h("p", "sub", rec.r.label, detail);
+    var e = G.terms[KIND_TERM[rec.r.kind]];
+    h("p", "note", e[0], detail);
+    h("p", "sub", T.basis + e[1], detail);
+  }
+
+  /* ---- 显示切换 ---- */
+  Array.prototype.forEach.call(document.querySelectorAll(".chip[data-toggle]"), function (b) {
+    b.addEventListener("click", function () {
+      var on = b.getAttribute("aria-pressed") !== "true";
+      b.setAttribute("aria-pressed", String(on));
+      var k = b.getAttribute("data-toggle");
+      if (k === "rel") ["band-gan", "band-zhi"].forEach(function (id) { document.getElementById(id).classList.toggle("off", !on); });
+      if (k === "hid") Array.prototype.forEach.call(document.querySelectorAll(".hid"), function (u) { u.classList.toggle("off", !on); });
+      if (k === "plain") document.body.classList.toggle("plain-off", !on);
+    });
+  });
+
+  /* ---- 排盘：四柱依次翻开 ---- */
+  var timers = [];
+  function cast() {
+    timers.forEach(clearTimeout); timers = [];
+    if (reduce) return;
+    colEls.forEach(function (c) { c.classList.add("flip"); });
+    ["band-gan", "band-zhi"].forEach(function (id) { document.getElementById(id).style.opacity = 0; });
+    colEls.forEach(function (c, i) { timers.push(setTimeout(function () { c.classList.remove("flip"); }, 250 + i * 380)); });
+    timers.push(setTimeout(function () {
+      ["band-gan", "band-zhi"].forEach(function (id) { var e = document.getElementById(id); e.style.transition = "opacity .5s"; e.style.opacity = 1; });
+    }, 250 + N * 380 + 200));
+  }
+  document.getElementById("cast").addEventListener("click", cast);
+
+  /* ---- 大运流年 ---- */
+  var track = document.getElementById("track"), yearsBox = document.getElementById("years");
+  var slider = document.getElementById("slider"), out = document.getElementById("slider-out");
+  var spans = [];   // {label, gz|null, years: [...] , card}
+  if (D.pre_years.length) spans.push({ pre: true, gz: null, years: D.pre_years, start: D.birth_year + "" });
+  D.dayun.forEach(function (d) { spans.push({ pre: false, gz: d.gz, years: d.years, d: d }); });
+  var lastYear = spans[spans.length - 1].years.slice(-1)[0].year;
+  slider.min = D.birth_year; slider.max = lastYear; slider.step = 1;
+  spans.forEach(function (sp, k) {
+    var b = h("button", "yun-card" + (sp.pre ? " pre" : ""), null, track);
+    b.type = "button";
+    var gz = h("span", "gz", null, b);
+    if (sp.pre) gz.textContent = T.pre; else { wxSpan(sp.gz[0], WX_OF[sp.gz[0]], gz); wxSpan(sp.gz[1], WX_OF[sp.gz[1]], gz); if (EN) h("span", "y", gzName(sp.gz), b); }
+    h("span", "y", sp.pre ? sp.start + "–" + (sp.years.slice(-1)[0].year) : sp.d.start_year + " · " + sp.d.age_short, b);
+    if (!sp.pre) { h("span", "y", nm(sp.d.gan_ss) + " / " + nm(sp.d.zhi_ss), b); h("span", "gloss", ssShort(sp.d.gan_ss) + " / " + ssShort(sp.d.zhi_ss), b); }
+    if (sp.years.some(function (y) { return y.year === D.today_year; })) h("span", "now", T.now, b);
+    b.addEventListener("click", function () {
+      var y = sp.years.some(function (x) { return x.year === cur; }) ? cur : (sp.years.some(function (x) { return x.year === D.today_year; }) ? D.today_year : sp.years[0].year);
+      setYear(y);
+    });
+    sp.card = b;
+  });
+  var cur = null;
+  function spanOf(y) { for (var k = 0; k < spans.length; k++) if (spans[k].years.some(function (x) { return x.year === y; })) return spans[k]; return spans[0]; }
+  function setYear(y) {
+    y = Math.max(D.birth_year, Math.min(lastYear, y));
+    cur = y; slider.value = y;
+    var sp = spanOf(y), yr = sp.years.filter(function (x) { return x.year === y; })[0];
+    spans.forEach(function (q) { q.card.setAttribute("aria-pressed", String(q === sp)); });
+    out.textContent = T.sliderOut(y, yr);
+    yearsBox.textContent = "";
+    sp.years.forEach(function (x) {
+      var b = h("button", "year" + (x.relations.length ? " has-rel" : "") + ((notes.years || {})[x.year] ? " has-note" : ""), null, yearsBox);
+      b.type = "button"; b.setAttribute("aria-pressed", String(x.year === y));
+      b.setAttribute("aria-label", T.yearAria(x));
+      var g2 = h("span", "gz", null, b); wxSpan(x.gz[0], WX_OF[x.gz[0]], g2); wxSpan(x.gz[1], WX_OF[x.gz[1]], g2);
+      h("span", "y", x.year + (x.year === D.today_year ? " " + T.now : ""), b);
+      b.addEventListener("click", function () { setYear(x.year); });
+    });
+    var dd = document.getElementById("dayun-detail"); dd.textContent = "";
+    if (sp.pre) {
+      h("h3", null, T.pre, dd);
+      h("p", "sub", T.preSub, dd);
+    } else {
+      var t = h("h3", null, null, dd); txt(t, T.dayunHead); gzSpans(sp.gz, t);
+      h("p", "sub", T.dayunSub(sp.d), dd);
+      T.dayunPlain(sp.gz, sp.d, h("p", "note", null, dd));
+      var ul = h("ul", "facts-list", null, dd);
+      (sp.d.relations.length ? sp.d.relations : [T.noRel]).forEach(function (r) { h("li", null, r, ul); });
+      whyList(sp.d.relations, dd);
+      var n1 = (notes.dayun || {})[sp.gz];
+      h("p", n1 ? "note" : "note empty", n1 || T.emptyDayun, dd);
+    }
+    var yd = document.getElementById("year-detail"); yd.textContent = "";
+    var t2 = h("h3", null, null, yd); txt(t2, T.yearHead(y)); gzSpans(yr.gz, t2);
+    h("p", "sub", T.yearSub(yr), yd);
+    T.yearPlain(yr, h("p", "note", null, yd));
+    var ul2 = h("ul", "facts-list", null, yd);
+    (yr.relations.length ? yr.relations : [T.noRel]).forEach(function (r) { h("li", null, r, ul2); });
+    whyList(yr.relations, yd);
+    var n2 = (notes.years || {})[y];
+    h("p", n2 ? "note" : "note empty", n2 || T.emptyYear, yd);
+  }
+  slider.addEventListener("input", function () { setYear(parseInt(slider.value, 10)); });
+  setYear(D.focus_year >= D.birth_year && D.focus_year <= lastYear ? D.focus_year : D.birth_year);
+  (function () { var c = spanOf(cur).card; if (c && c.scrollIntoView && track.scrollWidth > track.clientWidth) track.scrollLeft = c.offsetLeft - track.offsetLeft - 8; })();
+
+  qmark("大运", document.getElementById("yun-title"));
+  qmark("调候", document.getElementById("th-title"));
+
+  /* ---- 调候 ---- */
+  var th = document.getElementById("tiaohou");
+  h("p", "sub", T.thSub(), th);
+  D.tiaohou.passages.forEach(function (q) {
+    var bq = h("blockquote", null, null, th);
+    if (EN) bq.setAttribute("lang", "zh-Hans");
+    h("span", "k", T.thKind(q.kind), bq); txt(bq, q.text);
+  });
+  h("p", "src", T.thSrc, th);
+
+  /* ---- 月令、五行、神煞 ---- */
+  var sl = document.getElementById("siling");
+  var slh = h("h3", null, T.slHead(), sl); qmark("司令", slh);
+  h("p", "note", T.slNote(), sl);
+  h("p", "sub", T.slSub(), sl);
+  var row = h("div", "siling", null, sl);
+  D.siling.table.forEach(function (t) { h("div", T.slOn(t) ? "on" : "", T.slCell(t), row); });
+
+  var wx = document.getElementById("wx");
+  qmark("五行个数", h("h3", null, T.wxHead, wx));
+  h("p", "sub", T.wxSub, wx);
+  var grid = h("div", "wx-bars", null, wx);
+  h("span", "h", "", grid); T.wxCols().forEach(function (c) { h("span", "h", c, grid); });
+  var maxv = 0; WXS.forEach(function (k) { maxv = Math.max(maxv, D.wuxing.count[k], D.wuxing.hidden[k]); });
+  WXS.forEach(function (k) {
+    h("span", "name wx-" + k, nm(k), grid);
+    [D.wuxing.count[k], D.wuxing.hidden[k]].forEach(function (v) {
+      var bar = h("span", "bar", null, grid);
+      var f = h("span", "fill bg-" + k, null, bar); f.style.width = (v ? (v / maxv * 100) : 0) * 0.8 + "%";
+      if (!v) f.style.opacity = .25;
+      h("span", "n", v, bar);
+    });
+  });
+
+  var ss = document.getElementById("shensha");
+  h("h3", null, T.ssHead, ss);
+  if (!D.shensha.length) h("p", "sub", T.ssNone, ss);
+  else {
+    var ul3 = h("ul", "ss-list", null, ss);
+    D.shensha.forEach(function (x) {
+      var li = h("li", null, null, ul3); term(T.ssLabel(x), x.name, h("b", null, null, li));
+      txt(li, T.ssItem(x));
+      var ex = explain(x.name); if (ex) h("span", "q", (EN ? " " : "") + ex.text, li).style.color = "var(--ink-soft)";
+    });
+  }
+  h("p", "src", T.ssSrc, ss);
+
+  /* ---- 盘断 ---- */
+  var ov = document.getElementById("overall");
+  h("h3", null, T.overall, ov);
+  if (notes.basis) h("p", "sub", T.basisOf + notes.basis, ov);
+  if (notes.summary) h("p", "note", notes.summary, ov);
+  if (notes.advice && notes.advice.length) { var ua = h("ul", "advice", null, ov); notes.advice.forEach(function (a) { h("li", null, a, ua); }); }
+  if (!notes.summary && !(notes.advice || []).length) h("p", "note empty", T.overallEmpty, ov);
+  document.getElementById("source").textContent = D.source;
+
+  /* ---- 一眼看懂 ---- */
+  var lead = document.getElementById("plain-lead");
+  if (notes.plain) notes.plain.split(/\n+/).forEach(function (t) { if (t.trim()) h("p", null, t, lead); });
+  else { lead.textContent = T.leadEmpty; lead.classList.add("empty"); }
+  var pg = document.getElementById("plain-grid");
+  function card(title) { var c = h("div", "pcard", null, pg); h("h3", null, title, c); return c; }
+  var c1 = card(T.c1);
+  wxSpan(D.day_gan, D.day_wx, c1, "big");
+  T.c1p(h("p", null, null, c1));
+  h("p", "q", T.c1q(), c1);
+  h("p", "hint", T.c1h, c1);
+
+  var w = D.wangxiang, c2 = card(T.c2);
+  T.c2p(w, h("p", null, null, c2));
+  h("p", "hint", T.c2h, c2);
+
+  var c3 = card(T.c3);
+  var zero = WXS.filter(function (k) { return !D.wuxing.count[k]; });
+  h("p", null, T.c3p(), c3);
+  h("p", "hint", T.c3h(zero), c3);
+
+  var fy = D.focus_year, fsp = null, fyr = null;
+  spans.forEach(function (q) { q.years.forEach(function (x) { if (x.year === fy) { fsp = q; fyr = x; } }); });
+  if (fyr) {
+    var c4 = card(T.c4(fy));
+    var p4 = h("p", null, null, c4);
+    if (fsp.pre) txt(p4, T.c4pre()); else T.c4yun(fsp, p4);
+    T.c4year(fy, fyr, h("p", null, null, c4));
+    h("p", "hint", T.c4h, c4);
+  }
+
+  /* ---- 术语表 ---- */
+  var gl = document.getElementById("glossary-list");
+  function gsec(title) { h("h4", null, title, gl); }
+  function gitem(k, text, basis) { h("dt", null, k, gl); var dd = h("dd", null, text, gl); if (basis) h("div", "basis", basis, dd); }
+  gsec(T.gTerms);
+  Object.keys(G.terms).forEach(function (k) { gitem(T.gTermItem(k), G.terms[k][0], G.terms[k][1]); });
+  gsec(T.gSs);
+  Object.keys(G.shishen).forEach(function (k) { var it = T.gSsItem(k, G.shishen[k]); gitem(it[0], it[1]); });
+  gsec(T.gCs);
+  Object.keys(G.changsheng).forEach(function (k) { var it = T.gCsItem(k, G.changsheng[k]); gitem(it[0], it[1]); });
+  gsec(T.gWx);
+  Object.keys(G.wangxiang).forEach(function (k) { var it = T.gWxItem(k); gitem(it[0], it[1]); });
+
+  pick(2, "gan");
+  if (!reduce) cast();
+})();
+</script>
+</body>
+</html>

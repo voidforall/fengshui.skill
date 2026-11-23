@@ -208,24 +208,40 @@ def shensha(pillars: list[str]) -> list[dict]:
     return out
 
 
-def against_natal(gz: str, natal: list[str], who: str) -> list[str]:
-    """大运或流年干支 gz 与原局各柱的关系（干合；支六合、冲、刑、害；与原局两支凑成三合、三会）。"""
+def against_natal_items(gz: str, natal: list[str]) -> list[dict]:
+    """大运或流年干支 gz 与原局各柱的关系（干合；支六合、冲、刑、害；与原局两支凑成三合、三会）。
+
+    每项 {kind, side: 干|支, char, with: [(柱名, 字), ...], wuxing?}；文字由 against_natal 或页面按语言生成。
+    """
     names = PILLAR_NAMES[:len(natal)]
     out = []
     g, z = gz
     for n, p in zip(names, natal):
         if frozenset((g, p[0])) in GAN_HE:
-            out.append(f"{who}干{g}合{n}干{p[0]}")
+            out.append({"kind": "合", "side": "干", "char": g, "with": [(n, p[0])]})
     for n, p in zip(names, natal):
         for r in pair_relations(z, p[1]):
             kind = XING.get(frozenset((z, p[1])), "刑") if r == "刑" else r
-            out.append(f"{who}支{z}{kind}{n}支{p[1]}" if r != "自刑" else f"{who}支{z}与{n}支{p[1]}自刑")
+            out.append({"kind": kind, "side": "支", "char": z, "with": [(n, p[1])]})
     zhis = {p[1]: n for n, p in zip(names, natal)}
-    for table, kind, tail in ((SANHE, "三合", "局"), (SANHUI, "三会", "方")):
+    for table, kind in ((SANHE, "三合"), (SANHUI, "三会")):
         for trio, wx in table.items():
             if z in trio and all(x in zhis for x in trio if x != z) and z not in zhis:
-                others = "、".join(f"{zhis[x]}支{x}" for x in trio if x != z)
-                out.append(f"{who}支{z}与{others}{kind}{wx}{tail}")
+                out.append({"kind": kind, "side": "支", "char": z, "with": [(zhis[x], x) for x in trio if x != z],
+                            "wuxing": wx})
+    return out
+
+
+def against_natal(gz: str, natal: list[str], who: str) -> list[str]:
+    out = []
+    for it in against_natal_items(gz, natal):
+        head = f"{who}{it['side']}{it['char']}"
+        if it["kind"] in ("三合", "三会"):
+            others = "、".join(f"{n}支{x}" for n, x in it["with"])
+            out.append(f"{head}与{others}{it['kind']}{it['wuxing']}{'局' if it['kind'] == '三合' else '方'}")
+        else:
+            (n, x), = it["with"]
+            out.append(f"{head}与{n}支{x}自刑" if it["kind"] == "自刑" else f"{head}{it['kind']}{n}{it['side']}{x}")
     return out
 
 

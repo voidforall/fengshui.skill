@@ -95,7 +95,102 @@ TERMS = {
 }
 
 
-def page_data() -> dict:
+# --- 英文版（英文命盘用）。原文引文照录中文，附我们的译文（our translation）；白话与中文版逐条对应 ---------
+# tests/test_terms_en.py 检查键与中文版一致。
+
+GAN_XIANG_EN = {
+    "甲": "in heaven it is thunder and the dragon; on earth, beams and pillars",
+    "乙": "in heaven it is wind; on earth, trees",
+    "丙": "in heaven it is the sun and lightning; on earth, the furnace and the forge",
+    "丁": "in heaven it is the stars; on earth, lamplight",
+    "戊": "in heaven it is mist; on earth, mountains",
+    "己": "it is the primal qi of heaven and the true soil of earth",
+    "庚": "in heaven it is wind and frost; on earth, metal and iron",
+    "辛": "in heaven it is the sun and moon, the essence of the great yin; on earth it is metal, the ore in mountain rock",
+    "壬": "in heaven it is clouds; on earth, marshes",
+    "癸": "in heaven it is rain and dew; on earth, springs and hidden streams",
+}
+
+SHISHEN_EN = {
+    "比肩": ("peer", "same element and same polarity as the Day Master", "siblings, friends and peers; also selfhood and independence"),
+    "劫财": ("rival", "same element as the Day Master, opposite polarity", "competing peers; also drive and contention"),
+    "食神": ("talent", "produced by the Day Master, same polarity", "talent, enjoyment of food, gentle self-expression"),
+    "伤官": ("sharp edge", "produced by the Day Master, opposite polarity", "brilliance, creativity, unrestrained expression"),
+    "偏财": ("windfall wealth", "controlled by the Day Master, same polarity", "money that comes and goes, opportunities, popularity"),
+    "正财": ("steady wealth", "controlled by the Day Master, opposite polarity", "steady income, money earned by hard work"),
+    "七杀": ("pressure", "controls the Day Master, same polarity", "pressure and challenges; also boldness"),
+    "正官": ("rules", "controls the Day Master, opposite polarity", "rules, responsibility, reputation"),
+    "偏印": ("inspiration", "produces the Day Master, same polarity", "unconventional learning, inspiration, solitude"),
+    "正印": ("support", "produces the Day Master, opposite polarity", "learning, protection, support from elders"),
+}
+
+CHANGSHENG_QUOTE_EN = {
+    "长生": "all things begin to flourish, like a person just born and starting to grow",
+    "沐浴": "things newly born are soft and fragile, easily harmed",
+    "冠带": "things grow fine and lush, like a person putting on cap and sash",
+    "临官": "things have grown full, like a person taking office",
+    "帝旺": "things are ripe, like a person at the height of vigour",
+    "衰": "things wane in form, like a person whose vigour declines",
+    "病": "things sicken, like a person falling ill",
+    "死": "things die, like a person dying",
+    "墓": "their work done, things are stored in the vault, like a person returning to the grave",
+    "绝": "things in the earth have no form yet, like an empty womb",
+    "胎": "things sprout in the earth and first have qi, like a person receiving the qi of father and mother",
+    "养": "things take shape in the earth, like a person forming in the mother's womb",
+}
+
+WANGXIANG_EN = {
+    "旺": "in season: the strongest element this season",
+    "相": "produced by the element in season: second strongest",
+    "休": "produces the element in season, so it retires to rest",
+    "囚": "tries to control the element in season and is trapped instead",
+    "死": "controlled by the element in season: the weakest",
+}
+
+_SM = "San Ming Tong Hui 三命通会"
+TERMS_EN = {
+    "日主": ("The stem of your birth day. It stands for you; the whole chart is read around it: which characters help it and which drain it.", "general rule of the Ziping method"),
+    "四柱": ("Your birth year, month, day and hour, each written as a stem and a branch: four pairs, eight characters, hence 'Bazi'.", "general rule of the Ziping method"),
+    "天干地支": ("The top character of each pillar is a Heavenly Stem (ten of them: Jia, Yi, Bing…); the bottom one is an Earthly Branch (twelve: Zi, Chou, Yin…). Each belongs to one of the Five Elements.", "general rule of the Ziping method"),
+    "十神": ("How each other character relates to the Day Master: produces it, is produced by it, controls it, is controlled by it, or is the same element, each split by polarity. Ten in all, used as metaphors for people and affairs.", "general rule of the Ziping method ⚖ meanings are the common reading"),
+    "藏干": ("Stems hidden inside a branch. The main qi matters most, then the middle and residual qi.", "common hidden-stem table ⚖"),
+    "通根": ("A stem finds the same element among the hidden stems of a branch, like a tree with roots. More roots, and main-qi roots, make it steadier.", "common Ziping reading ⚖"),
+    "透干": ("A stem hidden in a branch also appears as a stem, so its strength shows openly.", "common Ziping reading ⚖"),
+    "月令": ("The branch of your birth month. It decides which element is strongest in that season and is the most important factor in judging the Day Master's strength.", "general rule of the Ziping method"),
+    "司令": ("Within a month, different stems take turns to rule. The " + _SM + " section on the ruling stems lists how many days each rules after the solar term.", "✅ " + _SM + ", vol. 2"),
+    "旺相休囚死": ("How strong each element is in the season: in season it is Prosperous, then Strong, Resting, Trapped, and weakest Dead.", "✅ " + _SM + ", vol. 2"),
+    "十二长生": ("The Day Master's state on each branch. Old books compare it to twelve stages of a life, from birth to the grave.", "✅ " + _SM + ", vol. 2; the book says strong stages are 'not necessarily good'"),
+    "合": ("Two characters combine and hold on to each other. " + _SM + ": 'combination means harmony.' Combining into another element needs conditions; only the combination is marked here.", "✅ " + _SM + ", vol. 2"),
+    "冲": ("Two opposite branches clash, which brings change. The book says a clash 'may be good or bad and cannot be judged in general': it depends on whether a helpful or harmful character is hit.", "✅ " + _SM + ", vol. 2"),
+    "刑": ("Punishment. The book compares it to 'husband and wife who come together yet hurt each other': harm within closeness. Self-punishment is the same branch meeting itself.", "✅ " + _SM + ", vol. 2"),
+    "害": ("Harm: the book calls these 'branches that encroach on each other'; they get in each other's way.", "✅ " + _SM + ", vol. 2"),
+    "三合": ("Three branches complete a set and form one strong element (e.g. Shen, Zi and Chen form Water).", "✅ " + _SM + ", vol. 2"),
+    "三会": ("The three branches of one direction are all present (e.g. Yin, Mao, Chen: the Wood of the east), concentrating that element.", "✅ Yuan Hai Zi Ping 渊海子平"),
+    "三合缺一": ("Only two of a Three Harmony set are present. The book says 'with one of the three missing, the set does not form.' Watch for a Luck Pillar or year that brings the third.", "✅ " + _SM + ", vol. 2"),
+    "空亡": ("In each ten-day cycle of the sixty, two branches are left out: they are 'void'. The book says Void 'should not be read as bad on that account'.", "✅ " + _SM + ", vol. 3"),
+    "禄": ("The home position of the day stem. The book: 'Lu is rank and salary, to be enjoyed when in power.'", "✅ " + _SM + ", vol. 3"),
+    "羊刃": ("One step beyond Prosperity: too strong, with its edge too exposed. The book: 'when Lu goes too far, the blade appears.'", "✅ " + _SM + ", vol. 3"),
+    "天乙贵人": ("The most honoured auspicious star in the old books: 'wherever it goes, all malign stars quietly withdraw.' Popularly, help from benefactors.", "✅ " + _SM + ", vol. 3"),
+    "驿马": ("Movement, relocation and change. The book calls it 'a spirit of happy events'.", "✅ " + _SM + ", vol. 3"),
+    "咸池": ("Popularly 'Peach Blossom': charm and romantic attraction. The book's comments are negative; this skill does not repeat them or judge character from it.", "✅ " + _SM + ", vol. 2"),
+    "纳音": ("The traditional image element of each of the sixty pairs (e.g. Roadside Earth, Fire below the Mountain).", "✅ " + _SM + ", vol. 1"),
+    "起运": ("The age, in years and months, at which the first Luck Pillar starts, counted from birth to the next (or previous) solar term.", "general rule of the Ziping method"),
+    "大运": ("The background that changes every ten years, like the seasons of a life.", "general rule of the Ziping method"),
+    "流年": ("The stem and branch of each year, like that year's weather; read it together with the chart and the Luck Pillar.", "general rule of the Ziping method"),
+    "调候": ("Which element the chart needs to balance the warmth, cold, dryness or damp of the birth season. The Qiong Tong Bao Jian 穷通宝鉴 is devoted to this.", "✅ Qiong Tong Bao Jian 穷通宝鉴"),
+    "用神": ("The element that helps this chart most. This is a judgement; schools may choose differently, so look at the reasons.", "⚖ a judgement"),
+    "喜神": ("An element that helps the chart and supports the Useful God.", "⚖ a judgement"),
+    "忌神": ("An element that works against the chart.", "⚖ a judgement"),
+    "五行个数": ("How many of the eight characters belong to each element. It is only a count: not strength, and not 'add whatever is missing'.", "note by this project"),
+}
+
+
+def page_data(lang: str = "zh") -> dict:
+    if lang == "en":
+        from . import terms_en
+        return {"gan_xiang": GAN_XIANG, "gan_xiang_en": GAN_XIANG_EN, "shishen": SHISHEN_EN,
+                "changsheng": {k: (terms_en.CHANGSHENG[k][1], q, CHANGSHENG_QUOTE_EN[k]) for k, (_, q) in CHANGSHENG.items()},
+                "wangxiang": WANGXIANG_EN, "terms": TERMS_EN}
     return {"gan_xiang": GAN_XIANG, "shishen": SHISHEN, "changsheng": CHANGSHENG,
             "wangxiang": WANGXIANG, "terms": TERMS}
 

@@ -35,12 +35,13 @@ def cmd_bazi(a) -> Output:
         data["lunar_input"] = note
     if a.html is not None:
         notes = pages_bazi.load_bazi_notes(a.notes)
-        page = pages.render("bazi.html", pages_bazi.bazi_title(b), pages_bazi.bazi_data(b, notes=notes))
-        path = pages.write_page(a.html or pages_bazi.bazi_default_name(b), page)
+        page = pages.render("bazi.html", pages_bazi.bazi_title(b, a.lang),
+                            pages_bazi.bazi_data(b, notes=notes, lang=a.lang), lang=a.lang)
+        path = pages.write_page(a.html or pages_bazi.bazi_default_name(b, a.lang), page)
         text += f"\n\n交互命盘已生成：{path}"
         data["html"] = path
-    elif a.notes:
-        raise UsageError("--notes 需与 --html 一起使用")
+    elif a.notes or a.lang != "zh":
+        raise UsageError("--notes、--lang 需与 --html 一起使用")
     return Output(text, data)
 
 
@@ -60,6 +61,8 @@ def add_args(s: argparse.ArgumentParser) -> None:
                    help="同时生成可交互的命盘 HTML（不给路径则写到当前目录）")
     s.add_argument("--notes", metavar="JSON",
                    help="写入命盘的批注：{summary, basis, pillars:{年月日时:文字}, dayun:{干支:文字}, years:{年份:文字}, advice:[...]}")
+    s.add_argument("--lang", choices=pages_bazi.LANGS, default="zh",
+                   help="命盘语言：zh 中文（默认）/ en 英文；批注用同一种语言写")
 
 
 def build_parser() -> argparse.ArgumentParser:

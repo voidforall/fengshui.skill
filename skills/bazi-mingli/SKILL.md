@@ -26,7 +26,7 @@ metadata:
 
 ```bash
 python3 scripts/bazi.py --birth "YYYY-MM-DD HH:MM" --gender m/f --longitude <经度> \
-        [--tz <时区>] [--lunar [--leap]] [--zi next|same] [--year <流年>] --html <路径> [--notes 批注.json]
+        [--tz <时区>] [--lunar [--leap]] [--zi next|same] [--year <流年>] --html <路径> [--notes 批注.json] [--lang en]
 ```
 
 - 路径相对于本 skill 目录。需要 `pip install lunar_python`（见 `requirements.txt`）；未安装时先提示用户安装或代为安装，**不要**改为凭记忆推算。

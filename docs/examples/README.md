@@ -26,8 +26,15 @@ python3 skills/bazi-mingli/scripts/bazi.py --birth "1990-06-01 08:30" --gender f
         --html docs/examples/bazi-demo.html --notes docs/examples/bazi-notes.json
 ```
 
-修改 `skills/bazi-mingli/assets/templates/bazi.html` 或 `lib/kanyu/` 后（先运行 `python3 tools/sync_kanyu.py`）请重新运行此命令；`tests/test_pages.py` 会检查示例是否过期。
-在浏览器检查：「一眼看懂」、点术语弹出白话解释、「白话」开关、四柱翻开动画、点干支与弧线、大运卡片与年份拖动、「藏干」「合冲刑害」开关、时辰不详（三柱）、手机宽度与深色模式。
+英文版 `bazi-demo.en.html`（批注 `bazi-notes.en.json`，同一张命盘）：
+
+```bash
+python3 skills/bazi-mingli/scripts/bazi.py --birth "1990-06-01 08:30" --gender f --longitude 116.4 --year 2026 --lang en \
+        --html docs/examples/bazi-demo.en.html --notes docs/examples/bazi-notes.en.json
+```
+
+修改 `skills/bazi-mingli/assets/templates/bazi.html` 或 `lib/kanyu/` 后（先运行 `python3 tools/sync_kanyu.py`）请重新运行这两条命令；`tests/test_pages.py` 会检查示例是否过期。
+在浏览器检查：「一眼看懂」、点术语弹出白话解释、「白话」开关、四柱翻开动画、点干支与弧线、大运卡片与年份拖动、「藏干」「合冲刑害」开关、时辰不详（三柱）、手机宽度与深色模式；英文版另查术语首次出现的拼音与汉字、长英文名换行、无横向滚动。
 README 中的 `docs/images/bazi-chart.png` 用 Playwright 截取此页（2 倍像素）。
 
 ## 城市五行地图
