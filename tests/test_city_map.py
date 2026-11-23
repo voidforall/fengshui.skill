@@ -145,7 +145,7 @@ class TestCityMap(unittest.TestCase):
             with self.assertRaises(ValueError):generator.validate(self.data)
 
     def test_frozen_city_examples_are_complete_and_match_template(self):
-        for slug in ('london','new-york'):
+        for slug in ('london','new-york','shanghai'):
             with self.subTest(city=slug):
                 data=json.loads((SKILL/'examples'/f'{slug}.json').read_text())
                 generator.validate(data)
@@ -163,6 +163,8 @@ class TestCityMap(unittest.TestCase):
         cases={
             'london':[(-.45,51.52),(.22,51.57),(-.10,51.36),(-.10,51.65),(-.1278,51.5074)],
             'new-york':[(-74.15,40.58),(-73.82,40.72),(-73.87,40.85),(-73.95,40.65),(-74.006,40.7128)],
+            # 人民广场、陆家嘴、五角场、徐家汇、外高桥、南汇新城（临港）
+            'shanghai':[(121.4737,31.2304),(121.5055,31.2397),(121.514,31.299),(121.437,31.195),(121.59,31.35),(121.92,30.90)],
         }
         for slug,points in cases.items():
             data=json.loads((SKILL/'examples'/f'{slug}.json').read_text())
@@ -198,5 +200,39 @@ class TestFullCityModel(unittest.TestCase):
         a=model.analyse(self.metrics(commercial_industrial=1),'landscape')
         b=model.analyse(self.metrics(commercial_industrial=1),'function')
         self.assertEqual('土',a['primary']);self.assertEqual('金',b['primary'])
+
+    def test_shanghai_scope_is_land_of_declared_districts(self):
+        # 声明范围为八个区的街道、镇界之和：OSM 区界中的东海海域与江苏大丰的飞地不纳入
+        data=json.loads((SKILL/'examples'/'shanghai.json').read_text())
+        scope=shape(data['coverage']['geometry'])
+        for lon,lat in [(122.4,31.0),(122.0,31.5),(120.64,33.3)]:
+            self.assertFalse(scope.covers(Point(lon,lat)),(lon,lat))
+        self.assertEqual(data['scope_label'],'主城区')
+        self.assertIn('不纳入',data['model']['source_manifest']['boundary_note'])
+
+
+    def test_relative_view_is_default_balanced_and_cites_classics(self):
+        for slug in ('london','new-york','shanghai'):
+            data=json.loads((SKILL/'examples'/f'{slug}.json').read_text())
+            regions=data['regions']
+            self.assertTrue(all(r['preferred_method']=='relative' for r in regions),slug)
+            counts={e:sum(r['analyses']['relative']['primary']==e for r in regions) for e in '金木水火土'}
+            # 相对取象下每一行都至少占5%，没有哪一行超过四成
+            self.assertTrue(all(.05<=c/len(regions)<=.4 for c in counts.values()),(slug,counts))
+            a=regions[0]['analyses']['relative']
+            self.assertTrue(any('洪範' in s['url'] for s in a['sources']),slug)
+            self.assertIn('百分位',a['facts'][0])
+
+    def test_relative_percentiles_and_floor(self):
+        sys.path.insert(0,str(SKILL/'scripts'))
+        import city_model
+        base={'water':0,'vegetation':0,'open':0,'built':.6,'commercial_industrial':0,'retail':0,'culture_area':0,
+              'culture_count':0,'sample_count':400,'sampling':'50m多数分类统计','area_km2':1.0}
+        cells=[dict(base,water=w,vegetation=v) for w,v in [(.02,.1),(.3,.1),(.03,.5),(.0,.05)]]
+        out=city_model.relative_analyses(cells,'测试范围')
+        self.assertEqual(out[1]['primary'],'水')          # 水面全范围最高
+        self.assertEqual(out[2]['primary'],'木')          # 植被全范围最高
+        self.assertNotEqual(out[0]['primary'],'水')       # 水面 2%×1.2 低于 0.05 门槛，不参与
+
 
 if __name__=='__main__':unittest.main()

@@ -129,7 +129,7 @@ footer { color:var(--soft); font-size:.75rem; padding-block:1rem; border-block-s
   </header>
   <p class="intro" id="summary"></p><p class="coverage" id="coverage-status" role="status"></p>
   <div class="controls">
-    <label for="method">分析口径 <select id="method"><option value="combined">全城综合取象</option><option value="landscape">全城土地覆盖底层</option></select></label>
+    <label for="method">分析口径 <select id="method"><option value="relative">全城相对取象</option><option value="function">全城综合取象（绝对）</option><option value="landscape">全城土地覆盖底层</option></select></label>
     <label><input type="checkbox" id="show-evidence">显示本单元证据点</label><label><input type="checkbox" id="show-grid">显示统计单元线</label>
     <button class="reset" id="reset">查看全部片区 ↗</button>
   </div>
@@ -140,12 +140,12 @@ footer { color:var(--soft); font-size:.75rem; padding-block:1rem; border-block-s
       <search class="search"><form id="search-form" action="#map" method="get" aria-label="当地地址定位">
         <label for="search">邮编、地址或地区</label><input id="search" name="q" type="search" placeholder="当地邮编、地址或地区名" maxlength="200" enterkeyhint="search" autocomplete="off" autocorrect="off" autocapitalize="none" spellcheck="false" aria-describedby="search-help search-status">
         <button id="search-submit" type="submit">定位 ↗</button><p id="search-help"></p><p id="search-status" role="status"></p><ul id="search-results" aria-label="候选地点"></ul>
-        <p class="search-provider">联网定位：<a href="https://postcodes.io/" target="_blank" rel="noopener noreferrer">Postcodes.io</a> / <a href="https://github.com/komoot/photon" target="_blank" rel="noopener noreferrer">Photon · © OSM</a>。仅提交时发送查询词。</p>
+        <p class="search-provider">联网定位：<span id="postcodes-provider"><a href="https://postcodes.io/" target="_blank" rel="noopener noreferrer">Postcodes.io</a> / </span><a href="https://github.com/komoot/photon" target="_blank" rel="noopener noreferrer">Photon · © OSM</a>。仅提交时发送查询词。</p>
       </form><p id="count" role="status"></p></search>
       <ol id="regions"></ol>
     </aside>
     <section class="map-wrap" aria-label="真实地图与五行分析区块">
-      <div class="map-head"><b>全城连续覆盖 · 颜色为模型主象，格网不是风水硬边界</b><span>↑ 北</span></div>
+      <div class="map-head"><b id="map-head-text">全城连续覆盖 · 颜色为模型主象，格网不是风水硬边界</b><span>↑ 北</span></div>
       <div id="map" aria-label="可缩放片区地图；也可通过片区索引查看分析"></div>
       <p class="map-status" id="map-status" role="status">正在加载真实地图…</p>
     </section>
@@ -158,12 +158,13 @@ footer { color:var(--soft); font-size:.75rem; padding-block:1rem; border-block-s
     <div><h3>为什么这一带偏这个象</h3><p id="reason"></p><h3>区域整体特征</h3><ul id="facts"></ul>
       <h3>兼象与局限</h3><p id="limitations"></p><h3>事实来源</h3><ul id="sources"></ul></div>
   </section>
-  <details><summary>全城覆盖、取象规则与数据时效</summary>
+  <details><summary id="method-summary">全城覆盖、取象规则与数据时效</summary>
     <div class="method">
       <p><b>水</b> · 真实水面覆盖信号。</p><p><b>木</b> · 树木、灌丛、草地等植被信号。</p><p><b>土</b> · 耕地、裸地及建成承载空间的底层归类。</p><p><b>金</b> · 商业、工业用地或相应许可分区信号。</p><p><b>火</b> · 零售服务及演艺、传播功能信号。</p>
     </div>
     <p>边界内所有单元都有主象，允许兼象和低置信度，不再只选几处地标。连续统计格网裁切至真实城市边界；细分单位是观察尺度，不代表五行在格线上突变。边界外不在本图范围内；筛选五行会临时隐藏其他颜色，可点“查看全部片区”恢复。</p>
     <p>土地覆盖底层取自2021年ESA WorldCover，原始10米分类汇总至50米后按单元统计；并非2026年逐块实地调查。伦敦功能资料来自OSM快照，可能遗漏；纽约功能资料使用官方规划分区，表示许可用途，不等于目前营业实况，相关判断降低置信度。</p>
+    <p><b>相对取象（默认）</b> · 典籍依据：《尚书·洪范》「水曰润下，火曰炎上，木曰曲直，金曰从革，土爰稼穑」；《五行大义》卷一「辨体性」以「体者，以形质为名；性者，以功用为义」辨五行，并说土「总于四行」「土苞四德，故其体能兼虚实」。据此以土为承载四行的底色，看每个单元在本范围内相对最突出的是哪一行：各行信号换算成范围内百分位，取最高且信号不低于0.05者。它回答「这里比本城一般地方更突出什么」，不是「这里哪一行占多数」；同一地方换一个比较范围，结果可能不同。</p>
     <p>综合模型的决策信号为：水×1.2、植被×1.1、承载空间×0.65、商业工业比例×2、零售服务比例×2.4，加演艺区覆盖×0.9及演艺对象信号。比较信号选主象，保留有一定支撑的兼象。它们是本项目公开的现代解释规则，未声称由古籍直接推导，更不是实测气场、吉凶或投资评分。详情中的百分比是地理覆盖统计，不是五行能量百分比。</p>
     <p id="coordinate-note"></p><p>置信等级表示资料和规则区分度，不是风水效应成立的概率；混合单元、样本少、资料历史性或规划代替现状都会限制判断。</p>
     <p>Leaflet 1.9.4 已内嵌（BSD-2-Clause）；真实底图需联网及HTTP，仅请求当前视野瓦片。</p>
@@ -179,12 +180,16 @@ footer { color:var(--soft); font-size:.75rem; padding-block:1rem; border-block-s
 'use strict';
 const data=JSON.parse(document.getElementById('city-data').textContent);
 const colors={'金':'#9b701e','木':'#37754c','水':'#28678b','火':'#b74434','土':'#84603b'};
-const methods={landscape:'土地覆盖底层 · 2021年分类',function:'综合取象 · 覆盖与功能证据'};
+const methods={relative:'相对取象 · 与本范围各单元比较',landscape:'土地覆盖底层 · 2021年分类',function:'综合取象（绝对） · 覆盖与功能证据'};
 const $=id=>document.getElementById(id);
 const put=(id,value)=>{$(id).textContent=value;};
 const node=(tag,value,cls)=>{const n=document.createElement(tag);if(value!==undefined)n.textContent=value;if(cls)n.className=cls;return n;};
 function sourceList(target,sources){target.replaceChildren(...sources.map(s=>{const li=node('li'),a=node('a',s.title+' ↗');a.href=s.url;a.target='_blank';a.rel='noopener noreferrer';li.append(a);return li;}));}
-put('title',data.city+' · 全城五行地图');put('subtitle',data.subtitle);put('summary',data.summary);put('reviewed','资料整理：'+data.reviewed_at);put('coordinate-note',data.coordinate_note);
+const SCOPE=data.scope_label||'全城';
+put('title',data.city+' · '+SCOPE+'五行地图');put('map-head-text',SCOPE+'连续覆盖 · 颜色为模型主象，格网不是风水硬边界');put('method-summary',SCOPE+'覆盖、取象规则与数据时效');
+if(!data.regions.every(r=>r.analyses.relative))$('method').options[0].remove();
+for(const o of $('method').options)o.textContent=SCOPE+{relative:'相对取象',function:'综合取象（绝对）',landscape:'土地覆盖底层'}[o.value];
+if((data.search?.country_code||'')!=='gb')$('postcodes-provider').hidden=true;put('subtitle',data.subtitle);put('summary',data.summary);put('reviewed','资料整理：'+data.reviewed_at);put('coordinate-note',data.coordinate_note);
 put('coverage-status',data.coverage.name+' · GIS覆盖 '+data.coverage_report.coverage_percent.toFixed(2)+'% · '+data.regions.length+' 个连续单元 · 每单元都有主象及置信说明');
 put('data-attribution',(data.model?.attribution||[]).join('；'));
 const map=L.map('map',{scrollWheelZoom:false});L.control.scale({imperial:false,position:'bottomleft'}).addTo(map);
@@ -194,7 +199,7 @@ const searchIndex=new Map(data.regions.map(r=>[r.id,JSON.stringify([r.name,r.ana
 const shapes=new Map(),evidenceLayer=L.layerGroup().addTo(map);
 const selectedLabel=L.tooltip({permanent:true,direction:'center',className:'region-label',pane:'regionLabels'});
 let active='全部',selected=null;
-const methodFor=r=>$('method').value==='combined'?r.preferred_method:$('method').value;
+const methodFor=r=>r.analyses[$('method').value]?$('method').value:r.preferred_method;
 const analysis=r=>r.analyses[methodFor(r)];
 const caption=a=>a.primary+'为主'+(a.secondary.length?' · 兼'+a.secondary.join('、'):'');
 function ringContains(ring,lon,lat){let inside=false;for(let i=0,j=ring.length-1;i<ring.length;j=i++){
@@ -231,7 +236,7 @@ function update(){
  put('count','显示 '+shown.length+' / '+data.regions.length+' 个分析单元');
  if(shown.length){const focus=data.coverage.focus,initial=focus?regionAt(focus[0],focus[1]):null;select(shown.find(r=>r.id===selected)||(initial&&shown.includes(initial)?initial:shown[0]),false);}else{selected=null;if(map.hasLayer(selectedLabel))map.removeLayer(selectedLabel);refreshEvidence();$('regions').append(node('li',coordinateQuery()?'该坐标不在本图城市范围内。':'没有匹配单元，请调整筛选或搜索。','empty'));for(const id of ['tag','basis','confidence','boundary','reason','limitations'])put(id,'');put('region-title','没有匹配单元');for(const id of ['facts','sources','boundary-sources','evidence'])$(id).replaceChildren();}
  document.querySelectorAll('.filter').forEach(b=>{const e=b.dataset.element;b.setAttribute('aria-pressed',String(e===active));const count=data.regions.filter(r=>e==='全部'||analysis(r).primary===e).length;b.querySelector('.filter-text').textContent=e+' · '+count;});
- put('view-note',($('method').value==='combined'?'全城综合取象':'全城土地覆盖底层')+'：每个单元均已归类；筛选只改变显示。土地覆盖为2021年，功能资料的现状完整性有限。');
+ put('view-note',SCOPE+{relative:'相对取象：看每个单元比本范围一般地方更突出的是哪一行，所以五行分布较均衡；',function:'综合取象（绝对）：看每个单元哪一行信号最强，建成区多以土为主；',landscape:'土地覆盖底层：只看水面、植被与建成覆盖；'}[$('method').value]+'每个单元均已归类，筛选只改变显示。土地覆盖为2021年，功能资料的现状完整性有限。');
 }
 for(const e of ['全部','金','木','水','火','土']){const b=node('button',undefined,'filter');b.dataset.element=e;if(colors[e]){const dot=node('span',undefined,'swatch');dot.style.setProperty('--element',colors[e]);b.append(dot);}b.append(node('span',e,'filter-text'));b.addEventListener('click',()=>{active=e;update();fit(visible());});$('filters').append(b);}
 const searchConfig=data.search||{};
