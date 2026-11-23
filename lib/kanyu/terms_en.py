@@ -32,6 +32,17 @@ PALACES = {
 DIRECTIONS = {"北": "North", "东北": "Northeast", "东": "East", "东南": "Southeast", "南": "South",
               "西南": "Southwest", "西": "West", "西北": "Northwest", "中": "Center"}
 
+DIR_ABBR = {"北": "N", "东北": "NE", "东": "E", "东南": "SE", "南": "S", "西南": "SW", "西": "W", "西北": "NW", "中": "C"}
+
+
+def pinyin(ch: str) -> str:
+    """天干、地支、卦名的拼音（二十四山都在其中）。"""
+    for table in (GAN, ZHI, PALACES):
+        if ch in table:
+            return table[ch][0]
+    raise KeyError(ch)
+
+
 COMMON = [
     ("五行", "Five Elements", "Wu Xing"),
     ("阴阳", "Yin and Yang", "Yin Yang"),

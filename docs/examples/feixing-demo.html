@@ -6,7 +6,7 @@
 <title>飞星盘 子山午向</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Ma+Shan+Zheng&family=Noto+Serif+SC:wght@400;600&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,600;1,400&family=Ma+Shan+Zheng&family=Noto+Serif+SC:wght@400;600&display=swap">
 <style>
 /* 盘谱：册页上摊开一面罗经——外圈二十四山，内为九宫；右栏为批注（眉批）。
    浅色 = 宣纸册页；深色 = 黑漆描金罗盘。大胆之处只在盘面，其余安静。 */
@@ -24,6 +24,24 @@
   --font-song: "Noto Serif SC", "Songti SC", "STSong", "SimSun", "Noto Serif CJK SC", serif;
   color-scheme: light;
 }
+/* 英文页：西文用 Garamond，汉字（印章、原文引文）仍回落到宋体 / 楷体 */
+:root[lang="en"] {
+  --font-brush: "EB Garamond", "Garamond", "Ma Shan Zheng", "STKaiti", serif;
+  --font-song: "EB Garamond", "Garamond", "Noto Serif SC", "Songti SC", serif;
+}
+:root[lang="en"] body { font-size: 16px; line-height: 1.6; }
+:root[lang="en"] h1 { letter-spacing: 0; font-size: clamp(30px, 5vw, 44px); font-weight: 600; }
+:root[lang="en"] .btn-cast { letter-spacing: .06em; font-size: 19px; padding: 3px 18px; font-weight: 600; }
+:root[lang="en"] .badge { font-size: 16px; }
+:root[lang="en"] .leaf h2 { font-size: 25px; font-weight: 600; }
+:root[lang="en"] section.legend h3, :root[lang="en"] aside.notes h3 { font-size: 21px; font-weight: 600; }
+:root[lang="en"] .star.shan, :root[lang="en"] .star.xiang { font-size: 31px; font-weight: 600; }
+:root[lang="en"] .star.yun { font-size: 42px; }
+:root[lang="en"] .gua-lab { font-size: 17px; font-weight: 600; }
+:root[lang="en"] .mt { font-size: 13px; }
+:root[lang="en"] .mt.sit, :root[lang="en"] .mt.face { font-size: 14px; }
+:root[lang="en"] .axis-text { font-size: 15px; font-weight: 600; }
+:root[lang="en"] .status-row .s { font-size: 12px; line-height: 1.3; display: block; }
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
     --paper: #16120e; --paper-2: #211a14; --ink: #eadcbf; --ink-soft: #b3a283;
@@ -107,7 +125,7 @@ h1 { font-family: var(--font-brush); font-weight: 400; font-size: clamp(34px, 6v
 .star.wang { fill: var(--gold); }
 .star.hidden { opacity: 0 !important; }
 .sha { fill: var(--cinnabar); }
-.path { fill: none; stroke: var(--gold); stroke-width: 2; stroke-dasharray: 4 5; opacity: 0; }
+.path { fill: none; stroke: var(--gold); stroke-width: 2; stroke-dasharray: 4 5; opacity: 0; pointer-events: none; }
 .path.on { opacity: .8; }
 
 /* 批注栏 */
@@ -164,17 +182,17 @@ footer p { margin: 0; }
   <div class="board-wrap">
     <div class="plate">
       <svg id="board" viewBox="-30 -30 700 700" role="img" aria-labelledby="board-desc">
-        <desc id="board-desc">玄空飞星九宫盘，上南下北。外圈为二十四山。</desc>
+        <desc id="board-desc"></desc>
       </svg>
-      <div class="toolbar" role="group" aria-label="图层">
-        <button class="btn-cast" id="cast" type="button">起盘</button>
-        <button class="chip" type="button" data-layer="yun" aria-pressed="true"><span class="dot" style="background:var(--ink-soft)"></span>运盘</button>
-        <button class="chip" type="button" data-layer="shan" aria-pressed="true"><span class="dot" style="background:var(--ink)"></span>山星</button>
-        <button class="chip" type="button" data-layer="xiang" aria-pressed="true"><span class="dot" style="background:var(--cinnabar)"></span>向星</button>
-        <button class="chip" type="button" data-layer="annual" aria-pressed="true" id="chip-annual"><span class="dot" style="background:var(--azurite)"></span>流年</button>
-        <button class="chip" type="button" data-layer="month" aria-pressed="true" id="chip-month"><span class="dot" style="background:var(--azurite);opacity:.7"></span>流月</button>
+      <div class="toolbar" role="group" id="toolbar">
+        <button class="btn-cast" id="cast" type="button"></button>
+        <button class="chip" type="button" data-layer="yun" aria-pressed="true"><span class="dot" style="background:var(--ink-soft)"></span><span data-t="yun"></span></button>
+        <button class="chip" type="button" data-layer="shan" aria-pressed="true"><span class="dot" style="background:var(--ink)"></span><span data-t="shan"></span></button>
+        <button class="chip" type="button" data-layer="xiang" aria-pressed="true"><span class="dot" style="background:var(--cinnabar)"></span><span data-t="xiang"></span></button>
+        <button class="chip" type="button" data-layer="annual" aria-pressed="true" id="chip-annual"><span class="dot" style="background:var(--azurite)"></span><span data-t="annual"></span></button>
+        <button class="chip" type="button" data-layer="month" aria-pressed="true" id="chip-month"><span class="dot" style="background:var(--azurite);opacity:.7"></span><span data-t="month"></span></button>
       </div>
-      <p class="orient">上南下北，左东右西（罗经旧式）。每宫左上为山星（墨，管人丁），右上为向星（朱，管财），中下为运星；右下小字为流年。金色为当令之星。</p>
+      <p class="orient" id="orient"></p>
     </div>
 
     <aside class="notes" aria-live="polite">
@@ -190,20 +208,52 @@ footer p { margin: 0; }
 
   <footer>
     <p id="source"></p>
-    <p>风水为辅，人为为主。本盘由脚本按《沈氏玄空学》排盘规则计算；断语为传统取象，仅供参考。</p>
+    <p id="disclaimer"></p>
   </footer>
 </div>
 
-<script id="chart-data" type="application/json">{"title": "八运 · 子山午向", "facts": [["元运", "八运"], ["坐向", "坐子向午"], ["排法", "下卦"], ["罗盘", "向 180.0°（偏子山中线 +0.0°）"], ["流年", "2026年一入中"]], "warnings": [], "yun_note": "元运：2018-09-01 → 8运（2004-2023，以立春为界）。以入住或大修完工时间立极。", "sit": "子", "facing": "午", "sit_palace": "坎", "face_palace": "离", "axis_deg": 180.0, "patterns": ["双星到向（当令山向二星同到向首）"], "main_pattern": "双星到向", "entries": ["山星：运盘四入中，依巽山（+）顺飞", "向星：运盘三入中，依卯山（-）逆飞"], "layers": {"yun": {"中": 8, "乾": 9, "兑": 1, "艮": 2, "离": 3, "坎": 4, "坤": 5, "震": 6, "巽": 7}, "shan": {"中": 4, "乾": 5, "兑": 6, "艮": 7, "离": 8, "坎": 9, "坤": 1, "震": 2, "巽": 3}, "xiang": {"中": 3, "乾": 2, "兑": 1, "艮": 9, "离": 8, "坎": 7, "坤": 6, "震": 5, "巽": 4}, "annual": {"中": 1, "乾": 2, "兑": 3, "艮": 4, "离": 5, "坎": 6, "坤": 7, "震": 8, "巽": 9}, "month": null}, "current_yun": 9, "current_yun_cn": "九", "yun_cn": "八", "status": {"1": "生气（下运旺）", "2": "次生气", "3": "死气", "4": "死气", "5": "五黄煞", "6": "死气", "7": "衰气", "8": "退气", "9": "当令旺星"}, "chart_status": {"1": "次生气", "2": "死气", "3": "死气", "4": "死气", "5": "五黄煞", "6": "衰气", "7": "退气", "8": "当令旺星", "9": "生气（下运旺）"}, "star_names": {"1": "一白贪狼", "2": "二黑巨门", "3": "三碧禄存", "4": "四绿文曲", "5": "五黄廉贞", "6": "六白武曲", "7": "七赤破军", "8": "八白左辅", "9": "九紫右弼"}, "palaces": {"中": {"dir": "中", "xiang": "", "flags": []}, "乾": {"dir": "西北", "xiang": "乾为天、为圜、为君、为父、为玉、为金", "flags": ["五黄", "二五交加"]}, "兑": {"dir": "西", "xiang": "兑为泽、为少女、为巫、为口舌、为毁折", "flags": []}, "艮": {"dir": "东北", "xiang": "艮为山、为径路、为小石、为门阙、为少男", "flags": []}, "离": {"dir": "南", "xiang": "离为火、为日、为电、为中女、为甲胄", "flags": ["五黄"]}, "坎": {"dir": "北", "xiang": "坎为水、为沟渎、为隐伏、为中男", "flags": []}, "坤": {"dir": "西南", "xiang": "坤为地、为母、为布、为釜、为均、为众", "flags": []}, "震": {"dir": "东", "xiang": "震为雷、为龙、为长子、为大涂、为决躁", "flags": ["五黄", "二五交加"]}, "巽": {"dir": "东南", "xiang": "巽为木、为风、为长女、为绳直、为工、为高", "flags": []}}, "grid": [["巽", "离", "坤"], ["震", "中", "兑"], ["艮", "坎", "乾"]], "path": ["中", "乾", "兑", "艮", "离", "坎", "坤", "震", "巽"], "mountains": [{"name": "壬", "deg": 345, "boundary": true}, {"name": "子", "deg": 0, "boundary": false}, {"name": "癸", "deg": 15, "boundary": false}, {"name": "丑", "deg": 30, "boundary": true}, {"name": "艮", "deg": 45, "boundary": false}, {"name": "寅", "deg": 60, "boundary": false}, {"name": "甲", "deg": 75, "boundary": true}, {"name": "卯", "deg": 90, "boundary": false}, {"name": "乙", "deg": 105, "boundary": false}, {"name": "辰", "deg": 120, "boundary": true}, {"name": "巽", "deg": 135, "boundary": false}, {"name": "巳", "deg": 150, "boundary": false}, {"name": "丙", "deg": 165, "boundary": true}, {"name": "午", "deg": 180, "boundary": false}, {"name": "丁", "deg": 195, "boundary": false}, {"name": "未", "deg": 210, "boundary": true}, {"name": "坤", "deg": 225, "boundary": false}, {"name": "申", "deg": 240, "boundary": false}, {"name": "庚", "deg": 255, "boundary": true}, {"name": "酉", "deg": 270, "boundary": false}, {"name": "辛", "deg": 285, "boundary": false}, {"name": "戌", "deg": 300, "boundary": true}, {"name": "乾", "deg": 315, "boundary": false}, {"name": "亥", "deg": 330, "boundary": false}], "gua_ring": [{"name": "坎", "deg": 0}, {"name": "艮", "deg": 45}, {"name": "震", "deg": 90}, {"name": "巽", "deg": 135}, {"name": "离", "deg": 180}, {"name": "坤", "deg": 225}, {"name": "兑", "deg": 270}, {"name": "乾", "deg": 315}], "notes": {"summary": "八运子山午向，双星到向：当令八白的山星、向星同到南方向首。此局要南方近处开阔、远处有山，方能丁财两旺。府上南面近处有高楼压迫，向星见山而不得水，财气难进；山星八白得楼为靠，人丁健康反得力。", "palaces": {"离": "向首。山八向八，双星会于此。宜近处开阔、远处见高，今近处有楼，财星受压。2026 年流年五黄到此，门口一带宜静，不宜动工。", "坎": "坐山。山九向七：九紫为九运当令之星，背后若有实墙或高楼依靠，利人丁。", "艮": "向星九紫在此，为九运财星。若有门窗、开阔处，可多加使用。", "乾": "山五向二，2026 年流年二黑又到，成二五交加。宜安静、整洁，老人不宜久居。"}, "advice": ["主要活动区、书桌尽量设在东北（向星九紫所到）", "南面门内保持通畅明亮，不放杂物", "西北房间少用、保持整洁；今年不在南方门口动土"]}, "autoplay": true, "source": "堪舆子 fengshui-master v2.2.0 · 生成于 2026-11-07 · 盘面由 scripts/fengshui.py 计算，旺衰按当前九运论"}</script>
+<script id="chart-data" type="application/json">{"lang": "zh", "title": "八运 · 子山午向", "facts": [["元运", "八运"], ["坐向", "坐子向午"], ["排法", "下卦"], ["罗盘", "向 180.0°（偏子山中线 +0.0°）"], ["流年", "2026年一入中"]], "warnings": [], "yun_note": "元运：2018-09-01 → 8运（2004-2023，以立春为界）。以入住或大修完工时间立极。", "sit": "子", "facing": "午", "sit_palace": "坎", "face_palace": "离", "axis_deg": 180.0, "patterns": ["双星到向（当令山向二星同到向首）"], "main_pattern": "双星到向", "entries": ["山星：运盘四入中，依巽山（+）顺飞", "向星：运盘三入中，依卯山（-）逆飞"], "layers": {"yun": {"中": 8, "乾": 9, "兑": 1, "艮": 2, "离": 3, "坎": 4, "坤": 5, "震": 6, "巽": 7}, "shan": {"中": 4, "乾": 5, "兑": 6, "艮": 7, "离": 8, "坎": 9, "坤": 1, "震": 2, "巽": 3}, "xiang": {"中": 3, "乾": 2, "兑": 1, "艮": 9, "离": 8, "坎": 7, "坤": 6, "震": 5, "巽": 4}, "annual": {"中": 1, "乾": 2, "兑": 3, "艮": 4, "离": 5, "坎": 6, "坤": 7, "震": 8, "巽": 9}, "month": null}, "current_yun": 9, "nums": ["", "一", "二", "三", "四", "五", "六", "七", "八", "九"], "status": {"1": "生气（下运旺）", "2": "次生气", "3": "死气", "4": "死气", "5": "五黄煞", "6": "死气", "7": "衰气", "8": "退气", "9": "当令旺星"}, "chart_status": {"1": "次生气", "2": "死气", "3": "死气", "4": "死气", "5": "五黄煞", "6": "衰气", "7": "退气", "8": "当令旺星", "9": "生气（下运旺）"}, "status_class": {"1": "good", "2": "good", "3": "bad", "4": "bad", "5": "bad", "6": "bad", "7": "bad", "8": "", "9": "good"}, "status_text": {"1": "九运生气", "2": "九运次生气", "3": "九运死气", "4": "九运死气", "5": "九运五黄煞", "6": "九运死气", "7": "九运衰气", "8": "九运退气", "9": "九运当令旺星"}, "status_short": {"1": "生气", "2": "次生气", "3": "死气", "4": "死气", "5": "五黄煞", "6": "死气", "7": "衰气", "8": "退气", "9": "当令旺星"}, "chart_status_text": {"1": "八运次生气", "2": "八运死气", "6": "八运衰气", "7": "八运退气", "8": "八运当令旺星", "9": "八运生气"}, "star_names": {"1": "一白贪狼", "2": "二黑巨门", "3": "三碧禄存", "4": "四绿文曲", "5": "五黄廉贞", "6": "六白武曲", "7": "七赤破军", "8": "八白左辅", "9": "九紫右弼"}, "star_short": {"1": "贪狼", "2": "巨门", "3": "禄存", "4": "文曲", "5": "廉贞", "6": "武曲", "7": "破军", "8": "左辅", "9": "右弼"}, "palaces": {"中": {"dir": "中", "label": "中", "name": "中宫", "xiang": "", "flags": []}, "乾": {"dir": "西北", "label": "乾 · 西北", "name": "乾宫 · 西北", "xiang": "乾为天、为圜、为君、为父、为玉、为金", "flags": ["五黄", "二五交加"]}, "兑": {"dir": "西", "label": "兑 · 西", "name": "兑宫 · 西", "xiang": "兑为泽、为少女、为巫、为口舌、为毁折", "flags": []}, "艮": {"dir": "东北", "label": "艮 · 东北", "name": "艮宫 · 东北", "xiang": "艮为山、为径路、为小石、为门阙、为少男", "flags": []}, "离": {"dir": "南", "label": "离 · 南", "name": "离宫 · 南", "xiang": "离为火、为日、为电、为中女、为甲胄", "flags": ["五黄"]}, "坎": {"dir": "北", "label": "坎 · 北", "name": "坎宫 · 北", "xiang": "坎为水、为沟渎、为隐伏、为中男", "flags": []}, "坤": {"dir": "西南", "label": "坤 · 西南", "name": "坤宫 · 西南", "xiang": "坤为地、为母、为布、为釜、为均、为众", "flags": []}, "震": {"dir": "东", "label": "震 · 东", "name": "震宫 · 东", "xiang": "震为雷、为龙、为长子、为大涂、为决躁", "flags": ["五黄", "二五交加"]}, "巽": {"dir": "东南", "label": "巽 · 东南", "name": "巽宫 · 东南", "xiang": "巽为木、为风、为长女、为绳直、为工、为高", "flags": []}}, "grid": [["巽", "离", "坤"], ["震", "中", "兑"], ["艮", "坎", "乾"]], "path": ["中", "乾", "兑", "艮", "离", "坎", "坤", "震", "巽"], "mountains": [{"name": "壬", "label": "壬", "deg": 345, "boundary": true}, {"name": "子", "label": "子", "deg": 0, "boundary": false}, {"name": "癸", "label": "癸", "deg": 15, "boundary": false}, {"name": "丑", "label": "丑", "deg": 30, "boundary": true}, {"name": "艮", "label": "艮", "deg": 45, "boundary": false}, {"name": "寅", "label": "寅", "deg": 60, "boundary": false}, {"name": "甲", "label": "甲", "deg": 75, "boundary": true}, {"name": "卯", "label": "卯", "deg": 90, "boundary": false}, {"name": "乙", "label": "乙", "deg": 105, "boundary": false}, {"name": "辰", "label": "辰", "deg": 120, "boundary": true}, {"name": "巽", "label": "巽", "deg": 135, "boundary": false}, {"name": "巳", "label": "巳", "deg": 150, "boundary": false}, {"name": "丙", "label": "丙", "deg": 165, "boundary": true}, {"name": "午", "label": "午", "deg": 180, "boundary": false}, {"name": "丁", "label": "丁", "deg": 195, "boundary": false}, {"name": "未", "label": "未", "deg": 210, "boundary": true}, {"name": "坤", "label": "坤", "deg": 225, "boundary": false}, {"name": "申", "label": "申", "deg": 240, "boundary": false}, {"name": "庚", "label": "庚", "deg": 255, "boundary": true}, {"name": "酉", "label": "酉", "deg": 270, "boundary": false}, {"name": "辛", "label": "辛", "deg": 285, "boundary": false}, {"name": "戌", "label": "戌", "deg": 300, "boundary": true}, {"name": "乾", "label": "乾", "deg": 315, "boundary": false}, {"name": "亥", "label": "亥", "deg": 330, "boundary": false}], "gua_ring": [{"name": "坎", "label": "坎", "deg": 0}, {"name": "艮", "label": "艮", "deg": 45}, {"name": "震", "label": "震", "deg": 90}, {"name": "巽", "label": "巽", "deg": 135}, {"name": "离", "label": "离", "deg": 180}, {"name": "坤", "label": "坤", "deg": 225}, {"name": "兑", "label": "兑", "deg": 270}, {"name": "乾", "label": "乾", "deg": 315}], "notes": {"summary": "八运子山午向，双星到向：当令八白的山星、向星同到南方向首。此局要南方近处开阔、远处有山，方能丁财两旺。府上南面近处有高楼压迫，向星见山而不得水，财气难进；山星八白得楼为靠，人丁健康反得力。", "palaces": {"离": "向首。山八向八，双星会于此。宜近处开阔、远处见高，今近处有楼，财星受压。2026 年流年五黄到此，门口一带宜静，不宜动工。", "坎": "坐山。山九向七：九紫为九运当令之星，背后若有实墙或高楼依靠，利人丁。", "艮": "向星九紫在此，为九运财星。若有门窗、开阔处，可多加使用。", "乾": "山五向二，2026 年流年二黑又到，成二五交加。宜安静、整洁，老人不宜久居。"}, "advice": ["主要活动区、书桌尽量设在东北（向星九紫所到）", "南面门内保持通畅明亮，不放杂物", "西北房间少用、保持整洁；今年不在南方门口动土"]}, "autoplay": true, "source": "堪舆子 fengshui-master v3.1.0 · 生成于 2026-11-23 · 盘面由 scripts/fengshui.py 计算，旺衰按当前九运论"}</script>
 <script>
 (function () {
   "use strict";
   var D = JSON.parse(document.getElementById("chart-data").textContent);
-  var NUM = ["", "一", "二", "三", "四", "五", "六", "七", "八", "九"];
+  var NUM = D.nums;
   var SVGNS = "http://www.w3.org/2000/svg";
   var reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-  var GOOD = { "当令旺星": 1, "生气（下运旺）": 1, "次生气": 1 };
-  var BAD = { "五黄煞": 1, "死气": 1, "衰气": 1 };
+  /* 界面文字。数据里的文字（坐向、格局、星名、旺衰）由脚本按语言生成。 */
+  var I18N = {
+    zh: {
+      desc: "玄空飞星九宫盘，上南下北。外圈为二十四山。", layers: "图层", cast: "起盘",
+      yun: "运盘", shan: "山星", xiang: "向星", annual: "流年", month: "流月", yunStar: "运星",
+      orient: "上南下北，左东右西（罗经旧式）。每宫左上为山星（墨，管人丁），右上为向星（朱，管财），中下为运星；右下小字为流年。金色为当令之星。",
+      disclaimer: "风水为辅，人为为主。本盘由脚本按《沈氏玄空学》排盘规则计算；断语为传统取象，仅供参考。",
+      sep: "：", facing: "向", sitting: "坐", roleFace: " · 向首", roleSit: " · 坐山", palaceSuffix: "宫",
+      shuogua: "《说卦》：", chartWas: function (s) { return "（本盘" + s.replace("运", "运时为") + "）"; },
+      emptyPalace: "此宫未作批注。点其他宫位查看，或在对话中继续追问。",
+      overall: "盘断", pattern: "格局：", noPattern: "无特殊格局", seeChat: "完整解读见对话。",
+      legend: function (y) { return y + "运星曜旺衰"; }, badgeCut: /（/
+    },
+    en: {
+      desc: "Flying Star chart of the Nine Palaces, south at the top. The outer ring shows the 24 Mountains.",
+      layers: "Layers", cast: "Cast the chart",
+      yun: "Period", shan: "Mountain", xiang: "Facing", annual: "Annual", month: "Monthly", yunStar: "Period",
+      orient: "South is at the top and east on the left, as on a traditional compass. In each palace the Mountain Star (ink, people and health) is top left, the Facing Star (red, wealth) top right and the Period Star in the middle; the small blue number is the Annual Star. Gold marks the timely (most prosperous) star.",
+      disclaimer: "Feng shui supports, people decide. The chart is computed by script following the rules of Shen's Xuan Kong Studies (Shen Shi Xuan Kong Xue 沈氏玄空学); readings are traditional imagery, for reference only.",
+      sep: ": ", facing: "F", sitting: "S", roleFace: " · facing", roleSit: " · sitting", palaceSuffix: " palace",
+      shuogua: "Discussion of the Trigrams (Shuo Gua 说卦), our translation: ",
+      chartWas: function (s) { return " (" + s + " when the chart was set)"; },
+      emptyPalace: "No note for this palace. Tap another palace, or ask in the chat.",
+      overall: "Reading", pattern: "Formation: ", noPattern: "no special formation", seeChat: "See the chat for the full reading.",
+      legend: function (y) { return "Star strength in Period " + y; }, badgeCut: / \(/
+    }
+  };
+  var T = I18N[D.lang] || I18N.zh;
+  document.getElementById("board-desc").textContent = T.desc;
+  document.getElementById("toolbar").setAttribute("aria-label", T.layers);
+  document.getElementById("cast").textContent = T.cast;
+  Array.prototype.forEach.call(document.querySelectorAll("[data-t]"), function (n) { n.textContent = T[n.getAttribute("data-t")]; });
+  document.getElementById("orient").textContent = T.orient;
+  document.getElementById("disclaimer").textContent = T.disclaimer;
 
   function el(tag, attrs, text, parent) {
     var n = document.createElementNS(SVGNS, tag);
@@ -219,16 +269,15 @@ footer p { margin: 0; }
     if (parent) parent.appendChild(n);
     return n;
   }
-  function stClass(s) { return GOOD[s] ? "good" : (BAD[s] ? "bad" : ""); }
 
   /* ---- 题签 ---- */
   document.getElementById("title").textContent = D.title;
   var facts = document.getElementById("facts");
   D.facts.forEach(function (f) {
-    var li = h("li", null, null, facts); h("span", null, f[0] + "：", li); h("b", null, f[1], li);
+    var li = h("li", null, null, facts); h("span", null, f[0] + T.sep, li); h("b", null, f[1], li);
   });
   var badges = document.getElementById("badges");
-  D.patterns.forEach(function (p, i) { h("span", i === 0 && D.main_pattern ? "badge" : "badge quiet", p.split("（")[0], badges); });
+  D.patterns.forEach(function (p, i) { h("span", i === 0 && D.main_pattern ? "badge" : "badge quiet", p.split(T.badgeCut)[0], badges); });
   D.warnings.forEach(function (w) { h("p", "warn", w, document.getElementById("warnings")); });
 
   /* ---- 罗盘 ---- */
@@ -247,11 +296,11 @@ footer p { margin: 0; }
     el("line", { x1: a[0], y1: a[1], x2: b[0], y2: b[1], "class": "ring-line", "stroke-width": m.boundary ? 1.6 : 0.8 }, null, svg);
     var p = pt(m.deg, (R1 + R2) / 2);
     var cls = "mt" + (m.name === D.sit ? " sit" : "") + (m.name === D.facing ? " face" : "");
-    el("text", { x: p[0], y: p[1], "class": cls }, m.name, svg);
+    el("text", { x: p[0], y: p[1], "class": cls }, m.label, svg);
   });
   D.gua_ring.forEach(function (g) {
     var p = pt(g.deg, (R2 + R3) / 2 - 2);
-    el("text", { x: p[0], y: p[1], "class": "gua-lab" }, g.name, svg);
+    el("text", { x: p[0], y: p[1], "class": "gua-lab" }, g.label, svg);
   });
 
   /* 九宫 */
@@ -259,10 +308,10 @@ footer p { margin: 0; }
   D.grid.forEach(function (row, r) {
     row.forEach(function (pal, c) {
       var x = X0 + c * cw, y = Y0 + r * cw;
-      var g = el("g", { "class": "cell", tabindex: "0", role: "button", "aria-label": pal + "宫" }, null, svg);
+      var g = el("g", { "class": "cell", tabindex: "0", role: "button", "aria-label": D.palaces[pal].name }, null, svg);
       el("rect", { x: x, y: y, width: cw, height: cw }, null, g);
       var info = D.palaces[pal];
-      el("text", { x: x + 8, y: y + cw - 10, "class": "pal" }, pal + (info.dir === "中" ? "" : " · " + info.dir), g);
+      el("text", { x: x + 8, y: y + cw - 10, "class": "pal" }, info.label, g);
       var se = {};
       se.shan = el("text", { x: x + cw * 0.27, y: y + cw * 0.28, "class": "star shan" }, NUM[D.layers.shan[pal]], g);
       se.xiang = el("text", { x: x + cw * 0.73, y: y + cw * 0.28, "class": "star xiang" }, NUM[D.layers.xiang[pal]], g);
@@ -295,39 +344,39 @@ footer p { margin: 0; }
     }
     el("line", { x1: fo[0], y1: fo[1], x2: f[0], y2: f[1], "class": "axis" }, null, svg);
     el("line", { x1: so[0], y1: so[1], x2: s[0], y2: s[1], "class": "axis" }, null, svg);
-    [[f, "向"], [s, "坐"]].forEach(function (q) {
+    [[f, T.facing], [s, T.sitting]].forEach(function (q) {
       el("circle", { cx: q[0][0], cy: q[0][1], r: 13, "class": "axis-cap" }, null, svg);
       el("text", { x: q[0][0], y: q[0][1] + 1, "class": "axis-text" }, q[1], svg);
     });
   }
 
   /* ---- 批注 ---- */
-  var LAYER_NAME = { shan: "山星", xiang: "向星", yun: "运星", annual: "流年", month: "流月" };
+  var LAYER_NAME = { shan: T.shan, xiang: T.xiang, yun: T.yunStar, annual: T.annual, month: T.month };
   function select(pal) {
     Object.keys(cells).forEach(function (k) { cells[k].classList.toggle("sel", k === pal); });
     var info = D.palaces[pal], box = document.getElementById("palace");
     box.textContent = "";
-    var role = pal === D.face_palace ? " · 向首" : (pal === D.sit_palace ? " · 坐山" : "");
-    h("h2", null, (pal === "中" ? "中宫" : pal + "宫 · " + info.dir) + role, box);
-    if (info.xiang) h("p", "xiang-quote", "《说卦》：" + info.xiang, box);
+    var role = pal === D.face_palace ? T.roleFace : (pal === D.sit_palace ? T.roleSit : "");
+    h("h2", null, info.name + role, box);
+    if (info.xiang) h("p", "xiang-quote", T.shuogua + info.xiang, box);
     var dl = h("dl", "stars", null, box);
     ["shan", "xiang", "yun", "annual", "month"].forEach(function (k) {
       if (!D.layers[k]) return;
-      var n = D.layers[k][pal], st = D.status[n];
+      var n = D.layers[k][pal];
       h("dt", null, LAYER_NAME[k], dl);
       var dd = h("dd", "num", NUM[n], dl); dd.style.margin = "0";
-      var label = D.star_names[n] + " · " + D.current_yun_cn + "运" + st.replace("（下运旺）", "");
-      if (D.chart_status && D.chart_status[n] !== st) label += "（本盘" + D.yun_cn + "运时为" + D.chart_status[n].replace("（下运旺）", "") + "）";
-      h("dd", "st " + stClass(st), label, dl).style.margin = "0";
+      var label = D.star_names[n] + " · " + D.status_text[n];
+      if (D.chart_status_text && D.chart_status_text[n]) label += T.chartWas(D.chart_status_text[n]);
+      h("dd", "st " + D.status_class[n], label, dl).style.margin = "0";
     });
     if (info.flags.length) { var fp = h("p", null, null, box); info.flags.forEach(function (x) { h("span", "flag", x, fp); }); }
     var note = (D.notes.palaces || {})[pal];
-    h("p", note ? "note" : "note empty", note || "此宫未作批注。点其他宫位查看，或在对话中继续追问。", box);
+    h("p", note ? "note" : "note empty", note || T.emptyPalace, box);
   }
   (function overall() {
     var box = document.getElementById("overall");
-    h("h3", null, "盘断", box);
-    var parts = [D.main_pattern ? "格局：" + D.patterns[0] : "格局：" + (D.patterns[0] || "无特殊格局")];
+    h("h3", null, T.overall, box);
+    var parts = [T.pattern + (D.patterns[0] || T.noPattern)];
     D.entries.forEach(function (e) { parts.push(e); });
     parts.forEach(function (t) { h("p", "sub", t, box); });
     if (D.notes.summary) h("p", "note", D.notes.summary, box);
@@ -335,15 +384,15 @@ footer p { margin: 0; }
       var ul = h("ul", "advice", null, box);
       D.notes.advice.forEach(function (a) { h("li", null, a, ul); });
     }
-    if (!D.notes.summary && !(D.notes.advice || []).length) h("p", "note empty", "完整解读见对话。", box);
+    if (!D.notes.summary && !(D.notes.advice || []).length) h("p", "note empty", T.seeChat, box);
   })();
 
   /* ---- 旺衰 ---- */
-  document.getElementById("legend-title").textContent = D.current_yun_cn + "运星曜旺衰";
+  document.getElementById("legend-title").textContent = T.legend(NUM[D.current_yun]);
   var row = document.getElementById("status-row");
   for (var n = 1; n <= 9; n++) {
-    var d = h("div", stClass(D.status[n]), null, row);
-    h("span", "n", NUM[n], d); h("span", "s", D.star_names[n].slice(2) + " · " + D.status[n].replace("（下运旺）", ""), d);
+    var d = h("div", D.status_class[n], null, row);
+    h("span", "n", NUM[n], d); h("span", "s", D.star_short[n] + " · " + D.status_short[n], d);
   }
   document.getElementById("source").textContent = D.source;
 

@@ -99,7 +99,7 @@ def cmd_feixing(a) -> Output:
         y, _ = lichun_year(parse_date(a.year))
         yun = yun_of_year(y)
         s, e = yun_range(yun)
-        note = f"元运：{a.year} → {yun}运（{s}-{e}，以立春为界）。以入住或大修完工时间立极。"
+        note = pages_feixing.yun_note(a.year, yun, s, e)
     else:
         raise UsageError("请提供 --yun 或 --year（入住/完工时间）")
 
@@ -116,16 +116,19 @@ def cmd_feixing(a) -> Output:
     data = {"chart": _jsonable(ch), "facing_deg": facing_deg, "annual_center": annual, "month_center": month}
     if a.html is not None:
         notes = pages_feixing.load_notes(a.notes)
-        annual_label = f"{a.annual}年" if a.annual else (f"{lichun_year(parse_date(a.month))[0]}年" if a.month else None)
-        page = pages.render("feixing.html", f"飞星盘 {ch.sit}山{ch.facing}向",
+        ann_year = a.annual or (lichun_year(parse_date(a.month))[0] if a.month else None)
+        annual_label = None if ann_year is None else (str(ann_year) if a.lang == "en" else f"{ann_year}年")
+        page_note = pages_feixing.yun_note(a.year, yun, *yun_range(yun), lang=a.lang) if a.year and not a.yun else ""
+        page = pages.render("feixing.html", pages_feixing.page_title(ch, a.lang),
                             pages_feixing.feixing_data(ch, annual=annual, annual_label=annual_label, month=month,
-                                               facing_deg=facing_deg, yun_note=note, current_yun=cur,
-                                               notes=notes))
-        path = pages.write_page(a.html or pages_feixing.default_name(ch), page)
+                                               facing_deg=facing_deg, yun_note=page_note, current_yun=cur,
+                                               notes=notes, lang=a.lang),
+                            lang=a.lang)
+        path = pages.write_page(a.html or pages_feixing.default_name(ch, a.lang), page)
         text += f"\n\n交互盘面已生成：{path}"
         data["html"] = path
-    elif a.notes:
-        raise UsageError("--notes 需与 --html 一起使用")
+    elif a.notes or a.lang != "zh":
+        raise UsageError("--notes、--lang 需与 --html 一起使用")
     return Output(text, data)
 
 
@@ -193,6 +196,8 @@ def build_parser() -> argparse.ArgumentParser:
     s.add_argument("--html", nargs="?", const="", metavar="PATH",
                    help="同时生成可交互的 HTML 盘面（不给路径则写到当前目录）")
     s.add_argument("--notes", metavar="JSON", help="写入盘面的批注：{summary, palaces:{宫名:文字}, advice:[...]}")
+    s.add_argument("--lang", choices=pages_feixing.LANGS, default="zh",
+                   help="盘面语言：zh 中文（默认）/ en 英文；批注用同一种语言写")
 
     s = add("liunian", cmd_liunian, "流年紫白与年家煞方")
     s.add_argument("--year", type=int, required=True)

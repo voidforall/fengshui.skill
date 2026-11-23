@@ -7,7 +7,14 @@ python3 skills/fengshui-master/scripts/fengshui.py feixing --facing 180 --year 2
         --html docs/examples/feixing-demo.html --notes docs/examples/feixing-notes.json
 ```
 
-修改 `skills/fengshui-master/assets/templates/feixing.html` 或 `lib/kanyu/` 后（先运行 `python3 tools/sync_kanyu.py`）请重新运行此命令；`tests/test_pages.py` 会检查示例是否过期。
+英文版 `feixing-demo.en.html`（批注 `feixing-notes.en.json`，同一套房子）：
+
+```bash
+python3 skills/fengshui-master/scripts/fengshui.py feixing --facing 180 --year 2018-09-01 --annual 2026 --lang en \
+        --html docs/examples/feixing-demo.en.html --notes docs/examples/feixing-notes.en.json
+```
+
+修改 `skills/fengshui-master/assets/templates/feixing.html` 或 `lib/kanyu/` 后（先运行 `python3 tools/sync_kanyu.py`）请重新运行这两条命令；`tests/test_pages.py` 会检查示例是否过期。
 README 中的动图与截图用 Playwright 录制（见 PR 说明），不参与测试。
 
 ## 八字命盘

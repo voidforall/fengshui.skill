@@ -62,6 +62,53 @@ class TestFeixingPage(unittest.TestCase):
                     pages_feixing.load_notes(write(bad))
 
 
+class TestFeixingPageEnglish(unittest.TestCase):
+    """英文页面：数据文字都译成英文，汉字只留在原文引文里；排盘数据与中文页相同。"""
+
+    def data(self, ch, **kw):
+        return pages_feixing.feixing_data(ch, annual=kw.get("annual"), annual_label="2026", month=kw.get("month"),
+                                          facing_deg=kw.get("deg"), yun_note="", current_yun=9, notes={}, lang="en")
+
+    def test_every_pattern_has_english(self):
+        from kanyu.core import MOUNTAINS
+        from kanyu.feixing import chart_patterns
+        seen = set()
+        for yun in range(1, 10):
+            for m in MOUNTAINS:
+                for tigua in (False, True):
+                    seen.update(chart_patterns(feixing_chart(yun, m, tigua=tigua)))
+        self.assertEqual(seen - set(pages_feixing.PATTERN_EN), set())
+
+    def test_mountain_codes(self):
+        self.assertEqual(pages_feixing.mountain_code("壬"), "N1")
+        self.assertEqual(pages_feixing.mountain_code("子"), "N2")
+        self.assertEqual(pages_feixing.mountain_code("丑"), "NE1")
+        self.assertEqual(pages_feixing.mountain_code("亥"), "NW3")
+
+    def test_english_text_has_no_chinese(self):
+        import re
+        ch = feixing_chart(8, "子")
+        d = self.data(ch, annual=1, month=5, deg=186.5)
+        zh = pages.extract_data(page_for(ch, annual=1))
+        for k in ("yun", "shan", "xiang", "annual"):
+            self.assertEqual(d["layers"][k], zh["layers"][k])
+        visible = [d["title"], d["source"], *d["patterns"], *d["entries"], *d["warnings"],
+                   *(f"{k}{v}" for k, v in d["facts"]), *d["star_names"].values(), *d["status_text"].values(),
+                   *d["status_short"].values(), *(m["label"] for m in d["mountains"]),
+                   *(g["label"] for g in d["gua_ring"])]
+        for p in d["palaces"].values():
+            visible += [p["label"], p["name"], *p["flags"], p["xiang"].split(" — ")[-1]]
+        han = re.compile(r"[\u4e00-\u9fff]")
+        self.assertEqual([t for t in visible if han.search(t)], [])
+        self.assertEqual(d["title"], "Period 8 · Sitting Zi, Facing Wu")
+        self.assertTrue(d["warnings"])
+
+    def test_html_lang(self):
+        html = pages.render("feixing.html", "Flying Star Chart", self.data(feixing_chart(9, "午")), lang="en")
+        self.assertIn('<html lang="en">', html)
+        self.assertIn('<html lang="zh-Hans">', page_for(feixing_chart(9, "午")))
+
+
 class TestCli(unittest.TestCase):
     def test_html_default_name(self):
         with tempfile.TemporaryDirectory() as td:
@@ -79,6 +126,18 @@ class TestCli(unittest.TestCase):
     def test_notes_requires_html(self):
         with self.assertRaises(cli.UsageError):
             cli.run(["feixing", "--facing", "180", "--yun", "8", "--notes", "x.json"])
+        with self.assertRaises(cli.UsageError):
+            cli.run(["feixing", "--facing", "180", "--yun", "8", "--lang", "en"])
+
+    def test_english_page(self):
+        with tempfile.TemporaryDirectory() as td:
+            path = os.path.join(td, "en.html")
+            cli.run(["feixing", "--facing", "180", "--year", "2018-09-01", "--annual", "2026",
+                     "--lang", "en", "--html", path])
+            with open(path, encoding="utf-8") as f:
+                d = pages.extract_data(f.read())
+        self.assertEqual(d["lang"], "en")
+        self.assertIn(["Annual", "2026 · star 1 at the center"], d["facts"])
 
     def test_example_page_is_current(self):
         # docs/examples 中的示例页面须与当前模板一致（修改模板后重新生成）
@@ -87,8 +146,13 @@ class TestCli(unittest.TestCase):
             demo = f.read()
         with open(os.path.join(support.FENGSHUI, "assets", "templates", "feixing.html"), encoding="utf-8") as f:
             tpl = f.read()
-        head = tpl.split("__DATA__")[0].replace("__TITLE__", "飞星盘 子山午向")
+        head = tpl.split("__DATA__")[0].replace("__TITLE__", "飞星盘 子山午向").replace("__LANG__", "zh-Hans")
         self.assertTrue(demo.startswith(head), "示例页面已过期：重新运行 docs/examples/README 中的命令")
+        with open(os.path.join(root, "docs", "examples", "feixing-demo.en.html"), encoding="utf-8") as f:
+            demo_en = f.read()
+        head_en = tpl.split("__DATA__")[0].replace("__TITLE__", "Flying Star Chart · Sitting Zi, Facing Wu") \
+            .replace("__LANG__", "en")
+        self.assertTrue(demo_en.startswith(head_en), "英文示例页面已过期：重新运行 docs/examples/README 中的命令")
 
 
 BAZI_NOTES = {"plain": "白话总结", "summary": "总断 </script><b>x</b>", "basis": "依《穷通宝鉴》", "pillars": {"日": "日柱批注"},
