@@ -18,7 +18,7 @@ from shapely.geometry import shape, mapping, box, Point
 from shapely.ops import unary_union
 from shapely.strtree import STRtree
 
-from city_model import analyse, MODEL_VERSION
+from city_model import analyse, relative_analyses, CLASSICS, MODEL_VERSION
 
 ROOT = Path(__file__).resolve().parents[1]
 
@@ -142,7 +142,9 @@ def build(source_dir, slug, cell_size):
                         "note":"OSM收录的区域功能证据之一；没有以该点为中心画影响圆。", "sources":[{"title":"OSM原始对象", "url":f"https://www.openstreetmap.org/{props['osm_type']}/{props['osm_id']}"}]})
                 regions.append({"id":region_id,"name":f"{admin} · 单元{len(regions)+1:04d}","geometry":mapping(clipped),
                     "label_position":[label.x,label.y],"boundary":{"kind":"统计分区","description":f"{cell_size}米UTM连续统计格网与真实城市边界相交；本单元属于{admin}周边，行政名称仅作位置参照。格网线不是五行影响的硬边界。", "sources":[{"title":"城市边界原始资料", "url":manifest["boundary_source"]}]},
-                    "preferred_method":"function","analyses":analyses,"metrics":{k:round(v,6) if isinstance(v,float) else v for k,v in metrics.items()},"evidence":evidence})
+                    "preferred_method":"relative","analyses":analyses,"metrics":{k:round(v,6) if isinstance(v,float) else v for k,v in metrics.items()},"evidence":evidence})
+    for region, rel in zip(regions, relative_analyses([r["metrics"] for r in regions], "本范围")):
+        region["analyses"]["relative"] = dict(rel, sources=refs + CLASSICS)
     label = manifest.get("scope_label")
     extra = {"scope_label": label} if label else {}
     return {**extra, "search":manifest.get("search", {}),"schema_version":3,"city":manifest["city"],"subtitle":f"{label or '全城'}连续覆盖 · {cell_size}米分析单元 · 含主象、兼象与置信说明",

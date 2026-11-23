@@ -211,4 +211,28 @@ class TestFullCityModel(unittest.TestCase):
         self.assertIn('不纳入',data['model']['source_manifest']['boundary_note'])
 
 
+    def test_relative_view_is_default_balanced_and_cites_classics(self):
+        for slug in ('london','new-york','shanghai'):
+            data=json.loads((SKILL/'examples'/f'{slug}.json').read_text())
+            regions=data['regions']
+            self.assertTrue(all(r['preferred_method']=='relative' for r in regions),slug)
+            counts={e:sum(r['analyses']['relative']['primary']==e for r in regions) for e in '金木水火土'}
+            # 相对取象下每一行都至少占5%，没有哪一行超过四成
+            self.assertTrue(all(.05<=c/len(regions)<=.4 for c in counts.values()),(slug,counts))
+            a=regions[0]['analyses']['relative']
+            self.assertTrue(any('洪範' in s['url'] for s in a['sources']),slug)
+            self.assertIn('百分位',a['facts'][0])
+
+    def test_relative_percentiles_and_floor(self):
+        sys.path.insert(0,str(SKILL/'scripts'))
+        import city_model
+        base={'water':0,'vegetation':0,'open':0,'built':.6,'commercial_industrial':0,'retail':0,'culture_area':0,
+              'culture_count':0,'sample_count':400,'sampling':'50m多数分类统计','area_km2':1.0}
+        cells=[dict(base,water=w,vegetation=v) for w,v in [(.02,.1),(.3,.1),(.03,.5),(.0,.05)]]
+        out=city_model.relative_analyses(cells,'测试范围')
+        self.assertEqual(out[1]['primary'],'水')          # 水面全范围最高
+        self.assertEqual(out[2]['primary'],'木')          # 植被全范围最高
+        self.assertNotEqual(out[0]['primary'],'水')       # 水面 2%×1.2 低于 0.05 门槛，不参与
+
+
 if __name__=='__main__':unittest.main()

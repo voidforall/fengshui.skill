@@ -104,8 +104,8 @@ def validate(data):
         text(boundary.get("description"), label + ".boundary.description")
         sources(boundary.get("sources"), label + ".boundary.sources")
         analyses = region.get("analyses")
-        if not isinstance(analyses, dict) or set(analyses) != {"landscape", "function"}:
-            raise ValueError(f"{label}.analyses 全城数据的每个单元必须同时提供 landscape 和 function 分析")
+        if not isinstance(analyses, dict) or not {"landscape", "function"} <= set(analyses) <= {"landscape", "function", "relative"}:
+            raise ValueError(f"{label}.analyses 全城数据的每个单元必须同时提供 landscape 和 function 分析（可另有 relative）")
         if (analyses and region.get("preferred_method") not in analyses) or (not analyses and region.get("preferred_method") is not None):
             raise ValueError(f"{label}.preferred_method 必须有对应分析")
         for method, analysis in analyses.items():
