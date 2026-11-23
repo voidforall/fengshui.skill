@@ -25,13 +25,17 @@ def _escape_html(s: str) -> str:
     return s.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;")
 
 
-def render(template: str, title: str, data: dict) -> str:
+HTML_LANG = {"zh": "zh-Hans", "en": "en"}
+
+
+def render(template: str, title: str, data: dict, lang: str = "zh") -> str:
     path = next((os.path.join(d, template) for d in TEMPLATE_DIRS if os.path.exists(os.path.join(d, template))), None)
     if path is None:
         raise FileNotFoundError(f"找不到模板 {template}（查找：{'、'.join(TEMPLATE_DIRS)}）")
     with open(path, encoding="utf-8") as f:
         tpl = f.read()
-    return tpl.replace("__TITLE__", _escape_html(title)).replace("__DATA__", _embed_json(data))
+    return (tpl.replace("__LANG__", HTML_LANG[lang]).replace("__TITLE__", _escape_html(title))
+            .replace("__DATA__", _embed_json(data)))
 
 
 def write_page(path: str, html: str) -> str:

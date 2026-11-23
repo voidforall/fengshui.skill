@@ -38,9 +38,12 @@ these years, then technical details last.
 
 ## Interactive chart page
 
-The chart page still has Chinese labels. Tell the user so, and explain what they will see: four pillar cards
-(Year, Month, Day, Hour), the "一眼看懂" plain summary at the top, and the 大运流年 (Luck Pillars and years) timeline.
-Write the notes JSON in English if the user reads English.
+Add `--lang en` to the `--html` command: the page is then in English, with terms from `terms-en.md` and the pinyin
+under each stem and branch. The stems and branches themselves stay as Chinese characters, and the Qiong Tong Bao Jian
+passages stay in classical Chinese: offer to translate the passage in the chat, marked as our translation.
+Write the notes JSON in English (same keys; `pillars` keyed by 年 月 日 时, `dayun` by the Chinese stem-branch pair,
+e.g. "戊寅", `years` by year). Point the user to "At a glance" at the top, tapping a term for its plain explanation,
+and the Luck Pillars timeline.
 
 ## Boundaries
 

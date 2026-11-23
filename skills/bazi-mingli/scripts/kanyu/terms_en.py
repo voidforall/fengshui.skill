@@ -32,6 +32,17 @@ PALACES = {
 DIRECTIONS = {"北": "North", "东北": "Northeast", "东": "East", "东南": "Southeast", "南": "South",
               "西南": "Southwest", "西": "West", "西北": "Northwest", "中": "Center"}
 
+DIR_ABBR = {"北": "N", "东北": "NE", "东": "E", "东南": "SE", "南": "S", "西南": "SW", "西": "W", "西北": "NW", "中": "C"}
+
+
+def pinyin(ch: str) -> str:
+    """天干、地支、卦名的拼音（二十四山都在其中）。"""
+    for table in (GAN, ZHI, PALACES):
+        if ch in table:
+            return table[ch][0]
+    raise KeyError(ch)
+
+
 COMMON = [
     ("五行", "Five Elements", "Wu Xing"),
     ("阴阳", "Yin and Yang", "Yin Yang"),
@@ -177,6 +188,16 @@ FENGSHUI = [
     ("反弓", "Reverse Bow (road or river curving away)", "Fan Gong"),
 ]
 
+# 二十四节气：通行英文名（单个节气名尚无国家或国际标准，见 STANDARD 注）
+JIEQI = {
+    "立春": "Start of Spring", "雨水": "Rain Water", "惊蛰": "Awakening of Insects", "春分": "Spring Equinox",
+    "清明": "Pure Brightness", "谷雨": "Grain Rain", "立夏": "Start of Summer", "小满": "Grain Buds",
+    "芒种": "Grain in Ear", "夏至": "Summer Solstice", "小暑": "Minor Heat", "大暑": "Major Heat",
+    "立秋": "Start of Autumn", "处暑": "End of Heat", "白露": "White Dew", "秋分": "Autumn Equinox",
+    "寒露": "Cold Dew", "霜降": "Frost's Descent", "立冬": "Start of Winter", "小雪": "Minor Snow",
+    "大雪": "Major Snow", "冬至": "Winter Solstice", "小寒": "Minor Cold", "大寒": "Major Cold",
+}
+
 # --- 八字 -------------------------------------------------------------------------------
 
 SHISHEN = {
@@ -195,6 +216,24 @@ CHANGSHENG = {
     "墓": ("Tomb", "stored away"), "绝": ("Extinction", "empty, awaiting renewal"),
     "胎": ("Conception", "sprouting"), "养": ("Nurture", "taking shape"),
 }
+# 纳音：六十甲子的物象五行（意译）
+NAYIN = {
+    "海中金": "Gold in the Sea", "炉中火": "Furnace Fire", "大林木": "Great Forest Wood", "路旁土": "Roadside Earth",
+    "剑锋金": "Sword-edge Metal", "山头火": "Mountaintop Fire", "涧下水": "Valley Stream Water", "城头土": "City-wall Earth",
+    "白蜡金": "White Wax Metal", "杨柳木": "Willow Wood", "泉中水": "Spring Water", "屋上土": "Rooftop Earth",
+    "霹雳火": "Thunderbolt Fire", "松柏木": "Pine and Cypress Wood", "长流水": "Long River Water",
+    "沙中金": "Gold in the Sand", "山下火": "Fire below the Mountain", "平地木": "Flatland Wood", "壁上土": "Wall Earth",
+    "金箔金": "Gold Leaf Metal", "覆灯火": "Lamp Fire", "天河水": "Heavenly River Water", "大驿土": "Post-road Earth",
+    "钗钏金": "Hairpin Metal", "桑柘木": "Mulberry Wood", "大溪水": "Great Stream Water", "沙中土": "Earth in the Sand",
+    "天上火": "Fire in the Sky", "石榴木": "Pomegranate Wood", "大海水": "Great Sea Water",
+}
+PILLARS = {"年": "Year", "月": "Month", "日": "Day", "时": "Hour"}
+SEASONS = {"春": "spring", "夏": "summer", "六月": "the sixth month (late summer)", "秋": "autumn", "冬": "winter"}
+QI = {"本气": "main qi", "中气": "middle qi", "余气": "residual qi"}
+# 相刑的三种名目（《三命通会》）与自刑
+XING_KINDS = {"无恩之刑": "ungrateful punishment", "恃势之刑": "bullying punishment",
+              "无礼之刑": "uncivil punishment", "自刑": "self-punishment"}
+
 WANGXIANG = {"旺": "Prosperous", "相": "Strong", "休": "Resting", "囚": "Trapped", "死": "Dead (weakest)"}
 
 BAZI = [

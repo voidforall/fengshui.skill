@@ -61,6 +61,25 @@ class TestCoverage(unittest.TestCase):
             self.assertIn(zh, common)
             self.assertIn(common[zh].lower().split(" (")[0], source.lower(), zh)
 
+    def test_english_glossary_matches_chinese(self):
+        self.assertEqual(set(glossary.TERMS_EN), set(glossary.TERMS))
+        self.assertEqual(set(glossary.SHISHEN_EN), set(glossary.SHISHEN))
+        self.assertEqual(set(glossary.CHANGSHENG_QUOTE_EN), set(glossary.CHANGSHENG))
+        self.assertEqual(set(glossary.WANGXIANG_EN), set(glossary.WANGXIANG))
+        self.assertEqual(set(glossary.GAN_XIANG_EN), set(glossary.GAN_XIANG))
+        bazi_terms = {zh for zh, _, _ in terms_en.BAZI}
+        self.assertEqual(set(glossary.TERMS) - bazi_terms, set())       # 页面上每个术语都有英文名
+
+    def test_nayin_and_solar_terms(self):
+        try:
+            from lunar_python import Lunar
+            from lunar_python.util import LunarUtil
+        except ImportError:
+            self.skipTest("需要 lunar_python")
+        self.assertEqual(set(LunarUtil.NAYIN.values()) - set(terms_en.NAYIN), set())
+        names = {x for x in Lunar.JIE_QI_IN_USE if not x.isascii()}           # 历法库的节气名（另有拼音占位）
+        self.assertEqual(names, set(terms_en.JIEQI))
+
     def test_life_stages_have_plain_english(self):
         for zh, (en, plain) in terms_en.CHANGSHENG.items():
             self.assertTrue(plain and "death" not in plain.lower(), zh)

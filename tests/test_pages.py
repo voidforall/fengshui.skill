@@ -62,6 +62,53 @@ class TestFeixingPage(unittest.TestCase):
                     pages_feixing.load_notes(write(bad))
 
 
+class TestFeixingPageEnglish(unittest.TestCase):
+    """英文页面：数据文字都译成英文，汉字只留在原文引文里；排盘数据与中文页相同。"""
+
+    def data(self, ch, **kw):
+        return pages_feixing.feixing_data(ch, annual=kw.get("annual"), annual_label="2026", month=kw.get("month"),
+                                          facing_deg=kw.get("deg"), yun_note="", current_yun=9, notes={}, lang="en")
+
+    def test_every_pattern_has_english(self):
+        from kanyu.core import MOUNTAINS
+        from kanyu.feixing import chart_patterns
+        seen = set()
+        for yun in range(1, 10):
+            for m in MOUNTAINS:
+                for tigua in (False, True):
+                    seen.update(chart_patterns(feixing_chart(yun, m, tigua=tigua)))
+        self.assertEqual(seen - set(pages_feixing.PATTERN_EN), set())
+
+    def test_mountain_codes(self):
+        self.assertEqual(pages_feixing.mountain_code("壬"), "N1")
+        self.assertEqual(pages_feixing.mountain_code("子"), "N2")
+        self.assertEqual(pages_feixing.mountain_code("丑"), "NE1")
+        self.assertEqual(pages_feixing.mountain_code("亥"), "NW3")
+
+    def test_english_text_has_no_chinese(self):
+        import re
+        ch = feixing_chart(8, "子")
+        d = self.data(ch, annual=1, month=5, deg=186.5)
+        zh = pages.extract_data(page_for(ch, annual=1))
+        for k in ("yun", "shan", "xiang", "annual"):
+            self.assertEqual(d["layers"][k], zh["layers"][k])
+        visible = [d["title"], d["source"], *d["patterns"], *d["entries"], *d["warnings"],
+                   *(f"{k}{v}" for k, v in d["facts"]), *d["star_names"].values(), *d["status_text"].values(),
+                   *d["status_short"].values(), *(m["label"] for m in d["mountains"]),
+                   *(g["label"] for g in d["gua_ring"])]
+        for p in d["palaces"].values():
+            visible += [p["label"], p["name"], *p["flags"], p["xiang"].split(" — ")[-1]]
+        han = re.compile(r"[\u4e00-\u9fff]")
+        self.assertEqual([t for t in visible if han.search(t)], [])
+        self.assertEqual(d["title"], "Period 8 · Sitting Zi, Facing Wu")
+        self.assertTrue(d["warnings"])
+
+    def test_html_lang(self):
+        html = pages.render("feixing.html", "Flying Star Chart", self.data(feixing_chart(9, "午")), lang="en")
+        self.assertIn('<html lang="en">', html)
+        self.assertIn('<html lang="zh-Hans">', page_for(feixing_chart(9, "午")))
+
+
 class TestCli(unittest.TestCase):
     def test_html_default_name(self):
         with tempfile.TemporaryDirectory() as td:
@@ -79,6 +126,18 @@ class TestCli(unittest.TestCase):
     def test_notes_requires_html(self):
         with self.assertRaises(cli.UsageError):
             cli.run(["feixing", "--facing", "180", "--yun", "8", "--notes", "x.json"])
+        with self.assertRaises(cli.UsageError):
+            cli.run(["feixing", "--facing", "180", "--yun", "8", "--lang", "en"])
+
+    def test_english_page(self):
+        with tempfile.TemporaryDirectory() as td:
+            path = os.path.join(td, "en.html")
+            cli.run(["feixing", "--facing", "180", "--year", "2018-09-01", "--annual", "2026",
+                     "--lang", "en", "--html", path])
+            with open(path, encoding="utf-8") as f:
+                d = pages.extract_data(f.read())
+        self.assertEqual(d["lang"], "en")
+        self.assertIn(["Annual", "2026 · star 1 at the center"], d["facts"])
 
     def test_example_page_is_current(self):
         # docs/examples 中的示例页面须与当前模板一致（修改模板后重新生成）
@@ -87,8 +146,13 @@ class TestCli(unittest.TestCase):
             demo = f.read()
         with open(os.path.join(support.FENGSHUI, "assets", "templates", "feixing.html"), encoding="utf-8") as f:
             tpl = f.read()
-        head = tpl.split("__DATA__")[0].replace("__TITLE__", "飞星盘 子山午向")
+        head = tpl.split("__DATA__")[0].replace("__TITLE__", "飞星盘 子山午向").replace("__LANG__", "zh-Hans")
         self.assertTrue(demo.startswith(head), "示例页面已过期：重新运行 docs/examples/README 中的命令")
+        with open(os.path.join(root, "docs", "examples", "feixing-demo.en.html"), encoding="utf-8") as f:
+            demo_en = f.read()
+        head_en = tpl.split("__DATA__")[0].replace("__TITLE__", "Flying Star Chart · Sitting Zi, Facing Wu") \
+            .replace("__LANG__", "en")
+        self.assertTrue(demo_en.startswith(head_en), "英文示例页面已过期：重新运行 docs/examples/README 中的命令")
 
 
 BAZI_NOTES = {"plain": "白话总结", "summary": "总断 </script><b>x</b>", "basis": "依《穷通宝鉴》", "pillars": {"日": "日柱批注"},
@@ -186,10 +250,113 @@ class TestBaziPage(unittest.TestCase):
             demo = f.read()
         with open(os.path.join(BAZI_SKILL, "assets", "templates", "bazi.html"), encoding="utf-8") as f:
             tpl = f.read()
-        head = tpl.split("__DATA__")[0].replace("__TITLE__", "坤造 庚午 辛巳 丁酉 甲辰")
+        head = tpl.split("__DATA__")[0].replace("__TITLE__", "坤造 庚午 辛巳 丁酉 甲辰").replace("__LANG__", "zh-Hans")
         self.assertTrue(demo.startswith(head), "示例页面已过期：重新运行 docs/examples/README 中的命令")
         with open(os.path.join(root, "docs", "examples", "bazi-notes.json"), encoding="utf-8") as f:
             self.assertEqual(pages.extract_data(demo)["notes"], json.load(f))
+        with open(os.path.join(root, "docs", "examples", "bazi-demo.en.html"), encoding="utf-8") as f:
+            demo_en = f.read()
+        head_en = tpl.split("__DATA__")[0].replace("__TITLE__", "Bazi Chart · Female · Gengwu Xinsi Dingyou Jiachen") \
+            .replace("__LANG__", "en")
+        self.assertTrue(demo_en.startswith(head_en), "英文示例页面已过期：重新运行 docs/examples/README 中的命令")
+        with open(os.path.join(root, "docs", "examples", "bazi-notes.en.json"), encoding="utf-8") as f:
+            self.assertEqual(pages.extract_data(demo_en)["notes"], json.load(f))
+
+
+HAN = __import__("re").compile(r"[\u4e00-\u9fff]")
+
+
+@support.needs_lunar
+class TestBaziPageEnglish(unittest.TestCase):
+    """英文命盘：排盘数据与中文页相同，显示文字都是英文（汉字只出现在原文引文与干支字形里）。"""
+
+    def chart(self, *args, **kw):
+        import datetime as dt
+        from kanyu.bazi import bazi
+        return bazi(dt.datetime(*args), **kw)
+
+    def data(self, b):
+        return pages_bazi.bazi_data(b, notes={}, lang="en")
+
+    def assertEnglish(self, texts):
+        # 允许按英文约定写成「拼音 汉字」的书名，如 San Ming Tong Hui 三命通会
+        allowed = __import__("re").compile(r"(San Ming Tong Hui 三命通会|Qiong Tong Bao Jian 穷通宝鉴|Yuan Hai Zi Ping 渊海子平)")
+        self.assertEqual([t for t in texts if HAN.search(allowed.sub("", t))], [])
+
+    def visible(self, d):
+        out = [d["title"], d["gender"], d["source"], *d["warnings"], *d["time_lines"],
+               *(f"{k}{v}" for k, v in d["facts"])]
+        for kind in ("gan", "zhi"):
+            out += [x for r in d["relations"][kind] for x in (r["label"], r["short"])]
+        for dy in d["dayun"]:
+            out += [dy["age"], dy["age_short"], *dy["relations"]]
+            out += [r for y in dy["years"] for r in y["relations"]]
+        out += [r for y in d["pre_years"] for r in y["relations"]]
+        for x in d["shensha"]:
+            out += [x["label"], x["basis"], x["targets"], *x["hits"]]
+        sl = d["siling"]
+        out += [sl["jie_en"], sl["ruler_en"], *(t["name_en"] for t in sl["table"]), d["wangxiang"]["season_en"]]
+        out += list(d["names"].values())
+        g = d["glossary"]
+        out += [t for v in g["shishen"].values() for t in v] + [t for k, v in g["terms"].items() for t in v]
+        out += list(g["wangxiang"].values()) + list(g["gan_xiang_en"].values())
+        out += [v[0] for v in g["changsheng"].values()] + [v[2] for v in g["changsheng"].values()]
+        return out
+
+    def test_same_chart_english_text(self):
+        b = self.chart(1990, 6, 1, 8, 30, gender="f", longitude=116.4, focus_year=2026)
+        zh, en = pages_bazi.bazi_data(b, notes={}), self.data(b)
+        self.assertEqual(en["lang"], "en")
+        self.assertEqual([p["gz"] for p in en["pillars"]], [p["gz"] for p in zh["pillars"]])
+        self.assertEqual([r["at"] for r in en["relations"]["zhi"]], [r["at"] for r in zh["relations"]["zhi"]])
+        self.assertEqual([len(x["relations"]) for x in en["dayun"]], [len(x["relations"]) for x in zh["dayun"]])
+        self.assertEnglish(self.visible(en))
+        self.assertEqual(en["title"], "Bazi Chart · Female · Gengwu Xinsi Dingyou Jiachen")
+        self.assertIn(("Lunar date", "year 1990, month 5, day 9"), en["facts"])
+        self.assertEqual(en["relations"]["zhi"][0]["label"], "Day branch You and Hour branch Chen: Six Harmonies")
+        self.assertEqual(en["names"]["旺相:死"], "Dead")             # 与十二长生的「死」分开
+        self.assertEqual(en["names"]["死"], "Death")
+
+    def test_every_warning_has_english(self):
+        cases = [dict(args=(1995, 2, 4, 23, 40), kw=dict(gender="m")),                       # 子时换日
+                 dict(args=(1990, 6, 6), kw=dict(gender="m", time_known=False, longitude=116.4)),  # 时辰不详、交节日
+                 dict(args=(1991, 4, 14, 2, 30), kw=dict(gender="f"))]                          # 夏令时切换中不存在的时刻
+        seen = 0
+        for c in cases:
+            b = self.chart(*c["args"], **c["kw"])
+            d = self.data(b)
+            self.assertEqual(len(d["warnings"]), len(b.warnings))
+            self.assertEnglish(self.visible(d))
+            seen += len(b.warnings)
+        self.assertGreaterEqual(seen, 5)
+        with self.assertRaises(ValueError):
+            pages_bazi._warning_en("未知提示")
+
+    def test_lunar_en(self):
+        self.assertEqual(pages_bazi.lunar_en("二〇二三年闰二月廿一"), "year 2023, leap month 2, day 21")
+        self.assertEqual(pages_bazi.lunar_en("一九九〇年腊月三十"), "year 1990, month 12, day 30")
+        self.assertEqual(pages_bazi.lunar_en("二〇〇一年正月初十"), "year 2001, month 1, day 10")
+        self.assertEqual(pages_bazi.lunar_en("二〇〇一年冬月十五"), "year 2001, month 11, day 15")
+
+    def test_relations_cover_every_kind(self):
+        from kanyu.ganzhi import JIAZI
+        natal = ["庚午", "辛巳", "丁酉", "甲辰"]
+        for gz in JIAZI:
+            self.assertEnglish(pages_bazi.against_natal_en(gz, natal, "Year"))
+
+    def test_cli(self):
+        with tempfile.TemporaryDirectory() as td:
+            cwd = os.getcwd()
+            os.chdir(td)
+            try:
+                out, _ = cli.run(["bazi", "--birth", "1990-06-01 08:30", "--gender", "f", "--lang", "en", "--html"])
+            finally:
+                os.chdir(cwd)
+            self.assertTrue(out.data["html"].endswith("bazi-chart-gengwu-xinsi-dingyou-jiachen.html"))
+            with open(out.data["html"], encoding="utf-8") as f:
+                self.assertIn('<html lang="en">', f.read())
+        with self.assertRaises(cli.UsageError):
+            cli.run(["bazi", "--birth", "1990-06-01 08:30", "--gender", "f", "--lang", "en"])
 
 
 if __name__ == "__main__":

@@ -1,0 +1,440 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Flying Star Chart · Sitting Zi, Facing Wu</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,600;1,400&family=Ma+Shan+Zheng&family=Noto+Serif+SC:wght@400;600&display=swap">
+<style>
+/* 盘谱：册页上摊开一面罗经——外圈二十四山，内为九宫；右栏为批注（眉批）。
+   浅色 = 宣纸册页；深色 = 黑漆描金罗盘。大胆之处只在盘面，其余安静。 */
+:root {
+  --paper: #ece2cb;        /* 宣纸 / 熟绢 */
+  --paper-2: #e3d6b8;      /* 盘心、卡片 */
+  --ink: #26211b;          /* 墨 */
+  --ink-soft: #5d5446;     /* 淡墨 */
+  --rule: #b9a985;         /* 界栏 */
+  --cinnabar: #b03a2e;     /* 朱砂：向星、坐向、印 */
+  --azurite: #2f5d6e;      /* 石青：流年 */
+  --gold: #9a7431;         /* 铜金：当令 */
+  --seal-text: #f6efe0;
+  --font-brush: "Ma Shan Zheng", "STKaiti", "KaiTi", "Kaiti SC", "BiauKai", serif;
+  --font-song: "Noto Serif SC", "Songti SC", "STSong", "SimSun", "Noto Serif CJK SC", serif;
+  color-scheme: light;
+}
+/* 英文页：西文用 Garamond，汉字（印章、原文引文）仍回落到宋体 / 楷体 */
+:root[lang="en"] {
+  --font-brush: "EB Garamond", "Garamond", "Ma Shan Zheng", "STKaiti", serif;
+  --font-song: "EB Garamond", "Garamond", "Noto Serif SC", "Songti SC", serif;
+}
+:root[lang="en"] body { font-size: 16px; line-height: 1.6; }
+:root[lang="en"] h1 { letter-spacing: 0; font-size: clamp(30px, 5vw, 44px); font-weight: 600; }
+:root[lang="en"] .btn-cast { letter-spacing: .06em; font-size: 19px; padding: 3px 18px; font-weight: 600; }
+:root[lang="en"] .badge { font-size: 16px; }
+:root[lang="en"] .leaf h2 { font-size: 25px; font-weight: 600; }
+:root[lang="en"] section.legend h3, :root[lang="en"] aside.notes h3 { font-size: 21px; font-weight: 600; }
+:root[lang="en"] .star.shan, :root[lang="en"] .star.xiang { font-size: 31px; font-weight: 600; }
+:root[lang="en"] .star.yun { font-size: 42px; }
+:root[lang="en"] .gua-lab { font-size: 17px; font-weight: 600; }
+:root[lang="en"] .mt { font-size: 13px; }
+:root[lang="en"] .mt.sit, :root[lang="en"] .mt.face { font-size: 14px; }
+:root[lang="en"] .axis-text { font-size: 15px; font-weight: 600; }
+:root[lang="en"] .status-row .s { font-size: 12px; line-height: 1.3; display: block; }
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --paper: #16120e; --paper-2: #211a14; --ink: #eadcbf; --ink-soft: #b3a283;
+    --rule: #5a4a33; --cinnabar: #d9604f; --azurite: #7fb0bf; --gold: #d2a856; --seal-text: #1b130d;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --paper: #16120e; --paper-2: #211a14; --ink: #eadcbf; --ink-soft: #b3a283;
+  --rule: #5a4a33; --cinnabar: #d9604f; --azurite: #7fb0bf; --gold: #d2a856; --seal-text: #1b130d;
+  color-scheme: dark;
+}
+
+* { box-sizing: border-box; }
+html, body { margin: 0; }
+body {
+  background: var(--paper);
+  background-image:
+    radial-gradient(ellipse at 20% 0%, color-mix(in srgb, var(--gold) 10%, transparent), transparent 60%),
+    radial-gradient(ellipse at 100% 100%, color-mix(in srgb, var(--cinnabar) 6%, transparent), transparent 55%);
+  color: var(--ink);
+  font-family: var(--font-song);
+  font-size: 15px;
+  line-height: 1.75;
+  padding-block: max(24px, env(safe-area-inset-top, 0px)) max(32px, env(safe-area-inset-bottom, 0px));
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+}
+.page { max-width: 1120px; margin: 0 auto; display: grid; gap: 28px; }
+
+/* 题签 */
+header.title { display: flex; gap: 20px; align-items: flex-start; flex-wrap: wrap; border-bottom: 1px solid var(--rule); padding-bottom: 18px; }
+.seal { width: 64px; height: 64px; flex: none; margin-top: 6px; }
+.seal rect { fill: var(--cinnabar); }
+.seal text { fill: var(--seal-text); font-family: var(--font-brush); font-size: 21px; text-anchor: middle; dominant-baseline: central; }
+.title-text { min-width: 0; flex: 1 1 320px; }
+h1 { font-family: var(--font-brush); font-weight: 400; font-size: clamp(34px, 6vw, 52px); line-height: 1.1; margin: 0; letter-spacing: .04em; text-wrap: balance; }
+.facts { display: flex; flex-wrap: wrap; gap: 6px 18px; margin: 8px 0 0; padding: 0; list-style: none; color: var(--ink-soft); font-size: 14px; }
+.facts b { color: var(--ink); font-weight: 600; }
+.badges { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
+.badge { font-family: var(--font-brush); font-size: 18px; padding: 0 10px; border: 1.5px solid var(--cinnabar); color: var(--cinnabar); border-radius: 3px; line-height: 1.6; }
+.badge.quiet { border-color: var(--rule); color: var(--ink-soft); }
+.warn { color: var(--cinnabar); font-size: 14px; margin: 8px 0 0; }
+
+/* 版心：左盘右批 */
+.board-wrap { display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr); gap: 28px; align-items: start; }
+@media (max-width: 860px) { .board-wrap { grid-template-columns: minmax(0, 1fr); } }
+
+.plate { display: grid; gap: 12px; justify-items: center; }
+.plate svg { width: 100%; max-width: 620px; height: auto; display: block; }
+.toolbar { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; align-items: center; }
+.chip { font: inherit; font-size: 14px; color: var(--ink-soft); background: transparent; border: 1px solid var(--rule); border-radius: 999px; padding: 4px 14px; cursor: pointer; }
+.chip[aria-pressed="true"] { color: var(--ink); border-color: var(--ink-soft); background: var(--paper-2); }
+.chip .dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; margin-right: 6px; vertical-align: 1px; }
+.btn-cast { font-family: var(--font-brush); font-size: 22px; color: var(--seal-text); background: var(--cinnabar); border: 0; border-radius: 4px; padding: 2px 22px; cursor: pointer; letter-spacing: .2em; }
+.btn-cast:hover { filter: brightness(1.08); }
+:focus-visible { outline: 2px solid var(--gold); outline-offset: 3px; }
+.orient { font-size: 13px; color: var(--ink-soft); text-align: center; margin: 0; }
+
+/* 罗盘 SVG */
+.ring-outer { fill: var(--paper-2); stroke: var(--rule); }
+.ring-line { stroke: var(--rule); stroke-width: 1; fill: none; }
+.mt { font-family: var(--font-song); font-size: 15px; fill: var(--ink-soft); text-anchor: middle; dominant-baseline: central; }
+.mt.sit, .mt.face { fill: var(--cinnabar); font-weight: 600; font-size: 17px; }
+.gua-lab { font-family: var(--font-brush); font-size: 20px; fill: var(--ink); text-anchor: middle; dominant-baseline: central; }
+.axis { stroke: var(--cinnabar); stroke-width: 2; }
+.axis-cap { fill: var(--cinnabar); }
+.axis-text { font-family: var(--font-brush); font-size: 18px; fill: var(--seal-text); text-anchor: middle; dominant-baseline: central; }
+.cell rect { fill: var(--paper); stroke: var(--rule); stroke-width: 1; transition: fill .2s; }
+.cell { cursor: pointer; outline: none; }
+.cell:hover rect { fill: color-mix(in srgb, var(--gold) 12%, var(--paper)); }
+.cell.sel rect { fill: color-mix(in srgb, var(--gold) 22%, var(--paper)); stroke: var(--gold); stroke-width: 2; }
+.cell:focus-visible rect { stroke: var(--gold); stroke-width: 3; }
+.pal { font-size: 14px; fill: var(--ink-soft); }
+.star { font-family: var(--font-brush); text-anchor: middle; dominant-baseline: central; transition: opacity .35s, transform .35s; }
+.star.shan { fill: var(--ink); font-size: 30px; }
+.star.xiang { fill: var(--cinnabar); font-size: 30px; }
+.star.yun { fill: var(--ink-soft); font-size: 44px; opacity: .55; }
+.star.annual { fill: var(--azurite); font-size: 18px; }
+.star.month { fill: var(--azurite); font-size: 15px; opacity: .8; }
+.star.wang { fill: var(--gold); }
+.star.hidden { opacity: 0 !important; }
+.sha { fill: var(--cinnabar); }
+.path { fill: none; stroke: var(--gold); stroke-width: 2; stroke-dasharray: 4 5; opacity: 0; pointer-events: none; }
+.path.on { opacity: .8; }
+
+/* 批注栏 */
+aside.notes { display: grid; gap: 18px; min-width: 0; }
+.leaf { border-left: 3px solid var(--cinnabar); padding: 2px 0 2px 16px; min-width: 0; }
+.leaf h2 { font-family: var(--font-brush); font-weight: 400; font-size: 28px; margin: 0; line-height: 1.3; }
+.leaf .sub { color: var(--ink-soft); font-size: 13px; margin: 0 0 8px; }
+.stars { display: grid; grid-template-columns: auto auto 1fr; gap: 4px 12px; margin: 10px 0; align-items: baseline; }
+.stars dt { color: var(--ink-soft); font-size: 13px; }
+.stars .num { font-family: var(--font-brush); font-size: 22px; line-height: 1; }
+.stars .st { font-size: 13px; color: var(--ink-soft); }
+.stars .st.good { color: var(--gold); }
+.stars .st.bad { color: var(--cinnabar); }
+.xiang-quote { font-size: 14px; color: var(--ink-soft); margin: 6px 0; }
+.flag { display: inline-block; color: var(--cinnabar); border: 1px solid var(--cinnabar); border-radius: 3px; font-size: 12px; padding: 0 6px; margin-right: 6px; }
+.note { margin: 8px 0 0; white-space: pre-wrap; }
+.note.empty { color: var(--ink-soft); font-size: 14px; }
+.advice { margin: 6px 0 0; padding-left: 1.3em; }
+.advice li + li { margin-top: 4px; }
+
+/* 九运旺衰 */
+section.legend h3, aside.notes h3 { font-family: var(--font-brush); font-weight: 400; font-size: 22px; margin: 0 0 6px; }
+.status-row { display: grid; grid-template-columns: repeat(9, minmax(0, 1fr)); gap: 6px; }
+@media (max-width: 560px) { .status-row { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+.status-row div { border: 1px solid var(--rule); border-radius: 3px; padding: 6px 4px; text-align: center; background: var(--paper-2); }
+.status-row .n { font-family: var(--font-brush); font-size: 24px; display: block; line-height: 1.1; }
+.status-row .s { font-size: 12px; color: var(--ink-soft); }
+.status-row .good { border-color: var(--gold); }
+.status-row .good .n { color: var(--gold); }
+.status-row .bad .n { color: var(--cinnabar); }
+
+footer { border-top: 1px solid var(--rule); padding-top: 14px; color: var(--ink-soft); font-size: 13px; display: grid; gap: 4px; }
+footer p { margin: 0; }
+
+@media (prefers-reduced-motion: reduce) { .star, .cell rect { transition: none; } }
+</style>
+</head>
+<body>
+<div class="page">
+  <header class="title">
+    <svg class="seal" viewBox="0 0 64 64" aria-hidden="true">
+      <rect x="2" y="2" width="60" height="60" rx="5"></rect>
+      <text x="45" y="20">堪</text><text x="45" y="44">輿</text>
+      <text x="19" y="20">子</text><text x="19" y="44">印</text>
+    </svg>
+    <div class="title-text">
+      <h1 id="title"></h1>
+      <ul class="facts" id="facts"></ul>
+      <div class="badges" id="badges"></div>
+      <div id="warnings"></div>
+    </div>
+  </header>
+
+  <div class="board-wrap">
+    <div class="plate">
+      <svg id="board" viewBox="-30 -30 700 700" role="img" aria-labelledby="board-desc">
+        <desc id="board-desc"></desc>
+      </svg>
+      <div class="toolbar" role="group" id="toolbar">
+        <button class="btn-cast" id="cast" type="button"></button>
+        <button class="chip" type="button" data-layer="yun" aria-pressed="true"><span class="dot" style="background:var(--ink-soft)"></span><span data-t="yun"></span></button>
+        <button class="chip" type="button" data-layer="shan" aria-pressed="true"><span class="dot" style="background:var(--ink)"></span><span data-t="shan"></span></button>
+        <button class="chip" type="button" data-layer="xiang" aria-pressed="true"><span class="dot" style="background:var(--cinnabar)"></span><span data-t="xiang"></span></button>
+        <button class="chip" type="button" data-layer="annual" aria-pressed="true" id="chip-annual"><span class="dot" style="background:var(--azurite)"></span><span data-t="annual"></span></button>
+        <button class="chip" type="button" data-layer="month" aria-pressed="true" id="chip-month"><span class="dot" style="background:var(--azurite);opacity:.7"></span><span data-t="month"></span></button>
+      </div>
+      <p class="orient" id="orient"></p>
+    </div>
+
+    <aside class="notes" aria-live="polite">
+      <div class="leaf" id="palace"></div>
+      <div class="leaf" id="overall"></div>
+    </aside>
+  </div>
+
+  <section class="legend">
+    <h3 id="legend-title"></h3>
+    <div class="status-row" id="status-row"></div>
+  </section>
+
+  <footer>
+    <p id="source"></p>
+    <p id="disclaimer"></p>
+  </footer>
+</div>
+
+<script id="chart-data" type="application/json">{"lang": "en", "title": "Period 8 · Sitting Zi, Facing Wu", "facts": [["Period", "8"], ["Orientation", "sitting Zi (N2), facing Wu (S2)"], ["Chart", "Standard Chart"], ["Compass", "facing 180.0° (+0.0° from the Zi centre line)"], ["Annual", "2026 · star 1 at the center"]], "warnings": [], "yun_note": "Period: 2018-09-01 → Period 8 (2004–2023, divided at the Start of Spring). The chart is set by the move-in or major-renovation date.", "sit": "子", "facing": "午", "sit_palace": "坎", "face_palace": "离", "axis_deg": 180.0, "patterns": ["Double Stars at Facing (both timely stars meet at the facing palace)"], "main_pattern": "双星到向", "entries": ["Mountain Star: period star 4 enters the center; by the Xun mountain (yang), it flies forward", "Facing Star: period star 3 enters the center; by the Mao mountain (yin), it flies backward"], "layers": {"yun": {"中": 8, "乾": 9, "兑": 1, "艮": 2, "离": 3, "坎": 4, "坤": 5, "震": 6, "巽": 7}, "shan": {"中": 4, "乾": 5, "兑": 6, "艮": 7, "离": 8, "坎": 9, "坤": 1, "震": 2, "巽": 3}, "xiang": {"中": 3, "乾": 2, "兑": 1, "艮": 9, "离": 8, "坎": 7, "坤": 6, "震": 5, "巽": 4}, "annual": {"中": 1, "乾": 2, "兑": 3, "艮": 4, "离": 5, "坎": 6, "坤": 7, "震": 8, "巽": 9}, "month": null}, "current_yun": 9, "nums": ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"], "status": {"1": "生气（下运旺）", "2": "次生气", "3": "死气", "4": "死气", "5": "五黄煞", "6": "死气", "7": "衰气", "8": "退气", "9": "当令旺星"}, "chart_status": {"1": "次生气", "2": "死气", "3": "死气", "4": "死气", "5": "五黄煞", "6": "衰气", "7": "退气", "8": "当令旺星", "9": "生气（下运旺）"}, "status_class": {"1": "good", "2": "good", "3": "bad", "4": "bad", "5": "bad", "6": "bad", "7": "bad", "8": "", "9": "good"}, "status_text": {"1": "growing in Period 9", "2": "secondary growing in Period 9", "3": "dormant in Period 9", "4": "dormant in Period 9", "5": "5 Yellow affliction in Period 9", "6": "dormant in Period 9", "7": "declining in Period 9", "8": "retreating in Period 9", "9": "timely in Period 9"}, "status_short": {"1": "growing", "2": "secondary growing", "3": "dormant", "4": "dormant", "5": "5 Yellow affliction", "6": "dormant", "7": "declining", "8": "retreating", "9": "timely"}, "chart_status_text": {"1": "secondary growing in Period 8", "2": "dormant in Period 8", "6": "declining in Period 8", "7": "retreating in Period 8", "8": "timely in Period 8", "9": "growing in Period 8"}, "star_names": {"1": "1 White (Greedy Wolf)", "2": "2 Black (Giant Door)", "3": "3 Jade (Salary Preserved)", "4": "4 Green (Literary Arts)", "5": "5 Yellow (Chastity)", "6": "6 White (Military Arts)", "7": "7 Red (Broken Army)", "8": "8 White (Left Assistant)", "9": "9 Purple (Right Assistant)"}, "star_short": {"1": "Greedy Wolf", "2": "Giant Door", "3": "Salary Preserved", "4": "Literary Arts", "5": "Chastity", "6": "Military Arts", "7": "Broken Army", "8": "Left Assistant", "9": "Right Assistant"}, "palaces": {"中": {"dir": "中", "label": "Center", "name": "Center Palace", "xiang": "", "flags": []}, "乾": {"dir": "西北", "label": "Qian · NW", "name": "Qian Palace · Northwest", "xiang": "乾为天、为圜、为君、为父、为玉、为金 — Qian is heaven, a circle, the ruler, the father, jade, metal", "flags": ["5 Yellow", "2 Black and 5 Yellow together"]}, "兑": {"dir": "西", "label": "Dui · W", "name": "Dui Palace · West", "xiang": "兑为泽、为少女、为巫、为口舌、为毁折 — Dui is the marsh, the youngest daughter, the sorceress, mouth and tongue, breaking and ruin", "flags": []}, "艮": {"dir": "东北", "label": "Gen · NE", "name": "Gen Palace · Northeast", "xiang": "艮为山、为径路、为小石、为门阙、为少男 — Gen is the mountain, a footpath, small stones, gateways, the youngest son", "flags": []}, "离": {"dir": "南", "label": "Li · S", "name": "Li Palace · South", "xiang": "离为火、为日、为电、为中女、为甲胄 — Li is fire, the sun, lightning, the middle daughter, armour and helmets", "flags": ["5 Yellow"]}, "坎": {"dir": "北", "label": "Kan · N", "name": "Kan Palace · North", "xiang": "坎为水、为沟渎、为隐伏、为中男 — Kan is water, ditches and channels, what lies hidden, the middle son", "flags": []}, "坤": {"dir": "西南", "label": "Kun · SW", "name": "Kun Palace · Southwest", "xiang": "坤为地、为母、为布、为釜、为均、为众 — Kun is earth, the mother, cloth, a cauldron, evenness, the multitude", "flags": []}, "震": {"dir": "东", "label": "Zhen · E", "name": "Zhen Palace · East", "xiang": "震为雷、为龙、为长子、为大涂、为决躁 — Zhen is thunder, the dragon, the eldest son, a great highway, decisive haste", "flags": ["5 Yellow", "2 Black and 5 Yellow together"]}, "巽": {"dir": "东南", "label": "Xun · SE", "name": "Xun Palace · Southeast", "xiang": "巽为木、为风、为长女、为绳直、为工、为高 — Xun is wood, wind, the eldest daughter, a plumb line, the craftsman, height", "flags": []}}, "grid": [["巽", "离", "坤"], ["震", "中", "兑"], ["艮", "坎", "乾"]], "path": ["中", "乾", "兑", "艮", "离", "坎", "坤", "震", "巽"], "mountains": [{"name": "壬", "label": "Ren", "deg": 345, "boundary": true}, {"name": "子", "label": "Zi", "deg": 0, "boundary": false}, {"name": "癸", "label": "Gui", "deg": 15, "boundary": false}, {"name": "丑", "label": "Chou", "deg": 30, "boundary": true}, {"name": "艮", "label": "Gen", "deg": 45, "boundary": false}, {"name": "寅", "label": "Yin", "deg": 60, "boundary": false}, {"name": "甲", "label": "Jia", "deg": 75, "boundary": true}, {"name": "卯", "label": "Mao", "deg": 90, "boundary": false}, {"name": "乙", "label": "Yi", "deg": 105, "boundary": false}, {"name": "辰", "label": "Chen", "deg": 120, "boundary": true}, {"name": "巽", "label": "Xun", "deg": 135, "boundary": false}, {"name": "巳", "label": "Si", "deg": 150, "boundary": false}, {"name": "丙", "label": "Bing", "deg": 165, "boundary": true}, {"name": "午", "label": "Wu", "deg": 180, "boundary": false}, {"name": "丁", "label": "Ding", "deg": 195, "boundary": false}, {"name": "未", "label": "Wei", "deg": 210, "boundary": true}, {"name": "坤", "label": "Kun", "deg": 225, "boundary": false}, {"name": "申", "label": "Shen", "deg": 240, "boundary": false}, {"name": "庚", "label": "Geng", "deg": 255, "boundary": true}, {"name": "酉", "label": "You", "deg": 270, "boundary": false}, {"name": "辛", "label": "Xin", "deg": 285, "boundary": false}, {"name": "戌", "label": "Xu", "deg": 300, "boundary": true}, {"name": "乾", "label": "Qian", "deg": 315, "boundary": false}, {"name": "亥", "label": "Hai", "deg": 330, "boundary": false}], "gua_ring": [{"name": "坎", "label": "Kan", "deg": 0}, {"name": "艮", "label": "Gen", "deg": 45}, {"name": "震", "label": "Zhen", "deg": 90}, {"name": "巽", "label": "Xun", "deg": 135}, {"name": "离", "label": "Li", "deg": 180}, {"name": "坤", "label": "Kun", "deg": 225}, {"name": "兑", "label": "Dui", "deg": 270}, {"name": "乾", "label": "Qian", "deg": 315}], "notes": {"summary": "A Period 8 house sitting Zi (N2) and facing Wu (S2), with Double Stars at Facing: the timely 8 White arrives at the south facing palace as both the Mountain Star and the Facing Star. This chart wants open space close by on the south side and higher ground further away; then both people and wealth do well. Your home has a tall building close by to the south, so the Facing Star meets a 'mountain' instead of open space and wealth finds it hard to come in. The Mountain Star 8 White, on the other hand, gains support from that building, which favours the household's health.", "palaces": {"离": "Facing palace. Mountain 8 and Facing 8 meet here. It wants openness nearby and height in the distance; the nearby building presses on the wealth star. In 2026 the annual 5 Yellow arrives here, so keep the entrance area quiet and avoid building work.", "坎": "Sitting palace. Mountain 9, Facing 7: 9 Purple is the timely star of Period 9. A solid wall or tall building behind the house gives support and favours the household.", "艮": "The Facing Star 9 Purple, the wealth star of Period 9, sits here. Use any doors, windows or open space in this area more.", "乾": "Mountain 5, Facing 2, and in 2026 the annual 2 Black arrives too: 2 Black and 5 Yellow together. Keep this room quiet and tidy; elderly family members should not stay here for long."}, "advice": ["Put the main living area and the desk in the northeast, where the Facing Star 9 Purple sits", "Keep the inside of the south entrance clear and bright, with no clutter", "Use the northwest room less and keep it tidy; no building work at the south entrance this year"]}, "autoplay": true, "source": "Kanyuzi fengshui-master v3.1.0 · generated 2026-11-23 · chart computed by scripts/fengshui.py; star strength read for the current Period 9"}</script>
+<script>
+(function () {
+  "use strict";
+  var D = JSON.parse(document.getElementById("chart-data").textContent);
+  var NUM = D.nums;
+  var SVGNS = "http://www.w3.org/2000/svg";
+  var reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  /* 界面文字。数据里的文字（坐向、格局、星名、旺衰）由脚本按语言生成。 */
+  var I18N = {
+    zh: {
+      desc: "玄空飞星九宫盘，上南下北。外圈为二十四山。", layers: "图层", cast: "起盘",
+      yun: "运盘", shan: "山星", xiang: "向星", annual: "流年", month: "流月", yunStar: "运星",
+      orient: "上南下北，左东右西（罗经旧式）。每宫左上为山星（墨，管人丁），右上为向星（朱，管财），中下为运星；右下小字为流年。金色为当令之星。",
+      disclaimer: "风水为辅，人为为主。本盘由脚本按《沈氏玄空学》排盘规则计算；断语为传统取象，仅供参考。",
+      sep: "：", facing: "向", sitting: "坐", roleFace: " · 向首", roleSit: " · 坐山", palaceSuffix: "宫",
+      shuogua: "《说卦》：", chartWas: function (s) { return "（本盘" + s.replace("运", "运时为") + "）"; },
+      emptyPalace: "此宫未作批注。点其他宫位查看，或在对话中继续追问。",
+      overall: "盘断", pattern: "格局：", noPattern: "无特殊格局", seeChat: "完整解读见对话。",
+      legend: function (y) { return y + "运星曜旺衰"; }, badgeCut: /（/
+    },
+    en: {
+      desc: "Flying Star chart of the Nine Palaces, south at the top. The outer ring shows the 24 Mountains.",
+      layers: "Layers", cast: "Cast the chart",
+      yun: "Period", shan: "Mountain", xiang: "Facing", annual: "Annual", month: "Monthly", yunStar: "Period",
+      orient: "South is at the top and east on the left, as on a traditional compass. In each palace the Mountain Star (ink, people and health) is top left, the Facing Star (red, wealth) top right and the Period Star in the middle; the small blue number is the Annual Star. Gold marks the timely (most prosperous) star.",
+      disclaimer: "Feng shui supports, people decide. The chart is computed by script following the rules of Shen's Xuan Kong Studies (Shen Shi Xuan Kong Xue 沈氏玄空学); readings are traditional imagery, for reference only.",
+      sep: ": ", facing: "F", sitting: "S", roleFace: " · facing", roleSit: " · sitting", palaceSuffix: " palace",
+      shuogua: "Discussion of the Trigrams (Shuo Gua 说卦), our translation: ",
+      chartWas: function (s) { return " (" + s + " when the chart was set)"; },
+      emptyPalace: "No note for this palace. Tap another palace, or ask in the chat.",
+      overall: "Reading", pattern: "Formation: ", noPattern: "no special formation", seeChat: "See the chat for the full reading.",
+      legend: function (y) { return "Star strength in Period " + y; }, badgeCut: / \(/
+    }
+  };
+  var T = I18N[D.lang] || I18N.zh;
+  document.getElementById("board-desc").textContent = T.desc;
+  document.getElementById("toolbar").setAttribute("aria-label", T.layers);
+  document.getElementById("cast").textContent = T.cast;
+  Array.prototype.forEach.call(document.querySelectorAll("[data-t]"), function (n) { n.textContent = T[n.getAttribute("data-t")]; });
+  document.getElementById("orient").textContent = T.orient;
+  document.getElementById("disclaimer").textContent = T.disclaimer;
+
+  function el(tag, attrs, text, parent) {
+    var n = document.createElementNS(SVGNS, tag);
+    for (var k in attrs) n.setAttribute(k, attrs[k]);
+    if (text != null) n.textContent = text;
+    if (parent) parent.appendChild(n);
+    return n;
+  }
+  function h(tag, cls, text, parent) {
+    var n = document.createElement(tag);
+    if (cls) n.className = cls;
+    if (text != null) n.textContent = text;
+    if (parent) parent.appendChild(n);
+    return n;
+  }
+
+  /* ---- 题签 ---- */
+  document.getElementById("title").textContent = D.title;
+  var facts = document.getElementById("facts");
+  D.facts.forEach(function (f) {
+    var li = h("li", null, null, facts); h("span", null, f[0] + T.sep, li); h("b", null, f[1], li);
+  });
+  var badges = document.getElementById("badges");
+  D.patterns.forEach(function (p, i) { h("span", i === 0 && D.main_pattern ? "badge" : "badge quiet", p.split(T.badgeCut)[0], badges); });
+  D.warnings.forEach(function (w) { h("p", "warn", w, document.getElementById("warnings")); });
+
+  /* ---- 罗盘 ---- */
+  var svg = document.getElementById("board");
+  var C = 320, R1 = 312, R2 = 268, R3 = 236;      // 外沿、二十四山内沿、八卦圈
+  var S = 330, X0 = C - S / 2, Y0 = C - S / 2, cw = S / 3;
+  function pt(deg, r) {                            // 罗经度数 → 屏幕坐标（上南下北：屏幕角 = 度数 + 180）
+    var a = (deg + 180) * Math.PI / 180;
+    return [C + r * Math.sin(a), C - r * Math.cos(a)];
+  }
+  el("circle", { cx: C, cy: C, r: R1, "class": "ring-outer" }, null, svg);
+  el("circle", { cx: C, cy: C, r: R2, "class": "ring-line" }, null, svg);
+  el("circle", { cx: C, cy: C, r: R3, "class": "ring-line" }, null, svg);
+  D.mountains.forEach(function (m) {
+    var a = pt(m.deg - 7.5, R2), b = pt(m.deg - 7.5, R1);
+    el("line", { x1: a[0], y1: a[1], x2: b[0], y2: b[1], "class": "ring-line", "stroke-width": m.boundary ? 1.6 : 0.8 }, null, svg);
+    var p = pt(m.deg, (R1 + R2) / 2);
+    var cls = "mt" + (m.name === D.sit ? " sit" : "") + (m.name === D.facing ? " face" : "");
+    el("text", { x: p[0], y: p[1], "class": cls }, m.label, svg);
+  });
+  D.gua_ring.forEach(function (g) {
+    var p = pt(g.deg, (R2 + R3) / 2 - 2);
+    el("text", { x: p[0], y: p[1], "class": "gua-lab" }, g.label, svg);
+  });
+
+  /* 九宫 */
+  var cells = {}, starEls = {};
+  D.grid.forEach(function (row, r) {
+    row.forEach(function (pal, c) {
+      var x = X0 + c * cw, y = Y0 + r * cw;
+      var g = el("g", { "class": "cell", tabindex: "0", role: "button", "aria-label": D.palaces[pal].name }, null, svg);
+      el("rect", { x: x, y: y, width: cw, height: cw }, null, g);
+      var info = D.palaces[pal];
+      el("text", { x: x + 8, y: y + cw - 10, "class": "pal" }, info.label, g);
+      var se = {};
+      se.shan = el("text", { x: x + cw * 0.27, y: y + cw * 0.28, "class": "star shan" }, NUM[D.layers.shan[pal]], g);
+      se.xiang = el("text", { x: x + cw * 0.73, y: y + cw * 0.28, "class": "star xiang" }, NUM[D.layers.xiang[pal]], g);
+      se.yun = el("text", { x: x + cw * 0.5, y: y + cw * 0.6, "class": "star yun" }, NUM[D.layers.yun[pal]], g);
+      if (D.layers.annual) se.annual = el("text", { x: x + cw * 0.84, y: y + cw * 0.84, "class": "star annual" }, NUM[D.layers.annual[pal]], g);
+      if (D.layers.month) se.month = el("text", { x: x + cw * 0.66, y: y + cw * 0.86, "class": "star month" }, NUM[D.layers.month[pal]], g);
+      ["shan", "xiang"].forEach(function (k) { if (D.layers[k][pal] === D.current_yun) se[k].classList.add("wang"); });
+      if (info.flags.length) el("circle", { cx: x + cw - 10, cy: y + 10, r: 4, "class": "sha" }, null, g);
+      g.addEventListener("click", function () { select(pal); });
+      g.addEventListener("keydown", function (e) { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); select(pal); } });
+      cells[pal] = g; starEls[pal] = se;
+    });
+  });
+  function centerOf(pal) {
+    for (var r = 0; r < 3; r++) for (var c = 0; c < 3; c++) if (D.grid[r][c] === pal) return [X0 + (c + .5) * cw, Y0 + (r + .5) * cw];
+  }
+  var path = el("polyline", { points: D.path.map(function (p) { return centerOf(p).join(","); }).join(" "), "class": "path" }, null, svg);
+
+  /* 坐向线 */
+  if (D.axis_deg != null) {
+    // 坐向线只画在九宫与八卦圈之间、以及盘外，不压二十四山与八卦文字
+    var f = pt(D.axis_deg, R1 + 20), s = pt(D.axis_deg + 180, R1 + 20);
+    var fo = pt(D.axis_deg, R1), so = pt(D.axis_deg + 180, R1);
+    var fi = pt(D.axis_deg, R3 - 22), si = pt(D.axis_deg + 180, R3 - 22);
+    var edge = S / 2 / Math.max(Math.abs(Math.sin((D.axis_deg + 180) * Math.PI / 180)), Math.abs(Math.cos((D.axis_deg + 180) * Math.PI / 180)));
+    var fe = pt(D.axis_deg, edge), se2 = pt(D.axis_deg + 180, edge);
+    if (edge < R3 - 30) {   // 斜向时九宫角已逼近八卦圈，此段放不下则不画
+      el("line", { x1: fe[0], y1: fe[1], x2: fi[0], y2: fi[1], "class": "axis" }, null, svg);
+      el("line", { x1: se2[0], y1: se2[1], x2: si[0], y2: si[1], "class": "axis" }, null, svg);
+    }
+    el("line", { x1: fo[0], y1: fo[1], x2: f[0], y2: f[1], "class": "axis" }, null, svg);
+    el("line", { x1: so[0], y1: so[1], x2: s[0], y2: s[1], "class": "axis" }, null, svg);
+    [[f, T.facing], [s, T.sitting]].forEach(function (q) {
+      el("circle", { cx: q[0][0], cy: q[0][1], r: 13, "class": "axis-cap" }, null, svg);
+      el("text", { x: q[0][0], y: q[0][1] + 1, "class": "axis-text" }, q[1], svg);
+    });
+  }
+
+  /* ---- 批注 ---- */
+  var LAYER_NAME = { shan: T.shan, xiang: T.xiang, yun: T.yunStar, annual: T.annual, month: T.month };
+  function select(pal) {
+    Object.keys(cells).forEach(function (k) { cells[k].classList.toggle("sel", k === pal); });
+    var info = D.palaces[pal], box = document.getElementById("palace");
+    box.textContent = "";
+    var role = pal === D.face_palace ? T.roleFace : (pal === D.sit_palace ? T.roleSit : "");
+    h("h2", null, info.name + role, box);
+    if (info.xiang) h("p", "xiang-quote", T.shuogua + info.xiang, box);
+    var dl = h("dl", "stars", null, box);
+    ["shan", "xiang", "yun", "annual", "month"].forEach(function (k) {
+      if (!D.layers[k]) return;
+      var n = D.layers[k][pal];
+      h("dt", null, LAYER_NAME[k], dl);
+      var dd = h("dd", "num", NUM[n], dl); dd.style.margin = "0";
+      var label = D.star_names[n] + " · " + D.status_text[n];
+      if (D.chart_status_text && D.chart_status_text[n]) label += T.chartWas(D.chart_status_text[n]);
+      h("dd", "st " + D.status_class[n], label, dl).style.margin = "0";
+    });
+    if (info.flags.length) { var fp = h("p", null, null, box); info.flags.forEach(function (x) { h("span", "flag", x, fp); }); }
+    var note = (D.notes.palaces || {})[pal];
+    h("p", note ? "note" : "note empty", note || T.emptyPalace, box);
+  }
+  (function overall() {
+    var box = document.getElementById("overall");
+    h("h3", null, T.overall, box);
+    var parts = [T.pattern + (D.patterns[0] || T.noPattern)];
+    D.entries.forEach(function (e) { parts.push(e); });
+    parts.forEach(function (t) { h("p", "sub", t, box); });
+    if (D.notes.summary) h("p", "note", D.notes.summary, box);
+    if (D.notes.advice && D.notes.advice.length) {
+      var ul = h("ul", "advice", null, box);
+      D.notes.advice.forEach(function (a) { h("li", null, a, ul); });
+    }
+    if (!D.notes.summary && !(D.notes.advice || []).length) h("p", "note empty", T.seeChat, box);
+  })();
+
+  /* ---- 旺衰 ---- */
+  document.getElementById("legend-title").textContent = T.legend(NUM[D.current_yun]);
+  var row = document.getElementById("status-row");
+  for (var n = 1; n <= 9; n++) {
+    var d = h("div", D.status_class[n], null, row);
+    h("span", "n", NUM[n], d); h("span", "s", D.star_short[n] + " · " + D.status_short[n], d);
+  }
+  document.getElementById("source").textContent = D.source;
+
+  /* ---- 图层 ---- */
+  var visible = { yun: true, shan: true, xiang: true, annual: true, month: true };
+  if (!D.layers.annual) document.getElementById("chip-annual").hidden = true;
+  if (!D.layers.month) document.getElementById("chip-month").hidden = true;
+  function applyLayers() {
+    Object.keys(starEls).forEach(function (pal) {
+      Object.keys(starEls[pal]).forEach(function (k) { starEls[pal][k].classList.toggle("hidden", !visible[k]); });
+    });
+  }
+  Array.prototype.forEach.call(document.querySelectorAll(".chip[data-layer]"), function (b) {
+    b.addEventListener("click", function () {
+      var k = b.getAttribute("data-layer"); visible[k] = !visible[k];
+      b.setAttribute("aria-pressed", String(visible[k])); applyLayers();
+    });
+  });
+
+  /* ---- 起盘：按洛书轨迹逐宫飞布 ---- */
+  var timers = [];
+  function cast() {
+    timers.forEach(clearTimeout); timers = [];
+    if (reduce) { applyLayers(); return; }
+    var order = ["yun", "shan", "xiang", "annual", "month"].filter(function (k) { return D.layers[k] && visible[k]; });
+    order.forEach(function (k) { D.path.forEach(function (pal) { starEls[pal][k].classList.add("hidden"); }); });
+    path.classList.add("on");
+    var t = 300, step = 150;
+    order.forEach(function (k) {
+      D.path.forEach(function (pal) {
+        timers.push(setTimeout(function () { starEls[pal][k].classList.remove("hidden"); select(pal); }, t));
+        t += step;
+      });
+      t += 350;
+    });
+    timers.push(setTimeout(function () { path.classList.remove("on"); select(D.face_palace); }, t));
+  }
+  document.getElementById("cast").addEventListener("click", cast);
+
+  select(D.face_palace);
+  if (!reduce && D.autoplay) cast();
+})();
+</script>
+</body>
+</html>
