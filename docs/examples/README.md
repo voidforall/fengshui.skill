@@ -46,11 +46,13 @@ python3 -m pip install -r skills/city-wuxing-map/requirements.txt
 python3 skills/city-wuxing-map/scripts/generate.py --example london --output docs/examples/london-wuxing.html
 python3 skills/city-wuxing-map/scripts/generate.py --example new-york --output docs/examples/new-york-wuxing.html
 python3 skills/city-wuxing-map/scripts/generate.py --example shanghai --output docs/examples/shanghai-wuxing.html
+python3 skills/city-wuxing-map/scripts/generate.py --example london --lang en --output docs/examples/london-wuxing.en.html
+python3 skills/city-wuxing-map/scripts/generate.py --example new-york --lang en --output docs/examples/new-york-wuxing.en.html
 python3 -m http.server 8000 --bind 127.0.0.1
 ```
 
 访问 `http://127.0.0.1:8000/docs/examples/london-wuxing.html`、`new-york-wuxing.html` 或 `shanghai-wuxing.html`。这些示例内嵌 Leaflet、模板与区域几何和分析数据，真实地图瓦片需要联网，通过 HTTP 加载。直接双击 HTML 时只显示区域分析并提示启动本地服务。
 
-原始区域资料在 `skills/city-wuxing-map/examples/`，修改模板、生成器、库文件或资料后都要重新生成三个 HTML。`tests/test_city_map.py` 检查示例是否过期。README 截图来自实际浏览器加载后的伦敦地图，保留底图署名。
+原始区域资料在 `skills/city-wuxing-map/examples/`，修改模板、生成器、库文件或资料后都要重新生成这五个 HTML（英文示例只提交伦敦、纽约，上海英文页可用同样的 `--lang en` 生成）。`tests/test_city_map.py` 检查示例是否过期。README 截图来自实际浏览器加载后的伦敦地图，保留底图署名。
 
 默认连续着色：伦敦1,735单元、纽约五区1,323单元、上海主城区1,857单元。检查城市边缘、岛屿与水域，所有单元在两种口径下都有分类。检查伦敦 `SW1A 1AA` / `SW1A` / `SW1`、纽约 `10013`、上海「陆家嘴」与 `31.2397,121.5055`、当地地址候选，以及坐标搜索、五行筛选、选中单元详情与置信等级、证据和格网线开关。源数据与离线重建方式见skill说明和examples/sources/README.md。

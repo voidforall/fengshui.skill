@@ -5,6 +5,9 @@
 - 顶层必填：`schema_version: 3`、非空 `city/subtitle/summary/coordinate_note`、实际核对日期 `reviewed_at`（YYYY-MM-DD）、`regions`。
 - `coverage` 必填：`kind: "full-city"`、`name`、完整城市 `geometry` 和 `sources`；可选 `focus: [经度,纬度]` 为初始选中位置。
 - 可选顶层 `scope_label`（1–8 字，默认「全城」）：声明范围不是整个行政市域时（如「主城区」），页面标题与口径说明用它代替「全城」；`coverage.name` 须写明具体范围。
+- 英文页面（`generate.py --lang en`）有两种数据来源：
+  - 由 `build_full_city.py` 生成、带 `metrics` 的数据：生成器按 `city_model.py` 重新写出英文单元文字，并核对主象、兼象、置信与数据一致。专名放在可选顶层 `en` 对象：`city`（必填）、`scope_label`、`scope_name`、`search`（覆盖 placeholder、hint）、`admin_names`（{中文地名: 英文地名}，中文地名须全部给出）。`en` 由源快照 manifest 的同名字段带入。
+  - 自己书写的数据：没有 `metrics` 不能重算，请直接用英文书写所有文字，并加顶层 `"lang": "en"`。
 - `regions` 为1–5000个不重叠且覆盖完整范围的单元。每项含唯一小写字母/数字/连字符 `id`、`name`、`geometry`、在本区内部的 `label_position`。
 - 几何为WGS84 GeoJSON Polygon（可有洞）或MultiPolygon。每环4–20000点、首尾闭合、有限坐标，纬度限±85.05112878、经度±180。GEOS检查有效拓扑、并集漏区/越界与面积重叠；不接受伪造的覆盖报告。
 - `boundary` 含 `kind`（统计分区/官方边界/解释性概化）、`description` 与 `sources`。统计格网必须明确尺度，不能标成官方风水区。

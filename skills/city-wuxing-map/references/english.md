@@ -33,8 +33,13 @@ On the first mention write "Five Elements (Wu Xing 五行)"; afterwards use Engl
 
 ## Map page
 
-The map page still has Chinese labels. Tell the user, and explain the controls they need: 分析口径 (reading),
-the element filters, the search box, and the cell details (main and secondary element, reasons, sources, confidence).
+Generate the page with `--lang en` (`python3 scripts/generate.py --example london --lang en --output ...`). Every cell's
+reason, facts, limits and confidence note are then regenerated in English by the same rules, and the main element,
+secondary elements and confidence are checked to be identical to the Chinese data. City, area and district names come
+from the data's `en` object (for Shanghai, Hanyu Pinyin with translated generic terms, e.g. "Lujiazui Subdistrict,
+Pudong New Area"). Data you write yourself without `metrics` cannot be regenerated: write its text in English and add
+`"lang": "en"` (see data-format.md). Explain the controls: Reading (relative, combined, land-cover base), the element
+filters, the search box, and the cell details (main and secondary element, reasons, sources, confidence).
 
 ## Boundaries
 

@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="zh-Hans">
+<html lang="__LANG__">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -125,52 +125,50 @@ footer { color:var(--soft); font-size:.75rem; padding-block:1rem; border-block-s
   <header>
     <div class="seal" aria-hidden="true">城<br>域</div>
     <div class="heading"><p class="eyebrow">KANYU · REGIONAL ATLAS</p><h1 id="title"></h1><p class="subtitle" id="subtitle"></p></div>
-    <div class="edition">片区主象 · 兼象 · 分析依据<br><span id="reviewed"></span></div>
+    <div class="edition"><span data-t="edition"></span><br><span id="reviewed"></span></div>
   </header>
   <p class="intro" id="summary"></p><p class="coverage" id="coverage-status" role="status"></p>
   <div class="controls">
-    <label for="method">分析口径 <select id="method"><option value="relative">全城相对取象</option><option value="function">全城综合取象（绝对）</option><option value="landscape">全城土地覆盖底层</option></select></label>
-    <label><input type="checkbox" id="show-evidence">显示本单元证据点</label><label><input type="checkbox" id="show-grid">显示统计单元线</label>
-    <button class="reset" id="reset">查看全部片区 ↗</button>
+    <label for="method"><span data-t="reading"></span> <select id="method"><option value="relative"></option><option value="function"></option><option value="landscape"></option></select></label>
+    <label><input type="checkbox" id="show-evidence"><span data-t="showEvidence"></span></label><label><input type="checkbox" id="show-grid"><span data-t="showGrid"></span></label>
+    <button class="reset" id="reset" data-t="reset"></button>
   </div>
   <p id="view-note"></p>
-  <div class="filters" role="group" aria-label="按片区主象筛选" id="filters"></div>
+  <div class="filters" role="group" data-t-aria="filterAria" id="filters"></div>
   <div class="workspace">
-    <aside class="sidebar" aria-label="片区索引">
-      <search class="search"><form id="search-form" action="#map" method="get" aria-label="当地地址定位">
-        <label for="search">邮编、地址或地区</label><input id="search" name="q" type="search" placeholder="当地邮编、地址或地区名" maxlength="200" enterkeyhint="search" autocomplete="off" autocorrect="off" autocapitalize="none" spellcheck="false" aria-describedby="search-help search-status">
-        <button id="search-submit" type="submit">定位 ↗</button><p id="search-help"></p><p id="search-status" role="status"></p><ul id="search-results" aria-label="候选地点"></ul>
-        <p class="search-provider">联网定位：<span id="postcodes-provider"><a href="https://postcodes.io/" target="_blank" rel="noopener noreferrer">Postcodes.io</a> / </span><a href="https://github.com/komoot/photon" target="_blank" rel="noopener noreferrer">Photon · © OSM</a>。仅提交时发送查询词。</p>
+    <aside class="sidebar" data-t-aria="indexAria">
+      <search class="search"><form id="search-form" action="#map" method="get" data-t-aria="searchAria">
+        <label for="search" data-t="searchLabel"></label><input id="search" name="q" type="search" maxlength="200" enterkeyhint="search" autocomplete="off" autocorrect="off" autocapitalize="none" spellcheck="false" aria-describedby="search-help search-status">
+        <button id="search-submit" type="submit" data-t="locate"></button><p id="search-help"></p><p id="search-status" role="status"></p><ul id="search-results" data-t-aria="candidates"></ul>
+        <p class="search-provider"><span data-t="online"></span><span id="postcodes-provider"><a href="https://postcodes.io/" target="_blank" rel="noopener noreferrer">Postcodes.io</a> / </span><a href="https://github.com/komoot/photon" target="_blank" rel="noopener noreferrer">Photon · © OSM</a><span data-t="onlyOnSubmit"></span></p>
       </form><p id="count" role="status"></p></search>
       <ol id="regions"></ol>
     </aside>
-    <section class="map-wrap" aria-label="真实地图与五行分析区块">
-      <div class="map-head"><b id="map-head-text">全城连续覆盖 · 颜色为模型主象，格网不是风水硬边界</b><span>↑ 北</span></div>
-      <div id="map" aria-label="可缩放片区地图；也可通过片区索引查看分析"></div>
-      <p class="map-status" id="map-status" role="status">正在加载真实地图…</p>
+    <section class="map-wrap" data-t-aria="mapAria">
+      <div class="map-head"><b id="map-head-text"></b><span data-t="north"></span></div>
+      <div id="map" data-t-aria="mapLabel"></div>
+      <p class="map-status" id="map-status" role="status"></p>
     </section>
   </div>
   <section class="detail" id="detail" aria-labelledby="region-title" tabindex="-1">
     <div><span class="tag" id="tag"></span><h2 id="region-title"></h2><p id="basis"></p><p id="confidence"></p>
-      <h3>为什么这样划区</h3><p id="boundary"></p><ul id="boundary-sources"></ul>
-      <h3>证据地点 · 辅助观察</h3><div id="evidence"></div>
+      <h3 data-t="whyBoundary"></h3><p id="boundary"></p><ul id="boundary-sources"></ul>
+      <h3 data-t="evidenceHead"></h3><div id="evidence"></div>
     </div>
-    <div><h3>为什么这一带偏这个象</h3><p id="reason"></p><h3>区域整体特征</h3><ul id="facts"></ul>
-      <h3>兼象与局限</h3><p id="limitations"></p><h3>事实来源</h3><ul id="sources"></ul></div>
+    <div><h3 data-t="whyElement"></h3><p id="reason"></p><h3 data-t="factsHead"></h3><ul id="facts"></ul>
+      <h3 data-t="limitsHead"></h3><p id="limitations"></p><h3 data-t="sourcesHead"></h3><ul id="sources"></ul></div>
   </section>
-  <details><summary id="method-summary">全城覆盖、取象规则与数据时效</summary>
-    <div class="method">
-      <p><b>水</b> · 真实水面覆盖信号。</p><p><b>木</b> · 树木、灌丛、草地等植被信号。</p><p><b>土</b> · 耕地、裸地及建成承载空间的底层归类。</p><p><b>金</b> · 商业、工业用地或相应许可分区信号。</p><p><b>火</b> · 零售服务及演艺、传播功能信号。</p>
-    </div>
-    <p>边界内所有单元都有主象，允许兼象和低置信度，不再只选几处地标。连续统计格网裁切至真实城市边界；细分单位是观察尺度，不代表五行在格线上突变。边界外不在本图范围内；筛选五行会临时隐藏其他颜色，可点“查看全部片区”恢复。</p>
-    <p>土地覆盖底层取自2021年ESA WorldCover，原始10米分类汇总至50米后按单元统计；并非2026年逐块实地调查。伦敦功能资料来自OSM快照，可能遗漏；纽约功能资料使用官方规划分区，表示许可用途，不等于目前营业实况，相关判断降低置信度。</p>
-    <p><b>相对取象（默认）</b> · 典籍依据：《尚书·洪范》「水曰润下，火曰炎上，木曰曲直，金曰从革，土爰稼穑」；《五行大义》卷一「辨体性」以「体者，以形质为名；性者，以功用为义」辨五行，并说土「总于四行」「土苞四德，故其体能兼虚实」。据此以土为承载四行的底色，看每个单元在本范围内相对最突出的是哪一行：各行信号换算成范围内百分位，取最高且信号不低于0.05者。它回答「这里比本城一般地方更突出什么」，不是「这里哪一行占多数」；同一地方换一个比较范围，结果可能不同。</p>
-    <p>综合模型的决策信号为：水×1.2、植被×1.1、承载空间×0.65、商业工业比例×2、零售服务比例×2.4，加演艺区覆盖×0.9及演艺对象信号。比较信号选主象，保留有一定支撑的兼象。它们是本项目公开的现代解释规则，未声称由古籍直接推导，更不是实测气场、吉凶或投资评分。详情中的百分比是地理覆盖统计，不是五行能量百分比。</p>
-    <p id="coordinate-note"></p><p>置信等级表示资料和规则区分度，不是风水效应成立的概率；混合单元、样本少、资料历史性或规划代替现状都会限制判断。</p>
-    <p>Leaflet 1.9.4 已内嵌（BSD-2-Clause）；真实底图需联网及HTTP，仅请求当前视野瓦片。</p>
+  <details><summary id="method-summary"></summary>
+    <div class="method" id="method-elements"></div>
+    <p data-t="m1"></p>
+    <p data-t="m2"></p>
+    <p><b data-t="relDefault"></b><span data-t="m3"></span></p>
+    <p data-t="m4"></p>
+    <p id="coordinate-note"></p><p data-t="m5"></p>
+    <p data-t="m6"></p>
   </details>
-  <footer>堪舆子 · 城市边界内逐单元分析，保留主象、兼象与不确定性。底图 © OpenStreetMap contributors。<p id="data-attribution"></p><a href="https://www.openstreetmap.org/fixthemap" target="_blank" rel="noopener noreferrer">报告底图问题 ↗</a></footer>
-  <noscript>请启用 JavaScript 查看片区地图；原始分析与来源保存在城市 JSON 文件中。</noscript>
+  <footer><span data-t="footer"></span><p id="data-attribution"></p><a href="https://www.openstreetmap.org/fixthemap" target="_blank" rel="noopener noreferrer"><span data-t="reportMap"></span></a></footer>
+  <noscript>请启用 JavaScript 查看片区地图；原始分析与来源保存在城市 JSON 文件中。 Enable JavaScript to view the map; the analysis and sources are in the city JSON file.</noscript>
 </main>
 <!-- __LICENSE__ -->
 <script>__LEAFLET_JS__</script>
@@ -179,19 +177,86 @@ footer { color:var(--soft); font-size:.75rem; padding-block:1rem; border-block-s
 <script>
 'use strict';
 const data=JSON.parse(document.getElementById('city-data').textContent);
+/* 界面文字。单元的分析文字由生成器按语言写入数据（--lang en 时为英文）。 */
+const UI={
+ zh:{edition:'片区主象 · 兼象 · 分析依据',reading:'分析口径',showEvidence:'显示本单元证据点',showGrid:'显示统计单元线',reset:'查看全部片区 ↗',
+  filterAria:'按片区主象筛选',indexAria:'片区索引',searchAria:'当地地址定位',searchLabel:'邮编、地址或地区',locate:'定位 ↗',candidates:'候选地点',
+  online:'联网定位：',onlyOnSubmit:'。仅提交时发送查询词。',mapAria:'真实地图与五行分析区块',north:'↑ 北',mapLabel:'可缩放片区地图；也可通过片区索引查看分析',
+  whyBoundary:'为什么这样划区',evidenceHead:'证据地点 · 辅助观察',whyElement:'为什么这一带偏这个象',factsHead:'区域整体特征',limitsHead:'兼象与局限',sourcesHead:'事实来源',
+  footer:'堪舆子 · 城市边界内逐单元分析，保留主象、兼象与不确定性。底图 © OpenStreetMap contributors。',reportMap:'报告底图问题 ↗',
+  elements:{水:' · 真实水面覆盖信号。',木:' · 树木、灌丛、草地等植被信号。',土:' · 耕地、裸地及建成承载空间的底层归类。',金:' · 商业、工业用地或相应许可分区信号。',火:' · 零售服务及演艺、传播功能信号。'},
+  m1:'边界内所有单元都有主象，允许兼象和低置信度，不再只选几处地标。连续统计格网裁切至真实城市边界；细分单位是观察尺度，不代表五行在格线上突变。边界外不在本图范围内；筛选五行会临时隐藏其他颜色，可点“查看全部片区”恢复。',
+  m2:'土地覆盖底层取自2021年ESA WorldCover，原始10米分类汇总至50米后按单元统计；并非2026年逐块实地调查。伦敦功能资料来自OSM快照，可能遗漏；纽约功能资料使用官方规划分区，表示许可用途，不等于目前营业实况，相关判断降低置信度。',
+  relDefault:'相对取象（默认）',
+  m3:' · 典籍依据：《尚书·洪范》「水曰润下，火曰炎上，木曰曲直，金曰从革，土爰稼穑」；《五行大义》卷一「辨体性」以「体者，以形质为名；性者，以功用为义」辨五行，并说土「总于四行」「土苞四德，故其体能兼虚实」。据此以土为承载四行的底色，看每个单元在本范围内相对最突出的是哪一行：各行信号换算成范围内百分位，取最高且信号不低于0.05者。它回答「这里比本城一般地方更突出什么」，不是「这里哪一行占多数」；同一地方换一个比较范围，结果可能不同。',
+  m4:'综合模型的决策信号为：水×1.2、植被×1.1、承载空间×0.65、商业工业比例×2、零售服务比例×2.4，加演艺区覆盖×0.9及演艺对象信号。比较信号选主象，保留有一定支撑的兼象。它们是本项目公开的现代解释规则，未声称由古籍直接推导，更不是实测气场、吉凶或投资评分。详情中的百分比是地理覆盖统计，不是五行能量百分比。',
+  m5:'置信等级表示资料和规则区分度，不是风水效应成立的概率；混合单元、样本少、资料历史性或规划代替现状都会限制判断。',
+  m6:'Leaflet 1.9.4 已内嵌（BSD-2-Clause）；真实底图需联网及HTTP，仅请求当前视野瓦片。',
+  whole:'全城',title:(c,sc)=>c+' · '+sc+'五行地图',mapHead:sc=>sc+'连续覆盖 · 颜色为模型主象，格网不是风水硬边界',methodSummary:sc=>sc+'覆盖、取象规则与数据时效',
+  option:(sc,m)=>sc+{relative:'相对取象',function:'综合取象（绝对）',landscape:'土地覆盖底层'}[m],
+  methods:{relative:'相对取象 · 与本范围各单元比较',landscape:'土地覆盖底层 · 2021年分类',function:'综合取象（绝对） · 覆盖与功能证据'},
+  reviewed:'资料整理：',coverage:(name,pct,n)=>name+' · GIS覆盖 '+pct+'% · '+n+' 个连续单元 · 每单元都有主象及置信说明',attrSep:'；',
+  el:e=>e,all:'全部',main:'为主',secondary:' · 兼',sep:'、',conf:c=>' · 置信'+c,confNote:c=>'置信说明：'+c+' · ',more:'查看覆盖统计、依据与局限',unit:' · 连续统计单元',
+  noEvidence:'本单元没有附点位；土地覆盖及功能分区资料仍参与完整分析。',cellAria:n=>n+'，查看单元分析',count:(a,b)=>'显示 '+a+' / '+b+' 个分析单元',
+  coordOut:'该坐标不在本图城市范围内。',noMatch:'没有匹配单元，请调整筛选或搜索。',noMatchTitle:'没有匹配单元',
+  viewNote:{relative:'相对取象：看每个单元比本范围一般地方更突出的是哪一行，所以五行分布较均衡；',function:'综合取象（绝对）：看每个单元哪一行信号最强，建成区多以土为主；',landscape:'土地覆盖底层：只看水面、植被与建成覆盖；'},
+  viewTail:'每个单元均已归类，筛选只改变显示。土地覆盖为2021年，功能资料的现状完整性有限。',
+  placeholder:'当地邮编、地址、地区名或坐标',hint:'按当地习惯输入邮编、地址或地区名；坐标格式为纬度,经度。',hintTail:' 名称可本地筛选；点击定位或回车联网查询。',
+  outside:'此地点在本图城市范围外，无法提供五行分析。',approx:' · 地区/邮区参考中心点',exact:' · 地址/邮编参考点',located:'已定位：',stop:'。',
+  approxNote:'以地区/邮区参考中心点定位，并非整个邮区边界或全区统一结论。',exactNote:'显示参考点所在单元的分析，邮编范围可能跨越多个单元。',source:' 来源：',
+  enterQuery:'请输入邮编、地址、地区名或坐标。',coordFound:'已定位坐标所在单元。',localFound:'已定位本地单元。',querying:'正在查询当地邮编或地址…',
+  resultOut:'查询地点在本图城市范围外。',notFound:'未找到范围内的地点；请补充完整邮编、门牌或当地地区名，也可使用坐标。',candidatesFound:n=>'找到 '+n+' 个候选地点，请选择；以下地点均在本图范围内。',
+  timeout:'查询超时，请重试；本地单元筛选与坐标查询仍可用。',offlineSearch:'无法连接定位服务；请检查网络、重试或输入坐标。',failed:'查询失败，请重试或输入坐标。',
+  http:'请通过HTTP加载真实底图：在本文件目录运行 python3 -m http.server 8000 --bind 127.0.0.1 。完整分类资料仍可查阅。',loading:'正在加载真实地图…',
+  tileError:'部分底图加载失败，完整城市分类与来源仍可查阅。',tilesLoaded:'真实底图已加载 · 城市边界内全部分类，可点击任意单元或输入坐标查询',offline:'网络已断开，底图可能不完整；全城分类资料仍可查阅。'},
+ en:{edition:'Main element · secondary · basis',reading:'Reading',showEvidence:'Show evidence points',showGrid:'Show grid lines',reset:'Show all cells ↗',
+  filterAria:'Filter by main element',indexAria:'Cell index',searchAria:'Find a local address',searchLabel:'Postcode, address or area',locate:'Locate ↗',candidates:'Candidate places',
+  online:'Online lookup: ',onlyOnSubmit:'. The query is sent only when you submit.',mapAria:'Real map with five-element cells',north:'↑ N',mapLabel:'Zoomable map of the cells; the cell index gives the same analysis',
+  whyBoundary:'Why this cell',evidenceHead:'Evidence points · supporting only',whyElement:'Why this element here',factsHead:'What the area is like',limitsHead:'Secondary element and limits',sourcesHead:'Sources',
+  footer:'Kanyuzi · every cell inside the boundary is analysed, with main and secondary elements and the uncertainty kept. Base map © OpenStreetMap contributors. ',reportMap:'Report a base-map problem ↗',
+  elements:{水:' · water surface in the land cover.',木:' · vegetation: trees, shrubs, grassland.',土:' · base class for farmland, bare ground and built land that carries everything.',金:' · commercial and industrial land use or matching zoning.',火:' · retail, services, performing arts and media.'},
+  m1:'Every cell inside the boundary has a main element; secondary elements and low confidence are allowed, instead of picking a few landmarks. A continuous statistical grid is clipped to the real boundary; the cell size is a scale of observation and does not mean the elements change at grid lines. Areas outside the boundary are not covered. Filtering by element hides the other colours for a while; use "Show all cells" to bring them back.',
+  m2:'The land-cover base comes from ESA WorldCover 2021: 10 m classes aggregated to 50 m and counted per cell, not a 2026 field survey. Function data for London and Shanghai is an OSM snapshot and may miss things; New York uses official zoning, which shows permitted use rather than current business, so those readings have lower confidence.',
+  relDefault:'Relative reading (default)',
+  m3:' · Classical basis (our translation): the Hong Fan 洪范 of the Book of History (Shang Shu 尚书): 「水曰润下，火曰炎上，木曰曲直，金曰从革，土爰稼穑」 "water moistens and descends, fire blazes upward, wood bends and straightens, metal yields and is reshaped, earth receives sowing and harvest"; the Wu Xing Da Yi 五行大义, vol. 1, tells the elements apart by 「体者，以形质为名；性者，以功用为义」 "body is named by form and substance; nature is defined by function", and says Earth 「总于四行」 "unites the other four" and 「土苞四德，故其体能兼虚实」 "embraces the four virtues, so its body holds both the empty and the solid". So Earth is the base that carries the other four, and each cell is read by which element stands out most compared with the rest of the area: each signal becomes a percentile within the area, and the highest one with a signal of at least 0.05 wins. It answers "what stands out here compared with an ordinary place in this city", not "which element makes up most of this place"; in a different comparison area the same place may come out differently.',
+  m4:'The combined model uses these decision signals: water ×1.2, vegetation ×1.1, supporting land ×0.65, commercial and industrial share ×2, retail and service share ×2.4, plus performing-arts district cover ×0.9 and a performing-arts object signal. The strongest signal gives the main element, and well-supported others are kept as secondary. These are this project\'s published modern rules, not derived directly from classical texts, and not a measured qi field, fortune or investment score. Percentages in the details are geographic cover statistics, not five-element energy percentages.',
+  m5:'Confidence shows how clearly the data and rules separate, not the probability that a feng shui effect holds; mixed cells, few samples, historical data or zoning in place of current use all limit the reading.',
+  m6:'Leaflet 1.9.4 is embedded (BSD-2-Clause); the real base map needs a network and HTTP, and only tiles in view are requested.',
+  whole:'Whole city',title:(c,sc)=>c+' · Five Elements Map'+(sc==='Whole city'?'':' ('+sc+')'),mapHead:sc=>sc+' covered continuously · colour is the model\'s main element; grid lines are not feng shui boundaries',methodSummary:sc=>'Coverage, rules and data dates ('+sc.toLowerCase()+')',
+  option:(sc,m)=>({relative:'Relative reading',function:'Combined reading (absolute)',landscape:'Land-cover base'}[m]),
+  methods:{relative:'Relative reading · compared with every cell in the area',landscape:'Land-cover base · 2021 classes',function:'Combined reading (absolute) · cover and function evidence'},
+  reviewed:'Data prepared: ',coverage:(name,pct,n)=>name+' · GIS coverage '+pct+'% · '+n+' continuous cells · every cell has a main element and a confidence note',attrSep:'; ',
+  el:e=>({金:'Metal',木:'Wood',水:'Water',火:'Fire',土:'Earth'}[e]||e),all:'All',main:'',secondary:' · also ',sep:', ',conf:c=>' · '+({低:'low',中:'medium',高:'high'}[c]||c)+' confidence',confNote:c=>'Confidence: '+({低:'low',中:'medium',高:'high'}[c]||c)+' · ',more:'Cover statistics, basis and limits',unit:' · continuous statistical cell',
+  noEvidence:'No points attached to this cell; the land-cover and function data still feed the full analysis.',cellAria:n=>n+', view the cell analysis',count:(a,b)=>'Showing '+a+' / '+b+' cells',
+  coordOut:'That coordinate is outside the mapped area.',noMatch:'No matching cells; change the filter or search.',noMatchTitle:'No matching cells',
+  viewNote:{relative:'Relative reading: which element stands out in each cell compared with an ordinary place in the area, so the elements are fairly balanced. ',function:'Combined reading (absolute): which signal is strongest in each cell, so built-up areas are mostly Earth. ',landscape:'Land-cover base: water, vegetation and built cover only. '},
+  viewTail:'Every cell is classified; filters only change what is shown. Land cover is from 2021, and the function data is incomplete for today.',
+  placeholder:'Local postcode, address, area name or coordinates',hint:'Enter a postcode, address or area name as used locally; coordinates as latitude,longitude.',hintTail:' Names filter locally; press Locate or Enter to look up online.',
+  outside:'That place is outside the mapped area, so there is no five-element reading.',approx:' · reference centre of an area or postcode district',exact:' · address or postcode reference point',located:'Located: ',stop:'. ',
+  approxNote:'Located at the reference centre of an area or postcode district, not its whole boundary or a reading for the whole district.',exactNote:'Showing the cell that contains the reference point; a postcode may span several cells.',source:' Source: ',
+  enterQuery:'Enter a postcode, address, area name or coordinates.',coordFound:'Located the cell containing the coordinate.',localFound:'Located the local cell.',querying:'Looking up the postcode or address…',
+  resultOut:'The place found is outside the mapped area.',notFound:'No place found inside the area; add the full postcode, house number or local area name, or use coordinates.',candidatesFound:n=>'Found '+n+' candidates inside the mapped area; choose one.',
+  timeout:'The lookup timed out; try again. Local cell filtering and coordinates still work.',offlineSearch:'Cannot reach the lookup service; check the network, try again or enter coordinates.',failed:'Lookup failed; try again or enter coordinates.',
+  http:'Load the real base map over HTTP: run python3 -m http.server 8000 --bind 127.0.0.1 in this folder. The full classification is still available.',loading:'Loading the real map…',
+  tileError:'Some base-map tiles failed to load; the full classification and sources are still available.',tilesLoaded:'Base map loaded · every cell inside the boundary is classified; tap any cell or enter coordinates',offline:'Offline: the base map may be incomplete; the full classification is still available.'}
+};
+const LANG=data.lang==='en'?'en':'zh',T=UI[LANG],EL=T.el;
+document.querySelectorAll('[data-t]').forEach(n=>{n.textContent=T[n.dataset.t];});
+document.querySelectorAll('[data-t-aria]').forEach(n=>{n.setAttribute('aria-label',T[n.dataset.tAria]);});
 const colors={'金':'#9b701e','木':'#37754c','水':'#28678b','火':'#b74434','土':'#84603b'};
-const methods={relative:'相对取象 · 与本范围各单元比较',landscape:'土地覆盖底层 · 2021年分类',function:'综合取象（绝对） · 覆盖与功能证据'};
+const methods=T.methods;
 const $=id=>document.getElementById(id);
 const put=(id,value)=>{$(id).textContent=value;};
 const node=(tag,value,cls)=>{const n=document.createElement(tag);if(value!==undefined)n.textContent=value;if(cls)n.className=cls;return n;};
 function sourceList(target,sources){target.replaceChildren(...sources.map(s=>{const li=node('li'),a=node('a',s.title+' ↗');a.href=s.url;a.target='_blank';a.rel='noopener noreferrer';li.append(a);return li;}));}
-const SCOPE=data.scope_label||'全城';
-put('title',data.city+' · '+SCOPE+'五行地图');put('map-head-text',SCOPE+'连续覆盖 · 颜色为模型主象，格网不是风水硬边界');put('method-summary',SCOPE+'覆盖、取象规则与数据时效');
+const SCOPE=data.scope_label||T.whole;
+put('title',T.title(data.city,SCOPE));put('map-head-text',T.mapHead(SCOPE));put('method-summary',T.methodSummary(SCOPE));put('map-status',T.loading);
+$('method-elements').replaceChildren(...['水','木','土','金','火'].map(e=>{const p=node('p'),b=node('b',EL(e));p.append(b,T.elements[e]);return p;}));
 if(!data.regions.every(r=>r.analyses.relative))$('method').options[0].remove();
-for(const o of $('method').options)o.textContent=SCOPE+{relative:'相对取象',function:'综合取象（绝对）',landscape:'土地覆盖底层'}[o.value];
-if((data.search?.country_code||'')!=='gb')$('postcodes-provider').hidden=true;put('subtitle',data.subtitle);put('summary',data.summary);put('reviewed','资料整理：'+data.reviewed_at);put('coordinate-note',data.coordinate_note);
-put('coverage-status',data.coverage.name+' · GIS覆盖 '+data.coverage_report.coverage_percent.toFixed(2)+'% · '+data.regions.length+' 个连续单元 · 每单元都有主象及置信说明');
-put('data-attribution',(data.model?.attribution||[]).join('；'));
+for(const o of $('method').options)o.textContent=T.option(SCOPE,o.value);
+if((data.search?.country_code||'')!=='gb')$('postcodes-provider').hidden=true;put('subtitle',data.subtitle);put('summary',data.summary);put('reviewed',T.reviewed+data.reviewed_at);put('coordinate-note',data.coordinate_note);
+put('coverage-status',T.coverage(data.coverage.name,data.coverage_report.coverage_percent.toFixed(2),data.regions.length));
+put('data-attribution',(data.model?.attribution||[]).join(T.attrSep));
 const map=L.map('map',{scrollWheelZoom:false});L.control.scale({imperial:false,position:'bottomleft'}).addTo(map);
 map.createPane('regionLabels');map.getPane('regionLabels').style.zIndex=450;map.getPane('regionLabels').style.pointerEvents='none';
 const regionIndex=new Map(data.regions.map(r=>[r.id,r]));
@@ -201,7 +266,7 @@ const selectedLabel=L.tooltip({permanent:true,direction:'center',className:'regi
 let active='全部',selected=null;
 const methodFor=r=>r.analyses[$('method').value]?$('method').value:r.preferred_method;
 const analysis=r=>r.analyses[methodFor(r)];
-const caption=a=>a.primary+'为主'+(a.secondary.length?' · 兼'+a.secondary.join('、'):'');
+const caption=a=>EL(a.primary)+T.main+(a.secondary.length?T.secondary+a.secondary.map(EL).join(T.sep):'');
 function ringContains(ring,lon,lat){let inside=false;for(let i=0,j=ring.length-1;i<ring.length;j=i++){
  const [xi,yi]=ring[i],[xj,yj]=ring[j];
  const cross=(lon-xi)*(yj-yi)-(lat-yi)*(xj-xi);
@@ -215,65 +280,65 @@ function visible(){if(located)return data.regions.filter(r=>r.id===located&&(act
 function fit(regions){if(regions.length)map.fitBounds(L.featureGroup(regions.map(r=>shapes.get(r.id))).getBounds(),{padding:[20,20],maxZoom:15,animate:false});}
 function style(r){const a=analysis(r);return {color:r.id===selected?'#26211b':colors[a.primary],fillColor:colors[a.primary],fillOpacity:r.id===selected ? .72 : .52,weight:r.id===selected?2.5:($('show-grid').checked ? .45 : 0),dashArray:null};}
 function refreshEvidence(){evidenceLayer.clearLayers();const r=regionIndex.get(selected);if(!$('show-evidence').checked||!r)return;for(const p of r.evidence||[]){const box=node('div');box.append(node('h3',p.name),node('p',p.note));const list=node('ul');sourceList(list,p.sources);box.append(list);L.circleMarker([p.position[1],p.position[0]],{className:'evidence-marker',radius:5,color:'#26211b',fillColor:'#fff8ed',fillOpacity:1,weight:2}).bindPopup(box).addTo(evidenceLayer);}}
-function popup(r){const a=analysis(r),box=node('div');box.append(node('h3',r.name),node('p',caption(a)+' · 置信'+a.confidence),node('p',a.reason));const button=node('button','查看覆盖统计、依据与局限','evidence-link');button.addEventListener('click',()=>{select(r,false);$('detail').focus({preventScroll:true});$('detail').scrollIntoView({block:'start',behavior:'instant'});});box.append(button);return box;}
+function popup(r){const a=analysis(r),box=node('div');box.append(node('h3',r.name),node('p',caption(a)+T.conf(a.confidence)),node('p',a.reason));const button=node('button',T.more,'evidence-link');button.addEventListener('click',()=>{select(r,false);$('detail').focus({preventScroll:true});$('detail').scrollIntoView({block:'start',behavior:'instant'});});box.append(button);return box;}
 function select(r,pan=true){
  const previous=selected;selected=r.id;const a=analysis(r);
- put('region-title',r.name);put('tag',caption(a));$('tag').style.setProperty('--element',colors[a.primary]);put('basis',methods[methodFor(r)]+' · 连续统计单元');put('confidence','置信说明：'+a.confidence+' · '+a.confidence_reason);
+ put('region-title',r.name);put('tag',caption(a));$('tag').style.setProperty('--element',colors[a.primary]);put('basis',methods[methodFor(r)]+T.unit);put('confidence',T.confNote(a.confidence)+a.confidence_reason);
  put('boundary',r.boundary.description);sourceList($('boundary-sources'),r.boundary.sources);put('reason',a.reason);$('facts').replaceChildren(...a.facts.map(f=>node('li',f)));put('limitations',a.limitations);sourceList($('sources'),a.sources);
  $('evidence').replaceChildren(...(r.evidence||[]).map(p=>{const b=node('button',p.name+' ↗','evidence-link');b.addEventListener('click',()=>{map.setView([p.position[1],p.position[0]],15,{animate:false});const box=node('div');box.append(node('h3',p.name),node('p',p.note));const list=node('ul');sourceList(list,p.sources);box.append(list);L.popup().setLatLng([p.position[1],p.position[0]]).setContent(box).openOn(map);});return b;}));
- if(!(r.evidence||[]).length)$('evidence').append(node('p','本单元没有附点位；土地覆盖及功能分区资料仍参与完整分析。'));
+ if(!(r.evidence||[]).length)$('evidence').append(node('p',T.noEvidence));
  document.querySelectorAll('.region-item[aria-pressed="true"]').forEach(b=>b.setAttribute('aria-pressed','false'));const button=document.querySelector('.region-item[data-id="'+r.id+'"]');if(button)button.setAttribute('aria-pressed','true');
  if(previous&&shapes.has(previous))shapes.get(previous).setStyle(style(regionIndex.get(previous)));shapes.get(r.id).setStyle(style(r));
  selectedLabel.setLatLng([r.label_position[1],r.label_position[0]]).setContent(node('span',caption(a)));if(!map.hasLayer(selectedLabel))selectedLabel.addTo(map);refreshEvidence();if(pan)fit([r]);
 }
 for(const r of data.regions){const layer=L.geoJSON(r.geometry,{bubblingMouseEvents:false,style:()=>style(r),onEachFeature:(_,path)=>{
- path.on('click',()=>select(r,false));path.on('add',()=>{const el=path.getElement();el.setAttribute('tabindex','0');el.setAttribute('role','button');el.setAttribute('aria-label',r.name+'，查看单元分析');el.onkeydown=event=>{if(event.key==='Enter'||event.key===' '){event.preventDefault();select(r,false);path.openPopup();}};});path.bindPopup(()=>popup(r),{maxWidth:320,maxHeight:260});}});shapes.set(r.id,layer);}
+ path.on('click',()=>select(r,false));path.on('add',()=>{const el=path.getElement();el.setAttribute('tabindex','0');el.setAttribute('role','button');el.setAttribute('aria-label',T.cellAria(r.name));el.onkeydown=event=>{if(event.key==='Enter'||event.key===' '){event.preventDefault();select(r,false);path.openPopup();}};});path.bindPopup(()=>popup(r),{maxWidth:320,maxHeight:260});}});shapes.set(r.id,layer);}
 const outline=L.geoJSON(data.coverage.geometry,{interactive:false,style:{color:'#b03a2e',weight:1.5,fill:false}}).addTo(map);
 function update(){
  const shown=visible(),shownIds=new Set(shown.map(r=>r.id));map.closePopup();$('regions').replaceChildren();
  for(const r of data.regions){const layer=shapes.get(r.id);if(!shownIds.has(r.id)){if(map.hasLayer(layer))map.removeLayer(layer);continue;}if(!map.hasLayer(layer))layer.addTo(map);layer.setStyle(style(r));
- const li=node('li'),button=node('button',undefined,'place region-item');button.dataset.id=r.id;button.setAttribute('aria-pressed',String(r.id===selected));const a=analysis(r),symbol=node('span',a.primary,'number'),body=node('span');symbol.style.setProperty('--element',colors[a.primary]);body.append(node('strong',r.name),node('small',caption(a)+' · 置信'+a.confidence));button.append(symbol,body);button.addEventListener('click',()=>{select(r);$('detail').focus({preventScroll:true});$('detail').scrollIntoView({block:'nearest',behavior:'instant'});});li.append(button);$('regions').append(li);}
- put('count','显示 '+shown.length+' / '+data.regions.length+' 个分析单元');
- if(shown.length){const focus=data.coverage.focus,initial=focus?regionAt(focus[0],focus[1]):null;select(shown.find(r=>r.id===selected)||(initial&&shown.includes(initial)?initial:shown[0]),false);}else{selected=null;if(map.hasLayer(selectedLabel))map.removeLayer(selectedLabel);refreshEvidence();$('regions').append(node('li',coordinateQuery()?'该坐标不在本图城市范围内。':'没有匹配单元，请调整筛选或搜索。','empty'));for(const id of ['tag','basis','confidence','boundary','reason','limitations'])put(id,'');put('region-title','没有匹配单元');for(const id of ['facts','sources','boundary-sources','evidence'])$(id).replaceChildren();}
- document.querySelectorAll('.filter').forEach(b=>{const e=b.dataset.element;b.setAttribute('aria-pressed',String(e===active));const count=data.regions.filter(r=>e==='全部'||analysis(r).primary===e).length;b.querySelector('.filter-text').textContent=e+' · '+count;});
- put('view-note',SCOPE+{relative:'相对取象：看每个单元比本范围一般地方更突出的是哪一行，所以五行分布较均衡；',function:'综合取象（绝对）：看每个单元哪一行信号最强，建成区多以土为主；',landscape:'土地覆盖底层：只看水面、植被与建成覆盖；'}[$('method').value]+'每个单元均已归类，筛选只改变显示。土地覆盖为2021年，功能资料的现状完整性有限。');
+ const li=node('li'),button=node('button',undefined,'place region-item');button.dataset.id=r.id;button.setAttribute('aria-pressed',String(r.id===selected));const a=analysis(r),symbol=node('span',EL(a.primary),'number'),body=node('span');symbol.style.setProperty('--element',colors[a.primary]);body.append(node('strong',r.name),node('small',caption(a)+T.conf(a.confidence)));button.append(symbol,body);button.addEventListener('click',()=>{select(r);$('detail').focus({preventScroll:true});$('detail').scrollIntoView({block:'nearest',behavior:'instant'});});li.append(button);$('regions').append(li);}
+ put('count',T.count(shown.length,data.regions.length));
+ if(shown.length){const focus=data.coverage.focus,initial=focus?regionAt(focus[0],focus[1]):null;select(shown.find(r=>r.id===selected)||(initial&&shown.includes(initial)?initial:shown[0]),false);}else{selected=null;if(map.hasLayer(selectedLabel))map.removeLayer(selectedLabel);refreshEvidence();$('regions').append(node('li',coordinateQuery()?T.coordOut:T.noMatch,'empty'));for(const id of ['tag','basis','confidence','boundary','reason','limitations'])put(id,'');put('region-title',T.noMatchTitle);for(const id of ['facts','sources','boundary-sources','evidence'])$(id).replaceChildren();}
+ document.querySelectorAll('.filter').forEach(b=>{const e=b.dataset.element;b.setAttribute('aria-pressed',String(e===active));const count=data.regions.filter(r=>e==='全部'||analysis(r).primary===e).length;b.querySelector('.filter-text').textContent=(e==='全部'?T.all:EL(e))+' · '+count;});
+ put('view-note',(LANG==='zh'?SCOPE:'')+T.viewNote[$('method').value]+T.viewTail);
 }
-for(const e of ['全部','金','木','水','火','土']){const b=node('button',undefined,'filter');b.dataset.element=e;if(colors[e]){const dot=node('span',undefined,'swatch');dot.style.setProperty('--element',colors[e]);b.append(dot);}b.append(node('span',e,'filter-text'));b.addEventListener('click',()=>{active=e;update();fit(visible());});$('filters').append(b);}
+for(const e of ['全部','金','木','水','火','土']){const b=node('button',undefined,'filter');b.dataset.element=e;if(colors[e]){const dot=node('span',undefined,'swatch');dot.style.setProperty('--element',colors[e]);b.append(dot);}b.append(node('span',e==='全部'?T.all:EL(e),'filter-text'));b.addEventListener('click',()=>{active=e;update();fit(visible());});$('filters').append(b);}
 const searchConfig=data.search||{};
-$('search').placeholder=searchConfig.placeholder||'当地邮编、地址、地区名或坐标';
-put('search-help',(searchConfig.hint||'按当地习惯输入邮编、地址或地区名；坐标格式为纬度,经度。')+' 名称可本地筛选；点击定位或回车联网查询。');
+$('search').placeholder=searchConfig.placeholder||T.placeholder;
+put('search-help',(searchConfig.hint||T.hint)+T.hintTail);
 const lookup=CitySearch.createLookup();
 let searchController=null,searchVersion=0,located=null,locationMarker=null;
 function clearLocation(){located=null;if(locationMarker){map.removeLayer(locationMarker);locationMarker=null;}}
 function cancelSearch(){searchVersion++;searchController?.abort();searchController=null;$('search-form').removeAttribute('aria-busy');$('search-submit').disabled=false;}
 function showLocation(result){
- const r=regionAt(...result.position);if(!r){put('search-status','此地点在本图城市范围外，无法提供五行分析。');return;}
+ const r=regionAt(...result.position);if(!r){put('search-status',T.outside);return;}
  clearLocation();located=r.id;active='全部';update();select(r,false);
- const content=node('div');content.append(node('strong',result.label),node('p',result.source+(result.approximate?' · 地区/邮区参考中心点':' · 地址/邮编参考点')));
+ const content=node('div');content.append(node('strong',result.label),node('p',result.source+(result.approximate?T.approx:T.exact)));
  locationMarker=L.circleMarker([result.position[1],result.position[0]],{radius:7,color:'#26211b',fillColor:'#fff8ed',fillOpacity:1,weight:2}).addTo(map).bindPopup(content).openPopup();
  map.setView([result.position[1],result.position[0]],14,{animate:false});
- put('search-status','已定位：'+result.label+'。'+(result.approximate?'以地区/邮区参考中心点定位，并非整个邮区边界或全区统一结论。':'显示参考点所在单元的分析，邮编范围可能跨越多个单元。')+' 来源：'+result.source+'。');
+ put('search-status',T.located+result.label+T.stop+(result.approximate?T.approxNote:T.exactNote)+T.source+result.source+T.stop);
 }
 async function submitSearch(){
  const query=$('search').value.trim();cancelSearch();clearLocation();$('search-results').replaceChildren();
- if(!query){update();fit(data.regions);put('search-status','请输入邮编、地址、地区名或坐标。');return;}
- const coordinate=coordinateQuery();if(coordinate){active='全部';update();fit(visible());put('search-status',regionAt(...coordinate)?'已定位坐标所在单元。':'该坐标不在本图城市范围内。');return;}
+ if(!query){update();fit(data.regions);put('search-status',T.enterQuery);return;}
+ const coordinate=coordinateQuery();if(coordinate){active='全部';update();fit(visible());put('search-status',regionAt(...coordinate)?T.coordFound:T.coordOut);return;}
  // Exact local region names are available offline; short names may also be
  // resolved online to a more precise neighbourhood or address on submission.
- if(data.regions.some(r=>r.name.toLocaleLowerCase()===query.toLocaleLowerCase())){update();fit(visible());put('search-status','已定位本地单元。');return;}
+ if(data.regions.some(r=>r.name.toLocaleLowerCase()===query.toLocaleLowerCase())){update();fit(visible());put('search-status',T.localFound);return;}
  const version=searchVersion,controller=new AbortController();searchController=controller;
- $('search-form').setAttribute('aria-busy','true');$('search-submit').disabled=true;put('search-status','正在查询当地邮编或地址…');
+ $('search-form').setAttribute('aria-busy','true');$('search-submit').disabled=true;put('search-status',T.querying);
  const timeout=setTimeout(()=>controller.abort(),15000);
  try{
   const b=outline.getBounds();
-  const results=await lookup(query,{...searchConfig,bbox:[b.getWest(),b.getSouth(),b.getEast(),b.getNorth()]},controller.signal);
+  const results=await lookup(query,{...searchConfig,lang:LANG,bbox:[b.getWest(),b.getSouth(),b.getEast(),b.getNorth()]},controller.signal);
   if(version!==searchVersion)return;
   const inside=results.filter(result=>regionAt(...result.position));
-  if(!inside.length){put('search-status',results.length?'查询地点在本图城市范围外。':'未找到范围内的地点；请补充完整邮编、门牌或当地地区名，也可使用坐标。');return;}
+  if(!inside.length){put('search-status',results.length?T.resultOut:T.notFound);return;}
   if(inside.length===1){showLocation(inside[0]);return;}
-  put('search-status','找到 '+inside.length+' 个候选地点，请选择；以下地点均在本图范围内。');
+  put('search-status',T.candidatesFound(inside.length));
   for(const result of inside){const li=node('li'),button=node('button',result.label,'evidence-link');button.type='button';button.addEventListener('click',()=>{showLocation(result);});li.append(button);$('search-results').append(li);}
- }catch(error){if(version===searchVersion)put('search-status',error.name==='AbortError'?'查询超时，请重试；本地单元筛选与坐标查询仍可用。':(error instanceof TypeError?'无法连接定位服务；请检查网络、重试或输入坐标。':error.message||'查询失败，请重试或输入坐标。'));}
+ }catch(error){if(version===searchVersion)put('search-status',error.name==='AbortError'?T.timeout:(error instanceof TypeError?T.offlineSearch:(LANG==='zh'&&error.message)||T.failed));}
  finally{clearTimeout(timeout);if(version===searchVersion){searchController=null;$('search-form').removeAttribute('aria-busy');$('search-submit').disabled=false;}}
 }
 $('search').addEventListener('input',()=>{cancelSearch();clearLocation();$('search-results').replaceChildren();put('search-status','');if(coordinateQuery())active='全部';update();});
@@ -284,10 +349,10 @@ $('reset').addEventListener('click',()=>{cancelSearch();clearLocation();$('searc
 map.on('click',event=>{const r=regionAt(event.latlng.lng,event.latlng.lat);if(r)select(r,false);});
 update();fit(data.regions);
 const status=(message,error=false)=>{put('map-status',message);$('map-status').dataset.error=String(error);};
-if(location.protocol==='file:'){status('请通过HTTP加载真实底图：在本文件目录运行 python3 -m http.server 8000 --bind 127.0.0.1 。完整分类资料仍可查阅。',true);}else{
+if(location.protocol==='file:'){status(T.http,true);}else{
  const base=data.basemap,link=node('a',base.attribution);link.href=base.attribution_url;link.target='_blank';link.rel='noopener noreferrer';let loaded=0,errors=0;
- L.tileLayer(base.url,{maxZoom:base.max_zoom,attribution:link.outerHTML}).on('loading',()=>{loaded=0;errors=0;status('正在加载真实地图…');}).on('tileload',()=>loaded++).on('tileerror',()=>{errors++;status('部分底图加载失败，完整城市分类与来源仍可查阅。',true);}).on('load',()=>{if(!errors&&loaded)status('真实底图已加载 · 城市边界内全部分类，可点击任意单元或输入坐标查询');}).addTo(map);
- window.addEventListener('offline',()=>status('网络已断开，底图可能不完整；全城分类资料仍可查阅。',true));
+ L.tileLayer(base.url,{maxZoom:base.max_zoom,attribution:link.outerHTML}).on('loading',()=>{loaded=0;errors=0;status(T.loading);}).on('tileload',()=>loaded++).on('tileerror',()=>{errors++;status(T.tileError,true);}).on('load',()=>{if(!errors&&loaded)status(T.tilesLoaded);}).addTo(map);
+ window.addEventListener('offline',()=>status(T.offline,true));
 }
 
 </script>

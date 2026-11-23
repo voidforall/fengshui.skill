@@ -48,5 +48,12 @@
     "country_code": "us",
     "placeholder": "10013 / Brooklyn / 350 5th Ave",
     "hint": "美国ZIP Code、街道地址或街区名；也可输入行政区名、纬度,经度。"
+  },
+  "en": {
+    "city": "New York",
+    "scope_name": "New York City, all five boroughs (including water areas)",
+    "search": {
+      "hint": "US ZIP Code, street address or neighbourhood; or a borough name, or latitude,longitude."
+    }
   }
 }

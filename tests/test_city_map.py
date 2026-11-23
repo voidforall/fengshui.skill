@@ -156,6 +156,8 @@ class TestCityMap(unittest.TestCase):
                         self.assertIn(r['analyses'][method]['primary'],'金木水火土')
                         self.assertIn(r['analyses'][method]['confidence'],('低','中','高'))
                 self.assertEqual(generator.render(data),(ROOT/'docs/examples'/f'{slug}-wuxing.html').read_text())
+                if slug!='shanghai':     # 英文示例只提交英语城市（上海英文页可用 --lang en 生成，下面的英文测试覆盖）
+                    self.assertEqual(generator.render(data,'en'),(ROOT/'docs/examples'/f'{slug}-wuxing.en.html').read_text())
                 for name,spec in data['model']['source_manifest']['files'].items():
                     self.assertEqual(spec['sha256'],hashlib.sha256((SKILL/'examples/sources'/name).read_bytes()).hexdigest())
 
@@ -222,6 +224,38 @@ class TestFullCityModel(unittest.TestCase):
             a=regions[0]['analyses']['relative']
             self.assertTrue(any('洪範' in s['url'] for s in a['sources']),slug)
             self.assertIn('百分位',a['facts'][0])
+
+    def test_english_page_keeps_every_conclusion(self):
+        import re
+        han=re.compile(r'[\u3400-\u9fff]')
+        # 允许按英文约定写成「拼音 汉字」的书名与原文引文（「」内）
+        allowed=re.compile(r'「[^」]*」|(Hong Fan|Wu Xing Da Yi|Shang Shu) [\u3400-\u9fff]+')
+        for slug in ('london','new-york','shanghai'):
+            with self.subTest(city=slug):
+                data=json.loads((SKILL/'examples'/f'{slug}.json').read_text())
+                en=generator.english(data)
+                self.assertEqual(en['lang'],'en')
+                texts=[en['city'],en['subtitle'],en['summary'],en['coordinate_note'],en['coverage']['name'],
+                       *(s['title'] for s in en['coverage']['sources']),*en.get('search',{}).values()]
+                for zh,r in zip(data['regions'],en['regions']):
+                    self.assertEqual(zh['id'],r['id'])
+                    texts+= [r['name'],r['boundary']['description'],*(s['title'] for s in r['boundary']['sources'])]
+                    for method,a in r['analyses'].items():
+                        b=zh['analyses'][method]
+                        self.assertEqual((a['primary'],a['secondary'],a['confidence']),(b['primary'],b['secondary'],b['confidence']))
+                        texts+= [a['reason'],a['limitations'],a['confidence_reason'],*a['facts'],*(s['title'] for s in a['sources'])]
+                    texts+= [p['note'] for p in r.get('evidence',[])]          # 证据点名称是 OSM 专名，可保留当地文字
+                self.assertEqual([t for t in texts if isinstance(t,str) and han.search(allowed.sub('',t))],[])
+        html=generator.render(json.loads((SKILL/'examples'/'shanghai.json').read_text()),'en')
+        self.assertIn('<html lang="en">',html)
+        self.assertIn('Lujiazui Subdistrict, Pudong New Area · cell',html)
+
+    def test_english_needs_recomputable_or_english_data(self):
+        data=fixture()
+        with self.assertRaises(ValueError):            # 夹具没有 metrics，也没有声明已用英文书写
+            generator.render(data,'en')
+        data['lang']='en'
+        self.assertIn('<html lang="en">',generator.render(data,'en'))
 
     def test_relative_percentiles_and_floor(self):
         sys.path.insert(0,str(SKILL/'scripts'))

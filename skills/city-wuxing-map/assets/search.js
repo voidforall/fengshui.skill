@@ -37,10 +37,11 @@ function createLookup(fetcher=fetch){
    if(!anchor?.result)return [];
    const nearby=await read('https://api.postcodes.io/outcodes/'+encodeURIComponent(compact+'A')+'/nearest?limit=100&radius=25000',signal);
    const unique=new Map([anchor.result,...(nearby?.result||[])].map(p=>[p.outcode,p]));
-   return [...unique.values()].filter(p=>p.outcode.startsWith(compact)&&/^[A-Z]$/.test(p.outcode.slice(compact.length))).map(p=>point(p.longitude,p.latitude,p.outcode+' · '+compact+'细分邮区','Postcodes.io',true)).filter(Boolean);
+   return [...unique.values()].filter(p=>p.outcode.startsWith(compact)&&/^[A-Z]$/.test(p.outcode.slice(compact.length))).map(p=>point(p.longitude,p.latitude,p.outcode+' · '+compact+(options.lang==='en'?' sub-district':'细分邮区'),'Postcodes.io',true)).filter(Boolean);
   }
   const url=new URL(options.photon_url||'https://photon.komoot.io/api/');
   url.searchParams.set('q',q);url.searchParams.set('limit','8');
+  if(options.lang==='en')url.searchParams.set('lang','en');   // Photon 的英文地名；中文页沿用默认（当地名称）
   if(options.bbox)url.searchParams.set('bbox',options.bbox.join(','));
   const result=await read(url.href,signal);
   return (result?.features||[]).filter(f=>!options.country_code||!f.properties?.countrycode||f.properties.countrycode.toLowerCase()===options.country_code).map(f=>{

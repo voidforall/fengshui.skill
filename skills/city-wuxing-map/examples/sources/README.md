@@ -10,7 +10,7 @@
 
 纽约使用DCP含水域五区边界的并集。功能面来自DCP ArcGIS nyzd图层：C1–C4归零售服务，C5–C6归商业，M归工业，共1435面；这是许可用途，不是现状营业统计。另一个culture_area来自已有Broadway演艺区研究的人工概化范围，单独列来源，不把它伪称官方规划面。源文件保留几何与必要的分类及来源信息。
 
-上海范围为黄浦、徐汇、长宁、静安、普陀、虹口、杨浦七区与浦东新区内各街道、镇界（OSM admin_level=8）之并集，1,691 km²。OSM这八个区的区界之并集为5,469 km²，多出的3,778 km²是浦东新区区界所含的东海海域，以及静安区区界中位于江苏大丰的一块飞地，均不纳入；manifest的boundary_note与boundary_stats记录了区界编号和面积。功能资料取自Overpass镜像（overpass.private.coffee，数据库快照2026-07-15）分四个子框查询后去重，保留2,235项；国内OSM用地标注覆盖不均，未收录的用地不等于实际不存在。三份源文件由仓库的 `tools/prepare_city_sources.py shanghai` 生成，可复现（gzip固定时间戳，哈希不变）。
+上海范围为黄浦、徐汇、长宁、静安、普陀、虹口、杨浦七区与浦东新区内各街道、镇界（OSM admin_level=8）之并集，1,691 km²。OSM这八个区的区界之并集为5,469 km²，多出的3,778 km²是浦东新区区界所含的东海海域，以及静安区区界中位于江苏大丰的一块飞地，均不纳入；manifest的boundary_note与boundary_stats记录了区界编号和面积。功能资料取自Overpass镜像（overpass.private.coffee，数据库快照2026-07-15）分四个子框查询后去重，保留2,235项；国内OSM用地标注覆盖不均，未收录的用地不等于实际不存在。三份源文件由仓库的 `tools/prepare_city_sources.py shanghai` 生成，可复现（gzip固定时间戳，哈希不变）。英文页面所用的街道、镇名在manifest的 `en.admin_names`，按中国地名的法定罗马字拼写（汉语拼音）人工转写，通名意译（街道 Subdistrict、镇 Town、路 Road，新村保留 Xincun）；整理时OSM的 `name:en` 无法取得，未采用。
 
 更新数据时重新向manifest所列权威来源取得数据、保留相同标准化字段、记录实际版本/处理/许可并更新哈希；不可只修改日期。完整重建命令见skill说明。格网尺度默认1km，统计比例先保留6位小数再分类，以便测量与理由可对照。
 

@@ -10,9 +10,11 @@ import json
 import math
 from pathlib import Path
 import re
+import sys
 from urllib.parse import urlsplit
 
 ROOT = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(Path(__file__).resolve().parent))
 ELEMENTS = "金木水火土"
 DEFAULT_BASEMAP = {
     "url": "https://tile.openstreetmap.org/{z}/{x}/{y}.png",
@@ -80,6 +82,20 @@ def validate(data):
         raise ValueError("需要 schema_version: 3 全城数据；旧 places 或局部片区须补充完整城市范围和连续分区")
     if "scope_label" in data and not (isinstance(data["scope_label"], str) and 1 <= len(data["scope_label"]) <= 8):
         raise ValueError("scope_label 应为 1–8 字的范围简称，如「主城区」")
+    if "en" in data:
+        en = data["en"]
+        if not isinstance(en, dict) or not isinstance(en.get("city"), str) or not en["city"].strip():
+            raise ValueError("en 应为对象并含英文城市名 en.city")
+        for key in ("scope_label", "scope_name"):
+            if key in en:
+                text(en[key], "en." + key)
+        names = en.get("admin_names", {})
+        if not isinstance(names, dict) or not all(isinstance(k, str) and isinstance(v, str) and v.strip() for k, v in names.items()):
+            raise ValueError("en.admin_names 应为 {中文地名: 英文地名}")
+        if not isinstance(en.get("search", {}), dict):
+            raise ValueError("en.search 应为对象")
+    if data.get("lang", "zh") not in ("zh", "en"):
+        raise ValueError("lang 应为 zh 或 en（en 表示数据文字已用英文书写）")
     for key in ("city", "subtitle", "summary", "coordinate_note", "reviewed_at"):
         text(data.get(key), key)
     datetime.date.fromisoformat(data["reviewed_at"])
@@ -199,13 +215,111 @@ def validate_coverage(data):
             "outside_percent":round(100*outside/scope.area, 8),"region_count":len(polygons)}
 
 
-def render(data):
+# --- 英文页面 ------------------------------------------------------------------------
+# 单元的分析文字由 city_model 按同一规则重新生成英文版（判定结果须与数据一致）；
+# 城市名、范围名、街道名等专名取自数据里的 en 对象（由源快照 manifest 的 en 字段带入）。
+
+CJK = re.compile(r"[\u3400-\u9fff]")
+SOURCE_EN = [
+    (re.compile(r"^ESA WorldCover 2021 v200 · 土地覆盖与许可$"), "ESA WorldCover 2021 v200 · land cover and licence"),
+    (re.compile(r"^OpenStreetMap用地及设施 · (.+)$"), r"OpenStreetMap land use and amenities · \1"),
+    (re.compile(r"^NYC DCP规划分区＋已核对演艺区研究 · (.+)$"), r"NYC DCP zoning + checked performing-arts district study · \1"),
+    (re.compile(r"^Times Square Alliance · 已研究的演艺街区范围（人工概化）$"), "Times Square Alliance · studied performing-arts district extent (hand-generalised)"),
+    (re.compile(r"^《尚书·洪范》五行（维基文库）$"), "Hong Fan 洪范, Book of History (Shang Shu 尚书): the Five Elements (Wikisource)"),
+    (re.compile(r"^《五行大义》卷一「辨体性」（维基文库）$"), "Wu Xing Da Yi 五行大义, vol. 1, on body and nature (Wikisource)"),
+    (re.compile(r"^城市边界原始资料$"), "City boundary source"),
+    (re.compile(r"^城市范围原始边界$"), "City boundary source"),
+    (re.compile(r"^OSM原始对象$"), "OSM source object"),
+]
+
+
+def source_en(item):
+    for pattern, repl in SOURCE_EN:
+        if pattern.match(item["title"]):
+            return dict(item, title=pattern.sub(repl, item["title"]))
+    if CJK.search(item["title"]):
+        raise ValueError(f"来源标题缺少英文：{item['title']}（在 generate.py 的 SOURCE_EN 补一条）")
+    return item
+
+
+def english(data):
+    """把 schema 3 数据转成英文页面数据；数据里的排盘结论不变。"""
+    from city_model import MODEL_VERSION, analyse, relative_analyses
+    if data.get("lang") == "en":            # 作者已用英文写好的数据，原样使用
+        return data
+    en = data.get("en")
+    if not isinstance(en, dict) or not isinstance(en.get("city"), str) or CJK.search(en["city"]):
+        raise ValueError("英文页面需要数据里的 en.city（英文城市名）；自写数据可改为直接用英文书写并加 \"lang\": \"en\"")
+    if data.get("model", {}).get("version") != MODEL_VERSION or not all("metrics" in r for r in data["regions"]):
+        raise ValueError(f"英文页面要按 {MODEL_VERSION} 由 metrics 重新生成单元文字；本数据不能重算，请直接用英文书写并加 \"lang\": \"en\"")
+    admin_names = en.get("admin_names", {})
+    scope = en.get("scope_label")
+    out = dict(data, lang="en", city=en["city"])
+    out.pop("en")
+    if scope:
+        out["scope_label"] = scope
+    cell = data["coverage"].get("cell_size_m", 1000)
+    snapshot = data.get("model", {}).get("function_snapshot", "")
+    n = len(data["regions"])
+    out["subtitle"] = f"{scope or 'Whole city'}, covered continuously · {cell} m cells · main and secondary element with confidence notes"
+    out["summary"] = (f"All {n} cells inside the {'declared area' if scope else 'city boundary'} are analysed. Tap any cell for its cover "
+                      "statistics, function evidence, main and secondary element and confidence; you can also enter latitude,longitude.")
+    out["coordinate_note"] = ("WGS84 coordinates. The statistical grid is clipped to the real boundary; district lines are not five-element "
+                              f"boundaries. Land cover is the 2021 classification and the function data a snapshot from {snapshot}; "
+                              "the classification is a modern interpretation under explicit rules.")
+    out["coverage"] = dict(data["coverage"], name=en.get("scope_name") or data["coverage"]["name"],
+                           sources=[source_en(x) for x in data["coverage"]["sources"]])
+    if "search" in data:
+        out["search"] = {**data["search"], **en.get("search", {})}
+    metrics = [r["metrics"] for r in data["regions"]]
+    relative = relative_analyses(metrics, "this area", "en")
+    regions = []
+    for r, rel in zip(data["regions"], relative):
+        m = re.fullmatch(r"(.+) · 单元(\d+)", r["name"])
+        admin = m.group(1) if m else r["name"]
+        admin_en = admin_names.get(admin, admin)
+        if CJK.search(admin_en):
+            raise ValueError(f"缺少地名英文：{admin}（在源快照 manifest 的 en.admin_names 补上）")
+        texts = {"landscape": analyse(r["metrics"], "landscape", "en"), "function": analyse(r["metrics"], "function", "en"),
+                 "relative": rel}
+        analyses = {}
+        for method, a in r["analyses"].items():
+            t = texts[method]
+            if (t["primary"], t["secondary"], t["confidence"]) != (a["primary"], a["secondary"], a["confidence"]):
+                raise ValueError(f"单元 {r['id']} 的 {method} 结论与模型重算不一致：请先用 build_full_city.py 重建数据")
+            analyses[method] = dict(t, sources=[source_en(x) for x in a["sources"]])
+        b = re.fullmatch(r"(\d+)米UTM连续统计格网与真实城市边界相交；本单元属于(.+)周边，行政名称仅作位置参照。格网线不是五行影响的硬边界。",
+                         r["boundary"]["description"])
+        desc = (f"A {b.group(1)} m UTM continuous statistical grid intersected with the real boundary; this cell lies around "
+                f"{admin_names.get(b.group(2), b.group(2))}, and the district name is only a location reference. Grid lines are not "
+                "hard boundaries of five-element influence." if b else r["boundary"]["description"])
+        evidence = [dict(p, name="performing-arts venue" if p["name"] == "演艺设施" else p["name"],
+                         note="One piece of function evidence recorded in OSM; no circle of influence is drawn around it."
+                         if p["note"] == "OSM收录的区域功能证据之一；没有以该点为中心画影响圆。" else p["note"],
+                         sources=[source_en(x) for x in p["sources"]]) for p in r.get("evidence", [])]
+        regions.append(dict(r, name=f"{admin_en} · cell {m.group(2)}" if m else admin_en,
+                            boundary=dict(r["boundary"], description=desc, sources=[source_en(x) for x in r["boundary"]["sources"]]),
+                            analyses=analyses, evidence=evidence))
+    out["regions"] = regions
+    return out
+
+
+LANGS = ("zh", "en")
+
+
+def render(data, lang="zh"):
     validate(data)
-    payload = dict(data, basemap=data.get("basemap", DEFAULT_BASEMAP), coverage_report=validate_coverage(data))
+    if lang not in LANGS:
+        raise ValueError("lang 应为 zh 或 en")
+    page = english(data) if lang == "en" else data
+    payload = dict(page, basemap=data.get("basemap", DEFAULT_BASEMAP), coverage_report=validate_coverage(data))
+    payload.pop("en", None)
     # Escaping '<' also prevents an annotation from closing the JSON script tag.
     embedded = json.dumps(payload, ensure_ascii=False, allow_nan=False).replace("<", "\\u003c")
+    title = page["city"] + (" · Five Elements Map" if lang == "en" else " · 城市五行风水地图")
     replacements = {
-        "__TITLE__": html.escape(data["city"] + " · 城市五行风水地图"),
+        "__LANG__": "en" if lang == "en" else "zh-Hans",
+        "__TITLE__": html.escape(title),
         "__DATA__": embedded,
         "__LEAFLET_CSS__": (ROOT / "assets/vendor/leaflet.css").read_text(encoding="utf-8"),
         "__SEARCH_JS__": (ROOT / "assets/search.js").read_text(encoding="utf-8"),
@@ -213,7 +327,7 @@ def render(data):
         "__LICENSE__": (ROOT / "assets/vendor/LEAFLET-LICENSE").read_text(encoding="utf-8"),
     }
     template = (ROOT / "assets/map.html").read_text(encoding="utf-8")
-    return re.sub(r"__(?:TITLE|DATA|LEAFLET_CSS|LEAFLET_JS|SEARCH_JS|LICENSE)__",
+    return re.sub(r"__(?:LANG|TITLE|DATA|LEAFLET_CSS|LEAFLET_JS|SEARCH_JS|LICENSE)__",
                   lambda match: replacements[match.group()], template)
 
 
@@ -223,11 +337,12 @@ def main():
     group.add_argument("--example", choices=("london", "new-york", "shanghai"))
     group.add_argument("--input", type=Path, help="任意城市的区域 GeoJSON 几何与分析 JSON")
     parser.add_argument("--output", type=Path, required=True, help="输出单个 HTML 文件")
+    parser.add_argument("--lang", choices=LANGS, default="zh", help="页面语言：zh 中文（默认）/ en 英文")
     args = parser.parse_args()
     source = ROOT / "examples" / (args.example + ".json") if args.example else args.input
     try:
         data = json.loads(source.read_text(encoding="utf-8"))
-        result = render(data)
+        result = render(data, args.lang)
         if args.output.resolve() == source.resolve():
             raise ValueError("输出路径不能覆盖输入数据")
         args.output.parent.mkdir(parents=True, exist_ok=True)

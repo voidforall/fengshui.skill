@@ -51,5 +51,12 @@
     "country_code": "gb",
     "placeholder": "SW1A 1AA / SW1 / Camden",
     "hint": "英国完整邮编、邮区或地址；也可输入行政区名、纬度,经度。"
+  },
+  "en": {
+    "city": "London",
+    "scope_name": "Greater London (whole area)",
+    "search": {
+      "hint": "UK postcode, postcode district or address; or a borough name, or latitude,longitude."
+    }
   }
 }
