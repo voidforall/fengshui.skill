@@ -143,11 +143,13 @@ def build(source_dir, slug, cell_size):
                 regions.append({"id":region_id,"name":f"{admin} · 单元{len(regions)+1:04d}","geometry":mapping(clipped),
                     "label_position":[label.x,label.y],"boundary":{"kind":"统计分区","description":f"{cell_size}米UTM连续统计格网与真实城市边界相交；本单元属于{admin}周边，行政名称仅作位置参照。格网线不是五行影响的硬边界。", "sources":[{"title":"城市边界原始资料", "url":manifest["boundary_source"]}]},
                     "preferred_method":"function","analyses":analyses,"metrics":{k:round(v,6) if isinstance(v,float) else v for k,v in metrics.items()},"evidence":evidence})
-    return {"search":manifest.get("search", {}),"schema_version":3,"city":manifest["city"],"subtitle":f"全城连续覆盖 · {cell_size}米分析单元 · 含主象、兼象与置信说明",
-        "summary":f"城市边界内 {len(regions)} 个单元全部纳入分析。点击任何区块查看真实覆盖统计、功能证据、主象兼象与置信说明；可输入纬度,经度定位。",
+    label = manifest.get("scope_label")
+    extra = {"scope_label": label} if label else {}
+    return {**extra, "search":manifest.get("search", {}),"schema_version":3,"city":manifest["city"],"subtitle":f"{label or '全城'}连续覆盖 · {cell_size}米分析单元 · 含主象、兼象与置信说明",
+        "summary":f"{'声明范围' if label else '城市边界'}内 {len(regions)} 个单元全部纳入分析。点击任何区块查看真实覆盖统计、功能证据、主象兼象与置信说明；可输入纬度,经度定位。",
         "reviewed_at":manifest.get("prepared_at", snapshot[:10]),"coordinate_note":"WGS84坐标。统计格网裁切至真实城市边界，区界不代表五行硬边界。土地覆盖为2021年历史分类，功能资料快照为"+snapshot+"；归类属于明确规则下的现代解释。",
         "coverage":{"kind":"full-city","name":manifest.get("scope_name", "大伦敦完整范围" if slug=="london" else manifest["city"]+"完整范围"),"geometry":mapping(scope),
-                    "sources":[{"title":"城市范围原始边界", "url":manifest["boundary_source"]}],"cell_size_m":cell_size,"focus":([-0.1278,51.5074] if slug=="london" else [-74.006,40.7128] if slug=="new-york" else list(scope.representative_point().coords)[0])},
+                    "sources":[{"title":"城市范围原始边界", "url":manifest["boundary_source"]}],"cell_size_m":cell_size,"focus":manifest.get("focus") or ([-0.1278,51.5074] if slug=="london" else [-74.006,40.7128] if slug=="new-york" else list(scope.representative_point().coords)[0])},
         "model":{"version":MODEL_VERSION,"attribution":manifest["attribution"],"source_manifest":manifest,"landcover_year":2021,"function_snapshot":snapshot,"function_dataset":function_title},
         "regions":regions}
 

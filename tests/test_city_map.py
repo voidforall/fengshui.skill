@@ -145,7 +145,7 @@ class TestCityMap(unittest.TestCase):
             with self.assertRaises(ValueError):generator.validate(self.data)
 
     def test_frozen_city_examples_are_complete_and_match_template(self):
-        for slug in ('london','new-york'):
+        for slug in ('london','new-york','shanghai'):
             with self.subTest(city=slug):
                 data=json.loads((SKILL/'examples'/f'{slug}.json').read_text())
                 generator.validate(data)
@@ -163,6 +163,8 @@ class TestCityMap(unittest.TestCase):
         cases={
             'london':[(-.45,51.52),(.22,51.57),(-.10,51.36),(-.10,51.65),(-.1278,51.5074)],
             'new-york':[(-74.15,40.58),(-73.82,40.72),(-73.87,40.85),(-73.95,40.65),(-74.006,40.7128)],
+            # 人民广场、陆家嘴、五角场、徐家汇、外高桥、南汇新城（临港）
+            'shanghai':[(121.4737,31.2304),(121.5055,31.2397),(121.514,31.299),(121.437,31.195),(121.59,31.35),(121.92,30.90)],
         }
         for slug,points in cases.items():
             data=json.loads((SKILL/'examples'/f'{slug}.json').read_text())
@@ -198,5 +200,15 @@ class TestFullCityModel(unittest.TestCase):
         a=model.analyse(self.metrics(commercial_industrial=1),'landscape')
         b=model.analyse(self.metrics(commercial_industrial=1),'function')
         self.assertEqual('土',a['primary']);self.assertEqual('金',b['primary'])
+
+    def test_shanghai_scope_is_land_of_declared_districts(self):
+        # 声明范围为八个区的街道、镇界之和：OSM 区界中的东海海域与江苏大丰的飞地不纳入
+        data=json.loads((SKILL/'examples'/'shanghai.json').read_text())
+        scope=shape(data['coverage']['geometry'])
+        for lon,lat in [(122.4,31.0),(122.0,31.5),(120.64,33.3)]:
+            self.assertFalse(scope.covers(Point(lon,lat)),(lon,lat))
+        self.assertEqual(data['scope_label'],'主城区')
+        self.assertIn('不纳入',data['model']['source_manifest']['boundary_note'])
+
 
 if __name__=='__main__':unittest.main()

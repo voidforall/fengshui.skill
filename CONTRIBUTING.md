@@ -40,6 +40,7 @@ node --test tests/city_search.test.cjs      # 城市地图地址搜索（Node 22
   ```
 
 - **交互示例**：改了 HTML 模板，按 [docs/examples/README.md](docs/examples/README.md) 重新生成示例，并在浏览器里检查。
+- **新增城市地图**：用 `python3 tools/prepare_city_sources.py <城市>`（联网，城市配置写在脚本里）从 OSM 与 WorldCover 生成冻结源文件和 manifest，再按 city-wuxing-map 的说明构建与生成，并把来源、范围取舍写进 `examples/sources/README.md`。
 - **模型评测**：见 [evals/README.md](evals/README.md)。
 
 ## 发版

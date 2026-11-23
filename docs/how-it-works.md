@@ -40,7 +40,7 @@
 
 - **飞星盘**：二十四山罗盘与九宫，「起盘」按洛书轨迹逐宫飞布，分层看运盘、山星、向星、流年，点宫看批注。[示例](examples/feixing-demo.html)
 - **八字命盘**：「一眼看懂」白话总结与事实卡，术语点开有白话解释，柱间弧线标合冲刑害，大运流年可拖动。[示例](examples/bazi-demo.html)
-- **城市五行地图**：真实底图上连续着色，点击单元看主象、兼象、理由、来源与置信度。[伦敦](examples/london-wuxing.html) · [纽约](examples/new-york-wuxing.html)
+- **城市五行地图**：真实底图上连续着色，点击单元看主象、兼象、理由、来源与置信度。[伦敦](examples/london-wuxing.html) · [纽约](examples/new-york-wuxing.html) · [上海](examples/shanghai-wuxing.html)
 
 ## 代码在哪里
 

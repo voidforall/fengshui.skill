@@ -1,0 +1,76 @@
+{
+  "city": "上海",
+  "slug": "shanghai",
+  "epsg": 32651,
+  "boundary_source": "https://www.openstreetmap.org/copyright",
+  "boundary_note": "范围为 黄浦区、徐汇区、长宁区、静安区、普陀区、虹口区、杨浦区、浦东新区 内各街道、镇界（OSM admin_level=8）之并集，共 1691.3 km²；区界（黄浦区 relation/371650、浦东新区 relation/398348、杨浦区 relation/398350、虹口区 relation/398351、静安区 relation/398353、普陀区 relation/398886、长宁区 relation/398899、徐汇区 relation/1278188）之并集为 5468.8 km²，其中 3777.6 km² 为区界所含海域及外省飞地，不纳入。快照 2026-06-01T08:52:28Z。",
+  "boundary_stats": {
+    "district_relations": {
+      "黄浦区": 371650,
+      "浦东新区": 398348,
+      "杨浦区": 398350,
+      "虹口区": 398351,
+      "静安区": 398353,
+      "普陀区": 398886,
+      "长宁区": 398899,
+      "徐汇区": 1278188
+    },
+    "district_union_km2": 5468.8,
+    "scope_km2": 1691.3,
+    "excluded_km2": 3777.6,
+    "admin_units": 113
+  },
+  "landcover_year": 2021,
+  "landcover_source": "https://esa-worldcover.org/en/data-access",
+  "landcover_tiles": [
+    "https://esa-worldcover.s3.eu-central-1.amazonaws.com/v200/2021/map/ESA_WorldCover_10m_2021_v200_N30E120_Map.tif"
+  ],
+  "landcover_processing": "10 m WorldCover 2021 v200 classes aggregated by majority (mode) to 50 m in local UTM; no class interpolation.",
+  "osm_source": "https://www.openstreetmap.org/copyright",
+  "osm_endpoint": "https://overpass.private.coffee/api/interpreter",
+  "osm_timestamp": "2026-07-15T15:22:01Z",
+  "osm_query_bbox": [
+    121.321716,
+    30.8410802,
+    121.974155,
+    31.3913715
+  ],
+  "osm_normalization": {
+    "retained_features": 2235,
+    "repaired_landuse_features": 0,
+    "skipped_unusable_features": 13,
+    "outside_scope_features": 965,
+    "simplification_m": 2
+  },
+  "attribution": [
+    "© ESA WorldCover project 2021 / Contains modified Copernicus Sentinel data (2021) processed by ESA WorldCover consortium",
+    "© OpenStreetMap contributors · ODbL 1.0"
+  ],
+  "files": {
+    "shanghai-boundary.geojson.gz": {
+      "sha256": "6dd2ed16adcba975ae302150da870d1ff1736748fd7d418928d9813a2ee5e024",
+      "bytes": 152925
+    },
+    "shanghai-cover-2021.tif": {
+      "sha256": "4c16d3d5786688f3d4398f66e524bf06c8ecbf2de0a4d93aa063fcf8e9901f42",
+      "bytes": 281320
+    },
+    "shanghai-functions.geojson.gz": {
+      "sha256": "d3bcad1cfbd933f0ed303e7ddca28968841032e9f46e49d5e71fdf147db27965",
+      "bytes": 206589
+    }
+  },
+  "prepared_at": "2026-11-23",
+  "scope_name": "上海主城区陆域（中心城区七区与浦东新区）",
+  "focus": [
+    121.4737,
+    31.2304
+  ],
+  "search": {
+    "country_code": "cn",
+    "placeholder": "人民广场 / 陆家嘴 / 31.23,121.47",
+    "hint": "中文地名或地址；也可输入纬度,经度。只显示范围内的候选。"
+  },
+  "function_basis": "OSM用地及设施（国内用地标注覆盖不均）",
+  "scope_label": "主城区"
+}

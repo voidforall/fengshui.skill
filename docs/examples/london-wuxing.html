@@ -801,12 +801,12 @@ footer { color:var(--soft); font-size:.75rem; padding-block:1rem; border-block-s
       <search class="search"><form id="search-form" action="#map" method="get" aria-label="当地地址定位">
         <label for="search">邮编、地址或地区</label><input id="search" name="q" type="search" placeholder="当地邮编、地址或地区名" maxlength="200" enterkeyhint="search" autocomplete="off" autocorrect="off" autocapitalize="none" spellcheck="false" aria-describedby="search-help search-status">
         <button id="search-submit" type="submit">定位 ↗</button><p id="search-help"></p><p id="search-status" role="status"></p><ul id="search-results" aria-label="候选地点"></ul>
-        <p class="search-provider">联网定位：<a href="https://postcodes.io/" target="_blank" rel="noopener noreferrer">Postcodes.io</a> / <a href="https://github.com/komoot/photon" target="_blank" rel="noopener noreferrer">Photon · © OSM</a>。仅提交时发送查询词。</p>
+        <p class="search-provider">联网定位：<span id="postcodes-provider"><a href="https://postcodes.io/" target="_blank" rel="noopener noreferrer">Postcodes.io</a> / </span><a href="https://github.com/komoot/photon" target="_blank" rel="noopener noreferrer">Photon · © OSM</a>。仅提交时发送查询词。</p>
       </form><p id="count" role="status"></p></search>
       <ol id="regions"></ol>
     </aside>
     <section class="map-wrap" aria-label="真实地图与五行分析区块">
-      <div class="map-head"><b>全城连续覆盖 · 颜色为模型主象，格网不是风水硬边界</b><span>↑ 北</span></div>
+      <div class="map-head"><b id="map-head-text">全城连续覆盖 · 颜色为模型主象，格网不是风水硬边界</b><span>↑ 北</span></div>
       <div id="map" aria-label="可缩放片区地图；也可通过片区索引查看分析"></div>
       <p class="map-status" id="map-status" role="status">正在加载真实地图…</p>
     </section>
@@ -819,7 +819,7 @@ footer { color:var(--soft); font-size:.75rem; padding-block:1rem; border-block-s
     <div><h3>为什么这一带偏这个象</h3><p id="reason"></p><h3>区域整体特征</h3><ul id="facts"></ul>
       <h3>兼象与局限</h3><p id="limitations"></p><h3>事实来源</h3><ul id="sources"></ul></div>
   </section>
-  <details><summary>全城覆盖、取象规则与数据时效</summary>
+  <details><summary id="method-summary">全城覆盖、取象规则与数据时效</summary>
     <div class="method">
       <p><b>水</b> · 真实水面覆盖信号。</p><p><b>木</b> · 树木、灌丛、草地等植被信号。</p><p><b>土</b> · 耕地、裸地及建成承载空间的底层归类。</p><p><b>金</b> · 商业、工业用地或相应许可分区信号。</p><p><b>火</b> · 零售服务及演艺、传播功能信号。</p>
     </div>
@@ -933,7 +933,10 @@ const $=id=>document.getElementById(id);
 const put=(id,value)=>{$(id).textContent=value;};
 const node=(tag,value,cls)=>{const n=document.createElement(tag);if(value!==undefined)n.textContent=value;if(cls)n.className=cls;return n;};
 function sourceList(target,sources){target.replaceChildren(...sources.map(s=>{const li=node('li'),a=node('a',s.title+' ↗');a.href=s.url;a.target='_blank';a.rel='noopener noreferrer';li.append(a);return li;}));}
-put('title',data.city+' · 全城五行地图');put('subtitle',data.subtitle);put('summary',data.summary);put('reviewed','资料整理：'+data.reviewed_at);put('coordinate-note',data.coordinate_note);
+const SCOPE=data.scope_label||'全城';
+put('title',data.city+' · '+SCOPE+'五行地图');put('map-head-text',SCOPE+'连续覆盖 · 颜色为模型主象，格网不是风水硬边界');put('method-summary',SCOPE+'覆盖、取象规则与数据时效');
+$('method').options[0].textContent=SCOPE+'综合取象';$('method').options[1].textContent=SCOPE+'土地覆盖底层';
+if((data.search?.country_code||'')!=='gb')$('postcodes-provider').hidden=true;put('subtitle',data.subtitle);put('summary',data.summary);put('reviewed','资料整理：'+data.reviewed_at);put('coordinate-note',data.coordinate_note);
 put('coverage-status',data.coverage.name+' · GIS覆盖 '+data.coverage_report.coverage_percent.toFixed(2)+'% · '+data.regions.length+' 个连续单元 · 每单元都有主象及置信说明');
 put('data-attribution',(data.model?.attribution||[]).join('；'));
 const map=L.map('map',{scrollWheelZoom:false});L.control.scale({imperial:false,position:'bottomleft'}).addTo(map);
@@ -980,7 +983,7 @@ function update(){
  put('count','显示 '+shown.length+' / '+data.regions.length+' 个分析单元');
  if(shown.length){const focus=data.coverage.focus,initial=focus?regionAt(focus[0],focus[1]):null;select(shown.find(r=>r.id===selected)||(initial&&shown.includes(initial)?initial:shown[0]),false);}else{selected=null;if(map.hasLayer(selectedLabel))map.removeLayer(selectedLabel);refreshEvidence();$('regions').append(node('li',coordinateQuery()?'该坐标不在本图城市范围内。':'没有匹配单元，请调整筛选或搜索。','empty'));for(const id of ['tag','basis','confidence','boundary','reason','limitations'])put(id,'');put('region-title','没有匹配单元');for(const id of ['facts','sources','boundary-sources','evidence'])$(id).replaceChildren();}
  document.querySelectorAll('.filter').forEach(b=>{const e=b.dataset.element;b.setAttribute('aria-pressed',String(e===active));const count=data.regions.filter(r=>e==='全部'||analysis(r).primary===e).length;b.querySelector('.filter-text').textContent=e+' · '+count;});
- put('view-note',($('method').value==='combined'?'全城综合取象':'全城土地覆盖底层')+'：每个单元均已归类；筛选只改变显示。土地覆盖为2021年，功能资料的现状完整性有限。');
+ put('view-note',SCOPE+($('method').value==='combined'?'综合取象':'土地覆盖底层')+'：每个单元均已归类；筛选只改变显示。土地覆盖为2021年，功能资料的现状完整性有限。');
 }
 for(const e of ['全部','金','木','水','火','土']){const b=node('button',undefined,'filter');b.dataset.element=e;if(colors[e]){const dot=node('span',undefined,'swatch');dot.style.setProperty('--element',colors[e]);b.append(dot);}b.append(node('span',e,'filter-text'));b.addEventListener('click',()=>{active=e;update();fit(visible());});$('filters').append(b);}
 const searchConfig=data.search||{};

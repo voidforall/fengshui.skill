@@ -27,6 +27,7 @@ metadata:
 python3 -m pip install -r requirements.txt
 python3 scripts/generate.py --example london --output 伦敦全城五行地图.html
 python3 scripts/generate.py --example new-york --output 纽约全城五行地图.html
+python3 scripts/generate.py --example shanghai --output 上海主城区五行地图.html
 python3 scripts/generate.py --input 城市全域.json --output 城市全城五行地图.html
 ```
 
@@ -34,10 +35,12 @@ python3 scripts/generate.py --input 城市全域.json --output 城市全城五�
 - 浏览器检查全域边缘、岛屿与水域、当地邮编/地址搜索、点击和坐标定位、两种口径、筛选、证据开关、手机布局与来源署名。不能只看渲染是否成功，不批量下载地图瓦片。
 - 交付地图和JSON链接，说明范围、数据年份、统计尺度、现代解释性质和不确定性；本地链接必须有运行中的服务。
 
-## 内置全城示例与重建
+## 内置示例与重建
 
 - 伦敦：大伦敦完整范围，1,735个单元；2021年WorldCover土地覆盖与2026-11-15 OSM功能快照。
 - 纽约：五区完整范围（含行政水域），1,323个单元；同年土地覆盖、2026-11-15取得的DCP规划分区及演艺区研究。规划许可用途不等于当前营业用途。
+- 上海：主城区陆域（中心城区七区与浦东新区，以OSM街道、镇界之和为准，不含区界所含海域及外省飞地），1,857个单元；同年土地覆盖与OSM功能快照（2026-07-15）。国内OSM用地标注覆盖不均，功能信号偏弱，土为主的单元较多。
+- 范围不是整个行政市域时，用 `scope_label`（如「主城区」）并在 `coverage.name` 写明，不能称为全城。
 
 已冻结源文件和SHA256在 `examples/sources/`。从这些源重新统计分析，无需联网：
 
@@ -45,6 +48,7 @@ python3 scripts/generate.py --input 城市全域.json --output 城市全城五�
 python3 -m pip install -r requirements-build.txt
 python3 scripts/build_full_city.py --city london --output examples/london.json
 python3 scripts/build_full_city.py --city new-york --output examples/new-york.json
+python3 scripts/build_full_city.py --city shanghai --output examples/shanghai.json
 ```
 
 再运行生成器更新HTML。新城市应提供同格式的来源清单、完整边界、50m分类栅格及功能几何；脚本不自动虚构来源，也不自动下载新城市。更改格网尺度会改变局部结论，应重新核验。

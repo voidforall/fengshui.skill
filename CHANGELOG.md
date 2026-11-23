@@ -7,6 +7,9 @@
 ## [Unreleased]
 
 ### 新增
+- 城市五行地图新增上海主城区示例：中心城区七区与浦东新区陆域，1,857 个 1km 单元（OSM 区界所含海域与外省飞地不纳入）。
+- city-wuxing-map 支持可选 `scope_label`：范围不是整个市域时，页面标题与口径用「主城区」等代替「全城」；Postcodes.io 署名只在英国地图显示。
+- 新增 `tools/prepare_city_sources.py`：从 OSM（Overpass）与 WorldCover 生成新城市的冻结源文件与 manifest，可复现。
 - 以 MIT 许可证发布（`LICENSE`），三个 skill 的 `SKILL.md` 标注 `license: MIT`。第三方数据与 Leaflet 保留各自许可。
 
 ## [3.1.0] - 2026-11-23

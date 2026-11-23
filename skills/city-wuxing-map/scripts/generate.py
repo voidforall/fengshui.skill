@@ -78,6 +78,8 @@ def validate(data):
     """Validate regional inputs before writing output; never infer boundaries from points."""
     if not isinstance(data, dict) or type(data.get("schema_version")) is not int or data.get("schema_version") != 3:
         raise ValueError("需要 schema_version: 3 全城数据；旧 places 或局部片区须补充完整城市范围和连续分区")
+    if "scope_label" in data and not (isinstance(data["scope_label"], str) and 1 <= len(data["scope_label"]) <= 8):
+        raise ValueError("scope_label 应为 1–8 字的范围简称，如「主城区」")
     for key in ("city", "subtitle", "summary", "coordinate_note", "reviewed_at"):
         text(data.get(key), key)
     datetime.date.fromisoformat(data["reviewed_at"])
@@ -218,7 +220,7 @@ def render(data):
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     group = parser.add_mutually_exclusive_group(required=True)
-    group.add_argument("--example", choices=("london", "new-york"))
+    group.add_argument("--example", choices=("london", "new-york", "shanghai"))
     group.add_argument("--input", type=Path, help="任意城市的区域 GeoJSON 几何与分析 JSON")
     parser.add_argument("--output", type=Path, required=True, help="输出单个 HTML 文件")
     args = parser.parse_args()
