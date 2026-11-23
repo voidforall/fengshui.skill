@@ -10,7 +10,7 @@ description: |
   English: traditional Chinese feng shui advisor — Flying Stars, Eight Mansions, Kua number, landforms, auspicious date selection; deterministic scripts do all chart calculations. Triggers: "feng shui", "flying stars", "bagua", "kua number", "house facing", "auspicious date", "moving date".
 license: MIT
 metadata:
-  version: "3.1.0"
+  version: "3.2.0"
   author: voidforall
 ---
 

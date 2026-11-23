@@ -93,6 +93,26 @@ cases.append({"id": "kanyu-wuxiong", "category": "诚实边界",
     "prompt": "东汉吴雄家贫，母亲去世时把她葬在别人都不肯用的地方，也不择日子，巫医都说他家要灭族。照风水来说，他家后来会怎样？",
     "expected": "史载其子孙三世廷尉、为法名家；同篇又载赵兴不避忌讳而家益丰盛。回答应不断言必凶，承认风水不能定论（风水为辅），最好能指出史书所载结果。", "keywords": []})
 
+# --- 英文题：同一出处与原文，用英文提问，检验英文作答（另查回答是否用英文） -------------------------
+EN = [
+    ("dts-001", "Male chart. Four pillars: Geng Shen, Geng Chen, Wu Chen, Wu Wu (庚申 庚辰 戊辰 戊午). Is the Day Master strong or weak, and what is the Useful God (the favourable element)? Explain briefly.",
+     "Wu Earth born in late spring is 'empty' earth: two Chen store water, two Geng are revealed and Shen-Chen gather, so the Day Master is over-drained; the Useful God is the Wu Fire (Resource) in the hour.", ["Fire"]),
+    ("dts-003", "Male chart. Four pillars: Ren Chen, Ren Yin, Jia Yin, Geng Wu (壬辰 壬寅 甲寅 庚午). Is the Day Master strong or weak, and what is the Useful God? Explain briefly.",
+     "Two Yin branches in season and two Ren producing it: Wood is extremely strong and should be drained, not controlled; Geng Metal is weak and useless, so Wu Fire is the Useful God.", ["Fire"]),
+    ("qtbj-th1", "A Jia Wood Day Master born in the first month (the Yin month). By climate adjustment, what does the chart take first, and what second? Give the basis.",
+     "Early spring still has lingering cold: take Bing Fire to warm and Gui Water to moisten (Bing first, then Gui).", ["Bing", "Gui"]),
+    ("kanyu-guanlu", "Looking at a grave site: the trees around it are lush, but the hill behind (the Black Tortoise position) hides its head, the hill on the left (Green Dragon) has no foot reaching out, the hill on the right (White Tiger) looks like it holds a corpse in its mouth, and the hill in front (Red Bird) looks like it is bowing its head and weeping. By landform feng shui, is this site auspicious or not?",
+     "All four animals are ominous; the text says 'with all four perils present, the family is bound to be wiped out': very inauspicious.", []),
+    ("kanyu-taisui", "It is 2026. I want to dig a hole for a pond in the due-south part of my garden. Is there anything I should watch out for?",
+     "In 2026 (Bingwu) the Tai Sui is in the south (Wu); digging at the Tai Sui direction is avoided. The answer should flag this and suggest another direction or another time.", ["Tai Sui"]),
+    ("kanyu-wuxiong", "In the Eastern Han, Wu Xiong's family was poor. When his mother died he buried her on a plot nobody else would use, without choosing a date, and the diviners said his family would be wiped out. By feng shui, what happened to his family afterwards?",
+     "History records that three generations became Commandant of Justice. The answer should not assert certain doom, should admit feng shui cannot decide this, and ideally cite the recorded outcome.", []),
+]
+by_id = {c["id"]: c for c in cases}
+for base, prompt, expected, keys in EN:
+    cases.append({**by_id[base], "id": base + "-en", "category": "英文", "lang": "en",
+                  "prompt": prompt, "expected": expected, "keywords": keys})
+
 json.dump({"version": 1,
            "note": "案例原文均取自维基文库所收古籍（公有领域）；expected 为本项目对书中结论的概括，判分以 source.quote 原文为准。",
            "cases": cases}, open(OUT, "w", encoding="utf-8"), ensure_ascii=False, indent=1)

@@ -11,7 +11,7 @@
      记录工具调用、是否触发 skill、最终回答、花费。
   2. 判分：另起一次 `claude -p`（不给工具），把书中原文、本项目对结论的概括与回答一并给出，
      要求输出 JSON：{"verdict": "一致|部分一致|不一致", "reason": "..."}。
-另有不调用模型的规则检查：回答中是否出现案例的关键字（keywords）。
+另有不调用模型的规则检查：回答中是否出现案例的关键字（keywords）；英文题（lang: en）另查回答是否用英文。
 
 结果写入 evals/results/<时间戳>/：每题一个 JSON、summary.md 汇总。
 注意：判分的「标准答案」是古籍的结论，只检验 skill 是否忠实于典籍，不说明命理风水是否灵验。
@@ -38,6 +38,7 @@ ANSWER_TOOLS = ["Skill", "Read", "Write", "Glob", "Grep", "Bash(python3:*)", "Ba
 
 JUDGE_PROMPT = """你是严格的评审。下面是一道命理 / 风水题、古籍中的原文结论，以及被评测助手的回答。
 请只判断「回答的核心结论是否与古籍一致」，不评判文笔，也不评判命理风水本身是否灵验。
+题目与回答可能是英文，按内容判断，与中文同等对待。
 
 判定标准：
 - 一致：核心结论（如旺衰判断、用神五行、格局、吉凶方向、该不该做）与古籍相同，理由方向相合。
@@ -70,9 +71,24 @@ def load_cases() -> list[dict]:
     for c in cases:
         for k in ("id", "category", "source", "prompt", "expected", "keywords"):
             assert k in c, f"{c.get('id')} 缺少字段 {k}"
+        assert c.get("lang", "zh") in ("zh", "en"), f"{c['id']} lang 应为 zh 或 en"
         for k in ("book", "location", "url", "quote"):
             assert c["source"].get(k), f"{c['id']} source 缺少 {k}"
     return cases
+
+
+CJK = re.compile(r"[\u3400-\u9fff]")
+LATIN = re.compile(r"[A-Za-z]")
+
+
+def language_check(answer: str, lang: str) -> dict | None:
+    """英文题：除「」内的原文引文外，汉字占字母与汉字总数的比例须低于 10%（术语后附的汉字允许）。"""
+    if lang != "en":
+        return None
+    body = re.sub(r"「[^」]*」|《[^》]*》", "", answer)
+    cjk, latin = len(CJK.findall(body)), len(LATIN.findall(body))
+    share = cjk / max(1, cjk + latin)
+    return {"pass": latin > 0 and share < .1, "cjk_share": round(share, 3)}
 
 
 def keyword_check(answer: str, keywords: list[str]) -> dict:
@@ -140,7 +156,8 @@ def run_case(case: dict, args) -> dict:
            "source": case["source"], "expected": case["expected"],
            "answer": ans["answer"], "answer_error": ans["is_error"], "stderr": ans["stderr"],
            "tool_calls": ans["tool_calls"], "used_skill": used_skill, "used_script": used_script,
-           "keywords": keyword_check(ans["answer"], case["keywords"]), "cost_usd": ans["cost_usd"]}
+           "keywords": keyword_check(ans["answer"], case["keywords"]), "cost_usd": ans["cost_usd"],
+           "language": language_check(ans["answer"], case.get("lang", "zh"))}
     if args.no_judge or not ans["answer"]:
         rec["judge"] = {"verdict": "未判分", "reason": "跳过" if args.no_judge else "无回答"}
         return rec
@@ -166,9 +183,14 @@ def summarize(results: list[dict], meta: dict) -> str:
         other = len(rs) - sum(cnt.values())
         out.append(f"| {cat} | {cnt['一致']} | {cnt['部分一致']} | {cnt['不一致']} | {other} | "
                    f"{sum(r['keywords']['pass'] for r in rs)}/{len(rs)} | {sum(r['used_skill'] for r in rs)}/{len(rs)} |")
+    en = [r for r in results if r.get("language")]
+    if en:
+        out += ["", f"英文题用英文作答：{sum(r['language']['pass'] for r in en)}/{len(en)}"]
     out += ["", "## 逐题", "", "| 案例 | 类别 | 判分 | 理由 | 关键字 | skill / 脚本 |", "|---|---|---|---|---|---|"]
     for r in results:
         kw = "✓" if r["keywords"]["pass"] else "缺 " + "、".join(r["keywords"]["missing"])
+        if r.get("language") and not r["language"]["pass"]:
+            kw += f"；非英文作答（汉字 {r['language']['cjk_share']:.0%}）"
         reason = r["judge"].get("reason", "").replace("|", "／").replace("\n", " ")
         out.append(f"| {r['id']} | {r['category']} | {r['judge']['verdict']} | {reason} | {kw} | "
                    f"{'✓' if r['used_skill'] else '✗'} / {'✓' if r['used_script'] else '✗'} |")
