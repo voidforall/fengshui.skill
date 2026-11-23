@@ -24,7 +24,9 @@ On the first mention write "Five Elements (Wu Xing 五行)"; afterwards use Engl
 - The default relative reading treats Earth as the base layer and asks which element stands out in a cell compared
   with the rest of the mapped area. It does not say that element makes up most of the cell, and readings cannot be
   compared between cities.
-- The classical basis can be quoted in Chinese with an English rendering, marked as our translation:
+- The classical basis can be quoted in Chinese with an English rendering, marked as our translation. Name the
+  text as "The Grand Rules" (Hong Fan 洪范) in The Book of History (Shang Shu 尚书), the renderings used by the
+  state-sponsored Key Concepts in Chinese Thought and Culture project (chinesethought.cn):
   《尚书·洪范》「水曰润下，火曰炎上，木曰曲直，金曰从革，土爰稼穑」 — "Water moistens and descends, fire blazes
   upward, wood bends and straightens, metal yields and is reshaped, earth receives sowing and harvest" (our translation).
 - Mapping commerce to Metal or retail and entertainment to Fire is a modern analogy; say so.

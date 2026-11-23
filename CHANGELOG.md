@@ -10,6 +10,7 @@
 - 三个 skill 改为中英双语触发：`description` 加英文说明与触发词（feng shui、flying stars、bazi、four pillars 等）。
 - 新增各 skill 的 `references/english.md`（英文作答约定：英文意译在前、首次出现附拼音与简体汉字；引典籍先原文后译文并注明译者或「our translation」；白话优先）。
 - 新增 `lib/kanyu/terms_en.py` 双语术语表，生成风水、八字的 `references/terms-en.md`；测试检查脚本输出的每个术语都有英文名。交互页面英文化在后续版本。
+- 有标准译名的术语按标准取：WHO《中医药国际标准术语》(2022) 与中华思想文化术语传播工程（如五行 Five Elements、相生 mutual generation、相克 mutual restraint、天干 Heavenly Stems、二十四节气 Twenty-four Solar Terms），出处逐条列在 `terms-en.md` 末尾；单个节气名、风水命理专名尚无标准，用通行译法。
 
 ### 新增
 - 城市五行地图新增「相对取象」并设为默认（模型 `landcover-function-v2`）：依《尚书·洪范》五行之性与《五行大义》卷一「辨体性」（土「总于四行」），以土为底色，看各单元在范围内相对最突出的一行。上海由土 71% 变为金 16%、木 31%、水 17%、火 7%、土 29%；伦敦、纽约同规则重算。原综合口径改称「综合取象（绝对）」，仍可切换。

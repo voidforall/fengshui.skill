@@ -9,15 +9,17 @@
 |------|---------|--------|
 | 五行 | Five Elements | Wu Xing |
 | 阴阳 | Yin and Yang | Yin Yang |
-| 相生 | generating cycle | Xiang Sheng |
-| 相克 | controlling cycle | Xiang Ke |
+| 相生 | mutual generation | Xiang Sheng |
+| 相克 | mutual restraint | Xiang Ke |
 | 天干 | Heavenly Stems | Tian Gan |
 | 地支 | Earthly Branches | Di Zhi |
 | 干支 | Stems and Branches | Gan Zhi |
-| 六十甲子 | sixty-year Jiazi cycle | Liu Shi Jia Zi |
-| 生肖 | Chinese zodiac animal | Sheng Xiao |
+| 六十甲子 | sixty-year cycle | Liu Shi Jia Zi |
+| 生肖 | Chinese Zodiac | Sheng Xiao |
 | 八卦 | Eight Trigrams | Ba Gua |
 | 节气 | solar terms | Jie Qi |
+| 二十四节气 | Twenty-four Solar Terms | Er Shi Si Jie Qi |
+| 气 | qi (vital force) | Qi |
 | 立春 | Start of Spring | Li Chun |
 | 农历 | Chinese lunisolar calendar | Nong Li |
 | 闰月 | leap month | Run Yue |
@@ -156,3 +158,24 @@
 | 休 | Resting |
 | 囚 | Trapped |
 | 死 | Dead (weakest) |
+
+## Standard renderings / 标准译名出处
+
+以下术语按国家级或国际标准取译名。CT＝中华思想文化术语传播工程（chinesethought.cn）；
+WHO＝WHO international standard terminologies on traditional Chinese medicine (2022)，数字为条目号。
+其余术语（单个节气名、风水与命理专名）目前没有国家或国际标准，用通行译法。
+
+| 中文 | English | 出处 |
+|------|---------|------|
+| 五行 | Five Elements | CT「Wuxing」/ the five elements；WHO 28「Five elements」(synonym: Five phases) |
+| 阴阳 | Yin and Yang | CT「Yin and Yang」；WHO 3「Yin–yang」 |
+| 相生 | mutual generation | WHO 34「The five elements mutually generate」(synonym: Mutual generation)；CT 4148「each in turn producing the next」 |
+| 相克 | mutual restraint | WHO 35「The five elements mutually restrain」(synonym: Mutual controlling)，名词形式作 mutual restraint；CT 4149「checking」 |
+| 天干 | Heavenly Stems | WHO 469「Heavenly stems」 |
+| 地支 | Earthly Branches | WHO 470「Earthly branches」 |
+| 六十甲子 | sixty-year cycle | WHO 471「Sixty-year cycle」（亦用于纪月、日、时） |
+| 八卦 | Eight Trigrams | CT 2228「Eight Trigrams」 |
+| 二十四节气 | Twenty-four Solar Terms | CT 4058「The Twenty-four Solar Terms」 |
+| 生肖 | Chinese Zodiac | CT 4067「The Chinese Zodiac / Animal of the Year」 |
+| 气 | qi (vital force) | CT 2130「Qi (Vital Force)」 |
+| 五色 | Five Colors | WHO 49「Five colours」，本表用美式拼写 Five Colors |

@@ -35,15 +35,17 @@ DIRECTIONS = {"北": "North", "东北": "Northeast", "东": "East", "东南": "S
 COMMON = [
     ("五行", "Five Elements", "Wu Xing"),
     ("阴阳", "Yin and Yang", "Yin Yang"),
-    ("相生", "generating cycle", "Xiang Sheng"),
-    ("相克", "controlling cycle", "Xiang Ke"),
+    ("相生", "mutual generation", "Xiang Sheng"),
+    ("相克", "mutual restraint", "Xiang Ke"),
     ("天干", "Heavenly Stems", "Tian Gan"),
     ("地支", "Earthly Branches", "Di Zhi"),
     ("干支", "Stems and Branches", "Gan Zhi"),
-    ("六十甲子", "sixty-year Jiazi cycle", "Liu Shi Jia Zi"),
-    ("生肖", "Chinese zodiac animal", "Sheng Xiao"),
+    ("六十甲子", "sixty-year cycle", "Liu Shi Jia Zi"),
+    ("生肖", "Chinese Zodiac", "Sheng Xiao"),
     ("八卦", "Eight Trigrams", "Ba Gua"),
     ("节气", "solar terms", "Jie Qi"),
+    ("二十四节气", "Twenty-four Solar Terms", "Er Shi Si Jie Qi"),
+    ("气", "qi (vital force)", "Qi"),
     ("立春", "Start of Spring", "Li Chun"),
     ("农历", "Chinese lunisolar calendar", "Nong Li"),
     ("闰月", "leap month", "Run Yue"),
@@ -51,6 +53,25 @@ COMMON = [
     ("夏令时", "daylight saving time", "Xia Ling Shi"),
     ("五色", "Five Colors", "Wu Se"),
 ]
+
+# 有国家级或国际标准译名的术语，按标准取译名，并记下出处与原表述（markdown() 列在表末）。
+# CT：中华思想文化术语传播工程 www.chinesethought.cn（国务院批准，外研社）；
+# WHO：WHO international standard terminologies on traditional Chinese medicine (2022), ISBN 9789240042322。
+# 单个节气名（立春等）、风水与命理专名目前没有国家或国际标准，用通行译法。
+STANDARD = {
+    "五行": "CT「Wuxing」/ the five elements；WHO 28「Five elements」(synonym: Five phases)",
+    "阴阳": "CT「Yin and Yang」；WHO 3「Yin–yang」",
+    "相生": "WHO 34「The five elements mutually generate」(synonym: Mutual generation)；CT 4148「each in turn producing the next」",
+    "相克": "WHO 35「The five elements mutually restrain」(synonym: Mutual controlling)，名词形式作 mutual restraint；CT 4149「checking」",
+    "天干": "WHO 469「Heavenly stems」",
+    "地支": "WHO 470「Earthly branches」",
+    "六十甲子": "WHO 471「Sixty-year cycle」（亦用于纪月、日、时）",
+    "八卦": "CT 2228「Eight Trigrams」",
+    "二十四节气": "CT 4058「The Twenty-four Solar Terms」",
+    "生肖": "CT 4067「The Chinese Zodiac / Animal of the Year」",
+    "气": "CT 2130「Qi (Vital Force)」",
+    "五色": "WHO 49「Five colours」，本表用美式拼写 Five Colors",
+}
 
 # --- 风水 -------------------------------------------------------------------------------
 
@@ -268,4 +289,11 @@ def markdown(domain: str) -> str:
         out += [f"| {k} | {v} |" for k, v in WANGXIANG.items()]
     else:
         raise ValueError("domain 应为 fengshui 或 bazi")
+    out += ["", "## Standard renderings / 标准译名出处", "",
+            "以下术语按国家级或国际标准取译名。CT＝中华思想文化术语传播工程（chinesethought.cn）；",
+            "WHO＝WHO international standard terminologies on traditional Chinese medicine (2022)，数字为条目号。",
+            "其余术语（单个节气名、风水与命理专名）目前没有国家或国际标准，用通行译法。", "",
+            "| 中文 | English | 出处 |", "|------|---------|------|"]
+    en = {zh: e for zh, e, _ in COMMON}
+    out += [f"| {k} | {en[k]} | {v} |" for k, v in STANDARD.items()]
     return "\n".join(out) + "\n"

@@ -54,6 +54,13 @@ class TestCoverage(unittest.TestCase):
             for zh, en, _ in lst:
                 self.assertEqual(seen.setdefault(zh, en), en, zh)
 
+    def test_standard_renderings_are_used(self):
+        """标出标准出处的术语必须在公共表里，且译名与所注出处一致。"""
+        common = {zh: en for zh, en, _ in terms_en.COMMON}
+        for zh, source in terms_en.STANDARD.items():
+            self.assertIn(zh, common)
+            self.assertIn(common[zh].lower().split(" (")[0], source.lower(), zh)
+
     def test_life_stages_have_plain_english(self):
         for zh, (en, plain) in terms_en.CHANGSHENG.items():
             self.assertTrue(plain and "death" not in plain.lower(), zh)
