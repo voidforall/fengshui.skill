@@ -4,7 +4,7 @@
 所以计算包要随 skill 带一份真实文件。每个 skill 只带自己用到的模块，清单见 MANIFEST。
 
 只改 lib/kanyu/，改完运行：python3 tools/sync_kanyu.py
-tests/test_skill_bazi.py 检查：每个源头模块都在清单里、副本与源头逐字节一致、副本能单独导入、glossary.md 已更新。
+tests/test_skill_bazi.py 检查：每个源头模块都在清单里、副本与源头逐字节一致、副本能单独导入、glossary.md 与 terms-en.md 已更新。
 """
 
 import os
@@ -14,7 +14,7 @@ import sys
 ROOT = os.path.abspath(os.path.join(os.path.dirname(os.path.abspath(__file__)), ".."))
 SOURCE = os.path.join(ROOT, "lib", "kanyu")
 
-SHARED = ["__init__.py", "core.py", "almanac.py", "bazhai.py", "cli.py", "pages.py"]
+SHARED = ["__init__.py", "core.py", "almanac.py", "bazhai.py", "cli.py", "pages.py", "terms_en.py"]
 MANIFEST = {
     "fengshui-master": SHARED + ["feixing.py", "zibai.py", "zeri.py",
                                  "render.py", "pages_feixing.py", "cli_fengshui.py"],
@@ -22,6 +22,7 @@ MANIFEST = {
                              "render_bazi.py", "pages_bazi.py", "cli_bazi.py"],
 }
 GLOSSARY_MD = os.path.join(ROOT, "skills", "bazi-mingli", "references", "glossary.md")
+TERMS_MD = {"fengshui-master": "fengshui", "bazi-mingli": "bazi"}   # skill → terms_en.markdown 的领域
 
 
 def target(skill: str) -> str:
@@ -42,6 +43,12 @@ def sync() -> list[str]:
     from kanyu import glossary
     with open(GLOSSARY_MD, "w", encoding="utf-8") as f:
         f.write(glossary.markdown())
+    from kanyu import terms_en
+    for skill, domain in TERMS_MD.items():
+        path = os.path.join(ROOT, "skills", skill, "references", "terms-en.md")
+        with open(path, "w", encoding="utf-8") as f:
+            f.write(terms_en.markdown(domain))
+        done.append(path)
     return done + [GLOSSARY_MD]
 
 

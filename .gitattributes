@@ -2,3 +2,4 @@
 skills/fengshui-master/scripts/kanyu/** linguist-generated=true
 skills/bazi-mingli/scripts/kanyu/** linguist-generated=true
 skills/bazi-mingli/references/glossary.md linguist-generated=true
+skills/*/references/terms-en.md linguist-generated=true
