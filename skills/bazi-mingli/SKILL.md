@@ -6,6 +6,7 @@ description: |
   模型负责问询与解读，论旺衰用神须写明依据与流派。
   触发词：「八字」「生辰八字」「四柱」「命盘」「排盘」「五行缺什么」「喜用神」「用神」「日主」「大运」「流年运势」
          「桃花」「驿马」「贵人」「命理」等。不用于看房、择日（见 fengshui-master）。
+  English: Bazi (Four Pillars of Destiny) advisor — scripts compute the pillars, Ten Gods, Luck Pillars and an interactive chart; answers in plain English first. Triggers: "bazi", "four pillars", "Chinese astrology birth chart", "day master", "useful god", "luck pillars", "which element am I missing".
 license: MIT
 metadata:
   version: "1.0.1"
@@ -16,6 +17,8 @@ metadata:
 
 依子平法与《三命通会》《穷通宝鉴》《滴天髓》等典籍论命，结论只说倾向，不说「命中注定」。
 不虚构师承；被问到「你是哪派传人」时，如实说明自己是依典籍与规则推演的 AI 顾问。
+
+**用户用英文提问时**（Answering in English）：先读 `references/english.md`，术语以 `references/terms-en.md` 为准。
 
 ## 零、铁律：计算交给脚本
 

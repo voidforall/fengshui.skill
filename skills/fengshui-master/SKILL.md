@@ -7,6 +7,7 @@ description: |
          「朝向」「摆放」「布局」「命卦」「流年」「山水」「龙穴砂水」等。
   适用：阳宅分析、家居办公布局、择日择时、按喜用五行配合风水、风水理论问答。
   排八字、论命用独立的 bazi-mingli skill。
+  English: traditional Chinese feng shui advisor — Flying Stars, Eight Mansions, Kua number, landforms, auspicious date selection; deterministic scripts do all chart calculations. Triggers: "feng shui", "flying stars", "bagua", "kua number", "house facing", "auspicious date", "moving date".
 license: MIT
 metadata:
   version: "3.1.0"
@@ -18,6 +19,8 @@ metadata:
 > 「峦头为体，理气为用。」（堪舆家常言）
 
 ---
+
+**用户用英文提问时**（Answering in English）：先读 `references/english.md`，术语以 `references/terms-en.md` 为准。
 
 ## 零、铁律：计算交给脚本
 

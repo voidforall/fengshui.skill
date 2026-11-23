@@ -19,6 +19,7 @@
   python3 tools/sync_kanyu.py
   ```
 
+- **中英双语**：规则只写一份中文；英文作答约定在各 skill 的 `references/english.md`。英文术语只在 `lib/kanyu/terms_en.py` 维护，同步脚本生成各 skill 的 `references/terms-en.md`；脚本新增术语时同时补英文（`tests/test_terms_en.py` 会检查）。
 - **`SKILL.md` 保持精简**，详细流程放进各 skill 的 `references/`。
 - 调试时可以直接运行 skill 调用的入口：`python3 skills/fengshui-master/scripts/fengshui.py -h`、`python3 skills/bazi-mingli/scripts/bazi.py -h`。
 

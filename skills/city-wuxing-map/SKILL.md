@@ -1,6 +1,8 @@
 ---
 name: city-wuxing-map
-description: 生成覆盖完整城市范围的五行着色地图，每个统计单元都有主象、兼象、置信等级和分析原因。用于伦敦、纽约或任意城市的区域取象；默认相对取象（看各单元在范围内相对最突出的一行，依《洪范》《五行大义》以土为底色），另有综合与土地覆盖口径；地标仅作证据，不用于单宅飞星排盘。
+description: |
+  生成覆盖完整城市范围的五行着色地图，每个统计单元都有主象、兼象、置信等级和分析原因。用于伦敦、纽约或任意城市的区域取象；默认相对取象（看各单元在范围内相对最突出的一行，依《洪范》《五行大义》以土为底色），另有综合与土地覆盖口径；地标仅作证据，不用于单宅飞星排盘。
+  English: Five Elements (Wu Xing) map of a whole city or a declared district scope, with a main and secondary element, reasons, sources and confidence for every cell.
 license: MIT
 metadata:
   version: "1.0.0"
@@ -9,6 +11,8 @@ metadata:
 # 城市全域五行地图
 
 交付完整城市边界内连续着色的真实地图。用户只给城市名时，以明确的完整城市范围为默认，不能拿几个代表地标或市中心孤立片区充当全城。每个单元都应有分析，证据不足通过低置信等级表达。
+
+**用户用英文提问时**（Answering in English）：先读 `references/english.md`。
 
 ## 范围、数据与解释
 
