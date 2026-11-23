@@ -7,7 +7,7 @@
     python3 evals/run.py                           # 全部案例
 
 每题两次调用：
-  1. 作答：在临时工作区装好本 skill（.claude/skills/fengshui-master）与 bazi-mingli，`claude -p` 提问，
+  1. 作答：在临时工作区装好 skills/ 下的 fengshui-master 与 bazi-mingli（.claude/skills/<name>），`claude -p` 提问，
      记录工具调用、是否触发 skill、最终回答、花费。
   2. 判分：另起一次 `claude -p`（不给工具），把书中原文、本项目对结论的概括与回答一并给出，
      要求输出 JSON：{"verdict": "一致|部分一致|不一致", "reason": "..."}。
@@ -32,7 +32,7 @@ import tempfile
 
 ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
 CASES = os.path.join(ROOT, "evals", "cases.json")
-SKILL_FILES = ["SKILL.md", "scripts", "references", "assets", "examples", "requirements.txt"]
+SKILLS = ["fengshui-master", "bazi-mingli"]   # 作答时安装的 skill（skills/<name>/）
 VERDICTS = ("一致", "部分一致", "不一致")
 ANSWER_TOOLS = ["Skill", "Read", "Write", "Glob", "Grep", "Bash(python3:*)", "Bash(python:*)", "Bash(pip install:*)"]
 
@@ -83,18 +83,11 @@ def keyword_check(answer: str, keywords: list[str]) -> dict:
 # --- 调用 claude ------------------------------------------------------------------------
 
 def make_workspace() -> str:
-    """临时工作区，装好风水主 skill 与八字 skill（与用户两者都装的情形一致）。"""
+    """临时工作区，装好风水与八字两个 skill（与用户两者都装的情形一致）。"""
     ws = tempfile.mkdtemp(prefix="fengshui-eval-")
-    dst = os.path.join(ws, ".claude", "skills", "fengshui-master")
-    os.makedirs(dst)
-    for name in SKILL_FILES:
-        src = os.path.join(ROOT, name)
-        if os.path.isdir(src):
-            shutil.copytree(src, os.path.join(dst, name), ignore=shutil.ignore_patterns("__pycache__"))
-        elif os.path.exists(src):
-            shutil.copy(src, dst)
-    shutil.copytree(os.path.join(ROOT, "skills", "bazi-mingli"), os.path.join(ws, ".claude", "skills", "bazi-mingli"),
-                    ignore=shutil.ignore_patterns("__pycache__"))
+    for name in SKILLS:
+        shutil.copytree(os.path.join(ROOT, "skills", name), os.path.join(ws, ".claude", "skills", name),
+                        ignore=shutil.ignore_patterns("__pycache__"))
     return ws
 
 

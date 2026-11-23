@@ -1,17 +1,14 @@
-"""命令行入口。解析参数 → 调用计算模块 → 交给 render 输出（或 --json）。"""
+"""fengshui-master 的命令：命卦、八宅、飞星、流年、单日、择日。解析参数 → 调用计算模块 → 交给 render 输出（或 --json）。"""
 
 from __future__ import annotations
 
 import argparse
-import dataclasses
-import datetime as _dt
-import json
 import sys
 
-from . import __version__, pages, render
-from .almanac import LunarUnavailable, day_info, has_time, lichun_year, lunar_to_solar, month_index, parse_date
+from . import __version__, cli, pages, pages_feixing, render
+from .almanac import day_info, has_time, lichun_year, month_index, parse_date
 from .bazhai import east_west, mingua_of, younian
-from .bazi import bazi
+from .cli import Output, UsageError, _jsonable
 from .core import mountain_palace, opposite, parse_direction, yun_of_year, yun_range
 from .feixing import feixing_chart
 from .zeri import EVENTS, select
@@ -36,38 +33,8 @@ DESCRIPTION = """堪舆确定性计算工具 —— 供 fengshui-master skill �
 加 --json 输出结构化数据。
 """
 
-
-class UsageError(Exception):
-    pass
-
-
-def today() -> _dt.date:
-    """当前日期（单独成函数，便于测试替换）。"""
-    return _dt.date.today()
-
-
-# --- 结果：文本 + 结构化数据 ---------------------------------------------------------
-
-@dataclasses.dataclass
-class Output:
-    text: str
-    data: object
-
-
-def _jsonable(o):
-    if dataclasses.is_dataclass(o) and not isinstance(o, type):
-        d = {f.name: _jsonable(getattr(o, f.name)) for f in dataclasses.fields(o)}
-        for name in ("replaced", "jigong", "label"):   # 常用派生属性也带上
-            if hasattr(type(o), name) and isinstance(getattr(type(o), name), property):
-                d[name] = _jsonable(getattr(o, name))
-        return d
-    if isinstance(o, dict):
-        return {str(k): _jsonable(v) for k, v in o.items()}
-    if isinstance(o, (list, tuple)):
-        return [_jsonable(v) for v in o]
-    if isinstance(o, (_dt.date, _dt.datetime)):
-        return o.isoformat()
-    return o
+BAZI_MOVED = ("八字已移至独立的 bazi-mingli skill。安装：npx skills add voidforall/fengshui.skill --skill bazi-mingli；"
+              "安装后运行该 skill 的 scripts/bazi.py --birth ... --gender ...")
 
 
 # --- 子命令 ------------------------------------------------------------------------
@@ -143,18 +110,18 @@ def cmd_feixing(a) -> Output:
         y, mi = month_index(parse_date(a.month))
         month = monthly_center(y, mi)
         annual = annual or annual_center(y)
-    cur = yun_of_year(today().year)
+    cur = yun_of_year(cli.today().year)
     text = render.feixing(ch, annual=annual, month=month, facing_deg=facing_deg, yun_note=note,
                           current_yun=cur)
     data = {"chart": _jsonable(ch), "facing_deg": facing_deg, "annual_center": annual, "month_center": month}
     if a.html is not None:
-        notes = pages.load_notes(a.notes)
+        notes = pages_feixing.load_notes(a.notes)
         annual_label = f"{a.annual}年" if a.annual else (f"{lichun_year(parse_date(a.month))[0]}年" if a.month else None)
         page = pages.render("feixing.html", f"飞星盘 {ch.sit}山{ch.facing}向",
-                            pages.feixing_data(ch, annual=annual, annual_label=annual_label, month=month,
+                            pages_feixing.feixing_data(ch, annual=annual, annual_label=annual_label, month=month,
                                                facing_deg=facing_deg, yun_note=note, current_yun=cur,
                                                notes=notes))
-        path = pages.write_page(a.html or pages.default_name(ch), page)
+        path = pages.write_page(a.html or pages_feixing.default_name(ch), page)
         text += f"\n\n交互盘面已生成：{path}"
         data["html"] = path
     elif a.notes:
@@ -189,53 +156,9 @@ def cmd_zeri(a) -> Output:
     return Output(render.zeri(r, a.top), data)
 
 
-def cmd_bazi(a) -> Output:
-    if len(a.birth.strip()) == 4:
-        raise UsageError("八字至少需要出生年月日：--birth YYYY-MM-DD（时辰不详时只给日期）")
-    d = parse_date(a.birth)
-    if a.leap and not a.lunar:
-        raise UsageError("--leap 需与 --lunar 一起使用")
-    if a.lunar:
-        d = lunar_to_solar(d, a.leap)
-    b = bazi(d, a.gender, a.longitude, tz=a.tz, time_known=has_time(a.birth),
-             zi=a.zi, focus_year=a.year or today().year)
-    text, data = render.bazi(b), _jsonable(b)
-    if a.lunar:
-        note = f"农历输入：{a.birth.strip()[:10]}{'（闰月）' if a.leap else ''} → 公历 {d:%Y-%m-%d}"
-        text = note + "\n" + text
-        data["lunar_input"] = note
-    if a.html is not None:
-        notes = pages.load_bazi_notes(a.notes)
-        page = pages.render("bazi.html", pages.bazi_title(b), pages.bazi_data(b, notes=notes))
-        path = pages.write_page(a.html or pages.bazi_default_name(b), page)
-        text += f"\n\n交互命盘已生成：{path}"
-        data["html"] = path
-    elif a.notes:
-        raise UsageError("--notes 需与 --html 一起使用")
-    return Output(text, data)
-
-
 # --- 参数 --------------------------------------------------------------------------
 
-def add_bazi_args(s: argparse.ArgumentParser) -> None:
-    s.add_argument("--birth", required=True,
-                   help="出生地钟表时间 'YYYY-MM-DD HH:MM'；时辰不详只给 YYYY-MM-DD（排三柱）")
-    s.add_argument("--gender", required=True)
-    s.add_argument("--longitude", type=float, help="出生地经度（东经为正），给出则按真太阳时排时柱")
-    s.add_argument("--lunar", action="store_true", help="--birth 为农历日期（月、日用数字，如 1990-04-26 08:30）")
-    s.add_argument("--leap", action="store_true", help="农历闰月（与 --lunar 一起用）")
-    s.add_argument("--tz", default="Asia/Shanghai",
-                   help="出生地时区（IANA 名或 UTC+8），默认 Asia/Shanghai；据此自动扣夏令时")
-    s.add_argument("--zi", choices=["next", "same"], default="next",
-                   help="子时口径：next=23:00 起换日（默认）；same=晚子时日柱仍按当日")
-    s.add_argument("--year", type=int, help="重点看的流年（默认今年）")
-    s.add_argument("--html", nargs="?", const="", metavar="PATH",
-                   help="同时生成可交互的命盘 HTML（不给路径则写到当前目录）")
-    s.add_argument("--notes", metavar="JSON",
-                   help="写入命盘的批注：{summary, basis, pillars:{年月日时:文字}, dayun:{干支:文字}, years:{年份:文字}, advice:[...]}")
-
-
-def build_parser(include_bazi: bool = True) -> argparse.ArgumentParser:
+def build_parser() -> argparse.ArgumentParser:
     common = argparse.ArgumentParser(add_help=False)
     common.add_argument("--json", action="store_true", help="输出结构化 JSON")
 
@@ -285,41 +208,7 @@ def build_parser(include_bazi: bool = True) -> argparse.ArgumentParser:
     s.add_argument("--birth-year", type=int, action="append", help="当事人出生年（可多次）")
     s.add_argument("--top", type=int, default=8)
 
-    if include_bazi:
-        add_bazi_args(add("bazi", cmd_bazi, "八字排盘（已移至 bazi-mingli skill）"))
     return p
-
-
-BAZI_DESCRIPTION = """八字确定性计算工具 —— 供 bazi-mingli skill 调用。
-
-排盘、查表、历法由脚本完成：四柱、藏干十神、十二长生、月令司令、通根透干、合冲刑害、
-查表神煞、《穷通宝鉴》调候原文、起运与大运流年；可同时生成交互命盘（--html）。
-不判定日主旺衰、格局、用神。需要 `pip install lunar_python`。加 --json 输出结构化数据。
-"""
-
-BAZI_MOVED = ("八字已移至独立的 bazi-mingli skill。安装：npx skills add voidforall/fengshui.skill --full-depth "
-              "--skill bazi-mingli；在本仓库中运行 python3 skills/bazi-mingli/scripts/bazi.py --birth ... --gender ...")
-
-
-def build_bazi_parser() -> argparse.ArgumentParser:
-    p = argparse.ArgumentParser(prog="bazi.py", description=BAZI_DESCRIPTION,
-                                formatter_class=argparse.RawDescriptionHelpFormatter)
-    p.add_argument("--version", action="version", version=f"%(prog)s（kanyu {__version__}）")
-    p.add_argument("--json", action="store_true", help="输出结构化 JSON")
-    add_bazi_args(p)
-    p.set_defaults(func=cmd_bazi)
-    return p
-
-
-def run(argv=None, parser: argparse.ArgumentParser | None = None) -> tuple[Output, argparse.Namespace]:
-    """解析并执行，返回 (Output, args)；出错抛异常（供测试调用）。"""
-    a = (parser or build_parser()).parse_args(argv)
-    return a.func(a), a
-
-
-def bazi_main(argv=None) -> None:
-    """bazi-mingli skill 的入口：python3 scripts/bazi.py --birth ... --gender ..."""
-    _execute(argv, build_bazi_parser())
 
 
 def main(argv=None) -> None:
@@ -327,19 +216,4 @@ def main(argv=None) -> None:
     argv = sys.argv[1:] if argv is None else argv
     if argv[:1] == ["bazi"]:
         sys.exit(BAZI_MOVED)
-    _execute(argv, build_parser(include_bazi=False))
-
-
-def _execute(argv, parser) -> None:
-    try:
-        out, a = run(argv, parser)
-    except LunarUnavailable as e:
-        sys.exit(str(e))
-    except UsageError as e:
-        sys.exit(str(e))
-    except ValueError as e:
-        sys.exit(f"错误：{e}")
-    if a.json:
-        print(json.dumps(_jsonable(out.data), ensure_ascii=False, indent=2))
-    else:
-        print(out.text)
+    cli.execute(argv, build_parser())

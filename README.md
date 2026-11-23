@@ -24,12 +24,12 @@
 ## 安装
 
 ```bash
-npx skills add voidforall/fengshui.skill                                   # 风水：看宅、择日、问答
-npx skills add voidforall/fengshui.skill --full-depth --skill bazi-mingli  # 八字
-npx skills add voidforall/fengshui.skill --full-depth --skill city-wuxing-map  # 城市五行地图
+npx skills add voidforall/fengshui.skill --skill fengshui-master   # 风水：看宅、择日、问答
+npx skills add voidforall/fengshui.skill --skill bazi-mingli       # 八字
+npx skills add voidforall/fengshui.skill --skill city-wuxing-map   # 城市五行地图
 ```
 
-装好后直接用自然语言提问，不需要记任何指令。
+不带 `--skill` 时会列出三个 skill 让你勾选（`--skill '*'` 全装）。装好后直接用自然语言提问，不需要记任何指令。
 
 ## 效果
 
@@ -72,8 +72,8 @@ npx skills add voidforall/fengshui.skill --full-depth --skill city-wuxing-map  #
 
 ## 文档
 
-- 各 skill 的规则与流程：[fengshui-master](SKILL.md) · [bazi-mingli](skills/bazi-mingli/SKILL.md) · [city-wuxing-map](skills/city-wuxing-map/SKILL.md)
-- 完整对话示例：[看宅](examples/yangzhai.md) · [择日](examples/zeri-example.md)
+- 各 skill 的规则与流程：[fengshui-master](skills/fengshui-master/SKILL.md) · [bazi-mingli](skills/bazi-mingli/SKILL.md) · [city-wuxing-map](skills/city-wuxing-map/SKILL.md)
+- 完整对话示例：[看宅](skills/fengshui-master/examples/yangzhai.md) · [择日](skills/fengshui-master/examples/zeri-example.md)
 - [工作原理](docs/how-it-works.md)：skill 如何分工、各项按什么口径计算
 - [参与贡献](CONTRIBUTING.md)（勘误、测试、发版）· [变更记录](CHANGELOG.md)
 - 发现错误？欢迎提 issue，请附出处（典籍卷次或可核对的资料）。

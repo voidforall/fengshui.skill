@@ -53,7 +53,7 @@ python3 scripts/bazi.py --birth "YYYY-MM-DD HH:MM" --gender m/f --longitude <经
 
 ## 二、与风水顾问的分工
 
-- 看房、布局、择日、命卦八宅属于 `fengshui-master`（本仓库根目录 skill）。用户要「按八字布置卧室、书桌」时，
+- 看房、布局、择日、命卦八宅属于 `fengshui-master`（同一仓库的风水 skill）。用户要「按八字布置卧室、书桌」时，
   本 skill 给出喜用五行及其方位、五色；命卦与宅命配合请转用 fengshui-master，未安装时提示
   `npx skills add voidforall/fengshui.skill --skill fengshui-master`。
 - 合婚、起名没有核对过出处的规则与计算，只讲原理，不下结论。

@@ -1,11 +1,12 @@
-"""独立 skill bazi-mingli：计算包副本与源头一致、入口脚本可用、结构与出处登记。
+"""各 skill 带的计算包副本：按清单、与源头一致、能单独导入；bazi-mingli 的入口、结构与出处登记。
 
-skill 安装后是独立目录，计算包 kanyu/ 随 skill 带一份，由 tools/sync_kanyu.py 从 scripts/kanyu/ 复制。
+skill 安装后是独立目录，计算包 kanyu/ 随 skill 带一份，由 tools/sync_kanyu.py 从 lib/kanyu/ 复制。
 """
 
 import support
 import filecmp
 import glob
+import importlib.util
 import os
 import re
 import subprocess
@@ -13,7 +14,7 @@ import sys
 import tempfile
 import unittest
 
-SKILL = os.path.join(support.ROOT, "skills", "bazi-mingli")
+SKILL = support.BAZI
 ENTRY = os.path.join(SKILL, "scripts", "bazi.py")
 
 
@@ -23,26 +24,52 @@ def read(*parts):
 
 
 class TestSync(unittest.TestCase):
-    def test_kanyu_copy_is_identical(self):
-        src = os.path.join(support.SCRIPTS, "kanyu")
-        dst = os.path.join(SKILL, "scripts", "kanyu")
+    """每个 skill 只带自己用到的模块（tools/sync_kanyu.py 的 MANIFEST）。"""
 
-        def files(root):
-            return sorted(os.path.relpath(p, root) for p in glob.glob(os.path.join(root, "**", "*"), recursive=True)
-                          if os.path.isfile(p) and "__pycache__" not in p)
+    @classmethod
+    def setUpClass(cls):
+        spec = importlib.util.spec_from_file_location("sync_kanyu", os.path.join(support.ROOT, "tools", "sync_kanyu.py"))
+        cls.sync = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(cls.sync)
 
-        self.assertEqual(files(src), files(dst), "运行 python3 tools/sync_kanyu.py")
-        for rel in files(src):
-            self.assertTrue(filecmp.cmp(os.path.join(src, rel), os.path.join(dst, rel), shallow=False),
-                            f"{rel} 与源头不一致：只改 scripts/kanyu/，再运行 python3 tools/sync_kanyu.py")
+    @staticmethod
+    def files(root):
+        return sorted(os.path.relpath(p, root).replace(os.sep, "/")
+                      for p in glob.glob(os.path.join(root, "**", "*"), recursive=True)
+                      if os.path.isfile(p) and "__pycache__" not in p)
+
+    def test_every_source_module_is_shipped(self):
+        shipped = set().union(*self.sync.MANIFEST.values())
+        self.assertEqual(set(self.files(os.path.join(support.LIB, "kanyu"))) - shipped, set(),
+                         "新模块要加进 tools/sync_kanyu.py 的 MANIFEST")
+
+    def test_copies_match_manifest_and_source(self):
+        src = os.path.join(support.LIB, "kanyu")
+        for skill, manifest in self.sync.MANIFEST.items():
+            dst = os.path.join(support.SKILLS, skill, "scripts", "kanyu")
+            self.assertEqual(self.files(dst), sorted(manifest), f"{skill}：运行 python3 tools/sync_kanyu.py")
+            for rel in manifest:
+                self.assertTrue(filecmp.cmp(os.path.join(src, rel), os.path.join(dst, rel), shallow=False),
+                                f"{skill}/{rel} 与源头不一致：只改 lib/kanyu/，再运行 python3 tools/sync_kanyu.py")
+
+    def test_each_copy_imports_on_its_own(self):
+        # 安装后只有这一个 skill 目录：副本里的每个模块都要能单独导入，不能依赖没带上的模块
+        for skill, manifest in self.sync.MANIFEST.items():
+            mods = [m[:-3].replace("/", ".") for m in manifest if m.endswith(".py") and m != "__init__.py"]
+            code = ("import importlib, sys; sys.path.insert(0, sys.argv[1]); "
+                    "[importlib.import_module('kanyu.' + m) for m in sys.argv[2:]]")
+            r = subprocess.run([sys.executable, "-I", "-c", code, os.path.join(support.SKILLS, skill, "scripts"), *mods],
+                               capture_output=True, text=True)
+            self.assertEqual(r.returncode, 0, f"{skill}：{r.stderr[-500:]}")
 
     def test_glossary_md_is_generated(self):
         from kanyu import glossary
         self.assertEqual(read(SKILL, "references", "glossary.md"), glossary.markdown(),
-                         "glossary.md 由 scripts/kanyu/glossary.py 生成：运行 python3 tools/sync_kanyu.py")
+                         "glossary.md 由 lib/kanyu/glossary.py 生成：运行 python3 tools/sync_kanyu.py")
 
     def test_requirements_match(self):
-        self.assertEqual(read(support.ROOT, "requirements.txt"), read(SKILL, "requirements.txt"))
+        for skill in (support.FENGSHUI, support.BAZI):
+            self.assertEqual(read(support.ROOT, "requirements.txt"), read(skill, "requirements.txt"), skill)
 
 
 class TestStructure(unittest.TestCase):

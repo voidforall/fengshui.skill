@@ -103,7 +103,7 @@ def page_data() -> dict:
 def markdown() -> str:
     """生成 bazi-mingli 的 references/glossary.md。"""
     out = ["# 八字术语白话释义", "",
-           "> 由 scripts/kanyu/glossary.py 生成，交互命盘里的术语解释与此一致。不要手改本文件。",
+           "> 由计算包的 glossary.py 生成，交互命盘里的术语解释与此一致。不要手改本文件。",
            "> 回答用户时，术语第一次出现就用这里的白话解释一句。✅ = 原文已核对，⚖ = 通行释义或判断。", "",
            "## 常用术语", "", "| 术语 | 白话 | 出处 / 口径 |", "|------|------|------|"]
     out += [f"| {k} | {v[0]} | {v[1]} |" for k, v in TERMS.items()]

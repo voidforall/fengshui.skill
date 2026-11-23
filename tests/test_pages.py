@@ -6,7 +6,7 @@ import os
 import tempfile
 import unittest
 
-from kanyu import cli, pages
+from kanyu import cli, pages, pages_bazi, pages_feixing
 from kanyu.feixing import feixing_chart
 
 NOTES = {"summary": "总断 </script><b>不应被当作标签</b>",
@@ -14,7 +14,7 @@ NOTES = {"summary": "总断 </script><b>不应被当作标签</b>",
 
 
 def page_for(ch, notes=None, **kw):
-    data = pages.feixing_data(ch, annual=kw.get("annual"), annual_label=None, month=None,
+    data = pages_feixing.feixing_data(ch, annual=kw.get("annual"), annual_label=None, month=None,
                               facing_deg=kw.get("deg"), yun_note="", current_yun=9, notes=notes or {})
     return pages.render("feixing.html", "飞星盘", data)
 
@@ -56,10 +56,10 @@ class TestFeixingPage(unittest.TestCase):
                 with open(p, "w", encoding="utf-8") as f:
                     json.dump(obj, f, ensure_ascii=False)
                 return p
-            self.assertEqual(pages.load_notes(write(NOTES)), NOTES)
+            self.assertEqual(pages_feixing.load_notes(write(NOTES)), NOTES)
             for bad in ({"palace": {}}, {"palaces": {"南": "x"}}, {"advice": [1]}, ["x"]):
                 with self.assertRaises(ValueError, msg=bad):
-                    pages.load_notes(write(bad))
+                    pages_feixing.load_notes(write(bad))
 
 
 class TestCli(unittest.TestCase):
@@ -85,7 +85,7 @@ class TestCli(unittest.TestCase):
         root = support.ROOT
         with open(os.path.join(root, "docs", "examples", "feixing-demo.html"), encoding="utf-8") as f:
             demo = f.read()
-        with open(os.path.join(root, "assets", "templates", "feixing.html"), encoding="utf-8") as f:
+        with open(os.path.join(support.FENGSHUI, "assets", "templates", "feixing.html"), encoding="utf-8") as f:
             tpl = f.read()
         head = tpl.split("__DATA__")[0].replace("__TITLE__", "飞星盘 子山午向")
         self.assertTrue(demo.startswith(head), "示例页面已过期：重新运行 docs/examples/README 中的命令")
@@ -95,25 +95,21 @@ BAZI_NOTES = {"plain": "白话总结", "summary": "总断 </script><b>x</b>", "b
               "dayun": {"戊寅": "大运批注"}, "years": {"2026": "流年批注"}, "advice": ["建议"]}
 
 
-BAZI_SKILL = os.path.join(support.ROOT, "skills", "bazi-mingli")
+BAZI_SKILL = support.BAZI
 
 
 @support.needs_lunar
 class TestBaziPage(unittest.TestCase):
-    """命盘模板随 bazi-mingli skill 发布；这里把模板目录指向该 skill。"""
+    """命盘模板随 bazi-mingli skill 发布（模板目录由 tests/support.py 登记）。"""
 
     def setUp(self):
         import datetime as dt
-        from unittest import mock
         from kanyu.bazi import bazi
         self.b = bazi(dt.datetime(1990, 6, 1, 8, 30), "f", 116.4, focus_year=2026)
-        patcher = mock.patch.object(pages, "TEMPLATES", os.path.join(BAZI_SKILL, "assets", "templates"))
-        patcher.start()
-        self.addCleanup(patcher.stop)
 
     def page(self, notes=None, b=None):
         b = b or self.b
-        return pages.render("bazi.html", pages.bazi_title(b), pages.bazi_data(b, notes=notes or {}))
+        return pages.render("bazi.html", pages_bazi.bazi_title(b), pages_bazi.bazi_data(b, notes=notes or {}))
 
     def test_data_matches_chart(self):
         d = pages.extract_data(self.page())
@@ -164,11 +160,11 @@ class TestBaziPage(unittest.TestCase):
                 with open(p, "w", encoding="utf-8") as f:
                     json.dump(obj, f, ensure_ascii=False)
                 return p
-            self.assertEqual(pages.load_bazi_notes(write(BAZI_NOTES)), BAZI_NOTES)
+            self.assertEqual(pages_bazi.load_bazi_notes(write(BAZI_NOTES)), BAZI_NOTES)
             for bad in ({"palaces": {}}, {"plain": 1}, {"pillars": {"子": "x"}}, {"years": {"明年": "x"}},
                         {"dayun": {"甲": "x"}}, {"advice": [1]}, {"summary": 1}, ["x"]):
                 with self.assertRaises(ValueError, msg=bad):
-                    pages.load_bazi_notes(write(bad))
+                    pages_bazi.load_bazi_notes(write(bad))
 
     def test_cli_html(self):
         with tempfile.TemporaryDirectory() as td:

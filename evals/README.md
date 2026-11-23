@@ -15,7 +15,7 @@
 - **大运排法**：新增 `dayun_from_pillars()`。曾一次性核对《滴天髓阐微》485 个命例书中所列大运，全部一致
   （另 2 例书中未注性别，20 例原书大运不连续）；仓库中只保留代表例（`tests/test_dayun.py`），
   需要复现全量核对时用 `evals/tools/extract_ditiansui.py`。
-- 命卦、紫白与三元起例对照（`tests/test_sanyuan.py`）等，见 `references/sources.md`。
+- 命卦、紫白与三元起例对照（`tests/test_sanyuan.py`）等，见 `skills/fengshui-master/references/sources.md`。
 
 ### 第 2 层
 
@@ -57,7 +57,7 @@ python3 evals/run.py --model sonnet --judge-model sonnet   # 用较便宜的模�
 
 1. 用 `evals/tools/fetch_wikisource.py` 下载原文（每次请求间隔 45 秒，遵守维基文库限流；**不要抓取 ctext.org**，其禁止自动下载）。
 2. 在 `evals/tools/build_cases.py` 中加题：引文从原文程序化截取，不要手抄。
-3. 新用到的典籍登记到 `references/sources.md`。
+3. 新用到的典籍登记到对应 skill 的出处表：`skills/fengshui-master/references/sources.md` 或 `skills/bazi-mingli/references/sources.md`。
 4. `python3 evals/run.py --dry-run` 校验。
 
 ## 尚缺
