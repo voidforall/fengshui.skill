@@ -7,7 +7,7 @@ description: |
   触发词：「八字」「生辰八字」「四柱」「命盘」「排盘」「五行缺什么」「喜用神」「用神」「日主」「大运」「流年运势」
          「桃花」「驿马」「贵人」「命理」等。不用于看房、择日（见 fengshui-master）。
 metadata:
-  version: "1.0.0"
+  version: "1.0.1"
   author: voidforall
 ---
 

@@ -1,10 +1,13 @@
 # Changelog
 
-版本号遵循 [语义化版本](https://semver.org/lang/zh-CN/)。`SKILL.md` 的 `metadata.version`、
-`scripts/kanyu/__init__.py` 的 `__version__` 与本文件最新条目保持一致（有测试校验）。
+版本号遵循 [语义化版本](https://semver.org/lang/zh-CN/)。`skills/fengshui-master/SKILL.md` 的 `metadata.version`、
+`lib/kanyu/__init__.py` 的 `__version__` 与本文件最新条目保持一致（有测试校验）。
 新改动先记在 `## [Unreleased]` 下；发版时改为 `## [版本号] - 日期`，合并到 main 后自动发布 Release。
 
-## [Unreleased]
+## [3.1.0] - 2026-11-23
+
+三个 skill 统一放进 `skills/`，安装方式变为 `npx skills add voidforall/fengshui.skill --skill <名称>`，不再需要 `--full-depth`。
+已安装的 skill 名称与功能不变。`bazi-mingli` 随之更新为 1.0.1（仅结构调整，功能不变）。
 
 ### 结构
 - **三个 skill 统一放在 `skills/` 下**：`fengshui-master` 从仓库根目录移到 `skills/fengshui-master/`，与 `bazi-mingli`、`city-wuxing-map` 并列。
