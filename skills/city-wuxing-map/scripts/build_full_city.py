@@ -147,6 +147,8 @@ def build(source_dir, slug, cell_size):
         region["analyses"]["relative"] = dict(rel, sources=refs + CLASSICS)
     label = manifest.get("scope_label")
     extra = {"scope_label": label} if label else {}
+    if manifest.get("en"):
+        extra["en"] = manifest["en"]      # 英文页面用的专名（城市、范围、街道），generate.py --lang en 读取
     return {**extra, "search":manifest.get("search", {}),"schema_version":3,"city":manifest["city"],"subtitle":f"{label or '全城'}连续覆盖 · {cell_size}米分析单元 · 含主象、兼象与置信说明",
         "summary":f"{'声明范围' if label else '城市边界'}内 {len(regions)} 个单元全部纳入分析。点击任何区块查看真实覆盖统计、功能证据、主象兼象与置信说明；可输入纬度,经度定位。",
         "reviewed_at":manifest.get("prepared_at", snapshot[:10]),"coordinate_note":"WGS84坐标。统计格网裁切至真实城市边界，区界不代表五行硬边界。土地覆盖为2021年历史分类，功能资料快照为"+snapshot+"；归类属于明确规则下的现代解释。",

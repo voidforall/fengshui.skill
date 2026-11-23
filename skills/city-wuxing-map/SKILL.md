@@ -33,6 +33,7 @@ python3 scripts/generate.py --example london --output 伦敦全城五行地图.h
 python3 scripts/generate.py --example new-york --output 纽约全城五行地图.html
 python3 scripts/generate.py --example shanghai --output 上海主城区五行地图.html
 python3 scripts/generate.py --input 城市全域.json --output 城市全城五行地图.html
+python3 scripts/generate.py --example london --lang en --output london-five-elements-map.html   # 英文页面
 ```
 
 - HTML内嵌Leaflet和资料，无需npm或API key；地图瓦片需要联网和HTTP。在输出目录运行 `python3 -m http.server 8000 --bind 127.0.0.1`，已有服务则复用。双击文件会显示启动服务提示。
