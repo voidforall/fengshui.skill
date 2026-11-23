@@ -1,5 +1,7 @@
 # 堪舆子 · 传统风水与八字顾问
 
+**中文** · [English](README.en.md)
+
 [![tests](https://github.com/voidforall/fengshui.skill/actions/workflows/tests.yml/badge.svg)](https://github.com/voidforall/fengshui.skill/actions/workflows/tests.yml)
 [![release](https://img.shields.io/github/v/release/voidforall/fengshui.skill)](https://github.com/voidforall/fengshui.skill/releases)
 [![Agent Skills](https://img.shields.io/badge/Agent%20Skills-compatible-8a2be2)](https://agentskills.io)
@@ -21,6 +23,8 @@
 | **八字** | 「1990 年 6 月 1 日早上 8 点半北京出生，女，五行缺什么？今年怎样？」 | 先白话、后专业的解读，以及不懂命理也看得懂的交互命盘 |
 | **城市五行** | 「给上海主城区做一张五行地图」 | 覆盖整个声明范围的着色地图，每块都有分类理由、来源与置信度 |
 | **问答** | 「『山上龙神不下水』是什么意思？」 | 引原文、注出处的解释 |
+
+用英文提问时用英文作答，盘面与地图也生成英文版；术语按统一的中英对照表，有国际或国家标准译名的按标准取。
 
 ## 安装
 
@@ -68,6 +72,7 @@ npx skills add voidforall/fengshui.skill --skill city-wuxing-map   # 城市五�
 - [x] 飞星揭盘：二十四山罗盘、九宫逐宫飞布、点宫看批注
 - [x] 八字命盘：白话总结、术语解释、合冲刑害、大运流年拖动
 - [x] 城市五行地图：伦敦、纽约全城，上海主城区
+- [x] 英文版：英文作答、英文盘面与地图
 - [ ] 罗盘定向：手机陀螺仪对准大门，实时显示坐向
 - [ ] 户型对位：把房间拖到九宫，逐间看吉凶
 - [ ] 择日月历、八宅方位图、起卦

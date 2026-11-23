@@ -5,7 +5,7 @@ description: |
   English: Five Elements (Wu Xing) map of a whole city or a declared district scope, with a main and secondary element, reasons, sources and confidence for every cell.
 license: MIT
 metadata:
-  version: "1.0.0"
+  version: "2.0.0"
 ---
 
 # 城市全域五行地图

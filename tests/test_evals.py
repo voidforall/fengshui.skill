@@ -19,7 +19,16 @@ class TestCases(unittest.TestCase):
 
     def test_count_and_categories(self):
         self.assertGreaterEqual(len(self.cases), 20)
-        self.assertEqual({c["category"] for c in self.cases} - {"八字", "形势", "年神", "诚实边界"}, set())
+        self.assertEqual({c["category"] for c in self.cases} - {"八字", "形势", "年神", "诚实边界", "英文"}, set())
+
+    def test_english_cases_mirror_a_chinese_case(self):
+        by_id = {c["id"]: c for c in self.cases}
+        en = [c for c in self.cases if c.get("lang") == "en"]
+        self.assertGreaterEqual(len(en), 5)
+        for c in en:
+            base = by_id[c["id"].removesuffix("-en")]           # 同一出处与原文，只换提问语言
+            self.assertEqual(c["source"], base["source"], c["id"])
+            self.assertIsNone(re.search(r"[\u4e00-\u9fff]", re.sub(r"\([^)]*\)", "", c["prompt"])), c["id"])
 
     def test_pillars_appear_in_quote(self):
         # 引文中带四柱的命例题（穷通、神峰）：题目四柱须与引文一致。阐微引文只含分析，四柱见原文对应行。
@@ -34,9 +43,11 @@ class TestCases(unittest.TestCase):
         for skill in (support.FENGSHUI, support.BAZI):    # 风水题、八字题分别登记在两个 skill 的出处表
             with open(os.path.join(skill, "references", "sources.md"), encoding="utf-8") as f:
                 reg += f.read()
+        by_id = {c["id"]: c for c in self.cases}
         for c in self.cases:
+            category = by_id[c["id"].removesuffix("-en")]["category"]   # 英文题按对应中文题的类别
             for title in re.findall(r"《([^》·]+)", c["source"]["book"]):
-                if c["category"] in ("形势", "年神", "诚实边界"):
+                if category in ("形势", "年神", "诚实边界"):
                     continue   # 转引自《古今图书集成》，已登记
                 self.assertIn(title, reg, c["id"])
 
