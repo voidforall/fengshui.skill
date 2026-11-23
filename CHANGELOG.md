@@ -10,7 +10,8 @@
 - **三个 skill 统一放在 `skills/` 下**：`fengshui-master` 从仓库根目录移到 `skills/fengshui-master/`，与 `bazi-mingli`、`city-wuxing-map` 并列。
   安装不再需要 `--full-depth`：`npx skills add voidforall/fengshui.skill --skill <名称>`；不带 `--skill` 时在终端里列出三个 skill 勾选，
   在智能体里运行则全部安装（已用 skills CLI 实测）。已安装的 `fengshui-master` 名称不变。
-- 计算包源头从 `scripts/kanyu/` 移到 `lib/kanyu/`，由 `tools/sync_kanyu.py` 复制到 `fengshui-master` 与 `bazi-mingli`，测试检查副本一致。
+- 计算包源头从 `scripts/kanyu/` 移到 `lib/kanyu/`，由 `tools/sync_kanyu.py` 复制到 `fengshui-master` 与 `bazi-mingli`。每个 skill 只带用到的模块
+  （命令、文字输出、页面按风水、八字拆分），测试检查副本与源头一致且能单独导入；副本在 `.gitattributes` 标为生成文件，PR 中默认折叠。
 - 测试、eval 工作区、CI 规范校验与发版工作流同步改为新路径。
 
 ### 文档

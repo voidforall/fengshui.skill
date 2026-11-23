@@ -9,7 +9,7 @@ import sys
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
-from kanyu.cli import bazi_main  # noqa: E402
+from kanyu.cli_bazi import main  # noqa: E402
 
 if __name__ == "__main__":
-    bazi_main()
+    main()

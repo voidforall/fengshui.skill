@@ -11,8 +11,8 @@
 
 ## 修改方式
 
-- 各 skill 的 `scripts/fengshui.py`、`scripts/bazi.py` 是命令行入口；计算放在 `lib/kanyu/` 的领域模块，参数处理放在 `cli.py`，文字输出放在 `render.py`，HTML 生成放在 `pages.py` 与各 skill 的 `assets/templates/`。保持计算与呈现分离。
-- 计算包只有一份源头 `lib/kanyu/`；各 skill 的 `scripts/kanyu/` 副本及八字的 `references/glossary.md` 由 `python3 tools/sync_kanyu.py` 同步，不直接改。
+- 各 skill 的 `scripts/fengshui.py`、`scripts/bazi.py` 是命令行入口；计算放在 `lib/kanyu/` 的领域模块，参数处理放在 `cli_fengshui.py`、`cli_bazi.py`，文字输出放在 `render.py`、`render_bazi.py`，HTML 生成放在 `pages_feixing.py`、`pages_bazi.py` 与各 skill 的 `assets/templates/`。保持计算与呈现分离，风水与八字模块互不导入。
+- 计算包只有一份源头 `lib/kanyu/`；各 skill 的 `scripts/kanyu/` 副本（按 `tools/sync_kanyu.py` 的清单只带用到的模块）及八字的 `references/glossary.md` 由 `python3 tools/sync_kanyu.py` 同步，不直接改；新模块要加进清单。
 - 保持纯标准库计算路径可用；历法依赖见 `requirements.txt`，缺失依赖时保留明确提示，不以猜测结果兜底。
 - 保持各 `SKILL.md` 精简，详细流程放在该 skill 的 `references/` 并从主文件分流；结构约束见 `tests/test_structure.py`、`tests/test_skill_bazi.py`。
 - 优先采用简单、直接的端到端实现；技术取舍优先考虑质量、简单性、稳健性、扩展性和长期维护，不因节省开发成本牺牲这些目标。

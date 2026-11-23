@@ -50,7 +50,7 @@ fengshui.skill/
 │   ├── fengshui-master/     # 风水：SKILL、流程与速查、出处、飞星盘模板、对话示例
 │   ├── bazi-mingli/         # 八字：SKILL、流程、术语表、出处、命盘模板
 │   └── city-wuxing-map/     # 城市五行地图
-├── lib/kanyu/               # 计算包源头，同步复制到前两个 skill 的 scripts/kanyu/
+├── lib/kanyu/               # 计算包源头；每个 skill 的 scripts/kanyu/ 只复制它用到的模块
 ├── tools/sync_kanyu.py      # 同步脚本
 ├── tests/  evals/           # 单元测试与快照；古籍案例端到端评测
 └── docs/                    # 原理文档、图片、交互示例

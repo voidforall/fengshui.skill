@@ -11,8 +11,9 @@
 ## 开发约定
 
 - **每个 skill 一个目录** `skills/<name>/`，目录名即 skill 名，各自带 `SKILL.md`、`references/`、`assets/`、`scripts/`。
-- **计算与呈现分开**：计算放在 `lib/kanyu/` 的领域模块，参数处理在 `cli.py`，文字输出在 `render.py`，HTML 在 `pages.py` 与各 skill 的 `assets/templates/`。
-- **计算包只有一份源头** `lib/kanyu/`。各 skill 的 `scripts/kanyu/` 副本和八字的术语表 `references/glossary.md` 由同步脚本生成，不要直接改：
+- **计算与呈现分开**：计算放在 `lib/kanyu/` 的领域模块；命令、文字输出、页面按领域分为 `cli_fengshui` / `cli_bazi`、`render` / `render_bazi`、`pages_feixing` / `pages_bazi`，公共部分在 `cli`、`pages`。风水与八字模块互不导入。
+- **计算包只有一份源头** `lib/kanyu/`。每个 skill 安装后是独立目录，所以要自带一份真实文件（指向目录外的符号链接在安装时会被丢掉）。
+  各 skill 的 `scripts/kanyu/` 副本只带清单里列出的模块（见 `tools/sync_kanyu.py` 的 `MANIFEST`），和八字的术语表 `references/glossary.md` 一样由同步脚本生成，不要直接改；新增模块要加进清单：
 
   ```bash
   python3 tools/sync_kanyu.py

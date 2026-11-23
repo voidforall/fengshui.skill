@@ -6,7 +6,7 @@ import os
 import tempfile
 import unittest
 
-from kanyu import cli, pages
+from kanyu import cli, pages, pages_bazi, pages_feixing
 from kanyu.feixing import feixing_chart
 
 NOTES = {"summary": "总断 </script><b>不应被当作标签</b>",
@@ -14,7 +14,7 @@ NOTES = {"summary": "总断 </script><b>不应被当作标签</b>",
 
 
 def page_for(ch, notes=None, **kw):
-    data = pages.feixing_data(ch, annual=kw.get("annual"), annual_label=None, month=None,
+    data = pages_feixing.feixing_data(ch, annual=kw.get("annual"), annual_label=None, month=None,
                               facing_deg=kw.get("deg"), yun_note="", current_yun=9, notes=notes or {})
     return pages.render("feixing.html", "飞星盘", data)
 
@@ -56,10 +56,10 @@ class TestFeixingPage(unittest.TestCase):
                 with open(p, "w", encoding="utf-8") as f:
                     json.dump(obj, f, ensure_ascii=False)
                 return p
-            self.assertEqual(pages.load_notes(write(NOTES)), NOTES)
+            self.assertEqual(pages_feixing.load_notes(write(NOTES)), NOTES)
             for bad in ({"palace": {}}, {"palaces": {"南": "x"}}, {"advice": [1]}, ["x"]):
                 with self.assertRaises(ValueError, msg=bad):
-                    pages.load_notes(write(bad))
+                    pages_feixing.load_notes(write(bad))
 
 
 class TestCli(unittest.TestCase):
@@ -109,7 +109,7 @@ class TestBaziPage(unittest.TestCase):
 
     def page(self, notes=None, b=None):
         b = b or self.b
-        return pages.render("bazi.html", pages.bazi_title(b), pages.bazi_data(b, notes=notes or {}))
+        return pages.render("bazi.html", pages_bazi.bazi_title(b), pages_bazi.bazi_data(b, notes=notes or {}))
 
     def test_data_matches_chart(self):
         d = pages.extract_data(self.page())
@@ -160,11 +160,11 @@ class TestBaziPage(unittest.TestCase):
                 with open(p, "w", encoding="utf-8") as f:
                     json.dump(obj, f, ensure_ascii=False)
                 return p
-            self.assertEqual(pages.load_bazi_notes(write(BAZI_NOTES)), BAZI_NOTES)
+            self.assertEqual(pages_bazi.load_bazi_notes(write(BAZI_NOTES)), BAZI_NOTES)
             for bad in ({"palaces": {}}, {"plain": 1}, {"pillars": {"子": "x"}}, {"years": {"明年": "x"}},
                         {"dayun": {"甲": "x"}}, {"advice": [1]}, {"summary": 1}, ["x"]):
                 with self.assertRaises(ValueError, msg=bad):
-                    pages.load_bazi_notes(write(bad))
+                    pages_bazi.load_bazi_notes(write(bad))
 
     def test_cli_html(self):
         with tempfile.TemporaryDirectory() as td:
