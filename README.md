@@ -3,6 +3,7 @@
 [![tests](https://github.com/voidforall/fengshui.skill/actions/workflows/tests.yml/badge.svg)](https://github.com/voidforall/fengshui.skill/actions/workflows/tests.yml)
 [![release](https://img.shields.io/github/v/release/voidforall/fengshui.skill)](https://github.com/voidforall/fengshui.skill/releases)
 [![Agent Skills](https://img.shields.io/badge/Agent%20Skills-compatible-8a2be2)](https://agentskills.io)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
 **让你的 AI 智能体变成一位懂玄空飞星、八宅、择日与八字的传统顾问。**
 排盘由代码算，解读由模型说，每条说法都能查到出处。可在 Claude Code、Codex CLI 等 30+ 支持 [Agent Skills](https://agentskills.io) 的智能体中使用。
@@ -77,6 +78,10 @@ npx skills add voidforall/fengshui.skill --skill city-wuxing-map   # 城市五�
 - [工作原理](docs/how-it-works.md)：skill 如何分工、各项按什么口径计算
 - [参与贡献](CONTRIBUTING.md)（勘误、测试、发版）· [变更记录](CHANGELOG.md)
 - 发现错误？欢迎提 issue，请附出处（典籍卷次或可核对的资料）。
+
+## 许可
+
+代码与文档以 [MIT](LICENSE) 发布。城市地图用到的第三方数据与 Leaflet 保留各自的许可，见[数据源说明](skills/city-wuxing-map/examples/sources/README.md)。
 
 ## 免责声明
 

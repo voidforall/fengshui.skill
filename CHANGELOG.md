@@ -4,6 +4,11 @@
 `lib/kanyu/__init__.py` 的 `__version__` 与本文件最新条目保持一致（有测试校验）。
 新改动先记在 `## [Unreleased]` 下；发版时改为 `## [版本号] - 日期`，合并到 main 后自动发布 Release。
 
+## [Unreleased]
+
+### 新增
+- 以 MIT 许可证发布（`LICENSE`），三个 skill 的 `SKILL.md` 标注 `license: MIT`。第三方数据与 Leaflet 保留各自许可。
+
 ## [3.1.0] - 2026-11-23
 
 三个 skill 统一放进 `skills/`，安装方式变为 `npx skills add voidforall/fengshui.skill --skill <名称>`，不再需要 `--full-depth`。
