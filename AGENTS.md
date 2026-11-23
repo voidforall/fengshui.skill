@@ -4,16 +4,17 @@
 
 这是一个遵循 Agent Skills 标准的传统堪舆顾问 skill。项目介绍以 `README.md` 为准，工作原理与计算口径见 `docs/how-it-works.md`，开发约定、测试与发版流程以 `CONTRIBUTING.md` 为准；运行时问询、分流与表达规则以 `SKILL.md` 为准。
 
-- 计算交给 `scripts/kanyu/` 的确定性代码，模型负责问询与解读。不要用模型推算替代排盘、历法、命卦等计算。
-- 修改传统规则或引文前，核对 `references/sources.md` 的出处与验证状态；区分经典原文、已验证计算与流派口径，不虚构出处。
+- 每个 skill 在 `skills/<name>/` 下（fengshui-master、bazi-mingli、city-wuxing-map）；仓库根目录只放仓库级文件。
+- 计算交给 `lib/kanyu/` 的确定性代码，模型负责问询与解读。不要用模型推算替代排盘、历法、命卦等计算。
+- 修改传统规则或引文前，核对对应 skill 的 `references/sources.md` 的出处与验证状态；区分经典原文、已验证计算与流派口径，不虚构出处。
 - 不夸大风水作用，不作恐吓式断言，不把传统规则的符合程度表述为现实效果的证明。
 
 ## 修改方式
 
-- `scripts/fengshui.py` 是命令行入口；计算放在对应领域模块，参数处理放在 `scripts/kanyu/cli.py`，文字输出放在 `scripts/kanyu/render.py`，HTML 生成放在 `scripts/kanyu/pages.py` 与 `assets/templates/`。保持计算与呈现分离。
-- 计算包只有一份源头 `scripts/kanyu/`；独立 skill（如 `skills/bazi-mingli/`）带的副本及由它生成的 `references/glossary.md` 由 `python3 tools/sync_kanyu.py` 同步，不直接改。
+- 各 skill 的 `scripts/fengshui.py`、`scripts/bazi.py` 是命令行入口；计算放在 `lib/kanyu/` 的领域模块，参数处理放在 `cli.py`，文字输出放在 `render.py`，HTML 生成放在 `pages.py` 与各 skill 的 `assets/templates/`。保持计算与呈现分离。
+- 计算包只有一份源头 `lib/kanyu/`；各 skill 的 `scripts/kanyu/` 副本及八字的 `references/glossary.md` 由 `python3 tools/sync_kanyu.py` 同步，不直接改。
 - 保持纯标准库计算路径可用；历法依赖见 `requirements.txt`，缺失依赖时保留明确提示，不以猜测结果兜底。
-- 保持 `SKILL.md` 精简，详细流程放在 `references/playbook-*.md` 并从主文件分流；结构约束见 `tests/test_structure.py`。
+- 保持各 `SKILL.md` 精简，详细流程放在该 skill 的 `references/` 并从主文件分流；结构约束见 `tests/test_structure.py`、`tests/test_skill_bazi.py`。
 - 优先采用简单、直接的端到端实现；技术取舍优先考虑质量、简单性、稳健性、扩展性和长期维护，不因节省开发成本牺牲这些目标。
 - 修复 bug 时，先通过用户实际使用的 CLI 或交互页面复现，再修改并补充能覆盖真实问题的回归测试。检查页面时也修正明显的视觉问题。
 

@@ -30,8 +30,10 @@ class TestCases(unittest.TestCase):
                 self.assertEqual(q[:4], p[:4], c["id"])
 
     def test_sources_registered(self):
-        with open(os.path.join(support.ROOT, "references", "sources.md"), encoding="utf-8") as f:
-            reg = f.read()
+        reg = ""
+        for skill in (support.FENGSHUI, support.BAZI):    # 风水题、八字题分别登记在两个 skill 的出处表
+            with open(os.path.join(skill, "references", "sources.md"), encoding="utf-8") as f:
+                reg += f.read()
         for c in self.cases:
             for title in re.findall(r"《([^》·]+)", c["source"]["book"]):
                 if c["category"] in ("形势", "年神", "诚实边界"):
@@ -61,6 +63,7 @@ class TestHelpers(unittest.TestCase):
         try:
             self.assertTrue(os.path.exists(os.path.join(ws, ".claude", "skills", "fengshui-master", "SKILL.md")))
             self.assertTrue(os.path.exists(os.path.join(ws, ".claude", "skills", "fengshui-master", "scripts", "fengshui.py")))
+            self.assertTrue(os.path.exists(os.path.join(ws, ".claude", "skills", "bazi-mingli", "scripts", "kanyu", "bazi.py")))
         finally:
             import shutil
             shutil.rmtree(ws)

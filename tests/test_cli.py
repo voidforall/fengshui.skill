@@ -128,7 +128,7 @@ class TestErrors(unittest.TestCase):
 
 class TestEntryScript(unittest.TestCase):
     def test_subprocess(self):
-        script = os.path.join(support.SCRIPTS, "fengshui.py")
+        script = os.path.join(support.FENGSHUI, "scripts", "fengshui.py")
         r = subprocess.run([sys.executable, script, "feixing", "--facing", "180", "--yun", "8"],
                            capture_output=True, text=True, cwd="/")
         self.assertEqual(r.returncode, 0, r.stderr)
@@ -139,7 +139,7 @@ class TestEntryScript(unittest.TestCase):
         self.assertIn("错误", r.stderr)
 
     def test_bazi_moved_to_own_skill(self):
-        script = os.path.join(support.SCRIPTS, "fengshui.py")
+        script = os.path.join(support.FENGSHUI, "scripts", "fengshui.py")
         r = subprocess.run([sys.executable, script, "bazi", "--birth", "1990-06-01 08:30", "--gender", "f"],
                            capture_output=True, text=True)
         self.assertEqual(r.returncode, 1)

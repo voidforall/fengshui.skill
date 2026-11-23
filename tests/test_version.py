@@ -15,7 +15,7 @@ def read(name):
 
 class TestVersion(unittest.TestCase):
     def test_consistent(self):
-        skill = re.search(r'version:\s*"([^"]+)"', read("SKILL.md")).group(1)
+        skill = re.search(r'version:\s*"([^"]+)"', read(os.path.join("skills", "fengshui-master", "SKILL.md"))).group(1)
         changelog = re.search(r"^## \[(\d+\.\d+\.\d+)\]", read("CHANGELOG.md"), re.M).group(1)
         self.assertEqual(skill, kanyu.__version__)
         self.assertEqual(changelog, kanyu.__version__)

@@ -1,4 +1,5 @@
-"""出处登记检查：SKILL 与参考资料中提到的每一部典籍，都必须登记在 references/sources.md。
+"""出处登记检查：fengshui-master 的 SKILL、参考资料与对话示例中提到的每一部典籍，都必须登记在它的 references/sources.md；
+仓库首页与文档提到的典籍须登记在 fengshui-master 或 bazi-mingli 的出处表（八字 skill 自身的检查见 test_skill_bazi.py）。
 
 新增引用时先在 sources.md 写明出处与核对状态，否则此测试失败。
 """
@@ -9,9 +10,11 @@ import os
 import re
 import unittest
 
-FILES = ["SKILL.md", "README.md", "CONTRIBUTING.md", os.path.join("docs", "how-it-works.md")] + sorted(
-    glob.glob(os.path.join(support.ROOT, "references", "*.md"))
-    + glob.glob(os.path.join(support.ROOT, "examples", "*.md")))
+SKILL = support.FENGSHUI
+FILES = [os.path.join(SKILL, "SKILL.md")] + sorted(
+    glob.glob(os.path.join(SKILL, "references", "*.md"))
+    + glob.glob(os.path.join(SKILL, "examples", "*.md")))
+REPO_DOCS = ["README.md", "CONTRIBUTING.md", os.path.join("docs", "how-it-works.md")]
 
 PLACEHOLDERS = {"书名"}   # SKILL.md 中说明引用格式用的占位符
 
@@ -29,8 +32,13 @@ def read(path):
 
 class TestSources(unittest.TestCase):
     def test_every_book_registered(self):
-        registry = norm(read("references/sources.md"))
+        registry = norm(read(os.path.join(SKILL, "references", "sources.md")))
+        both = registry + norm(read(os.path.join(support.BAZI, "references", "sources.md")))
         missing = {}
+        for f in REPO_DOCS:
+            for title in set(re.findall(r"《([^》]+)》", read(f))):
+                if title not in PLACEHOLDERS and norm(title) not in both:
+                    missing.setdefault(title, []).append(os.path.basename(f))
         for f in FILES:
             if f.endswith("sources.md"):
                 continue
@@ -40,7 +48,7 @@ class TestSources(unittest.TestCase):
         self.assertEqual(missing, {}, "以下书名未登记在 references/sources.md")
 
     def test_status_markers_defined(self):
-        s = read("references/sources.md")
+        s = read(os.path.join(SKILL, "references", "sources.md"))
         for mark in ("✅", "🧮", "📖", "⚖", "✂"):
             self.assertIn(mark, s)
 

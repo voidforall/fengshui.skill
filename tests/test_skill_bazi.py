@@ -1,6 +1,6 @@
-"""独立 skill bazi-mingli：计算包副本与源头一致、入口脚本可用、结构与出处登记。
+"""各 skill 带的计算包副本与源头 lib/kanyu/ 一致；bazi-mingli 的入口、结构与出处登记。
 
-skill 安装后是独立目录，计算包 kanyu/ 随 skill 带一份，由 tools/sync_kanyu.py 从 scripts/kanyu/ 复制。
+skill 安装后是独立目录，计算包 kanyu/ 随 skill 带一份，由 tools/sync_kanyu.py 从 lib/kanyu/ 复制。
 """
 
 import support
@@ -13,7 +13,7 @@ import sys
 import tempfile
 import unittest
 
-SKILL = os.path.join(support.ROOT, "skills", "bazi-mingli")
+SKILL = support.BAZI
 ENTRY = os.path.join(SKILL, "scripts", "bazi.py")
 
 
@@ -23,26 +23,28 @@ def read(*parts):
 
 
 class TestSync(unittest.TestCase):
-    def test_kanyu_copy_is_identical(self):
-        src = os.path.join(support.SCRIPTS, "kanyu")
-        dst = os.path.join(SKILL, "scripts", "kanyu")
+    def test_kanyu_copies_are_identical(self):
+        src = os.path.join(support.LIB, "kanyu")
 
         def files(root):
             return sorted(os.path.relpath(p, root) for p in glob.glob(os.path.join(root, "**", "*"), recursive=True)
                           if os.path.isfile(p) and "__pycache__" not in p)
 
-        self.assertEqual(files(src), files(dst), "运行 python3 tools/sync_kanyu.py")
-        for rel in files(src):
-            self.assertTrue(filecmp.cmp(os.path.join(src, rel), os.path.join(dst, rel), shallow=False),
-                            f"{rel} 与源头不一致：只改 scripts/kanyu/，再运行 python3 tools/sync_kanyu.py")
+        for skill in (support.FENGSHUI, support.BAZI):
+            dst = os.path.join(skill, "scripts", "kanyu")
+            self.assertEqual(files(src), files(dst), "运行 python3 tools/sync_kanyu.py")
+            for rel in files(src):
+                self.assertTrue(filecmp.cmp(os.path.join(src, rel), os.path.join(dst, rel), shallow=False),
+                                f"{os.path.basename(skill)}/{rel} 与源头不一致：只改 lib/kanyu/，再运行 python3 tools/sync_kanyu.py")
 
     def test_glossary_md_is_generated(self):
         from kanyu import glossary
         self.assertEqual(read(SKILL, "references", "glossary.md"), glossary.markdown(),
-                         "glossary.md 由 scripts/kanyu/glossary.py 生成：运行 python3 tools/sync_kanyu.py")
+                         "glossary.md 由 lib/kanyu/glossary.py 生成：运行 python3 tools/sync_kanyu.py")
 
     def test_requirements_match(self):
-        self.assertEqual(read(support.ROOT, "requirements.txt"), read(SKILL, "requirements.txt"))
+        for skill in (support.FENGSHUI, support.BAZI):
+            self.assertEqual(read(support.ROOT, "requirements.txt"), read(skill, "requirements.txt"), skill)
 
 
 class TestStructure(unittest.TestCase):

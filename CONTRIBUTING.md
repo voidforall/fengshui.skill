@@ -5,20 +5,21 @@
 ## 报告错误
 
 请提 issue，并附上**出处**：典籍、卷次、原文，或其他可核对的资料。确认后会修正，并补一条覆盖它的测试。
-规则与引文的出处登记在 [references/sources.md](references/sources.md)（八字见 [skills/bazi-mingli/references/sources.md](skills/bazi-mingli/references/sources.md)）；
+规则与引文的出处登记在各 skill 的出处表：[风水](skills/fengshui-master/references/sources.md)、[八字](skills/bazi-mingli/references/sources.md)；
 新增规则先在这里登记出处与核对状态，再写代码。
 
 ## 开发约定
 
-- **计算与呈现分开**：计算放在 `scripts/kanyu/` 的领域模块，参数处理在 `cli.py`，文字输出在 `render.py`，HTML 在 `pages.py` 与各 skill 的 `assets/templates/`。
-- **计算包只有一份源头** `scripts/kanyu/`。八字 skill 带的副本和它的术语表 `references/glossary.md` 由同步脚本生成，不要直接改：
+- **每个 skill 一个目录** `skills/<name>/`，目录名即 skill 名，各自带 `SKILL.md`、`references/`、`assets/`、`scripts/`。
+- **计算与呈现分开**：计算放在 `lib/kanyu/` 的领域模块，参数处理在 `cli.py`，文字输出在 `render.py`，HTML 在 `pages.py` 与各 skill 的 `assets/templates/`。
+- **计算包只有一份源头** `lib/kanyu/`。各 skill 的 `scripts/kanyu/` 副本和八字的术语表 `references/glossary.md` 由同步脚本生成，不要直接改：
 
   ```bash
   python3 tools/sync_kanyu.py
   ```
 
 - **`SKILL.md` 保持精简**，详细流程放进各 skill 的 `references/`。
-- 调试时可以直接运行 skill 调用的入口：`python3 scripts/fengshui.py -h`、`python3 skills/bazi-mingli/scripts/bazi.py -h`。
+- 调试时可以直接运行 skill 调用的入口：`python3 skills/fengshui-master/scripts/fengshui.py -h`、`python3 skills/bazi-mingli/scripts/bazi.py -h`。
 
 ## 测试
 
@@ -42,7 +43,7 @@ node --test tests/city_search.test.cjs      # 城市地图地址搜索（Node 22
 
 ## 发版
 
-在一个 PR 里同步提升 `scripts/kanyu/__init__.py` 与 `SKILL.md` 的版本号（再运行同步脚本），
+在一个 PR 里同步提升 `lib/kanyu/__init__.py` 与 `skills/fengshui-master/SKILL.md` 的版本号（再运行同步脚本），
 并把 [CHANGELOG](CHANGELOG.md) 的 `## [Unreleased]` 改为 `## [版本号] - 日期`。
 合并到 main 后，`.github/workflows/release.yml` 自动打 tag，并以 CHANGELOG 对应条目为正文发布 GitHub Release。
 

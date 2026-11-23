@@ -1,7 +1,7 @@
 """可交互 HTML 页面：把排盘结果填进模板，生成单个离线可用的 HTML 文件。
 
 图形与数据全部来自计算模块；模型的解读通过 notes（JSON）传入，只作为文字嵌入页面。
-模板见 skill 根目录 assets/templates/。
+模板见各 skill 的 assets/templates/。
 """
 
 from __future__ import annotations
@@ -19,9 +19,10 @@ from .core import (GRID, LUOSHU_PATH, MOUNTAINS, PALACE_DIR, PALACES, STAR_NAMES
                    deg_to_mountain, fly, mountain_center_deg, mountain_yinyang, wuxing_of)
 from .feixing import Chart, jian_warnings, main_pattern, palace_flags, star_status
 
-# 模板放在 skill 根目录的 assets/templates/（Agent Skills 规范：模板等静态资源放 assets/）
+# 本包随 skill 安装在 <skill>/scripts/kanyu/，模板在 <skill>/assets/templates/。
+# 仓库里的源头在 lib/kanyu/，测试时由 tests/support.py 把各 skill 的模板目录加进来。
 SKILL_ROOT = os.path.abspath(os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", ".."))
-TEMPLATES = os.path.join(SKILL_ROOT, "assets", "templates")
+TEMPLATE_DIRS = [os.path.join(SKILL_ROOT, "assets", "templates")]
 
 # 《周易·说卦传》第十、十一章取象（原文已核对，见 references/sources.md）
 GUA_XIANG = {
@@ -127,7 +128,10 @@ NUM_CN = ["", "一", "二", "三", "四", "五", "六", "七", "八", "九"]
 
 
 def render(template: str, title: str, data: dict) -> str:
-    with open(os.path.join(TEMPLATES, template), encoding="utf-8") as f:
+    path = next((os.path.join(d, template) for d in TEMPLATE_DIRS if os.path.exists(os.path.join(d, template))), None)
+    if path is None:
+        raise FileNotFoundError(f"找不到模板 {template}（查找：{'、'.join(TEMPLATE_DIRS)}）")
+    with open(path, encoding="utf-8") as f:
         tpl = f.read()
     return tpl.replace("__TITLE__", _escape_html(title)).replace("__DATA__", _embed_json(data))
 

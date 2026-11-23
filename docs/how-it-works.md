@@ -10,7 +10,7 @@
 - **代码负责**：排盘、历法、查表。结果是确定的，有回归测试，测试用例取自可公开核对的结论。
 - **模型负责**：问清信息、解读结果、写批注。旺衰、用神、形峦吉凶这些属于判断，必须说明依据与所依流派。
 - **说法要有出处**：每条规则、引文都登记了出处与核对状态（原文已核对、已计算验证、公认出处、流派口径、已删除），
-  模型按状态措辞，不把通行做法说成经典原文。见 [风水出处](../references/sources.md)、[八字出处](../skills/bazi-mingli/references/sources.md)。
+  模型按状态措辞，不把通行做法说成经典原文。见 [风水出处](../skills/fengshui-master/references/sources.md)、[八字出处](../skills/bazi-mingli/references/sources.md)。
 
 ## 三个 skill
 
@@ -20,7 +20,7 @@
 | `bazi-mingli` | 排八字、五行喜用、大运流年、桃花贵人等神煞 | 先白话后专业的回答 + 交互命盘 |
 | `city-wuxing-map` | 城市全域五行着色 | 真实底图上的交互地图 |
 
-三者可以分开安装。八字与风水交叉时（如按八字布置卧室），由八字 skill 给出喜用五行，风水 skill 给出方位与命卦。
+三者都在 `skills/` 下，可以分开安装。八字与风水交叉时（如按八字布置卧室），由八字 skill 给出喜用五行，风水 skill 给出方位与命卦。
 
 ## 各项怎么算
 
@@ -46,13 +46,14 @@
 
 ```
 fengshui.skill/
-├── SKILL.md                 # fengshui-master：铁律、人设、问题分流
-├── references/              # 看宅、择日流程，速查表，出处
-├── scripts/kanyu/           # 计算包（唯一源头）
-├── skills/bazi-mingli/      # 八字 skill（带一份计算包副本）
-├── skills/city-wuxing-map/  # 城市五行地图 skill
+├── skills/
+│   ├── fengshui-master/     # 风水：SKILL、流程与速查、出处、飞星盘模板、对话示例
+│   ├── bazi-mingli/         # 八字：SKILL、流程、术语表、出处、命盘模板
+│   └── city-wuxing-map/     # 城市五行地图
+├── lib/kanyu/               # 计算包源头，同步复制到前两个 skill 的 scripts/kanyu/
+├── tools/sync_kanyu.py      # 同步脚本
 ├── tests/  evals/           # 单元测试与快照；古籍案例端到端评测
-└── docs/  examples/         # 图片、交互示例；完整对话示例
+└── docs/                    # 原理文档、图片、交互示例
 ```
 
 开发、测试与发版见 [CONTRIBUTING.md](../CONTRIBUTING.md)。

@@ -6,6 +6,13 @@
 
 ## [Unreleased]
 
+### 结构
+- **三个 skill 统一放在 `skills/` 下**：`fengshui-master` 从仓库根目录移到 `skills/fengshui-master/`，与 `bazi-mingli`、`city-wuxing-map` 并列。
+  安装不再需要 `--full-depth`：`npx skills add voidforall/fengshui.skill --skill <名称>`；不带 `--skill` 时在终端里列出三个 skill 勾选，
+  在智能体里运行则全部安装（已用 skills CLI 实测）。已安装的 `fengshui-master` 名称不变。
+- 计算包源头从 `scripts/kanyu/` 移到 `lib/kanyu/`，由 `tools/sync_kanyu.py` 复制到 `fengshui-master` 与 `bazi-mingli`，测试检查副本一致。
+- 测试、eval 工作区、CI 规范校验与发版工作流同步改为新路径。
+
 ### 文档
 - README 精简为面向用户的首页（能做什么、安装、效果、为什么可信、参考典籍、路线图），不再列脚本命令；
   工作原理与计算口径移到 `docs/how-it-works.md`，勘误、开发约定、测试与发版移到新的 `CONTRIBUTING.md`。

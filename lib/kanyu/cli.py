@@ -297,8 +297,8 @@ BAZI_DESCRIPTION = """八字确定性计算工具 —— 供 bazi-mingli skill �
 不判定日主旺衰、格局、用神。需要 `pip install lunar_python`。加 --json 输出结构化数据。
 """
 
-BAZI_MOVED = ("八字已移至独立的 bazi-mingli skill。安装：npx skills add voidforall/fengshui.skill --full-depth "
-              "--skill bazi-mingli；在本仓库中运行 python3 skills/bazi-mingli/scripts/bazi.py --birth ... --gender ...")
+BAZI_MOVED = ("八字已移至独立的 bazi-mingli skill。安装：npx skills add voidforall/fengshui.skill --skill bazi-mingli；"
+              "安装后运行该 skill 的 scripts/bazi.py --birth ... --gender ...")
 
 
 def build_bazi_parser() -> argparse.ArgumentParser:

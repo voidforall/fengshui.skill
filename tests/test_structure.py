@@ -1,4 +1,4 @@
-"""skill 结构须符合 Agent Skills 规范（agentskills.io/specification）的建议：
+"""fengshui-master 的结构须符合 Agent Skills 规范（agentskills.io/specification）的建议：
 
 - SKILL.md 正文不超过 500 行
 - SKILL.md 中引用的文件都存在
@@ -12,7 +12,7 @@ import os
 import re
 import unittest
 
-ROOT = support.ROOT
+ROOT = support.FENGSHUI   # fengshui-master；八字 skill 的同类检查见 test_skill_bazi.py
 REF = re.compile(r"`((?:references|scripts|assets|examples)/[^`\s]+?\.(?:md|py|html|json))`")
 
 

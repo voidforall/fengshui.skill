@@ -85,7 +85,7 @@ class TestCli(unittest.TestCase):
         root = support.ROOT
         with open(os.path.join(root, "docs", "examples", "feixing-demo.html"), encoding="utf-8") as f:
             demo = f.read()
-        with open(os.path.join(root, "assets", "templates", "feixing.html"), encoding="utf-8") as f:
+        with open(os.path.join(support.FENGSHUI, "assets", "templates", "feixing.html"), encoding="utf-8") as f:
             tpl = f.read()
         head = tpl.split("__DATA__")[0].replace("__TITLE__", "飞星盘 子山午向")
         self.assertTrue(demo.startswith(head), "示例页面已过期：重新运行 docs/examples/README 中的命令")
@@ -95,21 +95,17 @@ BAZI_NOTES = {"plain": "白话总结", "summary": "总断 </script><b>x</b>", "b
               "dayun": {"戊寅": "大运批注"}, "years": {"2026": "流年批注"}, "advice": ["建议"]}
 
 
-BAZI_SKILL = os.path.join(support.ROOT, "skills", "bazi-mingli")
+BAZI_SKILL = support.BAZI
 
 
 @support.needs_lunar
 class TestBaziPage(unittest.TestCase):
-    """命盘模板随 bazi-mingli skill 发布；这里把模板目录指向该 skill。"""
+    """命盘模板随 bazi-mingli skill 发布（模板目录由 tests/support.py 登记）。"""
 
     def setUp(self):
         import datetime as dt
-        from unittest import mock
         from kanyu.bazi import bazi
         self.b = bazi(dt.datetime(1990, 6, 1, 8, 30), "f", 116.4, focus_year=2026)
-        patcher = mock.patch.object(pages, "TEMPLATES", os.path.join(BAZI_SKILL, "assets", "templates"))
-        patcher.start()
-        self.addCleanup(patcher.stop)
 
     def page(self, notes=None, b=None):
         b = b or self.b

@@ -14,7 +14,7 @@
   pages     交互 HTML 页面
   cli       命令行入口（fengshui.py、bazi.py）
 
-本包同步复制到 skills/bazi-mingli/scripts/kanyu/（tools/sync_kanyu.py），只改这里。
+本包（仓库 lib/kanyu/）由 tools/sync_kanyu.py 复制到各 skill 的 scripts/kanyu/，只改这里。
 
 计算函数只返回数据（dataclass / dict），不做格式化；格式化统一在 render。
 """

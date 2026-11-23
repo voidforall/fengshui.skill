@@ -42,13 +42,11 @@ jobs:
           python-version: "3.13"
       - name: Install validator
         run: pip install skills-ref
-      # 安装后 skill 目录按 name 命名（fengshui-master）；仓库目录名 fengshui.skill 含点号，按规范不能作 name，
-      # 故复制到与 name 同名的目录再校验，即用户实际安装后的形态。
+      # 每个 skill 放在 skills/<name>/，目录名即 skill 名，与安装后的形态一致。
       - name: Validate
         run: |
-          mkdir -p "$RUNNER_TEMP/skill"
-          git archive HEAD | tar -x -C "$RUNNER_TEMP/skill"
-          mv "$RUNNER_TEMP/skill" "$RUNNER_TEMP/fengshui-master"
-          agentskills validate "$RUNNER_TEMP/fengshui-master"
-          agentskills validate "$RUNNER_TEMP/fengshui-master/skills/city-wuxing-map"
-          agentskills validate "$RUNNER_TEMP/fengshui-master/skills/bazi-mingli"
+          mkdir -p "$RUNNER_TEMP/repo"
+          git archive HEAD | tar -x -C "$RUNNER_TEMP/repo"
+          for s in fengshui-master bazi-mingli city-wuxing-map; do
+            agentskills validate "$RUNNER_TEMP/repo/skills/$s"
+          done
