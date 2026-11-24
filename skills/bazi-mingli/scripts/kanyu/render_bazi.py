@@ -85,3 +85,47 @@ def bazi(b: Bazi) -> str:
     out.append(f"命卦（八宅）：{mg.number} {NUM_PALACE[mg.number]}卦，{mg.group}命")
     out.append("注：以上为排盘与查表事实。日主强弱、格局、用神属于判断，须结合月令、通根、透干、调候综合论断，并说明所依流派；本工具不代为判定。")
     return "\n".join(out)
+
+
+def pillars_chart(c) -> str:
+    """只给四柱时的输出：查表事实、根气轻重、寒暖燥湿、调候原文、大运干支。"""
+    ps = c.pillars
+    out = ["只给四柱：以下为查表事实，不涉出生时刻（起运岁数、流年周岁、真太阳时需出生时间）。", ""]
+    out.append("四柱：" + "  ".join(f"{p.name}{p.ganzhi}" for p in ps) + f"（{'乾造' if c.gender == 'm' else '坤造'}）")
+    out.append(f"日主：{c.day_gan}（{'阳' if c.day_gan in '甲丙戊庚壬' else '阴'}{wuxing_of(c.day_gan)}）  月令：{c.month_zhi}")
+    w = c.wangxiang
+    out.append(f"旺相休囚死（《三命通会》）：生于{w['season']}，{w['wang']}当令；日主{wuxing_of(c.day_gan)}为「{w['day']}」。"
+               + " ".join(f"{k}{v}" for k, v in w["states"].items()))
+    out.append("十神（天干）：" + "  ".join(f"{p.name}{p.gan}{p.gan_shishen}" for p in ps))
+    out.append("藏干（本气/中气/余气·十神）：")
+    for p in ps:
+        out.append(f"  {p.name}支{p.zhi}：" + "  ".join(f"{h.gan}（{h.qi}·{h.shishen}）" for h in p.hidden))
+    out.append(f"十二长生（日干{c.day_gan}临各支）：" + "  ".join(f"{p.name}支{p.zhi}{p.changsheng}" for p in ps))
+    out.append("纳音：" + "  ".join(f"{p.name}{p.nayin}" for p in ps))
+    out.append("通根（重根＝长生、临官、帝旺或本气；轻根＝墓库、余气、中气。《滴天髓阐微》：「天干得一比肩，不如地支得一余气墓库」）：")
+    for r in c.roots:
+        roots = "、".join(f"{x['pillar']}支{x['zhi']}{x['qi']}{x['hidden']}（{x['weight']}）" for x in r["roots"]) or "无根"
+        out.append(f"  {r['pillar']}干{r['gan']}：{roots}")
+    tou = "；".join(f"{t['pillar']}支{t['zhi']}{t['qi']}{t['hidden']}透{'、'.join(x + '干' for x in t['at'])}" for t in c.tou)
+    out.append(f"透干（藏干原样见于天干）：{tou or '无'}")
+    rel = [r["label"] for r in c.relations["gan"] + c.relations["zhi"]]
+    out.append("原局干支关系：" + ("；".join(rel) if rel else "无合冲刑害"))
+    cl = c.climate
+    out.append(f"寒暖燥湿（事实，供调候参考）：月令{cl['month']}，{cl['season']}；"
+               f"火见于 {'、'.join(cl['fire']) or '无'}；水见于 {'、'.join(cl['water']) or '无'}；"
+               f"湿土（辰丑）{'、'.join(cl['wet_earth']) or '无'}；燥土（未戌）{'、'.join(cl['dry_earth']) or '无'}")
+    out.append("五行计数（只是个数，不代表旺衰）：天干地支 " + " ".join(f"{k}{v}" for k, v in c.wuxing_count.items())
+               + "；藏干 " + " ".join(f"{k}{v}" for k, v in c.wuxing_hidden.items()))
+    if c.shensha:
+        out.append("神煞（《三命通会》查表，不单独论吉凶）：" + "；".join(
+            f"{x['name']}：依{x['basis']}查得{x['targets']}，见于{'、'.join(x['hits'])}" for x in c.shensha))
+    t = c.tiaohou
+    out.append(f"调候原文（{t['book']}{t['section']}，{t['month']}{c.day_gan}{wuxing_of(c.day_gan)}；月令按节气）：")
+    for q in t["passages"]:
+        out.append(f"  [{q['kind']}·第{q['line']}行] {q['text']}")
+    out.append("")
+    out.append(f"大运（{'顺' if dayun_forward(ps[0].gan, c.gender) else '逆'}排，自月柱起；起运岁数需出生时刻 · 干十神/支本气十神 · 日干长生 · 与原局关系）：")
+    for dy in c.dayun:
+        rel = "；".join(dy["relations"]) or "无"
+        out.append(f"  {dy['ganzhi']}  {dy['gan_shishen']}/{dy['zhi_shishen']}  {dy['changsheng']}  {rel}")
+    return "\n".join(out)

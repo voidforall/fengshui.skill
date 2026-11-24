@@ -7,7 +7,7 @@ import sys
 
 from . import __version__, cli, pages, pages_bazi, render_bazi
 from .almanac import has_time, lunar_to_solar, parse_date
-from .bazi import bazi
+from .bazi import bazi, chart_from_pillars, parse_pillars
 from .cli import Output, UsageError, _jsonable
 
 BAZI_DESCRIPTION = """八字确定性计算工具 —— 供 bazi-mingli skill 调用。
@@ -19,6 +19,16 @@ BAZI_DESCRIPTION = """八字确定性计算工具 —— 供 bazi-mingli skill �
 
 
 def cmd_bazi(a) -> Output:
+    if a.pillars:
+        if a.birth or a.html is not None or a.lunar:
+            raise UsageError("--pillars 只给四柱，不能与 --birth、--lunar、--html 同用")
+        try:
+            c = chart_from_pillars(parse_pillars(a.pillars), a.gender)
+        except ValueError as e:
+            raise UsageError(str(e)) from e
+        return Output(render_bazi.pillars_chart(c), _jsonable(c))
+    if not a.birth:
+        raise UsageError("请提供 --birth（出生时间）；只知道四柱时用 --pillars \"庚申 庚辰 戊辰 戊午\"")
     if len(a.birth.strip()) == 4:
         raise UsageError("八字至少需要出生年月日：--birth YYYY-MM-DD（时辰不详时只给日期）")
     d = parse_date(a.birth)
@@ -46,8 +56,10 @@ def cmd_bazi(a) -> Output:
 
 
 def add_args(s: argparse.ArgumentParser) -> None:
-    s.add_argument("--birth", required=True,
+    s.add_argument("--birth",
                    help="出生地钟表时间 'YYYY-MM-DD HH:MM'；时辰不详只给 YYYY-MM-DD（排三柱）")
+    s.add_argument("--pillars", metavar="四柱",
+                   help="只知道四柱时（如古籍命例）：\"庚申 庚辰 戊辰 戊午\"；输出查表事实与大运干支，不需要历法库")
     s.add_argument("--gender", required=True)
     s.add_argument("--longitude", type=float, help="出生地经度（东经为正），给出则按真太阳时排时柱")
     s.add_argument("--lunar", action="store_true", help="--birth 为农历日期（月、日用数字，如 1990-04-26 08:30）")

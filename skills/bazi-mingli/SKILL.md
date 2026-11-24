@@ -31,6 +31,7 @@ python3 scripts/bazi.py --birth "YYYY-MM-DD HH:MM" --gender m/f --longitude <经
 
 - 路径相对于本 skill 目录。需要 `pip install lunar_python`（见 `requirements.txt`）；未安装时先提示用户安装或代为安装，**不要**改为凭记忆推算。
 - 只知日期、不知时辰时，`--birth` 只写日期，脚本排三柱。
+- 只知道四柱（如古籍命例）时：`python3 scripts/bazi.py --pillars "庚申 庚辰 戊辰 戊午" --gender m`，输出查表事实与大运干支，不要反推出生日期。
 - 输出里的「⚠」提示（23 点后出生、时辰不详、当日交节等）回答时必须告诉用户。
 - 解读以脚本输出为准；旺衰、格局、用神不由脚本给出，是你的判断，要说明依据。
 

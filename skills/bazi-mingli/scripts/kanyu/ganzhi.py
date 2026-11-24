@@ -17,6 +17,11 @@ HIDE_GAN = {
 }
 QI_NAMES = ("本气", "中气", "余气")
 
+# --- 纳音 🧮 与 lunar-python 60 甲子逐一一致（tests/test_ganzhi.py）；每两甲子一名，自甲子起 ---------------
+_NAYIN_NAMES = ("海中金 炉中火 大林木 路旁土 剑锋金 山头火 涧下水 城头土 白蜡金 杨柳木 泉中水 屋上土 霹雳火 松柏木 长流水 "
+                "沙中金 山下火 平地木 壁上土 金箔金 覆灯火 天河水 大驿土 钗钏金 桑柘木 大溪水 沙中土 天上火 石榴木 大海水").split()
+NAYIN = {gz: _NAYIN_NAMES[i // 2] for i, gz in enumerate(JIAZI)}
+
 # --- 十神 -------------------------------------------------------------------------
 
 _SHENG = {"木": "火", "火": "土", "土": "金", "金": "水", "水": "木"}   # 我生
@@ -264,3 +269,35 @@ def wangxiang(month_zhi: str) -> dict[str, str]:
         elif _KE[x] == w:
             states[x] = "囚"
     return {x: states[x] for x in "木火土金水"}
+
+
+# --- 根气轻重、寒暖燥湿（《滴天髓阐微》，原文已核对，见 references/sources.md） -------------------------
+# 「衰旺」任氏：「长生禄旺，根之重者也；墓库余气，根之轻者也。」只列事实，不据此打分定旺衰。
+# 「寒暖」原注：「金水为寒，木火为暖。」「燥湿」任注：辰、丑为湿土，未、戌为燥土。
+
+def root_weight(gan: str, zhi: str) -> str:
+    """天干在某支（须为其根）的轻重：长生、临官、帝旺或本气同五行为重根；墓库、余气、中气为轻根。"""
+    if changsheng(gan, zhi) in ("长生", "临官", "帝旺") or wuxing_of(HIDE_GAN[zhi][0]) == wuxing_of(gan):
+        return "重根"
+    return "轻根"
+
+
+WET_EARTH, DRY_EARTH = "辰丑", "未戌"
+SEASON_TEMP = {**dict.fromkeys("亥子丑", "冬月，寒"), **dict.fromkeys("巳午", "夏月，暖"), "未": "六月，暖而燥",
+               **dict.fromkeys("寅卯辰", "春月"), **dict.fromkeys("申酉戌", "秋月")}
+
+
+def climate(pillars: list[str]) -> dict:
+    """寒暖燥湿的事实：月令季节、水火在何处（干、支本气、支中气余气）、湿土燥土在何处。"""
+    names = PILLAR_NAMES
+    where = {"火": [], "水": []}
+    for n, p in zip(names, pillars):
+        for e in where:
+            if wuxing_of(p[0]) == e:
+                where[e].append(f"{n}干{p[0]}")
+            for k, h in enumerate(HIDE_GAN[p[1]]):
+                if wuxing_of(h) == e:
+                    where[e].append(f"{n}支{p[1]}{QI_NAMES[k]}{h}")
+    return {"month": pillars[1][1], "season": SEASON_TEMP[pillars[1][1]], "fire": where["火"], "water": where["水"],
+            "wet_earth": [f"{n}支{p[1]}" for n, p in zip(names, pillars) if p[1] in WET_EARTH],
+            "dry_earth": [f"{n}支{p[1]}" for n, p in zip(names, pillars) if p[1] in DRY_EARTH]}
