@@ -19,7 +19,7 @@ class TestCases(unittest.TestCase):
 
     def test_count_and_categories(self):
         self.assertGreaterEqual(len(self.cases), 20)
-        self.assertEqual({c["category"] for c in self.cases} - {"八字", "形势", "年神", "诚实边界", "英文"}, set())
+        self.assertEqual({c["category"] for c in self.cases} - {"八字", "八字留出", "形势", "年神", "诚实边界", "英文"}, set())
 
     def test_english_cases_mirror_a_chinese_case(self):
         by_id = {c["id"]: c for c in self.cases}

@@ -16,7 +16,7 @@ from dataclasses import dataclass, field
 from . import ganzhi as gzr
 from .almanac import BirthMoment, birth_moment, lichun_year, require_lunar
 from .bazhai import MinGua, mingua_of
-from .core import ganzhi_of_year, jiazi_step, parse_gender, wuxing_of
+from .core import JIAZI, ganzhi_of_year, jiazi_step, parse_gender, wuxing_of
 
 try:
     from lunar_python import Solar  # type: ignore
@@ -197,6 +197,62 @@ def natal_relations(pillars: list[str]) -> dict:
     for r in gan + zhi:
         r["label"] = gzr.relation_label(r)
     return {"gan": gan, "zhi": zhi}
+
+
+# --- 只有四柱（如古籍命例、用户只记得八字）：查表事实与大运干支，不涉历法 ---------------------------
+
+@dataclass
+class PillarsChart:
+    gender: str
+    pillars: list[Pillar]
+    day_gan: str
+    month_zhi: str
+    wangxiang: dict
+    roots: list[dict]                  # 天干通根，每个根带「重根 / 轻根」
+    tou: list[dict]
+    relations: dict
+    wuxing_count: dict[str, int]
+    wuxing_hidden: dict[str, int]
+    shensha: list[dict]
+    tiaohou: dict
+    climate: dict                      # 寒暖燥湿的事实
+    dayun: list[dict]                  # 大运干支、十神、日干长生、与原局关系（无起运岁数）
+
+    @property
+    def ganzhi(self) -> list[str]:
+        return [p.ganzhi for p in self.pillars]
+
+
+def parse_pillars(text: str) -> list[str]:
+    gz = text.replace("，", " ").replace(",", " ").split()
+    if len(gz) == 1 and len(gz[0]) in (6, 8):
+        gz = [gz[0][i:i + 2] for i in range(0, len(gz[0]), 2)]
+    if len(gz) not in (3, 4) or any(g not in JIAZI for g in gz):
+        raise ValueError("四柱应为 3–4 个干支，如「庚申 庚辰 戊辰 戊午」（时柱不详可只给三柱）")
+    return gz
+
+
+def chart_from_pillars(gz_list: list[str], gender: str, n_dayun: int = 8) -> PillarsChart:
+    """只凭四柱排出的查表事实。不判定旺衰、用神；起运岁数需出生时刻，此处不算。"""
+    g = parse_gender(gender)
+    day_gan, month_zhi = gz_list[2][0], gz_list[1][1]
+    pillars = [make_pillar(n, p, day_gan, gzr.NAYIN[p]) for n, p in zip(gzr.PILLAR_NAMES, gz_list)]
+    roots, tou = roots_and_tou(gz_list)
+    for r in roots:
+        for x in r["roots"]:
+            x["weight"] = gzr.root_weight(r["gan"], x["zhi"])
+    states = gzr.wangxiang(month_zhi)
+    wx = {"season": gzr.SEASON_NAME[month_zhi], "wang": gzr.SEASON_WANG[month_zhi], "states": states,
+          "day": states[wuxing_of(day_gan)]}
+    dayun = [{"ganzhi": gz, "gan_shishen": gzr.shishen(day_gan, gz[0]),
+              "zhi_shishen": gzr.shishen(day_gan, gzr.HIDE_GAN[gz[1]][0]),
+              "changsheng": gzr.changsheng(day_gan, gz[1]), "relations": gzr.against_natal(gz, gz_list, "大运")}
+             for gz in dayun_from_pillars(gz_list, g, n_dayun)]
+    return PillarsChart(gender=g, pillars=pillars, day_gan=day_gan, month_zhi=month_zhi, wangxiang=wx,
+                        roots=roots, tou=tou, relations=natal_relations(gz_list),
+                        wuxing_count=wuxing_count(gz_list), wuxing_hidden=wuxing_hidden(gz_list),
+                        shensha=gzr.shensha(gz_list), tiaohou=tiaohou(day_gan, month_zhi),
+                        climate=gzr.climate(gz_list), dayun=dayun)
 
 
 _QT = None
