@@ -50,7 +50,7 @@ python3 scripts/bazi.py --birth "YYYY-MM-DD HH:MM" --gender m/f --longitude <经
 ## 一、先读流程文档
 
 **排盘、论命、回答任何八字问题之前，先读 `references/playbook.md`**：问询清单、论命顺序、按问题分流、交互命盘批注格式与表达边界都在其中。
-天干地支、五行生克、方位五色的速查见 `references/ganzhi.md`。
+天干地支、五行生克、方位五色的速查见 `references/ganzhi.md`；论旺衰前读 `references/shigan.md` 中日干那一条（《滴天髓》十干性情）。
 
 **回答先白话、后专业**：多数用户不懂命理，先给一句不用术语的结论，再讲理由；术语第一次出现就用 `references/glossary.md` 的白话解释一句，专业依据放在最后。
 
