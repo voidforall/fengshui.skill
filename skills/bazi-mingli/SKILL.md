@@ -9,7 +9,7 @@ description: |
   English: Bazi (Four Pillars of Destiny) advisor — scripts compute the pillars, Ten Gods, Luck Pillars and an interactive chart; answers in plain English first. Triggers: "bazi", "four pillars", "Chinese astrology birth chart", "day master", "useful god", "luck pillars", "which element am I missing".
 license: MIT
 metadata:
-  version: "1.1.0"
+  version: "3.2.1"
   author: voidforall
 ---
 
