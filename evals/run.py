@@ -81,6 +81,9 @@ CJK = re.compile(r"[\u3400-\u9fff]")
 LATIN = re.compile(r"[A-Za-z]")
 
 
+LIMIT = re.compile(r"hit your .{0,20}limit|usage limit|rate limit", re.I)
+
+
 def language_check(answer: str, lang: str) -> dict | None:
     """英文题：除「」内的原文引文外，汉字占字母与汉字总数的比例须低于 10%（术语后附的汉字允许）。"""
     if lang != "en":
@@ -158,13 +161,17 @@ def run_case(case: dict, args) -> dict:
            "tool_calls": ans["tool_calls"], "used_skill": used_skill, "used_script": used_script,
            "keywords": keyword_check(ans["answer"], case["keywords"]), "cost_usd": ans["cost_usd"],
            "language": language_check(ans["answer"], case.get("lang", "zh"))}
+    if ans["is_error"] or LIMIT.search(ans["answer"]):     # 额度用尽等错误不当作回答去判分
+        rec["judge"] = {"verdict": "运行失败", "reason": ans["answer"][:200] or ans["stderr"][-200:]}
+        return rec
     if args.no_judge or not ans["answer"]:
         rec["judge"] = {"verdict": "未判分", "reason": "跳过" if args.no_judge else "无回答"}
         return rec
     with tempfile.TemporaryDirectory(prefix="fengshui-judge-") as jd:
         j = run_claude(JUDGE_PROMPT.format(answer=ans["answer"], **case, **case["source"]),
                        jd, args.judge_model, [], args.timeout)
-    rec["judge"] = parse_verdict(j["answer"])
+    rec["judge"] = (parse_verdict(j["answer"]) if not (j["is_error"] or LIMIT.search(j["answer"]))
+                    else {"verdict": "运行失败", "reason": "判分调用失败：" + j["answer"][:150]})
     rec["cost_usd"] += j["cost_usd"]
     return rec
 
