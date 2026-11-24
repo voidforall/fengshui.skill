@@ -47,8 +47,8 @@ node --test tests/city_search.test.cjs      # 城市地图地址搜索（Node 22
 
 ## 发版
 
-在一个 PR 里同步提升 `lib/kanyu/__init__.py` 与 `skills/fengshui-master/SKILL.md` 的版本号（再运行同步脚本），
+三个 skill 共用一个版本号，与 Release 一致。在一个 PR 里同步提升 `lib/kanyu/__init__.py` 与三个 `skills/*/SKILL.md` 的版本号（再运行同步脚本），
 并把 [CHANGELOG](CHANGELOG.md) 的 `## [Unreleased]` 改为 `## [版本号] - 日期`。
 合并到 main 后，`.github/workflows/release.yml` 自动打 tag，并以 CHANGELOG 对应条目为正文发布 GitHub Release。
 
-版本号遵循语义化版本：已安装 skill 的能力减少、默认结果改变，都算不兼容变更。
+版本号遵循语义化版本：已安装 skill 的能力减少、默认结果改变，都算不兼容变更；任何一个 skill 有不兼容变更，整体提升主版本号。

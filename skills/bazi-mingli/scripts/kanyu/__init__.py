@@ -14,4 +14,4 @@ fengshui-master 带公共 + 风水模块，bazi-mingli 带公共 + 八字模块�
 计算函数只返回数据（dataclass / dict），不做格式化；格式化在 render / render_bazi。
 """
 
-__version__ = "3.2.0"
+__version__ = "3.2.1"

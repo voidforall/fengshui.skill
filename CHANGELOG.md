@@ -1,10 +1,19 @@
 # Changelog
 
-版本号遵循 [语义化版本](https://semver.org/lang/zh-CN/)。`skills/fengshui-master/SKILL.md` 的 `metadata.version`、
-`lib/kanyu/__init__.py` 的 `__version__` 与本文件最新条目保持一致（有测试校验）。
+版本号遵循 [语义化版本](https://semver.org/lang/zh-CN/)。三个 skill 共用一个版本号，与 Release 一致：各 `SKILL.md` 的 `metadata.version`、
+`lib/kanyu/__init__.py` 的 `__version__` 与本文件最新条目相同（有测试校验）。任何一个 skill 有不兼容变更，都提升主版本号。
 新改动先记在 `## [Unreleased]` 下；发版时改为 `## [版本号] - 日期`，合并到 main 后自动发布 Release。
 
 ## [Unreleased]
+
+## [3.2.1] - 2026-11-24
+
+三个 skill 统一使用仓库的版本号（与 Release 一致），不再各自编号：`fengshui-master`、`bazi-mingli`、`city-wuxing-map` 都是 3.2.1。
+功能与 3.2.0 相同。
+
+### 变更
+- `bazi-mingli`（原 1.1.0）与 `city-wuxing-map`（原 2.0.0）的 `metadata.version` 改为与仓库版本一致；测试检查三个 skill、计算包与 CHANGELOG 的版本号相同。
+- 发版约定：任何一个 skill 有不兼容变更（能力减少、默认结果改变），整体提升主版本号。
 
 ## [3.2.0] - 2026-11-23
 
